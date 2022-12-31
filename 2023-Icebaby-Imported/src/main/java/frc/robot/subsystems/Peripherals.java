@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.commands.defaults.PeripheralsDefault;
 import frc.robot.sensors.Navx;
 
@@ -40,7 +41,7 @@ public class Peripherals extends SubsystemBase {
   private double limeLightX = -1.0;
   private double limeLightY = -1.0;
 
-  PhotonCamera camera = new PhotonCamera("LimeLight");
+  PhotonCamera camera = new PhotonCamera(Constants.CAMERA_NAME);
 
   private final PowerDistribution m_pdh = new PowerDistribution(1, ModuleType.kRev);
   /** Creates a new Peripherals. */

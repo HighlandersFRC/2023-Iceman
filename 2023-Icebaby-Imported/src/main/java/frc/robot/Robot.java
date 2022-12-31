@@ -70,7 +70,6 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putBoolean("HAS TARGET", peripherals.cameraHasTargets());
     // SmartDashboard.putNumber("Target Yaw", peripherals.cameraYawToTarget());
     // SmartDashboard.putNumber("Target Pitch", peripherals.cameraPitchToTarget());
-    System.out.println(peripherals.cameraToTarget());
   }
 
   @Override
@@ -107,6 +106,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     SmartDashboard.putNumber("NAVX", peripherals.getNavxAngle());
+    // System.out.println(peripherals.cameraToTarget());
+    System.out.println(Constants.testDistanceToTagZero());
   }
 
   @Override
