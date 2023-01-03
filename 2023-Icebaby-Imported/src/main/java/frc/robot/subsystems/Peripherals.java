@@ -41,7 +41,7 @@ public class Peripherals extends SubsystemBase {
   private double limeLightX = -1.0;
   private double limeLightY = -1.0;
 
-  PhotonCamera camera = new PhotonCamera(Constants.CAMERA_NAME);
+  static PhotonCamera camera = new PhotonCamera(Constants.CAMERA_NAME);
 
   private final PowerDistribution m_pdh = new PowerDistribution(1, ModuleType.kRev);
   /** Creates a new Peripherals. */
@@ -61,7 +61,7 @@ public class Peripherals extends SubsystemBase {
     return cameraResult.hasTargets();
   }
 
-  public double cameraYawToTarget() {
+  public static double cameraYawToTarget() {
     PhotonPipelineResult cameraResult = camera.getLatestResult();
     double targetYaw = 0.0;
     if(cameraResult.hasTargets() == true) {
@@ -71,7 +71,7 @@ public class Peripherals extends SubsystemBase {
     return targetYaw;
   }
 
-  public double cameraPitchToTarget() {
+  public static double cameraPitchToTarget() {
     PhotonPipelineResult cameraResult = camera.getLatestResult();
     double targetPitch = 0.0;
     if(cameraResult.hasTargets() == true) {
@@ -81,7 +81,7 @@ public class Peripherals extends SubsystemBase {
     return targetPitch;
   }
 
-  public Transform3d cameraToTarget() {
+  public static Transform3d cameraToTarget() {
     PhotonPipelineResult cameraResult = camera.getLatestResult();
     Transform3d cameraToTarget = new Transform3d();
     if(cameraResult.hasTargets() == true) {
@@ -89,6 +89,15 @@ public class Peripherals extends SubsystemBase {
       cameraToTarget = target.getBestCameraToTarget();
     }
     return cameraToTarget;
+  }
+
+  public static double getTargetID() {
+    PhotonPipelineResult cameraResult = camera.getLatestResult();
+    if(cameraResult.hasTargets() == true) {
+      PhotonTrackedTarget target = cameraResult.getBestTarget();
+      return target.getFiducialId();
+    }
+    return -1;    
   }
 
   // public double getLimeLightX() {
