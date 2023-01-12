@@ -16,10 +16,15 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.AlignToConeHorizontal;
+import frc.robot.commands.AlignToConeVertical;
 import frc.robot.commands.AutonomousFollower;
+import frc.robot.commands.MoveToReflectiveTape;
 import frc.robot.commands.VisionAlignment;
+import frc.robot.commands.defaults.MoveArm;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Lights;
+import frc.robot.subsystems.MorrisArm;
 import frc.robot.subsystems.Peripherals;
 
 /**
@@ -37,6 +42,8 @@ public class Robot extends TimedRobot {
   private Peripherals peripherals = new Peripherals(lights);
   private Drive drive = new Drive(peripherals);
 
+  private MorrisArm arm = new MorrisArm();
+
   File pathingFile;
   String pathString;
 
@@ -48,6 +55,7 @@ public class Robot extends TimedRobot {
     drive.init();
     peripherals.init();
     lights.init();
+    arm.init();
 
     try {
       pathingFile = new File("/home/lvuser/deploy/Test.json");
@@ -68,6 +76,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    System.out.println(peripherals.getCameraBasedRobotLocation());
     // SmartDashboard.putBoolean("HAS TARGET", peripherals.cameraHasTargets());
     // SmartDashboard.putNumber("Target Yaw", peripherals.cameraYawToTarget());
     // SmartDashboard.putNumber("Target Pitch", peripherals.cameraPitchToTarget());
@@ -94,6 +103,12 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     drive.teleopInit();
+
+    OI.driverA.whenHeld(new MoveArm(arm, 0.25));
+    OI.driverB.whenHeld(new MoveArm(arm, -0.25));
+    OI.driverX.whenPressed(new AlignToConeHorizontal(drive, peripherals));
+    // OI.driverY.whenPressed(new AlignToConeVertical(drive, peripherals));
+    OI.driverY.whenPressed(new MoveToReflectiveTape(drive, peripherals));
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -107,8 +122,11 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     SmartDashboard.putNumber("NAVX", peripherals.getNavxAngle());
-    System.out.println(Constants.calculateCameraBasedPosition());
+    // System.out.println(Constants.testTagToRobot());
+    // System.out.println(Constants.calculateCameraBasedPosition());
     // System.out.println(peripherals.cameraToTarget());
+    // SmartDashboard.putNumber("X", peripherals.cameraToTarget().getX());
+    // SmartDashboard.putNumber("Y", peripherals.cameraToTarget().getY());
     // System.out.println(Constants.testDistanceToTagZero());
   }
 

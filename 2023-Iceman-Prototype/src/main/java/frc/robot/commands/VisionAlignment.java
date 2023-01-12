@@ -48,7 +48,7 @@ public class VisionAlignment extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    turn = peripherals.cameraYawToTarget();
+    // turn = peripherals.cameraYawToTarget();
     initialAngle = peripherals.getNavxAngle();
     target = (initialAngle - turn)%360;
     SmartDashboard.putNumber("Original Angle", initialAngle);
@@ -78,11 +78,11 @@ public class VisionAlignment extends CommandBase {
     //   angleSettled = 0;
     // }
 
-    if (peripherals.cameraYawToTarget()!= (0)/180) {
-      lights.setMode(LEDMode.GREEN);
-    } else {
-      lights.setMode(LEDMode.REDFLASH);
-    }
+    // if (peripherals.cameraYawToTarget()!= (0)/180) {
+    //   lights.setMode(LEDMode.GREEN);
+    // } else {
+    //   lights.setMode(LEDMode.REDFLASH);
+    // }
   }
 
   // Called once the command ends or is interrupted.
@@ -94,9 +94,9 @@ public class VisionAlignment extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Math.abs(target - peripherals.cameraYawToTarget()) <= 2) {
-      return true;
-    }
+    // if(Math.abs(target - peripherals.cameraYawToTarget()) <= 2) {
+    //   return true;
+    // }
     return false;
   }
 }

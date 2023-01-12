@@ -10,7 +10,9 @@ import org.apache.commons.math3.linear.RealMatrix;
 import com.ctre.phoenix.Util;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Peripherals;
 
@@ -23,6 +25,8 @@ import frc.robot.subsystems.Peripherals;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+    // public static final double FIELD_WIDTH = 
 
     public static final double ROBOT_RADIUS = inchesToMeters(16.75); //m
 
@@ -45,7 +49,7 @@ public final class Constants {
 
     public static final double MODULE_OFFSET = inchesToMeters(2.5);
 
-    public static final String CAMERA_NAME = "LimeLight";
+    public static final String CAMERA_NAME = "Limelight";
 
     public static final double CAMERA_CENTER_Z_OFFSET = inchesToMeters(-19);
     public static final double CAMERA_CENTER_X_OFFSET = 0;
@@ -75,67 +79,41 @@ public final class Constants {
     public static final double TAG_ONE_PITCH_TO_FIELD = 0;
     public static final double TAG_ONE_YAW_TO_FIELD = 0;
 
+    public static final Transform3d ROBOT_TO_CAM =
+                new Transform3d(
+                        new Translation3d(0.4064, 0.0, 0.3302),
+                        new Rotation3d(0, 0,0));
+
     public static RealMatrix getXRotationMatrix(double radians) {
-        double[][] XMatrixData = {{1, 0, 0}, {0, Math.cos(radians), -Math.sin(radians)}, {0, Math.sin(radians), Math.cos(radians)}};
+        double[][] XMatrixData = {{1, 0, 0},
+                                  {0, Math.cos(radians), -Math.sin(radians)},
+                                  {0, Math.sin(radians), Math.cos(radians)}};
         return MatrixUtils.createRealMatrix(XMatrixData);
     }
 
     public static RealMatrix getYRotationMatrix(double radians) {
-        double[][] yMatrixData = {{Math.cos(radians), 0, Math.sin(radians)}, {0, 1, 0}, {-Math.sin(radians), 0, Math.cos(radians)}};
+        double[][] yMatrixData = {{Math.cos(radians), 0, Math.sin(radians)},
+                                  {0, 1, 0},
+                                  {-Math.sin(radians), 0, Math.cos(radians)}};
         return MatrixUtils.createRealMatrix(yMatrixData);
     }
 
     public static RealMatrix getZRotationMatrix(double radians) {
-        double[][] ZMatrixData = {{Math.cos(radians), -Math.sin(radians), 0}, {Math.sin(radians), Math.cos(radians), 0}, {0, 0, 1}};
+        double[][] ZMatrixData = {{Math.cos(radians), -Math.sin(radians), 0},
+                                  {Math.sin(radians), Math.cos(radians), 0},
+                                  {0, 0, 1}};
         return MatrixUtils.createRealMatrix(ZMatrixData);
     }
 
-    public static RealMatrix getCameraToTagRotationMatrix(double yRot, double xRot, double zRot) {
-        RealMatrix xRotation = getXRotationMatrix(xRot);
-        RealMatrix yRotation = getYRotationMatrix(yRot);
-        RealMatrix zRotation = getZRotationMatrix(zRot);
+    public static RealMatrix getRotationMatrix(double xRot, double yRot, double zRot) {
+        RealMatrix xRotation = getXRotationMatrix(xRot);//should never exist unles tag is rotated on surface its mounted to
+        RealMatrix yRotation = getYRotationMatrix(yRot);//when surface tag is mounted to is not perpendigular to ground
+        RealMatrix zRotation = getZRotationMatrix(zRot);//when the tag is not directly infront of the robot, will chage most often
 
-        RealMatrix xyRotation = xRotation.multiply(yRotation);
-        RealMatrix xyzRotation = xyRotation.multiply(zRotation);
-        
+        RealMatrix xyzRotation = xRotation.multiply(yRotation).multiply(zRotation);        
         return xyzRotation;
     }
-
-    public static RealMatrix getCameraRotationMatrix() {
-        RealMatrix xRotation = getXRotationMatrix(CAMERA_PITCH);
-        RealMatrix yRotation = getYRotationMatrix(CAMERA_YAW);
-        RealMatrix zRotation = getZRotationMatrix(CAMERA_ANGLE);
-
-        RealMatrix xyRotation = xRotation.multiply(yRotation);
-        RealMatrix xyzRotation = xyRotation.multiply(zRotation);
-
-        return xyzRotation;
-    }
-
-    public static RealMatrix getTagZeroRotationMatrix() {
-        RealMatrix xRotation = getXRotationMatrix(TAG_ZERO_PITCH_TO_FIELD);
-        RealMatrix yRotation = getYRotationMatrix(TAG_ZERO_YAW_TO_FIELD);
-        RealMatrix zRotation = getZRotationMatrix(TAG_ZERO_ANGLE_TO_FIELD);
-
-        RealMatrix xyRotation = xRotation.multiply(yRotation);
-        RealMatrix xyzRotation = xyRotation.multiply(zRotation);
-
-        System.out.println("XYZ: " + xyzRotation);
-
-        return zRotation;
-    }
-
-    public static RealMatrix getTagOneRotationMatrix() {
-        RealMatrix xRotation = getXRotationMatrix(TAG_ONE_YAW_TO_FIELD);
-        RealMatrix yRotation = getYRotationMatrix(TAG_ONE_PITCH_TO_FIELD);
-        RealMatrix zRotation = getZRotationMatrix(TAG_ONE_ANGLE_TO_FIELD);
-
-        RealMatrix xyRotation = xRotation.multiply(yRotation);
-        RealMatrix xyzRotation = xyRotation.multiply(zRotation);
-
-        return xyzRotation;
-    }
-
+    /*
     public static RealMatrix getCameraToTagMatrix(double xRot, double yRot, double zRot, double cameraXinTagFrame, double cameraYinTagFrame, double cameraZinTagFrame) {
         RealMatrix cameraToTagRotationMatrix = getCameraToTagRotationMatrix(xRot, yRot, zRot);
         // RealMatrix inverseRotation = cameraToTagRotationMatrix.transpose();
@@ -148,7 +126,7 @@ public final class Constants {
         
         // double[][] cameraToTag = { {cameraToTagRotationMatrix.getEntry(0, 0), cameraToTagRotationMatrix.getEntry(0, 1), cameraToTagRotationMatrix.getEntry(0, 2), inversePerspective.getRow(0)[0]}, {cameraToTagRotationMatrix.getEntry(1, 0), cameraToTagRotationMatrix.getEntry(1, 1), cameraToTagRotationMatrix.getEntry(1, 2), inversePerspective.getRow(1)[0]}, {cameraToTagRotationMatrix.getEntry(2, 0), cameraToTagRotationMatrix.getEntry(2, 1), cameraToTagRotationMatrix.getEntry(2, 2), inversePerspective.getRow(2)[0]}, {0, 0, 0, 1}};
         
-        double[][] cameraToTag = { {cameraToTagRotationMatrix.getEntry(0, 0), cameraToTagRotationMatrix.getEntry(0, 1), cameraToTagRotationMatrix.getEntry(0, 2), cameraXinTagFrame}, {cameraToTagRotationMatrix.getEntry(1, 0), cameraToTagRotationMatrix.getEntry(1, 1), cameraToTagRotationMatrix.getEntry(1, 2), cameraYinTagFrame}, {cameraToTagRotationMatrix.getEntry(2, 0), cameraToTagRotationMatrix.getEntry(2, 1), cameraToTagRotationMatrix.getEntry(2, 2), cameraZinTagFrame}, {0, 0, 0, 1}};
+        double[][] cameraToTag = { {cameraToTagRotationMatrix.getEntry(0, 0), cameraToTagRotationMatrix.getEntry(1, 0), cameraToTagRotationMatrix.getEntry(2, 0), -cameraXinTagFrame}, {cameraToTagRotationMatrix.getEntry(0, 1), cameraToTagRotationMatrix.getEntry(1, 1), cameraToTagRotationMatrix.getEntry(2, 1), -cameraYinTagFrame}, {cameraToTagRotationMatrix.getEntry(0, 2), cameraToTagRotationMatrix.getEntry(1, 2), cameraToTagRotationMatrix.getEntry(2, 2), -cameraZinTagFrame}, {0, 0, 0, 1}};
 
         return MatrixUtils.createRealMatrix(cameraToTag);
     }
@@ -156,7 +134,7 @@ public final class Constants {
     public static RealMatrix getCameraToRobotMatrix() {
         RealMatrix cameraRotationMatrix = getCameraRotationMatrix();
 
-        double[][] cameraToRobot = { {cameraRotationMatrix.getEntry(0, 0), cameraRotationMatrix.getEntry(0, 1), cameraRotationMatrix.getEntry(0, 2), CAMERA_CENTER_X_OFFSET}, {cameraRotationMatrix.getEntry(1, 0), cameraRotationMatrix.getEntry(1, 1), cameraRotationMatrix.getEntry(1, 2), CAMERA_CENTER_X_OFFSET}, {cameraRotationMatrix.getEntry(2, 0), cameraRotationMatrix.getEntry(2, 1), cameraRotationMatrix.getEntry(2, 2), CAMERA_CENTER_Z_OFFSET}, {0, 0, 0, 1}};
+        double[][] cameraToRobot = { {cameraRotationMatrix.getEntry(0, 0), cameraRotationMatrix.getEntry(0, 1), cameraRotationMatrix.getEntry(0, 2), CAMERA_CENTER_X_OFFSET}, {cameraRotationMatrix.getEntry(1, 0), cameraRotationMatrix.getEntry(1, 1), cameraRotationMatrix.getEntry(1, 2), CAMERA_CENTER_Y_OFFSET}, {cameraRotationMatrix.getEntry(2, 0), cameraRotationMatrix.getEntry(2, 1), cameraRotationMatrix.getEntry(2, 2), CAMERA_CENTER_Z_OFFSET}, {0, 0, 0, 1}};
 
         return MatrixUtils.createRealMatrix(cameraToRobot);
     }
@@ -176,38 +154,90 @@ public final class Constants {
 
         return MatrixUtils.createRealMatrix(TagOneToField);
     }
+*/
+    // public static RealMatrix calculateCameraBasedPosition() {
+    //     double tagID = Peripherals.getTargetID();
+    //     if(tagID != -1) {
+    //         double targetPitch = Peripherals.cameraPitchToTarget();
+    //         double targetYaw = Peripherals.cameraYawToTarget();
+    //         Transform3d camera3d = Peripherals.cameraToTarget();
+    //         double tagX = 0;
+    //         double tagY = 0;
+    //         double tagZ = 0;
+    //         double tagAngleToField = 0;
 
-    public static RealMatrix calculateCameraBasedPosition() {
-        Transform3d camera3d = Peripherals.cameraToTarget();
-        double tagID = Peripherals.getTargetID();
-        if(tagID != -1) {
-            double targetPitch = Peripherals.cameraPitchToTarget();
-            double targetYaw = Peripherals.cameraYawToTarget();
-    
-            RealMatrix tagToFieldMatrix = MatrixUtils.createRealIdentityMatrix(4);
-            if(tagID == 0) {
-                tagToFieldMatrix = getTagZeroToFieldMatrix();
-            }
-            else if (tagID == 1) {
-                 tagToFieldMatrix = getTagOneToFieldMatrix();
-            }
-    
-            RealMatrix cameraToRobotMatrix = getCameraToRobotMatrix();
-    
-            final RealMatrix cameraToTagMatrix = getCameraToTagMatrix(0, targetPitch, Math.atan2(camera3d.getY(), camera3d.getX()), camera3d.getX(), camera3d.getY(), camera3d.getZ());
-    
-            System.out.println("CAM TO TAG" + cameraToTagMatrix);
-            double[] origin = {0, 0, 0, 1};
-            RealMatrix originMatrix = MatrixUtils.createColumnRealMatrix(origin);
-    
-            RealMatrix cameraToFieldMatrix = tagToFieldMatrix.multiply(cameraToTagMatrix);
-            RealMatrix robotToFieldMatrix = cameraToFieldMatrix.multiply(cameraToRobotMatrix);
-            RealMatrix robotPosition = robotToFieldMatrix.multiply(originMatrix);
-            return robotPosition;
-        }
-        RealMatrix noTarget = MatrixUtils.createRealIdentityMatrix(4);
-        return noTarget;
+    //         if(tagID == 1) {
+    //             tagX = TAG_ONE_X;
+    //             tagY = TAG_ONE_Y;
+    //             tagZ = TAG_ONE_Z;
+    //             tagAngleToField = TAG_ONE_ANGLE_TO_FIELD;
+    //         }
+
+    //         System.out.println(camera3d.getX());
+    //         System.out.println(camera3d.getY());
+
+    //         double[] tagInCameraInformation = {camera3d.getX(), camera3d.getY(), camera3d.getZ()};
+
+    //         RealMatrix tagInCameraMatrix = MatrixUtils.createColumnRealMatrix(tagInCameraInformation);
+
+    //         double currentNavxAngle = Peripherals.getNavxAngle();
+
+    //         double angleToTargetReferenceFrame = tagAngleToField - currentNavxAngle;
+
+    //         RealMatrix cameraInTagRefRotation = getRotationMatrix(0, 0, angleToTargetReferenceFrame);
+
+    //         RealMatrix cameraInTagReferenceMatrix = cameraInTagRefRotation.multiply(tagInCameraMatrix);
+
+    //         // double[] cameraInTagInformation = {camera3d.getX(), camera3d.getY(), camera3d.getZ()};
+
+    //         // RealMatrix cameraInTagMatrix = MatrixUtils.createColumnRealMatrix(cameraInTagInformation);
+            
+    //         // double angleToTarget = Math.atan2(camera3d.getY(), camera3d.getX()) - 180;
+    //         // RealMatrix cameraToTagRotationMatrix = getRotationMatrix(0, 0, angleToTarget);//
+
+    //         // RealMatrix cameraToTagTransformation = cameraToTagRotationMatrix.multiply(cameraInTagMatrix);
+            
+    //         // return cameraToTagTransformation;
+           
+    //     }
+    //     RealMatrix noTarget = MatrixUtils.createRealIdentityMatrix(4);
+    //     return noTarget;
         
+    // }
+/*
+    public static RealMatrix testTagOneLocation() {
+        double[] testLocation = {0, 0, 0, 1};
+
+        RealMatrix testLocationMatrix = MatrixUtils.createColumnRealMatrix(testLocation);
+        RealMatrix tagOneMatrix = getTagOneToFieldMatrix();
+
+        RealMatrix testedTagLocation = tagOneMatrix.multiply(testLocationMatrix);
+
+        return testedTagLocation;
+    }
+
+    public static RealMatrix testTagZeroLocation() {
+        double[] testLocation = {0, 0, 0, 1};
+
+        RealMatrix testLocationMatrix = MatrixUtils.createColumnRealMatrix(testLocation);
+        RealMatrix tagZeroMatrix = getTagZeroToFieldMatrix();
+
+        RealMatrix testedTagLocation = tagZeroMatrix.multiply(testLocationMatrix);
+
+        return testedTagLocation;
+    }
+
+    public static RealMatrix testTagToRobot() {
+        double[] robotCentricLocation = {0, 0, 0, 1};
+        RealMatrix robotMatrix = MatrixUtils.createColumnRealMatrix(robotCentricLocation);
+
+        RealMatrix tagToCameraMatrix = getCameraToTagMatrix(0, 0, Math.toRadians(16.7), 2.489, inchesToMeters(30), 1.5);
+        RealMatrix cameraToRobotMatrix = getCameraToRobotMatrix();
+
+        RealMatrix tagToRobotMatrix = tagToCameraMatrix.multiply(cameraToRobotMatrix);
+        tagToRobotMatrix = tagToRobotMatrix.multiply(robotMatrix);
+        
+        return tagToRobotMatrix;
     }
 
     // public static RealMatrix testDistanceToTagOne() {
@@ -231,7 +261,7 @@ public final class Constants {
 
     //     return distanceToTarget;
     // }
-
+*/
     public static double inchesToMeters(double inches) {
         return inches * 0.0254;
     }

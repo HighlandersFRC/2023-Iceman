@@ -10,7 +10,10 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -25,9 +28,9 @@ import frc.robot.commands.defaults.PeripheralsDefault;
 import frc.robot.sensors.Navx;
 
 public class Peripherals extends SubsystemBase {
-  private final AHRS ahrs = new AHRS(Port.kMXP);
+  private final static AHRS ahrs = new AHRS(Port.kMXP);
 
-  private final Navx navx = new Navx(ahrs);
+  private final static Navx navx = new Navx(ahrs);
 
   private Lights lights;
 
@@ -41,7 +44,9 @@ public class Peripherals extends SubsystemBase {
   private double limeLightX = -1.0;
   private double limeLightY = -1.0;
 
-  static PhotonCamera camera = new PhotonCamera(Constants.CAMERA_NAME);
+  // static PhotonCamera camera = new PhotonCamera(Constants.CAMERA_NAME);
+
+  static PhotonCameraWrapper camera = new PhotonCameraWrapper();
 
   private final PowerDistribution m_pdh = new PowerDistribution(1, ModuleType.kRev);
   /** Creates a new Peripherals. */
@@ -56,59 +61,65 @@ public class Peripherals extends SubsystemBase {
     setDefaultCommand(new PeripheralsDefault(this));
   }
 
-  public boolean cameraHasTargets() {
-    PhotonPipelineResult cameraResult = camera.getLatestResult();
-    return cameraResult.hasTargets();
+  public Pose2d getCameraBasedRobotLocation() {
+    return camera.getEstimatedGlobalPose().getFirst();
   }
 
-  public static double cameraYawToTarget() {
-    PhotonPipelineResult cameraResult = camera.getLatestResult();
-    double targetYaw = 0.0;
-    if(cameraResult.hasTargets() == true) {
-      PhotonTrackedTarget target = cameraResult.getBestTarget();
-      targetYaw = target.getYaw();
-    }
-    return targetYaw;
-  }
-
-  public static double cameraPitchToTarget() {
-    PhotonPipelineResult cameraResult = camera.getLatestResult();
-    double targetPitch = 0.0;
-    if(cameraResult.hasTargets() == true) {
-      PhotonTrackedTarget target = cameraResult.getBestTarget();
-      targetPitch = target.getPitch();
-    }
-    return targetPitch;
-  }
-
-  public static Transform3d cameraToTarget() {
-    PhotonPipelineResult cameraResult = camera.getLatestResult();
-    Transform3d cameraToTarget = new Transform3d();
-    if(cameraResult.hasTargets() == true) {
-      PhotonTrackedTarget target = cameraResult.getBestTarget();
-      cameraToTarget = target.getBestCameraToTarget();
-    }
-    return cameraToTarget;
-  }
-
-  public static double getTargetID() {
-    PhotonPipelineResult cameraResult = camera.getLatestResult();
-    if(cameraResult.hasTargets() == true) {
-      PhotonTrackedTarget target = cameraResult.getBestTarget();
-      return target.getFiducialId();
-    }
-    return -1;    
-  }
-
-  // public double getLimeLightX() {
-  //   limeLightX = Math.PI * (tableX.getDouble(0))/180;
-  //   return limeLightX;
+  // public boolean cameraHasTargets() {
+  //   PhotonPipelineResult cameraResult = camera.getLatestResult();
+  //   return cameraResult.hasTargets();
   // }
 
-  // public double getLimeLightY() {
-  //   limeLightY = tableY.getDouble(-100);
-  //   return limeLightY;
+  // public static double cameraYawToTarget() {
+  //   PhotonPipelineResult cameraResult = camera.getLatestResult();
+  //   double targetYaw = 0.0;
+  //   if(cameraResult.hasTargets() == true) {
+  //     PhotonTrackedTarget target = cameraResult.getBestTarget();
+  //     targetYaw = target.getYaw();
+  //   }
+  //   return targetYaw;
   // }
+
+  // public static double cameraPitchToTarget() {
+  //   PhotonPipelineResult cameraResult = camera.getLatestResult();
+  //   double targetPitch = 0.0;
+  //   if(cameraResult.hasTargets() == true) {
+  //     PhotonTrackedTarget target = cameraResult.getBestTarget();
+  //     targetPitch = target.getPitch();
+  //   }
+  //   return targetPitch;
+  // }
+
+  // public static Transform3d cameraToTarget() {
+  //   PhotonPipelineResult cameraResult = camera.getLatestResult();
+  //   Transform3d cameraToTarget = new Transform3d();
+  //   if(cameraResult.hasTargets() == true) {
+  //     PhotonTrackedTarget target = cameraResult.getBestTarget();
+  //     cameraToTarget = target.getBestCameraToTarget();
+  //     Rotation3d test = target.getBestCameraToTarget().getRotation();
+  //     System.out.println("ROTATION: " + test);
+  //   }
+  //   return cameraToTarget;
+  // }
+
+  // public static double getTargetID() {
+  //   PhotonPipelineResult cameraResult = camera.getLatestResult();
+  //   if(cameraResult.hasTargets() == true) {
+  //     PhotonTrackedTarget target = cameraResult.getBestTarget();
+  //     return target.getFiducialId();
+  //   }
+  //   return -1;    
+  // }
+
+  public double getLimeLightX() {
+    limeLightX = Math.PI * (tableX.getDouble(0))/180;
+    return limeLightX;
+  }
+
+  public double getLimeLightY() {
+    limeLightY = tableY.getDouble(-100);
+    return limeLightY;
+  }
 
   // public double getLimeLightYOffssetToTarget() {
   //   double x = getLimeLightY();
@@ -128,7 +139,7 @@ public class Peripherals extends SubsystemBase {
     switchLights.setNumber(1);
   }
 
-  public double getNavxAngle() {
+  public static double getNavxAngle() {
     // System.out.println("ANGLE: " + navx.getRawAngle() + " YAW: " + navx.getRawYaw() + " PITCH: " + navx.getRawPitch() + " ROLL: " + navx.getRawRoll());
     return navx.currentAngle();
 }
