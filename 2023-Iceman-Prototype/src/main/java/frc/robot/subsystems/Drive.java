@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 
+import org.apache.commons.math3.linear.MatrixUtils;
+import org.apache.commons.math3.linear.RealMatrix;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -540,43 +542,115 @@ public class Drive extends SubsystemBase {
         return dividend;
     }
 
+    public double[] samplePosition(RealMatrix coefficients) {
+
+    }
+
+    // t, x, y, theta, vx, vy, vtheta, ax, ay, atheta
     // generates a path to place a object on the fly, input is which part of grid to place on
-    // public void generatePlacementPathOnTheFly(int placementLocation) {
-    //     double[] firstPoint = new double[] {0, getFusedOdometryX(), getFusedOdometryY(), getFusedOdometryTheta()};
-    //     double[] midPoint = new double[] {1.5, Constants.PLACEMENT_PATH_MIDPOINT_X_RED, Constants.PLACEMENT_PATH_MIDPOINT_Y_RED[placementLocation], Math.toRadians(180)};
-    //     double[] placementPoint = new double[] {3, Constants.PLACEMENT_LOCATION_X_RED, Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation]};
+    public void generatePlacementPathOnTheFly(int placementLocation) {
+        double[] firstPoint = new double[] {0, getFusedOdometryX(), getFusedOdometryY(), getFusedOdometryTheta(), getCurrentXVelocity(), getCurrentYVelocity(), getCurrentThetaVelocity(), 0, 0, 0};
+        double[] midPoint = new double[] {1.5, Constants.PLACEMENT_PATH_MIDPOINT_X_RED, Constants.PLACEMENT_PATH_MIDPOINT_Y_RED[placementLocation], Math.toRadians(180), getCurrentXVelocity()/3, getCurrentYVelocity()/3, getCurrentThetaVelocity()/3, 0, 0, 0};
+        double[] placementPoint = new double[] {3, Constants.PLACEMENT_LOCATION_X_RED, Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation], 0, 0, 0, 0, 0, 0};
 
-    //     double[] currentPoint;
-    //     double[] nextPoint;
+        double[] currentPoint;
+        double[] nextPoint;
 
-    //     for(int i = 0; i < 3; i++) {
-    //         double[] startPad = new double[i * 6];
-    //         for(int j = 0; j < startPad.length - 1; j++) {
-    //             startPad[j] = 0;
-    //         }
-    //         if(i == 0) {
-    //             currentPoint = firstPoint;
-    //             nextPoint = midPoint;
-    //         }
-    //         else {
-    //             currentPoint = midPoint;
-    //             nextPoint = placementPoint;
-    //         }
-    //         double time = currentPoint[0];
-    //         double[] firstPointEqation = startPad.;
-    //     }
+        for(int i = 0; i < 3; i++) {
+            double[] startPad = new double[i * 6];
+            if(i == 0) {
+                currentPoint = firstPoint;
+                nextPoint = midPoint;
+            }
+            else {
+                currentPoint = midPoint;
+                nextPoint = placementPoint;
+            }
+            double time = currentPoint[0];
+            double currentX = currentPoint[1];
+            double currentY = currentPoint[2];
+            double currentTheta = currentPoint[3];
+            double currentXVelocity = currentPoint[4];
+            double currentYVelocity = currentPoint[5];
+            double currentThetaVelocity = currentPoint[6];
+            double currentXAccel = currentPoint[7];
+            double currentYAccel = currentPoint[8];
+            double currentThetaAccel = currentPoint[10];
 
-    // }
+            double nextTime = nextPoint[0];
+            double nextX = nextPoint[1];
+            double nextY = nextPoint[2];
+            double nextTheta = nextPoint[3];
+            double nextXVelocity = nextPoint[4];
+            double nextYVelocity = nextPoint[5];
+            double nextThetaVelocity = nextPoint[6];
+            double nextXAccel = nextPoint[7];
+            double nextYAccel = nextPoint[8];
+            double nextThetaAccel = nextPoint[10];
+
+            for(int j = 0; j < startPad.length - 1; j++) {
+                startPad[j] = 0;
+            }
+
+            double[] firstPointEq;
+            double[] secondPointEq;
+            double[] firstVelEq;
+            double[] secondVelEq;
+            double[] firstAccelEq;
+            double[] secondAccelEq;
+
+            if(i == 0) {
+                firstPointEq = new double[] {1, time, Math.pow(time, 2), Math.pow(time, 3), Math.pow(time, 4), Math.pow(time, 5), 0, 0, 0, 0, 0, 0};
+                secondPointEq = new double[] {1, nextTime, Math.pow(nextTime, 2), Math.pow(nextTime, 3), Math.pow(nextTime, 4), Math.pow(nextTime, 5),  0, 0, 0, 0, 0, 0};
+                firstVelEq = new double[] {0, 1, 2 * (time), 3 * (Math.pow(time, 2)), 4 * (Math.pow(time, 3)), 5 * (Math.pow(time, 4)), 0, 0, 0, 0, 0, 0};
+                secondVelEq = new double[] {0, 1, 2 * (nextTime), 3 * (Math.pow(nextTime, 2)), 4 * (Math.pow(nextTime, 3)), 5 * (Math.pow(nextTime, 4)), 0, 0, 0, 0, 0, 0};
+                firstAccelEq = new double[] {0, 0, 2, 6 * time, 12 * (Math.pow(time, 2)), 20 * ((Math.pow(time, 3))), 0, 0, 0, 0, 0, 0};
+                secondAccelEq = new double[] {0, 0, 2, 6 * nextTime, 12 * (Math.pow(nextTime, 2)), 20 * ((Math.pow(nextTime, 3))), 0, 0, 0, 0, 0, 0};
+            }
+            else {
+                firstPointEq = new double[] {0, 0, 0 , 0, 0, 0, 1, time, Math.pow(time, 2), Math.pow(time, 3), Math.pow(time, 4), Math.pow(time, 5)};
+                secondPointEq = new double[] {0, 0, 0 , 0, 0, 0, 1, nextTime, Math.pow(nextTime, 2), Math.pow(nextTime, 3), Math.pow(nextTime, 4), Math.pow(nextTime, 5)};
+                firstVelEq = new double[] {0, 0, 0 , 0, 0, 0, 0, 1, 2 * (time), 3 * (Math.pow(time, 2)), 4 * (Math.pow(time, 3)), 5 * (Math.pow(time, 4))};
+                secondVelEq = new double[] {0, 0, 0 , 0, 0, 0, 0, 1, 2 * (nextTime), 3 * (Math.pow(nextTime, 2)), 4 * (Math.pow(nextTime, 3)), 5 * (Math.pow(nextTime, 4))};
+                firstAccelEq = new double[] {0, 0, 0 , 0, 0, 0, 0, 0, 2, 6 * time, 12 * (Math.pow(time, 2)), 20 * ((Math.pow(time, 3)))};
+                secondAccelEq = new double[] {0, 0, 0 , 0, 0, 0, 0, 0, 2, 6 * nextTime, 12 * (Math.pow(nextTime, 2)), 20 * ((Math.pow(nextTime, 3)))};
+            }
+
+            double[] xArray = new double[] {currentX, nextX, currentXVelocity, nextXVelocity, currentXAccel, nextXAccel};
+            double[] yArray = new double[] {currentY, nextY, currentYVelocity, nextYVelocity, currentYAccel, nextYAccel};
+            double[] thetaArray = new double[] {currentTheta, nextTheta, currentThetaVelocity, nextThetaVelocity, currentThetaAccel, nextThetaAccel};
+
+            double[][] equationData = {firstPointEq, secondPointEq, firstVelEq, secondVelEq, firstAccelEq, secondAccelEq};
+
+            RealMatrix systemEqMatrix = MatrixUtils.createRealMatrix(equationData);
+
+            RealMatrix xMatrix = MatrixUtils.createColumnRealMatrix(xArray);
+            RealMatrix yMatrix = MatrixUtils.createColumnRealMatrix(yArray);
+            RealMatrix thetaMatrix = MatrixUtils.createColumnRealMatrix(thetaArray);
+
+            // taking inverse of matrix
+            RealMatrix systemEqMatrixInverse = systemEqMatrix.transpose().scalarMultiply(-1);
+
+            RealMatrix xCoefficients = systemEqMatrixInverse.multiply(xMatrix);
+            RealMatrix yCoefficients = systemEqMatrixInverse.multiply(yMatrix);
+            RealMatrix thetaCoefficients = systemEqMatrixInverse.multiply(thetaMatrix);
+
+            double[] sampledX = samplePosition(xCoefficients);
+            double[] sampledY = samplePosition(yCoefficients);
+            double[] sampledTheta = samplePosition(thetaCoefficients);
+        }
+
+    }
 
     // Autonomous algorithm
     public double[] pidController(double currentX, double currentY, double currentTheta, double time, JSONArray pathPoints) {
         if(time < pathPoints.getJSONArray(pathPoints.length() - 1).getDouble(0)) {
             JSONArray currentPoint = pathPoints.getJSONArray(0);
             JSONArray targetPoint = pathPoints.getJSONArray(0);
-            for(int i = 0; i < pathPoints.length() - lookAheadDistance; i ++) {
+            for(int i = 0; i < pathPoints.length(); i ++) {
                 if(i == pathPoints.length() - lookAheadDistance) {
                     currentPoint = pathPoints.getJSONArray(i + 1);
-                    targetPoint = pathPoints.getJSONArray((i + (lookAheadDistance - 1)));
+                    targetPoint = pathPoints.getJSONArray(pathPoints.length() - 1);
                     break;
                 }
 
