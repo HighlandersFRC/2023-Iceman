@@ -59,7 +59,7 @@ public class Robot extends TimedRobot {
     arm.init();
     intake.init();
     try {
-      pathingFile = new File("/home/lvuser/deploy/Test.json");
+      pathingFile = new File("/home/lvuser/deploy/AlignmentTest.json");
       FileReader scanner = new FileReader(pathingFile);
       // pathRead = new JSONTokener(scanner);
       pathRead = new JSONObject(new JSONTokener(scanner));

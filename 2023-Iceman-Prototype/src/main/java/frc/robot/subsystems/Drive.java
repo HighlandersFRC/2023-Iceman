@@ -458,60 +458,10 @@ public class Drive extends SubsystemBase {
         odometryList[1] = getFusedOdometryY();
         odometryList[2] = getFusedOdometryTheta();
 
-        // String strOdomList = (odometryList[0] + "," + odometryList[1] + ","+ odometryList[2]); 
-        // // System.out.println("STRING ODOM LIST:" + strOdomList);
-
-        // MqttMessage message = new MqttMessage(strOdomList.getBytes());
-
-        // publish.publish("/pathTool", message);
-
-        // System.out.println("X: " + getFusedOdometryX() + " Y: " + getFusedOdometryY() + " Theta: " + getFusedOdometryTheta());
-
         leftFront.velocityDrive(controllerVector, turn, 0);
         rightFront.velocityDrive(controllerVector, turn, 0);
         leftBack.velocityDrive(controllerVector, turn, 0);
         rightBack.velocityDrive(controllerVector, turn, 0);
-
-        // leftFront.testDrive();
-        // rightFront.testDrive();
-        // leftBack.testDrive();
-        // rightBack.testDrive();
-
-    }
-
-    // NOT WORKING method to accepts controller input of which way to drive but stay aligned to the target
-    public void driveAutoAligned(double cameraTurnAdjustment) {
-        updateOdometryFusedArray();
-
-        double turn = (-OI.getDriverRightX() * (Constants.TOP_SPEED)/(Constants.ROBOT_RADIUS));
-
-        // double cameraTurnAdjustment = -peripherals.getLimeLightX();
-
-        double turnRadiansPerSec = turn + cameraTurnAdjustment;
-
-        double originalX = -OI.getDriverLeftY();
-        double originalY = -OI.getDriverLeftX();
-
-        if(Math.abs(originalX) < 0.05) {
-            originalX = 0;
-        }
-        if(Math.abs(originalY) < 0.05) {
-            originalY = 0;
-        }
-
-        double navxOffset = Math.toRadians(peripherals.getNavxAngle());
-        double xPower = getAdjustedX(originalX, originalY);
-        double yPower = getAdjustedY(originalX, originalY);
-
-        double xSpeed = xPower * Constants.TOP_SPEED;
-        double ySpeed = yPower * Constants.TOP_SPEED;
-
-        Vector controllerVector = new Vector(xSpeed, ySpeed);
-
-        leftFront.velocityDrive(controllerVector, turnRadiansPerSec, navxOffset);
-        rightFront.velocityDrive(controllerVector, turnRadiansPerSec, navxOffset);
-        leftBack.velocityDrive(controllerVector, turnRadiansPerSec, navxOffset);
-        rightBack.velocityDrive(controllerVector, turnRadiansPerSec, navxOffset);
     }
 
     // method run in teleop that accepts controller values to move swerve drive
@@ -590,8 +540,36 @@ public class Drive extends SubsystemBase {
         return dividend;
     }
 
+    // generates a path to place a object on the fly, input is which part of grid to place on
+    // public void generatePlacementPathOnTheFly(int placementLocation) {
+    //     double[] firstPoint = new double[] {0, getFusedOdometryX(), getFusedOdometryY(), getFusedOdometryTheta()};
+    //     double[] midPoint = new double[] {1.5, Constants.PLACEMENT_PATH_MIDPOINT_X_RED, Constants.PLACEMENT_PATH_MIDPOINT_Y_RED[placementLocation], Math.toRadians(180)};
+    //     double[] placementPoint = new double[] {3, Constants.PLACEMENT_LOCATION_X_RED, Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation]};
+
+    //     double[] currentPoint;
+    //     double[] nextPoint;
+
+    //     for(int i = 0; i < 3; i++) {
+    //         double[] startPad = new double[i * 6];
+    //         for(int j = 0; j < startPad.length - 1; j++) {
+    //             startPad[j] = 0;
+    //         }
+    //         if(i == 0) {
+    //             currentPoint = firstPoint;
+    //             nextPoint = midPoint;
+    //         }
+    //         else {
+    //             currentPoint = midPoint;
+    //             nextPoint = placementPoint;
+    //         }
+    //         double time = currentPoint[0];
+    //         double[] firstPointEqation = startPad.;
+    //     }
+
+    // }
+
     // Autonomous algorithm
-    public double[] pidController(double currentX, double currentY, double currentTheta,double time, JSONArray pathPoints) {
+    public double[] pidController(double currentX, double currentY, double currentTheta, double time, JSONArray pathPoints) {
         if(time < pathPoints.getJSONArray(pathPoints.length() - 1).getDouble(0)) {
             JSONArray currentPoint = pathPoints.getJSONArray(0);
             JSONArray targetPoint = pathPoints.getJSONArray(0);
@@ -660,7 +638,7 @@ public class Drive extends SubsystemBase {
             velocityArray[1] = yVel;
             velocityArray[2] = thetaVel;
 
-            // System.out.println("Target Point: " + targetPoint + " CURRENT TIME: " + time + " xVel: " + velocityArray[0] + " yVel: " + velocityArray[1] + " thetaVel: " + velocityArray[2]);
+            System.out.println("Target Point: " + targetPoint + " CURRENT TIME: " + time + " xVel: " + velocityArray[0] + " yVel: " + velocityArray[1] + " thetaVel: " + velocityArray[2]);
 
             return velocityArray;
         }
@@ -672,8 +650,7 @@ public class Drive extends SubsystemBase {
             velocityArray[2] = 0;
 
             return velocityArray;
-        }
-        
+        }        
     }
  
     @Override

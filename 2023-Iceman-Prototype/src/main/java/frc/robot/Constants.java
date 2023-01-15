@@ -82,6 +82,12 @@ public final class Constants {
     public static final double TAG_ONE_PITCH_TO_FIELD = 0;
     public static final double TAG_ONE_YAW_TO_FIELD = 0;
 
+    public static final double PLACEMENT_LOCATION_X_RED = 14.75;
+    public static final double[] PLACEMENT_LOCATIONS_Y_RED = new double[] {0, 0, 0, 2.47, 0, 0, 0, 0, 0};
+
+    public static final double PLACEMENT_PATH_MIDPOINT_X_RED = 14.18;
+    public static final double[] PLACEMENT_PATH_MIDPOINT_Y_RED = new double[] {0, 0, 0, 2.47, 0, 0, 0, 0, 0};
+
     public static final Transform3d ROBOT_TO_CAM =
                 new Transform3d(
                         new Translation3d(0.4064, 0.0, 0.3302),
