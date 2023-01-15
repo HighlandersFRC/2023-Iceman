@@ -3,9 +3,9 @@
 package frc.robot.tools;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-public class TriggerButton extends Button {
+public class TriggerButton extends Trigger {
     private final double THRESHOLD = 0.5;
     private GenericHID joystick;
     private int axis;

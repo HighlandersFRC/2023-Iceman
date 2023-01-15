@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -39,10 +41,14 @@ public class Peripherals extends SubsystemBase {
   private NetworkTable limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
   private NetworkTableEntry tableX = limeLightTable.getEntry("tx");
   private NetworkTableEntry tableY = limeLightTable.getEntry("ty");
+  private NetworkTableEntry tableLatency = limeLightTable.getEntry("tl");
   private NetworkTableEntry switchLights = limeLightTable.getEntry("ledMode");
+  private NetworkTableEntry robotPose = limeLightTable.getEntry("json");
 
   private double limeLightX = -1.0;
   private double limeLightY = -1.0;
+
+  private double[] noTrackLimelightArray = new double[6];
 
   // static PhotonCamera camera = new PhotonCamera(Constants.CAMERA_NAME);
 
@@ -58,6 +64,12 @@ public class Peripherals extends SubsystemBase {
     System.out.print("INSIDE PERIPHERALS INIT");
     zeroNavx();
     turnLightRingOn();
+    noTrackLimelightArray[0] = 0;
+    noTrackLimelightArray[1] = 0;
+    noTrackLimelightArray[2] = 0;
+    noTrackLimelightArray[3] = 0;
+    noTrackLimelightArray[4] = 0;
+    noTrackLimelightArray[5] = 0;
     setDefaultCommand(new PeripheralsDefault(this));
   }
 
@@ -119,6 +131,46 @@ public class Peripherals extends SubsystemBase {
   public double getLimeLightY() {
     limeLightY = tableY.getDouble(-100);
     return limeLightY;
+  }
+
+  public double getCameraLatency() {
+    double latency = tableLatency.getDouble(-1);
+    return latency;
+  }
+
+  public JSONArray getLimelightBasedPosition() {
+    // System.out.println(robotPose.getString(""));
+    JSONArray robotPosArray = new JSONArray();
+    robotPosArray.put(0, 0);
+    try {
+      String networkTableResult = robotPose.getString("");
+      JSONObject camResult = new JSONObject(networkTableResult).getJSONObject("Results");
+      JSONArray tagList = camResult.getJSONArray("Fiducial");
+      double averagedX = 0;
+      double averagedY = 0;
+      double count = 0;
+      if(tagList.length() >= 1) {
+        for(int i = 0; i < tagList.length(); i++) {
+          JSONObject tag = (JSONObject) tagList.get(0);
+          robotPosArray = tag.getJSONArray("t6r_fs");
+          averagedX = averagedX + robotPosArray.getDouble(0);
+          averagedY = averagedY + robotPosArray.getDouble(1);
+          count++;
+        }
+        averagedX = averagedX/count;
+        averagedY = averagedY/count;
+        JSONObject bestTag = (JSONObject) tagList.get(0);
+        robotPosArray.put(0, averagedX + (Constants.FIELD_LENGTH/2));
+        robotPosArray.put(1, averagedY + (Constants.FIELD_WIDTH/2));
+        // System.out.println(robotPosArray);
+    } 
+    } catch (Exception e) {
+        JSONArray noTarget = new JSONArray();
+        noTarget.put(0);
+        return noTarget;
+        // TODO: handle exception
+    }
+    return robotPosArray;
   }
 
   // public double getLimeLightYOffssetToTarget() {

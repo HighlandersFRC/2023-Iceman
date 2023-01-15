@@ -26,6 +26,9 @@ public class SwerveModule extends SubsystemBase {
 
     private final CANCoder absoluteEncoder;
 
+    private double xTurnAngle = 0.7692;
+    private double yTurnAngle = 0.6390;
+
     public SwerveModule(int moduleNumber, TalonFX mAngleMotor, TalonFX mDriveMotor, double zeroOffset, CANCoder mAbsoluteEncoder) {
         // sets up the module by defining angle motor and drive motor
         angleMotor = mAngleMotor;
@@ -58,23 +61,42 @@ public class SwerveModule extends SubsystemBase {
         // +y <__|
 
         // this block creates the turn vector based on the module's relation to the robot(stays constant because robot is square)
+
+
+        // if(moduleNumber == 1) {
+        //     turnVector.setI(-Math.sqrt(2)/2.0);
+        //     turnVector.setJ(-Math.sqrt(2)/2.0);
+        // }
+        // if(moduleNumber == 2) {
+        //     turnVector.setI(Math.sqrt(2)/2.0);
+        //     turnVector.setJ(-Math.sqrt(2)/2.0);
+        // }
+        // if(moduleNumber == 3) {
+        //     turnVector.setI(Math.sqrt(2)/2.0);
+        //     turnVector.setJ(Math.sqrt(2)/2.0);
+        // }
+        // if(moduleNumber == 4) {
+        //     turnVector.setI(-Math.sqrt(2)/2.0);
+        //     turnVector.setJ(Math.sqrt(2)/2.0);
+        // }
+
         if(moduleNumber == 1) {
-            turnVector.setI(-Math.sqrt(2)/2.0);
-            turnVector.setJ(-Math.sqrt(2)/2.0);
+            turnVector.setI(-xTurnAngle);
+            turnVector.setJ(-yTurnAngle);
         }
         if(moduleNumber == 2) {
-            turnVector.setI(Math.sqrt(2)/2.0);
-            turnVector.setJ(-Math.sqrt(2)/2.0);
+            turnVector.setI(xTurnAngle);
+            turnVector.setJ(-yTurnAngle);
         }
         if(moduleNumber == 3) {
-            turnVector.setI(Math.sqrt(2)/2.0);
-            turnVector.setJ(Math.sqrt(2)/2.0);
+            turnVector.setI(xTurnAngle);
+            turnVector.setJ(yTurnAngle);
         }
         if(moduleNumber == 4) {
-            turnVector.setI(-Math.sqrt(2)/2.0);
-            turnVector.setJ(Math.sqrt(2)/2.0);
+            turnVector.setI(-xTurnAngle);
+            turnVector.setJ(yTurnAngle);
         }
-        
+    
     }
 
     // this method returns the angle of the joystick given the X and Y components

@@ -6,6 +6,8 @@ import com.ctre.phoenix.sensors.CANCoder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,6 +15,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -49,7 +53,8 @@ public class Drive extends SubsystemBase {
     private Peripherals peripherals;
 
     // xy position of module based on robot width and distance from edge of robot
-    private final double moduleXY = ((Constants.ROBOT_WIDTH)/2) - Constants.MODULE_OFFSET;
+    private final double moduleX = ((Constants.ROBOT_WIDTH)/2) - Constants.MODULE_OFFSET;
+    private final double moduleY = ((Constants.ROBOT_LENGTH)/2) - Constants.MODULE_OFFSET;
 
     // creating all the external encoders
     private CANCoder backRightAbsoluteEncoder = new CANCoder(4);
@@ -64,10 +69,10 @@ public class Drive extends SubsystemBase {
     private final SwerveModule rightBack = new SwerveModule(4, rightBackAngleMotor, rightBackMotor, 0, backRightAbsoluteEncoder);
 
     // Locations for the swerve drive modules relative to the robot center.
-    Translation2d m_frontLeftLocation = new Translation2d(moduleXY, moduleXY);
-    Translation2d m_frontRightLocation = new Translation2d(moduleXY, -moduleXY);
-    Translation2d m_backLeftLocation = new Translation2d(-moduleXY, moduleXY);
-    Translation2d m_backRightLocation = new Translation2d(-moduleXY, -moduleXY);
+    Translation2d m_frontLeftLocation = new Translation2d(moduleX, moduleY);
+    Translation2d m_frontRightLocation = new Translation2d(moduleX, -moduleY);
+    Translation2d m_backLeftLocation = new Translation2d(-moduleX, moduleY);
+    Translation2d m_backRightLocation = new Translation2d(-moduleX, -moduleY);
 
     // values for odometry for autonomous pathing
     private double currentX = 0;
@@ -159,6 +164,10 @@ public class Drive extends SubsystemBase {
         swerveModulePositions[2] = new SwerveModulePosition(leftBack.getModuleDistance(), new Rotation2d(leftBack.getAbsolutePositionRadians()));
         swerveModulePositions[3] = new SwerveModulePosition(rightBack.getModuleDistance(), new Rotation2d(rightBack.getAbsolutePositionRadians()));
         m_odometry.resetPosition(new Rotation2d(peripherals.getNavxAngle()), swerveModulePositions, new Pose2d(new Translation2d(getFusedOdometryX(), getFusedOdometryY()), new Rotation2d(getFusedOdometryTheta())));
+    }
+
+    public void setNavxAfterAuto() {
+        peripherals.setNavxAngle((peripherals.getNavxAngle() + 180)%360);
     }
 
     // get each external encoder
@@ -271,19 +280,29 @@ public class Drive extends SubsystemBase {
     public void updateOdometryFusedArray() {
         double navxOffset = Math.toRadians(peripherals.getNavxAngle());
 
-        // double cameraDistanceToTarget = peripherals.getLimeLightDistanceToTarget();
+        JSONArray cameraCoordinates = peripherals.getLimelightBasedPosition();
 
-        // double[] cameraCoordinates = peripherals.calculateRobotPosFromCamera();
+        double cameraBasedX = 0;
+        double cameraBasedY = 0;
 
-        // double cameraXVal = cameraCoordinates[0];
-        // double cameraYVal = cameraCoordinates[1];
+        Matrix<N3, N1> stdDeviation = new Matrix<>(Nat.N3(), Nat.N1());
+
+        stdDeviation.set(0, 0, 0);
+        stdDeviation.set(1, 0, 0);
+        stdDeviation.set(2, 0, 0);
+
+        if(cameraCoordinates.getDouble(0) != 0) {
+            cameraBasedX = cameraCoordinates.getDouble(0);
+            cameraBasedY = cameraCoordinates.getDouble(1);
+            Pose2d cameraBasedPosition = new Pose2d(new Translation2d(cameraBasedX, cameraBasedY), new Rotation2d(navxOffset));
+            m_odometry.addVisionMeasurement(cameraBasedPosition, Timer.getFPGATimestamp() - (peripherals.getCameraLatency()/1000));
+        }
 
         SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];
         swerveModulePositions[0] = new SwerveModulePosition(rightFront.getModuleDistance(), new Rotation2d(rightFront.getAbsolutePositionRadians()));
         swerveModulePositions[1] = new SwerveModulePosition(leftFront.getModuleDistance(), new Rotation2d(leftFront.getAbsolutePositionRadians()));
         swerveModulePositions[2] = new SwerveModulePosition(leftBack.getModuleDistance(), new Rotation2d(leftBack.getAbsolutePositionRadians()));
         swerveModulePositions[3] = new SwerveModulePosition(rightBack.getModuleDistance(), new Rotation2d(rightBack.getAbsolutePositionRadians()));
-        // m_odometry.resetPosition(new Rotation2d(peripherals.getNavxAngle()), swerveModulePositions, new Pose2d(new Translation2d(getFusedOdometryX(), getFusedOdometryY()), new Rotation2d(getFusedOdometryTheta())));
         
         m_pose = m_odometry.update(new Rotation2d((navxOffset)), swerveModulePositions);
 
@@ -321,8 +340,21 @@ public class Drive extends SubsystemBase {
         currentFusedOdometry[2] = currentTheta;
 
         // System.out.println("X: " + averagedX + " Y: " + averagedY + " Theta: " + currentTheta);
+        SmartDashboard.putNumber("X", averagedX);
+        SmartDashboard.putNumber("Y", averagedY);
 
         // m_odometry.resetPosition(new Pose2d(new Translation2d(averagedX, averagedY),  new Rotation2d(navxOffset)), new Rotation2d(navxOffset));
+    }
+
+    public double getCurrentXVelocity() {
+        return currentXVelocity;
+    }
+
+    public double getCurrentYVelocity() {
+        return currentYVelocity;
+    }
+    public double getCurrentThetaVelocity() {
+        return currentThetaVelocity;
     }
 
     // getFusedOdometryX
@@ -565,7 +597,7 @@ public class Drive extends SubsystemBase {
             JSONArray targetPoint = pathPoints.getJSONArray(0);
             for(int i = 0; i < pathPoints.length() - lookAheadDistance; i ++) {
                 if(i == pathPoints.length() - lookAheadDistance) {
-                    currentPoint = pathPoints.getJSONArray(i);
+                    currentPoint = pathPoints.getJSONArray(i + 1);
                     targetPoint = pathPoints.getJSONArray((i + (lookAheadDistance - 1)));
                     break;
                 }

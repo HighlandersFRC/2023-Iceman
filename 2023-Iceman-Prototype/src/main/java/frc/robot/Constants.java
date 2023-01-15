@@ -26,9 +26,10 @@ import frc.robot.subsystems.Peripherals;
  */
 public final class Constants {
 
-    // public static final double FIELD_WIDTH = 
+    public static final double FIELD_WIDTH = 8.2;
+    public static final double FIELD_LENGTH = 16.63;
 
-    public static final double ROBOT_RADIUS = inchesToMeters(16.75); //m
+    public static final double ROBOT_RADIUS = inchesToMeters(15.375); //m
 
     public static final double WHEEL_DIAMETER = inchesToMeters(4); //m
 
@@ -45,7 +46,9 @@ public final class Constants {
 
     public static final double NEO_TICS_PER_ROTATION = 42;
 
-    public static final double ROBOT_WIDTH = inchesToMeters(29); //m
+    public static final double ROBOT_WIDTH = inchesToMeters(24); //m
+
+    public static final double ROBOT_LENGTH = inchesToMeters(29); //m
 
     public static final double MODULE_OFFSET = inchesToMeters(2.5);
 

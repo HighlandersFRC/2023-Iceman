@@ -20,9 +20,12 @@ import frc.robot.commands.AlignToConeHorizontal;
 import frc.robot.commands.AlignToConeVertical;
 import frc.robot.commands.AutonomousFollower;
 import frc.robot.commands.MoveToReflectiveTape;
+import frc.robot.commands.RunIntake;
 import frc.robot.commands.VisionAlignment;
+import frc.robot.commands.ZeroNavxMidMatch;
 import frc.robot.commands.defaults.MoveArm;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.MorrisArm;
 import frc.robot.subsystems.Peripherals;
@@ -36,12 +39,10 @@ import frc.robot.subsystems.Peripherals;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
-  private RobotContainer m_robotContainer;
-
   private Lights lights = new Lights();
   private Peripherals peripherals = new Peripherals(lights);
   private Drive drive = new Drive(peripherals);
-
+  private Intake intake = new Intake();
   private MorrisArm arm = new MorrisArm();
 
   File pathingFile;
@@ -56,7 +57,7 @@ public class Robot extends TimedRobot {
     peripherals.init();
     lights.init();
     arm.init();
-
+    intake.init();
     try {
       pathingFile = new File("/home/lvuser/deploy/Test.json");
       FileReader scanner = new FileReader(pathingFile);
@@ -70,13 +71,15 @@ public class Robot extends TimedRobot {
     catch(Exception e) {
       System.out.println("ERROR WITH PATH FILE " + e);
     }
-    m_robotContainer = new RobotContainer();
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    System.out.println(peripherals.getCameraBasedRobotLocation());
+    // System.out.println(peripherals.getCameraBasedRobotLocation());
+    // peripherals.getLimelightBasedPosition();
+    SmartDashboard.putNumber("latency", peripherals.getCameraLatency());
+    SmartDashboard.putNumber("NAVX Roll", peripherals.getNavxRoll());
     // SmartDashboard.putBoolean("HAS TARGET", peripherals.cameraHasTargets());
     // SmartDashboard.putNumber("Target Yaw", peripherals.cameraYawToTarget());
     // SmartDashboard.putNumber("Target Pitch", peripherals.cameraPitchToTarget());
@@ -103,12 +106,17 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     drive.teleopInit();
-
-    OI.driverA.whenHeld(new MoveArm(arm, 0.25));
-    OI.driverB.whenHeld(new MoveArm(arm, -0.25));
-    OI.driverX.whenPressed(new AlignToConeHorizontal(drive, peripherals));
+    OI.driverViewButton.whileHeld(new ZeroNavxMidMatch(drive));
+    // OI.driverRT.whileActiveOnce(new RunIntake(intake, 0.2));
+    // OI.driverA.whenHeld(new MoveArm(arm, 0.25));
+    // OI.driverB.whenHeld(new MoveArm(arm, -0.25));
+    // OI.driverX.whenPressed(new AlignToConeHorizontal(drive, peripherals));
     // OI.driverY.whenPressed(new AlignToConeVertical(drive, peripherals));
-    OI.driverY.whenPressed(new MoveToReflectiveTape(drive, peripherals));
+    // OI.driverY.whenPressed(new MoveToReflectiveTape(drive, peripherals));
+    OI.driverA.whileHeld(new RunIntake(intake, 0.3));
+    OI.driverB.whileHeld(new RunIntake(intake, -0.3));
+    OI.driverY.whileHeld(new RunIntake(intake, 0.1));
+    OI.driverX.whileHeld(new RunIntake(intake, -0.1));
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
