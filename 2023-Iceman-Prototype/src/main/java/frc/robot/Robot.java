@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.AlignForPlacement;
 import frc.robot.commands.AlignToConeHorizontal;
 import frc.robot.commands.AlignToConeVertical;
 import frc.robot.commands.AutonomousFollower;
@@ -59,7 +60,7 @@ public class Robot extends TimedRobot {
     arm.init();
     intake.init();
     try {
-      pathingFile = new File("/home/lvuser/deploy/AlignmentTest.json");
+      pathingFile = new File("/home/lvuser/deploy/Test1.json");
       FileReader scanner = new FileReader(pathingFile);
       // pathRead = new JSONTokener(scanner);
       pathRead = new JSONObject(new JSONTokener(scanner));
@@ -94,7 +95,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     drive.autoInit(pathJSON);
-    AutonomousFollower auto = new AutonomousFollower(drive, pathJSON);
+    AutonomousFollower auto = new AutonomousFollower(drive, pathJSON, true);
 
     auto.schedule();
   }
@@ -113,10 +114,14 @@ public class Robot extends TimedRobot {
     // OI.driverX.whenPressed(new AlignToConeHorizontal(drive, peripherals));
     // OI.driverY.whenPressed(new AlignToConeVertical(drive, peripherals));
     // OI.driverY.whenPressed(new MoveToReflectiveTape(drive, peripherals));
-    OI.driverA.whileHeld(new RunIntake(intake, 0.3));
-    OI.driverB.whileHeld(new RunIntake(intake, -0.3));
-    OI.driverY.whileHeld(new RunIntake(intake, 0.1));
-    OI.driverX.whileHeld(new RunIntake(intake, -0.1));
+    // OI.driverA.whileHeld(new RunIntake(intake, 0.3));
+    // OI.driverB.whileHeld(new RunIntake(intake, -0.3));
+    // OI.driverY.whileHeld(new RunPastaRoller(intake, 0.3));
+    // OI.driverX.whileHeld(new RunPastaRoller(intake, -0.3));
+    OI.driverX.onTrue(new AlignForPlacement(drive, -1, "red"));
+    OI.driverA.onTrue(new AlignForPlacement(drive, 0, "red"));
+    OI.driverB.whileHeld(new AlignForPlacement(drive, 1, "red"));
+
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

@@ -23,37 +23,44 @@ public class AutonomousFollower extends CommandBase {
     private double initTime;
     private double currentTime;
     private double previousTime;
-    private double timeDiff;
-
-    private double previousX = 0;
-    private double previousY = 0;
-    private double previousTheta = 0;
-
-    private double currentXVelocity = 0;
-    private double currentYVelocity = 0;
-    private double currentThetaVelocity = 0;
 
     private double odometryFusedX = 0;
     private double odometryFusedY = 0;
     private double odometryFusedTheta = 0;
 
-    private double previousVelocityX = 0;
-    private double previousVelocityY = 0;
-    private double previousVelocityTheta = 0;
-
     private double[] desiredVelocityArray = new double[3];
     private double desiredThetaChange = 0;
+
+    private boolean record;
+    private String fieldSide;
+    private int offset;
     private ArrayList<double[]> recordedOdometry = new ArrayList<double[]>();
+    private boolean generatePath = false;
     /** Creates a new AutonomousFollower. */
-  public AutonomousFollower(Drive drive, JSONArray pathPoints) {
+  public AutonomousFollower(Drive drive, JSONArray pathPoints, boolean record) {
     this.drive = drive;
     this.path = pathPoints;
+    this.record = record;
+    addRequirements(this.drive);
+  }
+
+  public AutonomousFollower(Drive drive, boolean generatePath, boolean record, int placementOffset, String fieldSide){
+    this.drive = drive;
+    this.fieldSide = fieldSide;
+    this.offset = placementOffset;
+    this.record = record;
+    this.generatePath = generatePath;
     addRequirements(this.drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    if(generatePath == true) {
+      int row = drive.getClosestPlacementGroup(this.fieldSide, drive.getFusedOdometryX(), drive.getFusedOdometryY()) + this.offset;
+      System.out.println("Row: " + row);
+      this.path = drive.generatePlacementPathOnTheFly(row, this.fieldSide);
+    }
     initTime = Timer.getFPGATimestamp();
   }
 
@@ -64,17 +71,11 @@ public class AutonomousFollower extends CommandBase {
     odometryFusedY = drive.getFusedOdometryY();
     odometryFusedTheta = drive.getFusedOdometryTheta();
 
+    System.out.println("X: " + odometryFusedX + " Y: " + odometryFusedY + " Theta: " + odometryFusedTheta);
+
     currentTime = Timer.getFPGATimestamp() - initTime;
-    timeDiff = currentTime - previousTime;
 
-    // determine current velocities based on current position minus previous position divided by time difference
-    currentXVelocity = (odometryFusedX - previousX)/timeDiff;
-    currentYVelocity = (odometryFusedY - previousY)/timeDiff;
-    currentThetaVelocity = (odometryFusedTheta - previousTheta)/timeDiff;
-
-    currentXVelocity = previousVelocityX;
-    currentYVelocity = previousVelocityY;
-    currentThetaVelocity = previousVelocityTheta;
+    System.out.println("Current time: " + currentTime);
 
     // call PIDController function
     desiredVelocityArray = drive.pidController(odometryFusedX, odometryFusedY, odometryFusedTheta, currentTime, path);
@@ -85,16 +86,14 @@ public class AutonomousFollower extends CommandBase {
 
     drive.autoDrive(velocityVector, desiredThetaChange);
 
-    // set all previous variables to current variables to stay up to date
-    previousX = odometryFusedX;
-    previousY = odometryFusedY;
-    previousTheta = odometryFusedTheta;
     previousTime = currentTime;
 
     // previousVelocityX = desiredVelocityArray[0];
     // previousVelocityY = desiredVelocityArray[1];
     // previousVelocityTheta = desiredThetaChange;
-    recordedOdometry.add(new double[] {currentTime, odometryFusedX, odometryFusedY, odometryFusedTheta});
+    if (this.record){
+      recordedOdometry.add(new double[] {currentTime, odometryFusedX, odometryFusedY, odometryFusedTheta});
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -110,33 +109,35 @@ public class AutonomousFollower extends CommandBase {
     odometryFusedTheta = drive.getFusedOdometryTheta();
     currentTime = Timer.getFPGATimestamp() - initTime;
 
-    recordedOdometry.add(new double[] {currentTime, odometryFusedX, odometryFusedY, odometryFusedTheta});
+    if (this.record){
+      recordedOdometry.add(new double[] {currentTime, odometryFusedX, odometryFusedY, odometryFusedTheta});
 
-    try {
-      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd-hh-mm-ss");
-      LocalDateTime now = LocalDateTime.now();
-      String filename = "/home/lvuser/deploy/recordings/" + dtf.format(now) + ".csv";
-      File file = new File(filename);
-      if (!file.exists()){
-        file.createNewFile();
-      }
-      FileWriter fw = new FileWriter(file);
-      BufferedWriter bw = new BufferedWriter(fw);
-      for (int i = 0; i <recordedOdometry.size(); i ++){
-        String line = "";
-        for (double val : recordedOdometry.get(i)){
-          line += val + ",";
+      try {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd-hh-mm-ss");
+        LocalDateTime now = LocalDateTime.now();
+        String filename = "/home/lvuser/deploy/recordings/" + dtf.format(now) + ".csv";
+        File file = new File(filename);
+        if (!file.exists()){
+          file.createNewFile();
         }
-        line = line.substring(0, line.length() - 1);
-        line += "\n";
-        // System.out.println(line);
-        bw.write(line);
+        FileWriter fw = new FileWriter(file);
+        BufferedWriter bw = new BufferedWriter(fw);
+        for (int i = 0; i <recordedOdometry.size(); i ++){
+          String line = "";
+          for (double val : recordedOdometry.get(i)){
+            line += val + ",";
+          }
+          line = line.substring(0, line.length() - 1);
+          line += "\n";
+          // System.out.println(line);
+          bw.write(line);
+        }
+        
+        bw.close();
+      } catch (Exception e) {
+        System.out.println(e);
+        System.out.println("CSV file error");
       }
-      
-      bw.close();
-    } catch (Exception e) {
-      System.out.println(e);
-      System.out.println("CSV file error");
     }
   }
 

@@ -23,7 +23,8 @@ public class IntakeDefault extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this.intake.setIntakePercent(0.0);
+    intake.setIntakePercent(0.0);
+    intake.setPastaRollerPercent(0);
   }
 
   // Called once the command ends or is interrupted.

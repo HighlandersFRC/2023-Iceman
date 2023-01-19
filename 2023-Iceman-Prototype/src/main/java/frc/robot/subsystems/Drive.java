@@ -3,6 +3,9 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.json.JSONArray;
@@ -165,7 +168,7 @@ public class Drive extends SubsystemBase {
         swerveModulePositions[1] = new SwerveModulePosition(leftFront.getModuleDistance(), new Rotation2d(leftFront.getAbsolutePositionRadians()));
         swerveModulePositions[2] = new SwerveModulePosition(leftBack.getModuleDistance(), new Rotation2d(leftBack.getAbsolutePositionRadians()));
         swerveModulePositions[3] = new SwerveModulePosition(rightBack.getModuleDistance(), new Rotation2d(rightBack.getAbsolutePositionRadians()));
-        m_odometry.resetPosition(new Rotation2d(peripherals.getNavxAngle()), swerveModulePositions, new Pose2d(new Translation2d(getFusedOdometryX(), getFusedOdometryY()), new Rotation2d(getFusedOdometryTheta())));
+        m_odometry.resetPosition(new Rotation2d(peripherals.getNavxAngle()), swerveModulePositions, new Pose2d(new Translation2d(getFusedOdometryX(), getFusedOdometryY()), new Rotation2d(peripherals.getNavxAngle())));
     }
 
     public void setNavxAfterAuto() {
@@ -224,7 +227,7 @@ public class Drive extends SubsystemBase {
         thetaPID.setMinOutput(-(Constants.TOP_SPEED)/(Constants.ROBOT_RADIUS));
         thetaPID.setMaxOutput((Constants.TOP_SPEED)/(Constants.ROBOT_RADIUS));
 
-        setDefaultCommand(new DriveDefault(this));        
+        setDefaultCommand(new DriveDefault(this));
     }
 
     public void teleopInit() {
@@ -345,7 +348,6 @@ public class Drive extends SubsystemBase {
         SmartDashboard.putNumber("X", averagedX);
         SmartDashboard.putNumber("Y", averagedY);
 
-        // m_odometry.resetPosition(new Pose2d(new Translation2d(averagedX, averagedY),  new Rotation2d(navxOffset)), new Rotation2d(navxOffset));
     }
 
     public double getCurrentXVelocity() {
@@ -542,22 +544,90 @@ public class Drive extends SubsystemBase {
         return dividend;
     }
 
-    public double[] samplePosition(RealMatrix coefficients) {
-
+    public double samplePosition(RealMatrix coefficientsMatrix, double time) {
+        ArrayList<Double> coefs = new ArrayList<Double>();
+        for (double[] coef : coefficientsMatrix.getData()){
+            coefs.add(coef[0]);
+        }
+        // System.out.println(coefs.toString());
+        double sampled = 0.0;
+        sampled += coefs.get(5) * Math.pow(time, 5);
+        sampled += coefs.get(4) * Math.pow(time, 4);
+        sampled += coefs.get(3) * Math.pow(time, 3);
+        sampled += coefs.get(2) * Math.pow(time, 2);
+        sampled += coefs.get(1) * Math.pow(time, 1);
+        sampled += coefs.get(0);
+        // System.out.println(sampled);
+        // System.out.println("Time: " + time);
+        return sampled;
     }
 
-    // t, x, y, theta, vx, vy, vtheta, ax, ay, atheta
-    // generates a path to place a object on the fly, input is which part of grid to place on
-    public void generatePlacementPathOnTheFly(int placementLocation) {
+    // return the closest placement group 1, 4, or 7 (left to right)
+    // for instance, on red side group 1 is the leftmost (in the driver's perspective) group, with tag ID 1
+    // blue side group 7 is the rightmost group, with tag ID 8
+    public int getClosestPlacementGroup(String fieldSide, double robotX, double robotY) {
+        double distance = 999999;
+        int number = 0;
+        if (fieldSide == "red"){
+            for (int i = 0; i < 3; i ++){
+                double[] tagPosition = Constants.TAG_LOCATIONS[i];
+                double tagDistance = Math.sqrt(Math.pow(tagPosition[0] - robotX, 2) + Math.pow(tagPosition[1] - robotY, 2));
+                if (tagDistance < distance){
+                    distance = tagDistance;
+                    number = i * 3 + 1;
+                }
+            }
+        } else if (fieldSide == "blue"){
+            for (int i = 5; i < 8; i ++){
+                double[] tagPosition = Constants.TAG_LOCATIONS[i];
+                double tagDistance = Math.sqrt(Math.pow(tagPosition[0] - robotX, 2) + Math.pow(tagPosition[1] - robotY, 2));
+                if (tagDistance < distance){
+                    distance = tagDistance;
+                    number = (i - 5) * 3 + 1;
+                }
+            }
+        }
+        return number;
+    }
+
+    // points are defined as (time, x, y, theta, vx, vy, vtheta, ax, ay, atheta)
+    // generates a path to place a object on the fly, input is which part of grid to place on (0-8)
+    // placement location 0-8, from left to right
+    public JSONArray generatePlacementPathOnTheFly(int placementLocation, String fieldSide) {
         double[] firstPoint = new double[] {0, getFusedOdometryX(), getFusedOdometryY(), getFusedOdometryTheta(), getCurrentXVelocity(), getCurrentYVelocity(), getCurrentThetaVelocity(), 0, 0, 0};
-        double[] midPoint = new double[] {1.5, Constants.PLACEMENT_PATH_MIDPOINT_X_RED, Constants.PLACEMENT_PATH_MIDPOINT_Y_RED[placementLocation], Math.toRadians(180), getCurrentXVelocity()/3, getCurrentYVelocity()/3, getCurrentThetaVelocity()/3, 0, 0, 0};
-        double[] placementPoint = new double[] {3, Constants.PLACEMENT_LOCATION_X_RED, Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation], 0, 0, 0, 0, 0, 0};
+        // double[] firstPoint = new double[] {0, 14.3, 2.8, Math.toRadians(-180), 0, 0, 0, 0, 0, 0};
+        double robotX = getFusedOdometryX();
+        double robotY = getFusedOdometryY();
+        double robotAngle = getFusedOdometryTheta();
+
+        System.out.println(robotAngle);
+
+        double placementAngle = Math.toRadians(-180);
+
+        if(placementAngle - robotAngle >= Math.PI) {
+            placementAngle = placementAngle - (2 * Math.PI);
+        }
+        else if(placementAngle - robotAngle <= -Math.PI){
+            placementAngle = placementAngle + (2 * Math.PI);
+        }
+
+        double[] midPoint = new double[] {1.5, Constants.PLACEMENT_PATH_MIDPOINT_X_RED, Constants.PLACEMENT_PATH_MIDPOINT_Y_RED[placementLocation], Math.toRadians(0), (Constants.PLACEMENT_LOCATION_X_RED - getFusedOdometryX())/3, (Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation] - getFusedOdometryY())/3, 0, 0, 0, 0};
+        double[] placementPoint = new double[] {3, Constants.PLACEMENT_LOCATION_X_RED, Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation], Math.toRadians(0), 0, 0, 0, 0, 0, 0};
+
+        // System.out.println("first: " + Arrays.toString(firstPoint));
+        // System.out.println("mid: " + Arrays.toString(midPoint));
+        // System.out.println("placement: " + Arrays.toString(placementPoint));
 
         double[] currentPoint;
         double[] nextPoint;
 
-        for(int i = 0; i < 3; i++) {
-            double[] startPad = new double[i * 6];
+        ArrayList<RealMatrix> xEquations = new ArrayList<RealMatrix>();
+        ArrayList<RealMatrix> yEquations = new ArrayList<RealMatrix>();
+        ArrayList<RealMatrix> thetaEquations = new ArrayList<RealMatrix>();
+
+        ArrayList<double[]> sampledPoints = new ArrayList<double[]>();
+
+        for(int i = 0; i < 2; i++) {
             if(i == 0) {
                 currentPoint = firstPoint;
                 nextPoint = midPoint;
@@ -575,7 +645,7 @@ public class Drive extends SubsystemBase {
             double currentThetaVelocity = currentPoint[6];
             double currentXAccel = currentPoint[7];
             double currentYAccel = currentPoint[8];
-            double currentThetaAccel = currentPoint[10];
+            double currentThetaAccel = currentPoint[9];
 
             double nextTime = nextPoint[0];
             double nextX = nextPoint[1];
@@ -586,11 +656,7 @@ public class Drive extends SubsystemBase {
             double nextThetaVelocity = nextPoint[6];
             double nextXAccel = nextPoint[7];
             double nextYAccel = nextPoint[8];
-            double nextThetaAccel = nextPoint[10];
-
-            for(int j = 0; j < startPad.length - 1; j++) {
-                startPad[j] = 0;
-            }
+            double nextThetaAccel = nextPoint[9];
 
             double[] firstPointEq;
             double[] secondPointEq;
@@ -600,20 +666,20 @@ public class Drive extends SubsystemBase {
             double[] secondAccelEq;
 
             if(i == 0) {
-                firstPointEq = new double[] {1, time, Math.pow(time, 2), Math.pow(time, 3), Math.pow(time, 4), Math.pow(time, 5), 0, 0, 0, 0, 0, 0};
-                secondPointEq = new double[] {1, nextTime, Math.pow(nextTime, 2), Math.pow(nextTime, 3), Math.pow(nextTime, 4), Math.pow(nextTime, 5),  0, 0, 0, 0, 0, 0};
-                firstVelEq = new double[] {0, 1, 2 * (time), 3 * (Math.pow(time, 2)), 4 * (Math.pow(time, 3)), 5 * (Math.pow(time, 4)), 0, 0, 0, 0, 0, 0};
-                secondVelEq = new double[] {0, 1, 2 * (nextTime), 3 * (Math.pow(nextTime, 2)), 4 * (Math.pow(nextTime, 3)), 5 * (Math.pow(nextTime, 4)), 0, 0, 0, 0, 0, 0};
-                firstAccelEq = new double[] {0, 0, 2, 6 * time, 12 * (Math.pow(time, 2)), 20 * ((Math.pow(time, 3))), 0, 0, 0, 0, 0, 0};
-                secondAccelEq = new double[] {0, 0, 2, 6 * nextTime, 12 * (Math.pow(nextTime, 2)), 20 * ((Math.pow(nextTime, 3))), 0, 0, 0, 0, 0, 0};
+                firstPointEq = new double[] {1, time, Math.pow(time, 2), Math.pow(time, 3), Math.pow(time, 4), Math.pow(time, 5)};
+                secondPointEq = new double[] {1, nextTime, Math.pow(nextTime, 2), Math.pow(nextTime, 3), Math.pow(nextTime, 4), Math.pow(nextTime, 5),};
+                firstVelEq = new double[] {0, 1, 2 * (time), 3 * (Math.pow(time, 2)), 4 * (Math.pow(time, 3)), 5 * (Math.pow(time, 4))};
+                secondVelEq = new double[] {0, 1, 2 * (nextTime), 3 * (Math.pow(nextTime, 2)), 4 * (Math.pow(nextTime, 3)), 5 * (Math.pow(nextTime, 4))};
+                firstAccelEq = new double[] {0, 0, 2, 6 * time, 12 * (Math.pow(time, 2)), 20 * ((Math.pow(time, 3)))};
+                secondAccelEq = new double[] {0, 0, 2, 6 * nextTime, 12 * (Math.pow(nextTime, 2)), 20 * ((Math.pow(nextTime, 3)))};
             }
             else {
-                firstPointEq = new double[] {0, 0, 0 , 0, 0, 0, 1, time, Math.pow(time, 2), Math.pow(time, 3), Math.pow(time, 4), Math.pow(time, 5)};
-                secondPointEq = new double[] {0, 0, 0 , 0, 0, 0, 1, nextTime, Math.pow(nextTime, 2), Math.pow(nextTime, 3), Math.pow(nextTime, 4), Math.pow(nextTime, 5)};
-                firstVelEq = new double[] {0, 0, 0 , 0, 0, 0, 0, 1, 2 * (time), 3 * (Math.pow(time, 2)), 4 * (Math.pow(time, 3)), 5 * (Math.pow(time, 4))};
-                secondVelEq = new double[] {0, 0, 0 , 0, 0, 0, 0, 1, 2 * (nextTime), 3 * (Math.pow(nextTime, 2)), 4 * (Math.pow(nextTime, 3)), 5 * (Math.pow(nextTime, 4))};
-                firstAccelEq = new double[] {0, 0, 0 , 0, 0, 0, 0, 0, 2, 6 * time, 12 * (Math.pow(time, 2)), 20 * ((Math.pow(time, 3)))};
-                secondAccelEq = new double[] {0, 0, 0 , 0, 0, 0, 0, 0, 2, 6 * nextTime, 12 * (Math.pow(nextTime, 2)), 20 * ((Math.pow(nextTime, 3)))};
+                firstPointEq = new double[] {1, time, Math.pow(time, 2), Math.pow(time, 3), Math.pow(time, 4), Math.pow(time, 5)};
+                secondPointEq = new double[] {1, nextTime, Math.pow(nextTime, 2), Math.pow(nextTime, 3), Math.pow(nextTime, 4), Math.pow(nextTime, 5)};
+                firstVelEq = new double[] {0, 1, 2 * (time), 3 * (Math.pow(time, 2)), 4 * (Math.pow(time, 3)), 5 * (Math.pow(time, 4))};
+                secondVelEq = new double[] {0, 1, 2 * (nextTime), 3 * (Math.pow(nextTime, 2)), 4 * (Math.pow(nextTime, 3)), 5 * (Math.pow(nextTime, 4))};
+                firstAccelEq = new double[] {0, 0, 2, 6 * time, 12 * (Math.pow(time, 2)), 20 * ((Math.pow(time, 3)))};
+                secondAccelEq = new double[] {0, 0, 2, 6 * nextTime, 12 * (Math.pow(nextTime, 2)), 20 * ((Math.pow(nextTime, 3)))};
             }
 
             double[] xArray = new double[] {currentX, nextX, currentXVelocity, nextXVelocity, currentXAccel, nextXAccel};
@@ -628,29 +694,46 @@ public class Drive extends SubsystemBase {
             RealMatrix yMatrix = MatrixUtils.createColumnRealMatrix(yArray);
             RealMatrix thetaMatrix = MatrixUtils.createColumnRealMatrix(thetaArray);
 
-            // taking inverse of matrix
-            RealMatrix systemEqMatrixInverse = systemEqMatrix.transpose().scalarMultiply(-1);
+            RealMatrix systemEqMatrixInverse = MatrixUtils.inverse(systemEqMatrix);
 
             RealMatrix xCoefficients = systemEqMatrixInverse.multiply(xMatrix);
             RealMatrix yCoefficients = systemEqMatrixInverse.multiply(yMatrix);
             RealMatrix thetaCoefficients = systemEqMatrixInverse.multiply(thetaMatrix);
 
-            double[] sampledX = samplePosition(xCoefficients);
-            double[] sampledY = samplePosition(yCoefficients);
-            double[] sampledTheta = samplePosition(thetaCoefficients);
+            xEquations.add(xCoefficients);
+            yEquations.add(yCoefficients);
+            thetaEquations.add(thetaCoefficients);
+        }
+        // sample points along the path
+        double time = firstPoint[0];
+        while (time <= placementPoint[0]){
+            int equationIndex;
+            if (time <= midPoint[0]){
+                equationIndex = 0;
+            } else {
+                equationIndex = 1;
+            }
+            double x = samplePosition(xEquations.get(equationIndex), time);
+            double y = samplePosition(yEquations.get(equationIndex), time);
+            double theta = samplePosition(thetaEquations.get(equationIndex), time);
+            sampledPoints.add(new double[] {time, x, y, theta});
+            time += 0.02;
         }
 
+        JSONArray path = new JSONArray(sampledPoints);
+        // System.out.println(path.toString());
+        return path;
     }
 
     // Autonomous algorithm
-    public double[] pidController(double currentX, double currentY, double currentTheta, double time, JSONArray pathPoints) {
+    public double[] pidController(double currentX, double currentY, double currentTheta,double time, JSONArray pathPoints) {
         if(time < pathPoints.getJSONArray(pathPoints.length() - 1).getDouble(0)) {
             JSONArray currentPoint = pathPoints.getJSONArray(0);
             JSONArray targetPoint = pathPoints.getJSONArray(0);
-            for(int i = 0; i < pathPoints.length(); i ++) {
+            for(int i = 0; i < pathPoints.length() - lookAheadDistance; i ++) {
                 if(i == pathPoints.length() - lookAheadDistance) {
                     currentPoint = pathPoints.getJSONArray(i + 1);
-                    targetPoint = pathPoints.getJSONArray(pathPoints.length() - 1);
+                    targetPoint = pathPoints.getJSONArray((i + (lookAheadDistance - 1)));
                     break;
                 }
 
@@ -712,7 +795,7 @@ public class Drive extends SubsystemBase {
             velocityArray[1] = yVel;
             velocityArray[2] = thetaVel;
 
-            System.out.println("Target Point: " + targetPoint + " CURRENT TIME: " + time + " xVel: " + velocityArray[0] + " yVel: " + velocityArray[1] + " thetaVel: " + velocityArray[2]);
+            // System.out.println("Target Point: " + targetPoint + " CURRENT TIME: " + time + " xVel: " + velocityArray[0] + " yVel: " + velocityArray[1] + " thetaVel: " + velocityArray[2]);
 
             return velocityArray;
         }
@@ -724,7 +807,8 @@ public class Drive extends SubsystemBase {
             velocityArray[2] = 0;
 
             return velocityArray;
-        }        
+        }
+        
     }
  
     @Override

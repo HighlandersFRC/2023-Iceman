@@ -61,32 +61,44 @@ public final class Constants {
     public static final double CAMERA_PITCH = 0;
     public static final double CAMERA_YAW = 0;
 
-    // location of tag on field, x
-    public static final double TAG_ZERO_X = 8.236;
-    // location of tag on field, y
-    public static final double TAG_ZERO_Y = 3.47;
-    // height of tag on field
-    public static final double TAG_ZERO_Z = inchesToMeters(-58.5);
-    // which way tag faces on the field
-    public static final double TAG_ZERO_ANGLE_TO_FIELD = Math.toRadians(-90);
-    // the way that the tag is angle from level on the field, in our case, it is not angle upward
-    public static final double TAG_ZERO_PITCH_TO_FIELD = 0;
-    // the way that the tag is turned in the field, in our case the tag is flat against the hub
-    public static final double TAG_ZERO_YAW_TO_FIELD = 0;
+    // // location of tag on field, x
+    // public static final double TAG_ZERO_X = 8.236;
+    // // location of tag on field, y
+    // public static final double TAG_ZERO_Y = 3.47;
+    // // height of tag on field
+    // public static final double TAG_ZERO_Z = inchesToMeters(-58.5);
+    // // which way tag faces on the field
+    // public static final double TAG_ZERO_ANGLE_TO_FIELD = Math.toRadians(-90);
+    // // the way that the tag is angle from level on the field, in our case, it is not angle upward
+    // public static final double TAG_ZERO_PITCH_TO_FIELD = 0;
+    // // the way that the tag is turned in the field, in our case the tag is flat against the hub
+    // public static final double TAG_ZERO_YAW_TO_FIELD = 0;
 
-    // see above for each definition for tag
-    public static final double TAG_ONE_X = 7.6;
-    public static final double TAG_ONE_Y = 4.11;
-    public static final double TAG_ONE_Z = inchesToMeters(-58.5);
-    public static final double TAG_ONE_ANGLE_TO_FIELD = Math.toRadians(180);
-    public static final double TAG_ONE_PITCH_TO_FIELD = 0;
-    public static final double TAG_ONE_YAW_TO_FIELD = 0;
+    // // see above for each definition for tag
+    // public static final double TAG_ONE_X = 7.6;
+    // public static final double TAG_ONE_Y = 4.11;
+    // public static final double TAG_ONE_Z = inchesToMeters(-58.5);
+    // public static final double TAG_ONE_ANGLE_TO_FIELD = Math.toRadians(180);
+    // public static final double TAG_ONE_PITCH_TO_FIELD = 0;
+    // public static final double TAG_ONE_YAW_TO_FIELD = 0;
 
     public static final double PLACEMENT_LOCATION_X_RED = 14.75;
-    public static final double[] PLACEMENT_LOCATIONS_Y_RED = new double[] {0, 0, 0, 2.47, 0, 0, 0, 0, 0};
+    public static final double[] PLACEMENT_LOCATIONS_Y_RED = new double[] {0.52, 1.07, 1.62, 2.2, 2.74, 3.3, 3.85, 4.43, 4.98};
 
-    public static final double PLACEMENT_PATH_MIDPOINT_X_RED = 14.18;
-    public static final double[] PLACEMENT_PATH_MIDPOINT_Y_RED = new double[] {0, 0, 0, 2.47, 0, 0, 0, 0, 0};
+    public static final double PLACEMENT_PATH_MIDPOINT_X_RED = 14.41;
+    public static final double[] PLACEMENT_PATH_MIDPOINT_Y_RED = new double[] {0.52, 1.07, 1.62, 2.2, 2.74, 3.3, 3.85, 4.43, 4.98};
+
+    // 3D locations of all 8 april tags {x, y, z} in meters
+    public static final double[][] TAG_LOCATIONS = new double[][] {
+        {15.513558, 1.071626, 0.462788},
+        {15.513558, 2.748026, 0.462788},
+        {15.513558, 4.424426, 0.462788},
+        {16.178784, 6.749796, 0.695452},
+        {0.36195, 6.749796, 0.695452},
+        {1.02743, 4.4224426, 0.462788},
+        {1.02743, 2.748026, 0.462788},
+        {1.02743, 1.071626, 0.462788},
+    };
 
     public static final Transform3d ROBOT_TO_CAM =
                 new Transform3d(

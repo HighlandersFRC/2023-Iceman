@@ -39,6 +39,10 @@ public class Intake extends SubsystemBase {
     intakeMotor3.set(ControlMode.PercentOutput, percent);
   }
 
+  public void setPastaRollerPercent(double percent) {
+    intakeMotor3.set(ControlMode.PercentOutput, percent);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
