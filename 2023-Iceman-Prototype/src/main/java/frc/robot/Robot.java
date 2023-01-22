@@ -52,6 +52,8 @@ public class Robot extends TimedRobot {
   JSONObject pathRead;
   JSONArray pathJSON;
 
+  String fieldSide;
+
   @Override
   public void robotInit() {
     drive.init();
@@ -60,6 +62,8 @@ public class Robot extends TimedRobot {
     arm.init();
     intake.init();
     try {
+      fieldSide = "red";
+      drive.setFieldSide(fieldSide);
       pathingFile = new File("/home/lvuser/deploy/Test1.json");
       FileReader scanner = new FileReader(pathingFile);
       // pathRead = new JSONTokener(scanner);
@@ -118,9 +122,9 @@ public class Robot extends TimedRobot {
     // OI.driverB.whileHeld(new RunIntake(intake, -0.3));
     // OI.driverY.whileHeld(new RunPastaRoller(intake, 0.3));
     // OI.driverX.whileHeld(new RunPastaRoller(intake, -0.3));
-    OI.driverX.onTrue(new AlignForPlacement(drive, -1, "red"));
-    OI.driverA.onTrue(new AlignForPlacement(drive, 0, "red"));
-    OI.driverB.whileHeld(new AlignForPlacement(drive, 1, "red"));
+    OI.driverX.whileTrue(new AlignForPlacement(drive, -1));
+    OI.driverA.whileTrue(new AlignForPlacement(drive, 0));
+    OI.driverB.whileTrue(new AlignForPlacement(drive, 1));
 
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to

@@ -38,7 +38,7 @@ public class Peripherals extends SubsystemBase {
 
   private double limeLightHFOV = 59.6;
 
-  private NetworkTable limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
+  private NetworkTable limeLightTable = NetworkTableInstance.getDefault().getTable("limelight-front");
   private NetworkTableEntry tableX = limeLightTable.getEntry("tx");
   private NetworkTableEntry tableY = limeLightTable.getEntry("ty");
   private NetworkTableEntry tableLatency = limeLightTable.getEntry("tl");
@@ -137,6 +137,26 @@ public class Peripherals extends SubsystemBase {
     double latency = tableLatency.getDouble(-1);
     return latency;
   }
+
+  // public JSONArray getLimelightBasedPosition() {
+  //   // System.out.println(robotPose.getString(""));
+  //   JSONArray robotPosArray = new JSONArray();
+  //   robotPosArray.put(0, 0);
+  //   try {
+  //     String networkTableResult = robotPose.getString("");
+  //     JSONObject camResult = new JSONObject(networkTableResult).getJSONObject("Results");
+  //     JSONArray botPose = camResult.getJSONArray("botpose");
+  //       robotPosArray.put(0, botPose.getDouble(0) + (Constants.FIELD_LENGTH/2));
+  //       robotPosArray.put(1, botPose.getDouble(1) + (Constants.FIELD_WIDTH/2));
+  //       // System.out.println(robotPosArray);
+  //   } catch (Exception e) {
+  //       JSONArray noTarget = new JSONArray();
+  //       noTarget.put(0);
+  //       return noTarget;
+  //       // TODO: handle exception
+  //   }
+  //   return robotPosArray;
+  // }
 
   public JSONArray getLimelightBasedPosition() {
     // System.out.println(robotPose.getString(""));

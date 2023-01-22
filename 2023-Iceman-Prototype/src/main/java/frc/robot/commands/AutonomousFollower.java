@@ -44,9 +44,8 @@ public class AutonomousFollower extends CommandBase {
     addRequirements(this.drive);
   }
 
-  public AutonomousFollower(Drive drive, boolean generatePath, boolean record, int placementOffset, String fieldSide){
+  public AutonomousFollower(Drive drive, boolean generatePath, boolean record, int placementOffset){
     this.drive = drive;
-    this.fieldSide = fieldSide;
     this.offset = placementOffset;
     this.record = record;
     this.generatePath = generatePath;
@@ -57,9 +56,22 @@ public class AutonomousFollower extends CommandBase {
   @Override
   public void initialize() {
     if(generatePath == true) {
+      this.fieldSide = drive.getFieldSide();
+      if (this.fieldSide == "red"){
+        // System.out.println("Before: " + drive.getNavxAngle());
+        while (drive.getNavxAngle() <= -180.0){
+          drive.setNavxAngle(360.0);
+        }
+        if (drive.getNavxAngle() <= 0){
+          drive.setNavxAngle(180.0);
+        } else {
+          drive.setNavxAngle(-180.0);
+        }
+        // System.out.println("After: " + drive.getNavxAngle());
+      }
       int row = drive.getClosestPlacementGroup(this.fieldSide, drive.getFusedOdometryX(), drive.getFusedOdometryY()) + this.offset;
-      System.out.println("Row: " + row);
       this.path = drive.generatePlacementPathOnTheFly(row, this.fieldSide);
+      // System.out.println("Path: " + this.path.toString());
     }
     initTime = Timer.getFPGATimestamp();
   }
@@ -67,15 +79,16 @@ public class AutonomousFollower extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // drive.updateOdometryFusedArray();
     odometryFusedX = drive.getFusedOdometryX();
     odometryFusedY = drive.getFusedOdometryY();
     odometryFusedTheta = drive.getFusedOdometryTheta();
 
-    System.out.println("X: " + odometryFusedX + " Y: " + odometryFusedY + " Theta: " + odometryFusedTheta);
+    // System.out.println("X: " + odometryFusedX + " Y: " + odometryFusedY + " Theta: " + odometryFusedTheta);
 
     currentTime = Timer.getFPGATimestamp() - initTime;
 
-    System.out.println("Current time: " + currentTime);
+    // System.out.println("Current time: " + currentTime);
 
     // call PIDController function
     desiredVelocityArray = drive.pidController(odometryFusedX, odometryFusedY, odometryFusedTheta, currentTime, path);
@@ -99,7 +112,7 @@ public class AutonomousFollower extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drive.setNavxAfterAuto();
+    // drive.setNavxAfterAuto();
     Vector velocityVector = new Vector(0, 0);
     double desiredThetaChange = 0;
     drive.autoDrive(velocityVector, desiredThetaChange);
@@ -108,7 +121,11 @@ public class AutonomousFollower extends CommandBase {
     odometryFusedY = drive.getFusedOdometryY();
     odometryFusedTheta = drive.getFusedOdometryTheta();
     currentTime = Timer.getFPGATimestamp() - initTime;
-
+    if (this.generatePath){
+      if (this.fieldSide == "red"){
+        drive.setNavxAngle(-180.0);
+      }
+    }
     if (this.record){
       recordedOdometry.add(new double[] {currentTime, odometryFusedX, odometryFusedY, odometryFusedTheta});
 

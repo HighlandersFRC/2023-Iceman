@@ -147,6 +147,8 @@ public class Drive extends SubsystemBase {
 
     private int lookAheadDistance = 5;
 
+    private String fieldSide = "red";
+
     public Drive(Peripherals peripherals) {
         this.peripherals = peripherals;
         SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];
@@ -158,6 +160,14 @@ public class Drive extends SubsystemBase {
         Pose2d m_pose = new Pose2d();
 
         m_odometry = new SwerveDrivePoseEstimator(m_kinematics, new Rotation2d(peripherals.getNavxAngle()), swerveModulePositions, m_pose);
+    }
+
+    public void setFieldSide(String side){
+        this.fieldSide = side;
+    }
+
+    public String getFieldSide(){
+        return this.fieldSide;
     }
 
     // method to zeroNavx mid match and reset odometry with zeroed angle
@@ -173,6 +183,14 @@ public class Drive extends SubsystemBase {
 
     public void setNavxAfterAuto() {
         peripherals.setNavxAngle((peripherals.getNavxAngle() + 180)%360);
+    }
+
+    public void setNavxAngle(double angle){
+        peripherals.setNavxAngle(angle);
+    }
+
+    public double getNavxAngle(){
+        return peripherals.getNavxAngle();
     }
 
     // get each external encoder
@@ -245,7 +263,7 @@ public class Drive extends SubsystemBase {
         double firstPointY = firstPoint.getDouble(2);
         double firstPointAngle = firstPoint.getDouble(3);
 
-        System.out.println(firstPointAngle);
+        // System.out.println(firstPointAngle);
         
         peripherals.setNavxAngle(Math.toDegrees(firstPointAngle));
         SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];
@@ -471,7 +489,6 @@ public class Drive extends SubsystemBase {
     // method run in teleop that accepts controller values to move swerve drive
     public void teleopDrive() {
         updateOdometryFusedArray();
-
         double turnLimit = 1;
 
         if(OI.driverController.getLeftBumper()) {
@@ -594,29 +611,37 @@ public class Drive extends SubsystemBase {
     // generates a path to place a object on the fly, input is which part of grid to place on (0-8)
     // placement location 0-8, from left to right
     public JSONArray generatePlacementPathOnTheFly(int placementLocation, String fieldSide) {
-        double[] firstPoint = new double[] {0, getFusedOdometryX(), getFusedOdometryY(), getFusedOdometryTheta(), getCurrentXVelocity(), getCurrentYVelocity(), getCurrentThetaVelocity(), 0, 0, 0};
+        updateOdometryFusedArray();
+        double[] firstPoint = new double[] {0, getFusedOdometryX(), getFusedOdometryY(), getFusedOdometryTheta(), getCurrentXVelocity(), getCurrentYVelocity(), 0, 0, 0, 0};
         // double[] firstPoint = new double[] {0, 14.3, 2.8, Math.toRadians(-180), 0, 0, 0, 0, 0, 0};
         double robotX = getFusedOdometryX();
         double robotY = getFusedOdometryY();
         double robotAngle = getFusedOdometryTheta();
 
-        System.out.println(robotAngle);
+        // System.out.println(robotAngle);
 
-        double placementAngle = Math.toRadians(-180);
+        // double placementAngle = Math.toRadians(-180);
 
-        if(placementAngle - robotAngle >= Math.PI) {
-            placementAngle = placementAngle - (2 * Math.PI);
+        // if(placementAngle - robotAngle >= Math.PI) {
+        //     placementAngle = placementAngle - (2 * Math.PI);
+        // }
+        // else if(placementAngle - robotAngle <= -Math.PI){
+        //     placementAngle = placementAngle + (2 * Math.PI);
+        // }
+
+        double[] midPoint;
+        double[] placementPoint;
+
+        if (fieldSide == "red"){
+            midPoint = new double[] {1.5, Constants.PLACEMENT_PATH_MIDPOINT_X_RED, Constants.PLACEMENT_PATH_MIDPOINT_Y_RED[placementLocation], 0, (Constants.PLACEMENT_LOCATION_X_RED - getFusedOdometryX())/3, (Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation] - getFusedOdometryY())/3, 0, 0, 0, 0};
+            placementPoint = new double[] {3, Constants.PLACEMENT_LOCATION_X_RED, Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation], 0, 0, 0, 0, 0, 0, 0};
+            // midPoint = new double[] {1.5, robotX + 1.0, robotY, 0, 0, 0, 0, 0, 0, 0};
+            // placementPoint = new double[] {3.0, robotX + 1.0, robotY, 0, 0, 0, 0, 0, 0, 0};
+        } else {
+            midPoint = new double[] {};
+            placementPoint = new double[] {};
         }
-        else if(placementAngle - robotAngle <= -Math.PI){
-            placementAngle = placementAngle + (2 * Math.PI);
-        }
-
-        double[] midPoint = new double[] {1.5, Constants.PLACEMENT_PATH_MIDPOINT_X_RED, Constants.PLACEMENT_PATH_MIDPOINT_Y_RED[placementLocation], Math.toRadians(0), (Constants.PLACEMENT_LOCATION_X_RED - getFusedOdometryX())/3, (Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation] - getFusedOdometryY())/3, 0, 0, 0, 0};
-        double[] placementPoint = new double[] {3, Constants.PLACEMENT_LOCATION_X_RED, Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation], Math.toRadians(0), 0, 0, 0, 0, 0, 0};
-
-        // System.out.println("first: " + Arrays.toString(firstPoint));
-        // System.out.println("mid: " + Arrays.toString(midPoint));
-        // System.out.println("placement: " + Arrays.toString(placementPoint));
+        // System.out.print("Placement: " + Arrays.toString(placementPoint));
 
         double[] currentPoint;
         double[] nextPoint;
@@ -727,10 +752,11 @@ public class Drive extends SubsystemBase {
 
     // Autonomous algorithm
     public double[] pidController(double currentX, double currentY, double currentTheta,double time, JSONArray pathPoints) {
+        // System.out.println(pathPoints.toString());
         if(time < pathPoints.getJSONArray(pathPoints.length() - 1).getDouble(0)) {
             JSONArray currentPoint = pathPoints.getJSONArray(0);
             JSONArray targetPoint = pathPoints.getJSONArray(0);
-            for(int i = 0; i < pathPoints.length() - lookAheadDistance; i ++) {
+            for(int i = 0; i < pathPoints.length(); i ++) {
                 if(i == pathPoints.length() - lookAheadDistance) {
                     currentPoint = pathPoints.getJSONArray(i + 1);
                     targetPoint = pathPoints.getJSONArray((i + (lookAheadDistance - 1)));
