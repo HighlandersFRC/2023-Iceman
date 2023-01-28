@@ -13,8 +13,8 @@ import frc.robot.subsystems.Drive;
 public class AlignForPlacement extends SequentialCommandGroup {
   /** Creates a new AlignForPlacement. */
   // -1, 0, 1 for left, middle, right
-  public AlignForPlacement(Drive drive, int offset) {
+  public AlignForPlacement(Drive drive, int rowOffset) {
     addRequirements(drive);
-    addCommands(new AutonomousFollower(drive, true, true, offset));
+    addCommands(new AutonomousFollower(drive, true, true, rowOffset));
   }
 }

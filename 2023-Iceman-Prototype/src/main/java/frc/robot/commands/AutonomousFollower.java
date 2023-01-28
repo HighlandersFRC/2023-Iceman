@@ -33,7 +33,8 @@ public class AutonomousFollower extends CommandBase {
 
     private boolean record;
     private String fieldSide;
-    private int offset;
+    private int rowOffset = 0;
+
     private ArrayList<double[]> recordedOdometry = new ArrayList<double[]>();
     private boolean generatePath = false;
     /** Creates a new AutonomousFollower. */
@@ -44,9 +45,9 @@ public class AutonomousFollower extends CommandBase {
     addRequirements(this.drive);
   }
 
-  public AutonomousFollower(Drive drive, boolean generatePath, boolean record, int placementOffset){
+  public AutonomousFollower(Drive drive, boolean generatePath, boolean record, int rowOffset){
     this.drive = drive;
-    this.offset = placementOffset;
+    this.rowOffset = rowOffset;
     this.record = record;
     this.generatePath = generatePath;
     addRequirements(this.drive);
@@ -69,7 +70,7 @@ public class AutonomousFollower extends CommandBase {
         }
         // System.out.println("After: " + drive.getNavxAngle());
       }
-      int row = drive.getClosestPlacementGroup(this.fieldSide, drive.getFusedOdometryX(), drive.getFusedOdometryY()) + this.offset;
+      int row = drive.getClosestPlacementGroup(this.fieldSide, drive.getFusedOdometryX(), drive.getFusedOdometryY()) + this.rowOffset;
       this.path = drive.generatePlacementPathOnTheFly(row, this.fieldSide);
       // System.out.println("Path: " + this.path.toString());
     }
@@ -161,6 +162,16 @@ public class AutonomousFollower extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // if(generatePath == true) {
+    //   if(currentTime > (path.getJSONArray(path.length() - 1).getDouble(0) + 0.5)) {
+    //     return true;
+    //   }
+    //   // if(Math.abs(drive.getFusedOdometryX() - path.getJSONArray(path.length() - 1).getDouble(1)) < 0.05) {
+    //   //   if(Math.abs(drive.getFusedOdometryY() - path.getJSONArray(path.length() - 1).getDouble(2)) < 0.1) {
+    //   //     return true;
+    //   //   }
+    //   // }
+    // }
     if(currentTime > path.getJSONArray(path.length() - 1).getDouble(0)) {
       return true;
     }

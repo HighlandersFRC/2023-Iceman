@@ -20,7 +20,7 @@ public class Wrist extends SubsystemBase {
   private final CANSparkMax wristMotor = new CANSparkMax(13, MotorType.kBrushless);
   // private final CANSparkMax grabberMotor = new CANSparkMax(14, MotorType.kBrushless);
 
-  private final TalonFX grabberMotor = new TalonFX(12);
+  private final TalonFX grabberMotor = new TalonFX(15);
 
   public Wrist() {}
 

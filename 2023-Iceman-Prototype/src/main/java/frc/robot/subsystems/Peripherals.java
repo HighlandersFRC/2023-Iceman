@@ -42,7 +42,8 @@ public class Peripherals extends SubsystemBase {
   private NetworkTableEntry backTableX = backLimeLightTable.getEntry("tx");
   private NetworkTableEntry backTableY = backLimeLightTable.getEntry("ty");
   private NetworkTableEntry backTableLatency = backLimeLightTable.getEntry("tl");
-  private NetworkTableEntry backRobotPose = backLimeLightTable.getEntry("json");
+  // private NetworkTableEntry backRobotPose = backLimeLightTable.getEntry("json");
+  private NetworkTableEntry backRobotPose = backLimeLightTable.getEntry("botpose");
 
   private NetworkTable frontLimeLightTable = NetworkTableInstance.getDefault().getTable("limelight-front");
   private NetworkTableEntry frontTableX = frontLimeLightTable.getEntry("tx");
@@ -91,67 +92,30 @@ public class Peripherals extends SubsystemBase {
     return latency;
   }
 
-  // public JSONArray getLimelightBasedPosition() {
-  //   // System.out.println(robotPose.getString(""));
-  //   JSONArray robotPosArray = new JSONArray();
-  //   robotPosArray.put(0, 0);
-  //   try {
-  //     String networkTableResult = robotPose.getString("");
-  //     JSONObject camResult = new JSONObject(networkTableResult).getJSONObject("Results");
-  //     JSONArray botPose = camResult.getJSONArray("botpose");
-  //       robotPosArray.put(0, botPose.getDouble(0) + (Constants.FIELD_LENGTH/2));
-  //       robotPosArray.put(1, botPose.getDouble(1) + (Constants.FIELD_WIDTH/2));
-  //       // System.out.println(robotPosArray);
-  //   } catch (Exception e) {
-  //       JSONArray noTarget = new JSONArray();
-  //       noTarget.put(0);
-  //       return noTarget;
-  //       // TODO: handle exception
-  //   }
-  //   return robotPosArray;
-  // }
-
-  // public void getBotPose(){
-  //   try {
-  //     String result = botPose.getString("");
-  //     System.out.println(result);
-  //   } catch (Exception e){
-  //     System.out.println(e);
-  //   }
-  // }
-
-  public JSONArray getLimelightBasedPosition() {
+  public JSONArray getBackLimelightBasedPosition() {
     // System.out.println(robotPose.getString(""));
     JSONArray robotPosArray = new JSONArray();
     robotPosArray.put(0, 0);
+    double[] result = new double[6];
     try {
-      String networkTableResult = backRobotPose.getString("");
-      JSONObject camResult = new JSONObject(networkTableResult).getJSONObject("Results");
-      JSONArray tagList = camResult.getJSONArray("Fiducial");
-      double averagedX = 0;
-      double averagedY = 0;
-      double count = 0;
-      if(tagList.length() >= 1) {
-        for(int i = 0; i < tagList.length(); i++) {
-          JSONObject tag = (JSONObject) tagList.get(0);
-          robotPosArray = tag.getJSONArray("t6r_fs");
-          averagedX = averagedX + robotPosArray.getDouble(0);
-          averagedY = averagedY + robotPosArray.getDouble(1);
-          count++;
-        }
-        averagedX = averagedX/count;
-        averagedY = averagedY/count;
-        JSONObject bestTag = (JSONObject) tagList.get(0);
-        robotPosArray.put(0, averagedX + (Constants.FIELD_LENGTH/2));
-        robotPosArray.put(1, averagedY + (Constants.FIELD_WIDTH/2));
-        // System.out.println(robotPosArray);
-    } 
+      result = backRobotPose.getDoubleArray(noTrackLimelightArray);
     } catch (Exception e) {
-        JSONArray noTarget = new JSONArray();
-        noTarget.put(0);
-        return noTarget;
-        // TODO: handle exception
+      JSONArray noTarget = new JSONArray();
+      noTarget.put(0);
+      return noTarget;
+      // TODO: handle exception
     }
+    
+    if(result.length == 6) {
+      robotPosArray.put(0, result[0] + (Constants.FIELD_LENGTH/2));
+      robotPosArray.put(1, result[1] + (Constants.FIELD_WIDTH/2));
+    }
+    else {
+      robotPosArray.put(0, 0);
+      robotPosArray.put(1, 0);
+    }
+  
+    System.out.println(robotPosArray);
     return robotPosArray;
   }
 

@@ -303,7 +303,7 @@ public class Drive extends SubsystemBase {
     public void updateOdometryFusedArray() {
         double navxOffset = Math.toRadians(peripherals.getNavxAngle());
 
-        JSONArray cameraCoordinates = peripherals.getFrontLimelightBasedPosition();
+        JSONArray cameraCoordinates = peripherals.getBackLimelightBasedPosition();
 
         double cameraBasedX = 0;
         double cameraBasedY = 0;
@@ -346,9 +346,9 @@ public class Drive extends SubsystemBase {
         estimatedY = previousY + (cyclePeriod * currentYVelocity);
         estimatedTheta = previousTheta + (cyclePeriod * currentThetaVelocity);
 
-        averagedX = (currentX + averagedX)/2;
-        averagedY = (currentY + averagedY)/2;
-        averagedTheta = (currentTheta + averagedTheta)/2;
+        averagedX = (currentX);// + averagedX)/2;
+        averagedY = (currentY);// + averagedY)/2;
+        averagedTheta = (currentTheta);// + averagedTheta)/2;
 
         previousX = averagedX;
         previousY = averagedY;
@@ -362,7 +362,7 @@ public class Drive extends SubsystemBase {
         currentFusedOdometry[1] = averagedY;
         currentFusedOdometry[2] = currentTheta;
 
-        // System.out.println("X: " + averagedX + " Y: " + averagedY + " Theta: " + currentTheta);
+        System.out.println("X: " + averagedX + " Y: " + averagedY + " Theta: " + currentTheta);
         SmartDashboard.putNumber("X", averagedX);
         SmartDashboard.putNumber("Y", averagedY);
 
@@ -632,9 +632,21 @@ public class Drive extends SubsystemBase {
         double[] midPoint;
         double[] placementPoint;
 
+        double pathAngle;
+        if (robotAngle <= Math.toRadians(-90.0)) {
+            pathAngle = Math.toRadians(-180.0);
+        } else if (robotAngle >= Math.toRadians(90)) {
+            pathAngle = Math.toRadians(180.0);
+        } else {
+            pathAngle = 0.0;
+        }
+
+        SmartDashboard.putNumber("NavxAngle", getFusedOdometryTheta());
+        SmartDashboard.putNumber("PathAngle", pathAngle);
+
         if (fieldSide == "red"){
-            midPoint = new double[] {1, Constants.PLACEMENT_PATH_MIDPOINT_X_RED, Constants.PLACEMENT_PATH_MIDPOINT_Y_RED[placementLocation], 0, (Constants.PLACEMENT_LOCATION_X_RED - getFusedOdometryX())/3, (Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation] - getFusedOdometryY())/3, 0, 0, 0, 0};
-            placementPoint = new double[] {2, Constants.PLACEMENT_LOCATION_X_RED, Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation], 0, 0, 0, 0, 0, 0, 0};
+            midPoint = new double[] {2.5, Constants.PLACEMENT_PATH_MIDPOINT_X_RED, Constants.PLACEMENT_PATH_MIDPOINT_Y_RED[placementLocation], pathAngle, (Constants.PLACEMENT_LOCATION_X_RED - getFusedOdometryX())/3, (Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation] - getFusedOdometryY())/3, 0, 0, 0, 0};
+            placementPoint = new double[] {5, Constants.PLACEMENT_LOCATION_X_RED, Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation], pathAngle, 0, 0, 0, 0, 0, 0};
             // midPoint = new double[] {1.5, robotX + 1.0, robotY, 0, 0, 0, 0, 0, 0, 0};
             // placementPoint = new double[] {3.0, robotX + 1.0, robotY, 0, 0, 0, 0, 0, 0, 0};
         } else {
@@ -817,7 +829,7 @@ public class Drive extends SubsystemBase {
             velocityArray[1] = yVel;
             velocityArray[2] = thetaVel;
 
-            // System.out.println("Target Point: " + targetPoint + " CURRENT TIME: " + time + " xVel: " + velocityArray[0] + " yVel: " + velocityArray[1] + " thetaVel: " + velocityArray[2]);
+            System.out.println("Target Point: " + targetPoint);
 
             return velocityArray;
         }

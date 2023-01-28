@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.AutoPlacement;
 import frc.robot.commands.AutonomousFollower;
 import frc.robot.commands.ExtendArm;
 import frc.robot.commands.RotateArm;
@@ -139,14 +140,18 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     drive.teleopInit(); 
     OI.driverViewButton.whileHeld(new ZeroNavxMidMatch(drive));
-    
-    OI.driverY.whileHeld(new SetArmRotationPosition(arm, 45));
-    // OI.driverX.whileHeld(new RotateArm(arm, 0.5));
-    OI.driverX.whileHeld(new SetArmRotationPosition(arm, 0));
-    OI.driverA.whileHeld(new ExtendArm(arm, -0.2));
-    OI.driverB.whileHeld(new SetArmRotationPosition(arm, 180));
-    // OI.driverB.whileHeld(new RotateArm(arm, -0.5));
-    // OI.driverY.whenPressed(new SetArmExtensionPosition(arm, 10));
+
+    // OI.driverA.whileHeld(new RunWrist(wrist, -0.5));
+    // OI.driverY.whileHeld(new RunWrist(wrist, 0.5));
+
+    OI.driverA.whenPressed(new AutoPlacement(drive, arm, 0));
+    OI.driverX.whenPressed(new AutoPlacement(drive, arm, -1));
+    OI.driverB.whenPressed(new AutoPlacement(drive, arm, 1));
+
+    OI.operatorA.whenPressed(new SetArmExtensionPosition(arm, 2));
+    OI.operatorB.whileHeld(new SetArmRotationPosition(arm, 0));
+    OI.operatorX.whileHeld(new SetArmRotationPosition(arm, 180));
+    OI.operatorY.whileHeld(new SetArmExtensionPosition(arm, 25));
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
