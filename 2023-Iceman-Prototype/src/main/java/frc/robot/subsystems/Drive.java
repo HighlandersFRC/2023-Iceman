@@ -193,6 +193,14 @@ public class Drive extends SubsystemBase {
         return peripherals.getNavxAngle();
     }
 
+    public double getNavxPitch(){
+        return peripherals.getNavxPitch();
+    }
+
+    public double getNavxRoll(){
+        return peripherals.getNavxRoll();
+    }
+
     // get each external encoder
     public double getLeftForwardEncoder() {
         return leftFront.getAbsolutePosition();
@@ -484,6 +492,14 @@ public class Drive extends SubsystemBase {
         rightFront.velocityDrive(controllerVector, turn, 0);
         leftBack.velocityDrive(controllerVector, turn, 0);
         rightBack.velocityDrive(controllerVector, turn, 0);
+    }
+
+    public void autoRobotCentricDrive(Vector velocityVector, double turnRadiansPerSec){
+        updateOdometryFusedArray();
+        leftFront.velocityDrive(velocityVector, turnRadiansPerSec, 0);
+        rightFront.velocityDrive(velocityVector, turnRadiansPerSec, 0);
+        leftBack.velocityDrive(velocityVector, turnRadiansPerSec, 0);
+        rightBack.velocityDrive(velocityVector, turnRadiansPerSec, 0);
     }
 
     // method run in teleop that accepts controller values to move swerve drive

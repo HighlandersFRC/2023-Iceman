@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
 import frc.robot.commands.ExtendArm;
 import frc.robot.commands.RotateArm;
@@ -117,7 +118,8 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -138,14 +140,15 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     drive.teleopInit(); 
-    OI.driverViewButton.whileHeld(new ZeroNavxMidMatch(drive));
+    OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
     
-    OI.driverY.whileHeld(new SetArmRotationPosition(arm, 45));
-    // OI.driverX.whileHeld(new RotateArm(arm, 0.5));
-    OI.driverX.whileHeld(new SetArmRotationPosition(arm, 0));
-    OI.driverA.whileHeld(new ExtendArm(arm, -0.2));
-    OI.driverB.whileHeld(new SetArmRotationPosition(arm, 180));
-    // OI.driverB.whileHeld(new RotateArm(arm, -0.5));
+    OI.driverY.whileTrue(new SetArmRotationPosition(arm, 45));
+    // OI.driverX.whileTrue(new RotateArm(arm, 0.5));
+    OI.driverX.whileTrue(new SetArmRotationPosition(arm, 0));
+    OI.driverA.whileTrue(new ExtendArm(arm, -0.2));
+    // OI.driverA.onTrue(new AutoBalance(drive));
+    OI.driverB.whileTrue(new SetArmRotationPosition(arm, 180));
+    // OI.driverB.whileTrue(new RotateArm(arm, -0.5));
     // OI.driverY.whenPressed(new SetArmExtensionPosition(arm, 10));
 
     if (m_autonomousCommand != null) {
