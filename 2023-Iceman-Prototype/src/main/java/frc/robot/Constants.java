@@ -57,10 +57,22 @@ public final class Constants {
     public static final String CAMERA_NAME = "Limelight";
 
     public static final double PLACEMENT_LOCATION_X_RED = 14.75;
-    public static final double[] PLACEMENT_LOCATIONS_Y_RED = new double[] {0, 0, 0, 2.47, 0, 0, 0, 0, 0};
+    public static final double[] PLACEMENT_LOCATIONS_Y_RED = new double[] {0.52, 1.07, 1.62, 2.2, 2.74, 3.3, 3.85, 4.43, 4.98};
 
-    public static final double PLACEMENT_PATH_MIDPOINT_X_RED = 14.18;
-    public static final double[] PLACEMENT_PATH_MIDPOINT_Y_RED = new double[] {0, 0, 0, 2.47, 0, 0, 0, 0, 0};
+    public static final double PLACEMENT_PATH_MIDPOINT_X_RED = 14.41;
+    public static final double[] PLACEMENT_PATH_MIDPOINT_Y_RED = new double[] {0.52, 1.07, 1.62, 2.2, 2.74, 3.3, 3.85, 4.43, 4.98};
+
+    // 3D locations of all 8 april tags {x, y, z} in meters
+    public static final double[][] TAG_LOCATIONS = new double[][] {
+        {15.513558, 1.071626, 0.462788},
+        {15.513558, 2.748026, 0.462788},
+        {15.513558, 4.424426, 0.462788},
+        {16.178784, 6.749796, 0.695452},
+        {0.36195, 6.749796, 0.695452},
+        {1.02743, 4.4224426, 0.462788},
+        {1.02743, 2.748026, 0.462788},
+        {1.02743, 1.071626, 0.462788},
+    };
 
     public static final double EXTENSION_GEAR_RATIO = 6.5;
     public static final double EXTENSION_INCHES_PER_ROTATION = 1.5038 * Math.PI;

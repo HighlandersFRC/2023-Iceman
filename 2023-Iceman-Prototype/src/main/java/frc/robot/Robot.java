@@ -62,6 +62,7 @@ public class Robot extends TimedRobot {
 
   JSONObject pathRead2;
   JSONArray pathJSON2;
+  String fieldSide;
 
   @Override
   public void robotInit() {
