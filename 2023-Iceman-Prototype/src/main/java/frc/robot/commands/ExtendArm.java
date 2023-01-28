@@ -5,16 +5,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Arm;
 
-public class RunIntake extends CommandBase {
-  /** Creates a new RunIntake. */
-  private Intake intake;
+public class ExtendArm extends CommandBase {
+  /** Creates a new ExtendArm. */
+  private Arm arm;
   private double percent;
-  public RunIntake(Intake intake, double percent) {
-    this.intake = intake;
+
+  public ExtendArm(Arm arm, double percent) {
+    this.arm = arm;
     this.percent = percent;
-    addRequirements(this.intake);
+    addRequirements(this.arm);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -25,7 +26,7 @@ public class RunIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this.intake.setIntakePercent(percent);
+    arm.setExtensionMotorPercent(percent);
   }
 
   // Called once the command ends or is interrupted.

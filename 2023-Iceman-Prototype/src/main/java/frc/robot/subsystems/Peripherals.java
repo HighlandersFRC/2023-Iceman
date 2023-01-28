@@ -38,12 +38,18 @@ public class Peripherals extends SubsystemBase {
 
   private double limeLightHFOV = 59.6;
 
-  private NetworkTable limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
-  private NetworkTableEntry tableX = limeLightTable.getEntry("tx");
-  private NetworkTableEntry tableY = limeLightTable.getEntry("ty");
-  private NetworkTableEntry tableLatency = limeLightTable.getEntry("tl");
-  private NetworkTableEntry switchLights = limeLightTable.getEntry("ledMode");
-  private NetworkTableEntry robotPose = limeLightTable.getEntry("json");
+  private NetworkTable backLimeLightTable = NetworkTableInstance.getDefault().getTable("limelight-back");
+  private NetworkTableEntry backTableX = backLimeLightTable.getEntry("tx");
+  private NetworkTableEntry backTableY = backLimeLightTable.getEntry("ty");
+  private NetworkTableEntry backTableLatency = backLimeLightTable.getEntry("tl");
+  private NetworkTableEntry backRobotPose = backLimeLightTable.getEntry("json");
+
+  private NetworkTable frontLimeLightTable = NetworkTableInstance.getDefault().getTable("limelight-front");
+  private NetworkTableEntry frontTableX = frontLimeLightTable.getEntry("tx");
+  private NetworkTableEntry frontTableY = frontLimeLightTable.getEntry("ty");
+  private NetworkTableEntry frontTableLatency = frontLimeLightTable.getEntry("tl");
+  private NetworkTableEntry frontRobotPose = frontLimeLightTable.getEntry("json");
+  // private NetworkTableEntry frontRobotPose = frontLimeLightTable.getEntry("botpose");
 
   private double limeLightX = -1.0;
   private double limeLightY = -1.0;
@@ -51,8 +57,6 @@ public class Peripherals extends SubsystemBase {
   private double[] noTrackLimelightArray = new double[6];
 
   // static PhotonCamera camera = new PhotonCamera(Constants.CAMERA_NAME);
-
-  static PhotonCameraWrapper camera = new PhotonCameraWrapper();
 
   private final PowerDistribution m_pdh = new PowerDistribution(1, ModuleType.kRev);
   /** Creates a new Peripherals. */
@@ -63,7 +67,6 @@ public class Peripherals extends SubsystemBase {
   public void init() {
     System.out.print("INSIDE PERIPHERALS INIT");
     zeroNavx();
-    turnLightRingOn();
     noTrackLimelightArray[0] = 0;
     noTrackLimelightArray[1] = 0;
     noTrackLimelightArray[2] = 0;
@@ -73,77 +76,27 @@ public class Peripherals extends SubsystemBase {
     setDefaultCommand(new PeripheralsDefault(this));
   }
 
-  public Pose2d getCameraBasedRobotLocation() {
-    return camera.getEstimatedGlobalPose().getFirst();
-  }
-
-  // public boolean cameraHasTargets() {
-  //   PhotonPipelineResult cameraResult = camera.getLatestResult();
-  //   return cameraResult.hasTargets();
-  // }
-
-  // public static double cameraYawToTarget() {
-  //   PhotonPipelineResult cameraResult = camera.getLatestResult();
-  //   double targetYaw = 0.0;
-  //   if(cameraResult.hasTargets() == true) {
-  //     PhotonTrackedTarget target = cameraResult.getBestTarget();
-  //     targetYaw = target.getYaw();
-  //   }
-  //   return targetYaw;
-  // }
-
-  // public static double cameraPitchToTarget() {
-  //   PhotonPipelineResult cameraResult = camera.getLatestResult();
-  //   double targetPitch = 0.0;
-  //   if(cameraResult.hasTargets() == true) {
-  //     PhotonTrackedTarget target = cameraResult.getBestTarget();
-  //     targetPitch = target.getPitch();
-  //   }
-  //   return targetPitch;
-  // }
-
-  // public static Transform3d cameraToTarget() {
-  //   PhotonPipelineResult cameraResult = camera.getLatestResult();
-  //   Transform3d cameraToTarget = new Transform3d();
-  //   if(cameraResult.hasTargets() == true) {
-  //     PhotonTrackedTarget target = cameraResult.getBestTarget();
-  //     cameraToTarget = target.getBestCameraToTarget();
-  //     Rotation3d test = target.getBestCameraToTarget().getRotation();
-  //     System.out.println("ROTATION: " + test);
-  //   }
-  //   return cameraToTarget;
-  // }
-
-  // public static double getTargetID() {
-  //   PhotonPipelineResult cameraResult = camera.getLatestResult();
-  //   if(cameraResult.hasTargets() == true) {
-  //     PhotonTrackedTarget target = cameraResult.getBestTarget();
-  //     return target.getFiducialId();
-  //   }
-  //   return -1;    
-  // }
-
-  public double getLimeLightX() {
-    limeLightX = Math.PI * (tableX.getDouble(0))/180;
+  public double getBackLimeLightX() {
+    limeLightX = Math.PI * (backTableX.getDouble(0))/180;
     return limeLightX;
   }
 
-  public double getLimeLightY() {
-    limeLightY = tableY.getDouble(-100);
+  public double getBackLimeLightY() {
+    limeLightY = backTableY.getDouble(-100);
     return limeLightY;
   }
 
-  public double getCameraLatency() {
-    double latency = tableLatency.getDouble(-1);
+  public double getBackCameraLatency() {
+    double latency = backTableLatency.getDouble(-1);
     return latency;
   }
 
-  public JSONArray getLimelightBasedPosition() {
-    // System.out.println(robotPose.getString(""));
+  public JSONArray getBackLimelightBasedPosition() {
+    // System.out.println(backRobotPose.getString(""));
     JSONArray robotPosArray = new JSONArray();
     robotPosArray.put(0, 0);
     try {
-      String networkTableResult = robotPose.getString("");
+      String networkTableResult = backRobotPose.getString("");
       JSONObject camResult = new JSONObject(networkTableResult).getJSONObject("Results");
       JSONArray tagList = camResult.getJSONArray("Fiducial");
       double averagedX = 0;
@@ -173,22 +126,71 @@ public class Peripherals extends SubsystemBase {
     return robotPosArray;
   }
 
-  // public double getLimeLightYOffssetToTarget() {
-  //   double x = getLimeLightY();
-  //   if(x != -100) {
-  //     double distance = 133.185 - (3.3797 * x) + (0.0484411 * Math.pow(x, 2)) + (-0.0025609 *  Math.pow(x, 3)) + (0.000100128 * Math.pow(x, 4));
-  //     return distance;
-  //   }
-  //   return -1.0;
-  // }
-
-  public void turnLightRingOn() {
-    //m_pdh.setSwitchableChannel(true);
-    switchLights.setNumber(3);
+  public double getFrontLimeLightX() {
+    limeLightX = Math.PI * (frontTableX.getDouble(0))/180;
+    return limeLightX;
   }
 
-  public void turnLightRingOff() {
-    switchLights.setNumber(1);
+  public double getFrontLimeLightY() {
+    limeLightY = frontTableY.getDouble(-100);
+    return limeLightY;
+  }
+
+  public double getFrontCameraLatency() {
+    double latency = frontTableLatency.getDouble(-1);
+    return latency;
+  }
+
+  public JSONArray getFrontLimelightBasedPosition() {
+    // // System.out.println(frontRobotPose.getString(""));
+    // JSONArray robotPosArray = new JSONArray();
+    // robotPosArray.put(0, 0);
+    // try {
+    //   String networkTableResult = frontRobotPose.getString("");
+    //   JSONObject camResult = new JSONObject(networkTableResult).getJSONObject("Results");
+    //   JSONArray botPose = camResult.getJSONArray("botpose");
+    //   robotPosArray.put(0, botPose.getDouble(0) + (Constants.FIELD_LENGTH/2));
+    //   robotPosArray.put(1, botPose.getDouble(1) + (Constants.FIELD_WIDTH/2));
+    // } catch (Exception e) {
+    //     JSONArray noTarget = new JSONArray();
+    //     noTarget.put(0);
+    //     return noTarget;
+    //     // TODO: handle exception
+    // }
+    // return robotPosArray;
+
+    // System.out.println(backRobotPose.getString(""));
+    JSONArray robotPosArray = new JSONArray();
+    robotPosArray.put(0, 0);
+    try {
+      String networkTableResult = frontRobotPose.getString("");
+      JSONObject camResult = new JSONObject(networkTableResult).getJSONObject("Results");
+      JSONArray tagList = camResult.getJSONArray("Fiducial");
+      double averagedX = 0;
+      double averagedY = 0;
+      double count = 0;
+      if(tagList.length() >= 1) {
+        for(int i = 0; i < tagList.length(); i++) {
+          JSONObject tag = (JSONObject) tagList.get(0);
+          robotPosArray = tag.getJSONArray("t6r_fs");
+          averagedX = averagedX + robotPosArray.getDouble(0);
+          averagedY = averagedY + robotPosArray.getDouble(1);
+          count++;
+        }
+        averagedX = averagedX/count;
+        averagedY = averagedY/count;
+        JSONObject bestTag = (JSONObject) tagList.get(0);
+        robotPosArray.put(0, averagedX + (Constants.FIELD_LENGTH/2));
+        robotPosArray.put(1, averagedY + (Constants.FIELD_WIDTH/2));
+        // System.out.println(robotPosArray);
+    } 
+    } catch (Exception e) {
+        JSONArray noTarget = new JSONArray();
+        noTarget.put(0);
+        return noTarget;
+        // TODO: handle exception
+    }
+    return robotPosArray;
   }
 
   public static double getNavxAngle() {

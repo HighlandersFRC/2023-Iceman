@@ -12,23 +12,26 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.AlignToConeHorizontal;
-import frc.robot.commands.AlignToConeVertical;
 import frc.robot.commands.AutonomousFollower;
-import frc.robot.commands.MoveToReflectiveTape;
-import frc.robot.commands.RunIntake;
+import frc.robot.commands.ExtendArm;
+import frc.robot.commands.RotateArm;
+import frc.robot.commands.RunWrist;
+import frc.robot.commands.SetArmExtensionPosition;
+import frc.robot.commands.SetArmRotationPosition;
+import frc.robot.commands.TwoPieceAuto;
 import frc.robot.commands.VisionAlignment;
 import frc.robot.commands.ZeroNavxMidMatch;
-import frc.robot.commands.defaults.MoveArm;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lights;
-import frc.robot.subsystems.MorrisArm;
 import frc.robot.subsystems.Peripherals;
+import frc.robot.subsystems.Wrist;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -42,8 +45,11 @@ public class Robot extends TimedRobot {
   private Lights lights = new Lights();
   private Peripherals peripherals = new Peripherals(lights);
   private Drive drive = new Drive(peripherals);
-  private Intake intake = new Intake();
-  private MorrisArm arm = new MorrisArm();
+  private Arm arm = new Arm();
+  private Wrist wrist = new Wrist();
+
+  private UsbCamera frontDriverCam;
+  private UsbCamera backDriverCam;
 
   File pathingFile;
   String pathString;
@@ -51,15 +57,29 @@ public class Robot extends TimedRobot {
   JSONObject pathRead;
   JSONArray pathJSON;
 
+  File pathingFile2;
+  String pathString2;
+
+  JSONObject pathRead2;
+  JSONArray pathJSON2;
+
   @Override
   public void robotInit() {
+    // frontDriverCam = CameraServer.startAutomaticCapture("Front Cam", "/dev/video0");
+    // frontDriverCam.setResolution(320, 240);
+    // frontDriverCam.setFPS(15);
+
+    // backDriverCam = CameraServer.startAutomaticCapture("Back Cam", "/dev/video1");
+    // backDriverCam.setResolution(320, 240);
+    // backDriverCam.setFPS(15);
+
     drive.init();
     peripherals.init();
     lights.init();
     arm.init();
-    intake.init();
+    wrist.init();
     try {
-      pathingFile = new File("/home/lvuser/deploy/AlignmentTest.json");
+      pathingFile = new File("/home/lvuser/deploy/2PiecePart1.json");
       FileReader scanner = new FileReader(pathingFile);
       // pathRead = new JSONTokener(scanner);
       pathRead = new JSONObject(new JSONTokener(scanner));
@@ -71,18 +91,28 @@ public class Robot extends TimedRobot {
     catch(Exception e) {
       System.out.println("ERROR WITH PATH FILE " + e);
     }
-  }
+
+    try {
+      pathingFile2 = new File("/home/lvuser/deploy/2PiecePart2.json");
+      FileReader scanner2 = new FileReader(pathingFile2);
+      // pathRead = new JSONTokener(scanner);
+      pathRead2 = new JSONObject(new JSONTokener(scanner2));
+      pathJSON2 = (JSONArray) pathRead2.get("sampled_points");
+    }
+    catch(Exception e) {
+      System.out.println("ERROR WITH PATH FILE " + e);
+    }
+  }  
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    // System.out.println(peripherals.getCameraBasedRobotLocation());
-    // peripherals.getLimelightBasedPosition();
-    SmartDashboard.putNumber("latency", peripherals.getCameraLatency());
-    SmartDashboard.putNumber("NAVX Roll", peripherals.getNavxRoll());
-    // SmartDashboard.putBoolean("HAS TARGET", peripherals.cameraHasTargets());
-    // SmartDashboard.putNumber("Target Yaw", peripherals.cameraYawToTarget());
-    // SmartDashboard.putNumber("Target Pitch", peripherals.cameraPitchToTarget());
+
+    SmartDashboard.putNumber("Extension", arm.getExtensionPosition());
+    SmartDashboard.putBoolean("ARM LIMIT SWITCH", arm.getExtensionLimitSwitch());
+    // SmartDashboard.putNumber("ARM ROTATION", arm.getRotationPosition());
+
+    arm.postRotationValues();
   }
 
   @Override
@@ -94,7 +124,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     drive.autoInit(pathJSON);
-    AutonomousFollower auto = new AutonomousFollower(drive, pathJSON);
+
+    TwoPieceAuto auto = new TwoPieceAuto(drive, arm);
 
     auto.schedule();
   }
@@ -105,22 +136,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    drive.teleopInit();
+    drive.teleopInit(); 
     OI.driverViewButton.whileHeld(new ZeroNavxMidMatch(drive));
-    // OI.driverRT.whileActiveOnce(new RunIntake(intake, 0.2));
-    // OI.driverA.whenHeld(new MoveArm(arm, 0.25));
-    // OI.driverB.whenHeld(new MoveArm(arm, -0.25));
-    // OI.driverX.whenPressed(new AlignToConeHorizontal(drive, peripherals));
-    // OI.driverY.whenPressed(new AlignToConeVertical(drive, peripherals));
-    // OI.driverY.whenPressed(new MoveToReflectiveTape(drive, peripherals));
-    OI.driverA.whileHeld(new RunIntake(intake, 0.3));
-    OI.driverB.whileHeld(new RunIntake(intake, -0.3));
-    OI.driverY.whileHeld(new RunIntake(intake, 0.1));
-    OI.driverX.whileHeld(new RunIntake(intake, -0.1));
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
+    
+    OI.driverY.whileHeld(new SetArmRotationPosition(arm, 45));
+    // OI.driverX.whileHeld(new RotateArm(arm, 0.5));
+    OI.driverX.whileHeld(new SetArmRotationPosition(arm, 0));
+    OI.driverA.whileHeld(new ExtendArm(arm, -0.2));
+    OI.driverB.whileHeld(new SetArmRotationPosition(arm, 180));
+    // OI.driverB.whileHeld(new RotateArm(arm, -0.5));
+    // OI.driverY.whenPressed(new SetArmExtensionPosition(arm, 10));
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

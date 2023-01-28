@@ -2,31 +2,30 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.defaults;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Peripherals;
+import frc.robot.subsystems.Wrist;
 
-public class PeripheralsDefault extends CommandBase {
-  /** Creates a new PeripheralsDefault. */
-
-  private Peripherals peripherals;
-
-  public PeripheralsDefault(Peripherals peripherals) {
-    this.peripherals = peripherals;
-    addRequirements(peripherals);
+public class RunWrist extends CommandBase {
+  /** Creates a new RunIntake. */
+  private Wrist Wrist;
+  private double percent;
+  public RunWrist(Wrist Wrist, double percent) {
+    this.Wrist = Wrist;
+    this.percent = percent;
+    addRequirements(this.Wrist);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    this.Wrist.setGrabberMotorPercent(percent);
   }
 
   // Called once the command ends or is interrupted.

@@ -5,16 +5,14 @@
 package frc.robot.commands.defaults;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.MorrisArm;
+import frc.robot.subsystems.Wrist;
 
-public class MoveArm extends CommandBase {
-  /** Creates a new MoveArm. */
-  private MorrisArm arm;
-  private double percent;
-  public MoveArm(MorrisArm morrisArm, double percentage) {
-    this.arm = morrisArm;
-    this.percent = percentage;
-    addRequirements(this.arm);
+public class WristDefaultCommand extends CommandBase {
+  /** Creates a new WristDefaultCommand. */
+  private Wrist Wrist;
+  public WristDefaultCommand(Wrist Wrist) {
+    this.Wrist = Wrist;
+    addRequirements(this.Wrist);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -25,14 +23,12 @@ public class MoveArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.setArmMotorPercent(percent);
+    Wrist.setGrabberMotorPercent(0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    arm.setArmMotorPercent(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

@@ -5,13 +5,13 @@
 package frc.robot.commands.defaults;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.MorrisArm;
+import frc.robot.subsystems.Arm;
 
 public class ArmDefaultCommand extends CommandBase {
   /** Creates a new ArmDefaultCommand. */
-  private MorrisArm arm;
-  public ArmDefaultCommand(MorrisArm morrisArm) {
-    this.arm = morrisArm;
+  private Arm arm;
+  public ArmDefaultCommand(Arm arm) {
+    this.arm = arm;
     addRequirements(this.arm);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -23,7 +23,11 @@ public class ArmDefaultCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.setArmMotorPercent(0.025);
+    if (arm.getExtensionLimitSwitch()) {
+      arm.setExtensionEncoderPosition(0);
+    }
+    arm.setRotationMotorPercent(0);
+    arm.setExtensionMotorPercent(0);
   }
 
   // Called once the command ends or is interrupted.

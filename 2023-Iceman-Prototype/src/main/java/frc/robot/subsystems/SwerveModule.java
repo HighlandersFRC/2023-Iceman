@@ -194,7 +194,7 @@ public class SwerveModule extends SubsystemBase {
 
         driveMotor.config_kP(0, 0.2);
         driveMotor.config_kI(0, 0);
-        driveMotor.config_kD(0, 0.2);
+        driveMotor.config_kD(0, 0.1);
 
         angleMotor.setNeutralMode(NeutralMode.Brake);
         driveMotor.setNeutralMode(NeutralMode.Brake);

@@ -100,7 +100,7 @@ public class AutonomousFollower extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drive.setNavxAfterAuto();
+    // drive.setNavxAfterAuto();
     Vector velocityVector = new Vector(0, 0);
     double desiredThetaChange = 0;
     drive.autoDrive(velocityVector, desiredThetaChange);
