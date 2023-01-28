@@ -633,8 +633,8 @@ public class Drive extends SubsystemBase {
         double[] placementPoint;
 
         if (fieldSide == "red"){
-            midPoint = new double[] {1.5, Constants.PLACEMENT_PATH_MIDPOINT_X_RED, Constants.PLACEMENT_PATH_MIDPOINT_Y_RED[placementLocation], 0, (Constants.PLACEMENT_LOCATION_X_RED - getFusedOdometryX())/3, (Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation] - getFusedOdometryY())/3, 0, 0, 0, 0};
-            placementPoint = new double[] {3, Constants.PLACEMENT_LOCATION_X_RED, Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation], 0, 0, 0, 0, 0, 0, 0};
+            midPoint = new double[] {1, Constants.PLACEMENT_PATH_MIDPOINT_X_RED, Constants.PLACEMENT_PATH_MIDPOINT_Y_RED[placementLocation], 0, (Constants.PLACEMENT_LOCATION_X_RED - getFusedOdometryX())/3, (Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation] - getFusedOdometryY())/3, 0, 0, 0, 0};
+            placementPoint = new double[] {2, Constants.PLACEMENT_LOCATION_X_RED, Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation], 0, 0, 0, 0, 0, 0, 0};
             // midPoint = new double[] {1.5, robotX + 1.0, robotY, 0, 0, 0, 0, 0, 0, 0};
             // placementPoint = new double[] {3.0, robotX + 1.0, robotY, 0, 0, 0, 0, 0, 0, 0};
         } else {

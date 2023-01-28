@@ -44,6 +44,7 @@ public class Peripherals extends SubsystemBase {
   private NetworkTableEntry tableLatency = limeLightTable.getEntry("tl");
   private NetworkTableEntry switchLights = limeLightTable.getEntry("ledMode");
   private NetworkTableEntry robotPose = limeLightTable.getEntry("json");
+  private NetworkTableEntry botPose = limeLightTable.getEntry("botpose");
 
   private double limeLightX = -1.0;
   private double limeLightY = -1.0;
@@ -157,6 +158,15 @@ public class Peripherals extends SubsystemBase {
   //   }
   //   return robotPosArray;
   // }
+
+  public void getBotPose(){
+    try {
+      String result = botPose.getString("");
+      System.out.println(result);
+    } catch (Exception e){
+      System.out.println(e);
+    }
+  }
 
   public JSONArray getLimelightBasedPosition() {
     // System.out.println(robotPose.getString(""));
