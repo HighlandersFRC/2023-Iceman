@@ -219,10 +219,10 @@ public class Drive extends SubsystemBase {
     }
 
     public void lockWheels() {
-        leftBack.setAnglePID(-Math.PI/4, 0);
-        rightBack.setAnglePID(Math.PI/4, 0);
-        rightFront.setAnglePID(-Math.PI/4, 0);
-        leftFront.setAnglePID(Math.PI/4, 0);
+        leftBack.setAnglePID(Math.PI/4, 0);
+        rightBack.setAnglePID(-Math.PI/4, 0);
+        rightFront.setAnglePID(Math.PI/4, 0);
+        leftFront.setAnglePID(-Math.PI/4, 0);
     }
 
     // get Joystick adjusted y-value
@@ -370,7 +370,7 @@ public class Drive extends SubsystemBase {
         currentFusedOdometry[1] = averagedY;
         currentFusedOdometry[2] = currentTheta;
 
-        System.out.println("X: " + averagedX + " Y: " + averagedY + " Theta: " + currentTheta);
+        // System.out.println("X: " + averagedX + " Y: " + averagedY + " Theta: " + currentTheta);
         SmartDashboard.putNumber("X", averagedX);
         SmartDashboard.putNumber("Y", averagedY);
 
@@ -845,7 +845,7 @@ public class Drive extends SubsystemBase {
             velocityArray[1] = yVel;
             velocityArray[2] = thetaVel;
 
-            System.out.println("Target Point: " + targetPoint);
+            // System.out.println("Target Point: " + targetPoint);
 
             return velocityArray;
         }

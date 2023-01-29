@@ -144,19 +144,19 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     drive.teleopInit(); 
-    OI.driverViewButton.whileHeld(new ZeroNavxMidMatch(drive));
+    OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 
-    OI.driverA.whileHeld(new RunWrist(wrist, -0.3));
-    OI.driverY.whileHeld(new RunWrist(wrist, 0.5));
-
+    OI.driverA.whileTrue(new RunWrist(wrist, -0.3));
+    OI.driverY.whileTrue(new RunWrist(wrist, 0.5));
+    OI.driverX.onTrue(new AutoBalance(drive));
     // OI.driverA.whenPressed(new AutoPlacement(drive, armRotation, 0));
     // OI.driverX.whenPressed(new AutoPlacement(drive, armRotation, -1));
     // OI.driverB.whenPressed(new AutoPlacement(drive, armRotation, 1));
 
-    OI.operatorA.whenPressed(new SetArmExtensionPosition(armExtension, 2));
-    OI.operatorB.whileHeld(new SetArmRotationPosition(armRotation, -15));
-    OI.operatorX.whileHeld(new SetArmRotationPosition(armRotation, 190));
-    OI.operatorY.whileHeld(new SetArmExtensionPosition(armExtension, 25));
+    OI.operatorA.onTrue(new SetArmExtensionPosition(armExtension, 2));
+    OI.operatorB.whileTrue(new SetArmRotationPosition(armRotation, -15));
+    OI.operatorX.whileTrue(new SetArmRotationPosition(armRotation, 190));
+    OI.operatorY.whileTrue(new SetArmExtensionPosition(armExtension, 25));
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

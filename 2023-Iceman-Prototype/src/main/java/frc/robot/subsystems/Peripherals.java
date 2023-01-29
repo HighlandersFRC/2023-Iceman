@@ -115,7 +115,7 @@ public class Peripherals extends SubsystemBase {
       robotPosArray.put(1, 0);
     }
   
-    System.out.println(robotPosArray);
+    // System.out.println(robotPosArray);
     return robotPosArray;
   }
 

@@ -33,13 +33,16 @@ public class AutoBalance extends CommandBase {
     this.rollDif = drive.getNavxRoll() - this.roll;
     this.roll = drive.getNavxRoll();
     System.out.println("Navx Roll: " + this.roll);
-    if (Math.abs(this.rollDif) > 0.25){
+    if (Math.abs(this.rollDif) > 3){
+      System.out.println("Moving");
       drive.autoRobotCentricDrive(new Vector(0, 0), 0);
     } else {
-      if (this.roll >= -5.9 + this.rollMargin){
-        drive.autoRobotCentricDrive(new Vector(-0.65, 0), 0);
-      } else if (this.roll <= -5.9 - this.rollMargin){
-        drive.autoRobotCentricDrive(new Vector(0.65, 0), 0);
+      if (this.roll >= -2.74 + this.rollMargin){
+        System.out.println("Backward");
+        drive.autoRobotCentricDrive(new Vector(-0.6, 0), 0);
+      } else if (this.roll <= -2.74 - this.rollMargin){
+        System.out.println("Forward");
+        drive.autoRobotCentricDrive(new Vector(0.6, 0), 0);
       } else {
         drive.autoRobotCentricDrive(new Vector(0, 0), 0);
       }
@@ -56,7 +59,7 @@ public class AutoBalance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(this.rollDif) < 0.25 && Math.abs(this.roll + 5.9) < this.rollMargin){
+    if (Math.abs(this.rollDif) < 0.25 && Math.abs(this.roll + 2.74) < this.rollMargin){
       return true;
     } else {
       return false;
