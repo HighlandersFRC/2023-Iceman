@@ -5,14 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.ArmRotation;
 
 public class RotateArm extends CommandBase {
   /** Creates a new RotateArm. */
-  private Arm arm;
+  private ArmRotation arm;
   private double percent;
 
-  public RotateArm(Arm arm, double percent) {
+  public RotateArm(ArmRotation arm, double percent) {
     this.arm = arm;
     this.percent = percent;
     addRequirements(this.arm);

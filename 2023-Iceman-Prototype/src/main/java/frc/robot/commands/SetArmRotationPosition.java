@@ -6,14 +6,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.ArmRotation;
 
 public class SetArmRotationPosition extends CommandBase {
   /** Creates a new SetArmRotationPosition. */
-  private Arm arm;
+  private ArmRotation arm;
   private double position;
 
-  public SetArmRotationPosition(Arm arm, double Position) {
+  public SetArmRotationPosition(ArmRotation arm, double Position) {
     this.arm = arm;
     this.position = Position;
     addRequirements(this.arm);

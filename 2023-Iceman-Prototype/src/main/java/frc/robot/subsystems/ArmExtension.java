@@ -20,24 +20,18 @@ import edu.wpi.first.networktables.NetworkTableInstance.NetworkMode;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.commands.defaults.ArmDefaultCommand;
+import frc.robot.commands.defaults.ArmExtensionDefaultCommand;
 
-public class Arm extends SubsystemBase {
+public class ArmExtension extends SubsystemBase {
 
   private final WPI_TalonFX extensionMotor = new WPI_TalonFX(10);
-  private final WPI_TalonFX rotationMotorMaster = new WPI_TalonFX(11);
-  private final WPI_TalonFX rotationMotorFollower = new WPI_TalonFX(12);
   
-  private final CANCoder armRotationCancoder = new CANCoder(5);
-
-  /** Creates a new Arm. */
-  public Arm() {}
+  /** Creates a new ArmExtension. */
+  public ArmExtension() {}
 
   public void init() {
     extensionMotor.configFactoryDefault();
-    rotationMotorMaster.configFactoryDefault();
-    rotationMotorFollower.configFactoryDefault();
-
+    
     extensionMotor.setNeutralMode(NeutralMode.Brake);
 
     extensionMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
@@ -47,10 +41,6 @@ public class Arm extends SubsystemBase {
     extensionMotor.configForwardSoftLimitEnable(true);
 
     extensionMotor.setSelectedSensorPosition(0);
-
-    rotationMotorMaster.config_kP(0, 10);
-    rotationMotorMaster.config_kI(0, 0);
-    rotationMotorMaster.config_kD(0, 4);
 
     extensionMotor.configPeakOutputForward(0.35);
     extensionMotor.configPeakOutputReverse(-0.35);
@@ -65,18 +55,8 @@ public class Arm extends SubsystemBase {
 
     extensionMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 40, 0));
     extensionMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 40, 0));
-
-    rotationMotorFollower.set(ControlMode.Follower, 11);
-
-    // rotationMotorFollower.follow(rotationMotorMaster);
-
-    rotationMotorMaster.setNeutralMode(NeutralMode.Coast);
-    rotationMotorFollower.setNeutralMode(NeutralMode.Coast);
-
-    rotationMotorMaster.configRemoteFeedbackFilter(armRotationCancoder, 0);
-    rotationMotorMaster.configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0);
     
-    setDefaultCommand(new ArmDefaultCommand(this));
+    setDefaultCommand(new ArmExtensionDefaultCommand(this));
   }
 
   public double getExtensionPosition() {
@@ -85,10 +65,6 @@ public class Arm extends SubsystemBase {
 
   public double getExtensionRawPosition() {
     return extensionMotor.getSelectedSensorPosition();
-  }
-
-  public double getRotationPosition() {
-    return armRotationCancoder.getAbsolutePosition();
   }
 
   public boolean getExtensionLimitSwitch() {
@@ -102,10 +78,6 @@ public class Arm extends SubsystemBase {
     extensionMotor.setSelectedSensorPosition(Constants.getArmExtensionTics(inches));
   }
 
-  public void setRotationMotorPercent(double percent) {
-    rotationMotorMaster.set(ControlMode.PercentOutput, percent);
-  }
-
   public void setExtensionMotorPercent(double percent) {
     extensionMotor.set(ControlMode.PercentOutput, percent);
   }
@@ -113,18 +85,6 @@ public class Arm extends SubsystemBase {
   public void setExtensionPosition(double inches) {
     SmartDashboard.putNumber("Desired", Constants.getArmExtensionTics(inches));
     extensionMotor.set(ControlMode.Position, Constants.getArmExtensionTics(inches));
-  }
-
-  public void postRotationValues() {
-    SmartDashboard.putNumber("Setpoint", rotationMotorMaster.getClosedLoopTarget());
-    SmartDashboard.putNumber("Closed loop error", rotationMotorMaster.getClosedLoopError());
-    SmartDashboard.putNumber("Motor position", Constants.convertArmRotationTicsToDegrees(rotationMotorMaster.getSelectedSensorPosition()));
-    SmartDashboard.putNumber("Arm Rotation Position", armRotationCancoder.getAbsolutePosition());
-  }
-
-  public void setRotationPosition(double degrees) {
-    // SmartDashboard.putNumber("Setpoint", degrees);
-    rotationMotorMaster.set(ControlMode.Position, Constants.convertArmRotationDegreesToTics(degrees));
   }
 
   @Override

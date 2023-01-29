@@ -5,12 +5,12 @@
 package frc.robot.commands.defaults;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.ArmRotation;
 
-public class ArmDefaultCommand extends CommandBase {
+public class ArmRotationDefaultCommand extends CommandBase {
   /** Creates a new ArmDefaultCommand. */
-  private Arm arm;
-  public ArmDefaultCommand(Arm arm) {
+  private ArmRotation arm;
+  public ArmRotationDefaultCommand(ArmRotation arm) {
     this.arm = arm;
     addRequirements(this.arm);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -23,11 +23,7 @@ public class ArmDefaultCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (arm.getExtensionLimitSwitch()) {
-      arm.setExtensionEncoderPosition(0);
-    }
     arm.setRotationMotorPercent(0);
-    arm.setExtensionMotorPercent(0);
   }
 
   // Called once the command ends or is interrupted.

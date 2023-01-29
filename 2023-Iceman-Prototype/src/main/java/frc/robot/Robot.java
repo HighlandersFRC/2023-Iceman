@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.AutoPlacement;
+import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
 import frc.robot.commands.ExtendArm;
 import frc.robot.commands.RotateArm;
@@ -28,7 +29,8 @@ import frc.robot.commands.SetArmRotationPosition;
 import frc.robot.commands.TwoPieceAuto;
 import frc.robot.commands.VisionAlignment;
 import frc.robot.commands.ZeroNavxMidMatch;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.ArmRotation;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Peripherals;
@@ -46,7 +48,8 @@ public class Robot extends TimedRobot {
   private Lights lights = new Lights();
   private Peripherals peripherals = new Peripherals(lights);
   private Drive drive = new Drive(peripherals);
-  private Arm arm = new Arm();
+  private ArmExtension armExtension = new ArmExtension();
+  private ArmRotation armRotation = new ArmRotation();
   private Wrist wrist = new Wrist();
 
   private UsbCamera frontDriverCam;
@@ -78,7 +81,8 @@ public class Robot extends TimedRobot {
     drive.init();
     peripherals.init();
     lights.init();
-    arm.init();
+    armExtension.init();
+    armRotation.init();
     wrist.init();
     try {
       pathingFile = new File("/home/lvuser/deploy/2PiecePart1.json");
@@ -110,15 +114,16 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
-    SmartDashboard.putNumber("Extension", arm.getExtensionPosition());
-    SmartDashboard.putBoolean("ARM LIMIT SWITCH", arm.getExtensionLimitSwitch());
+    SmartDashboard.putNumber("Extension", armExtension.getExtensionPosition());
+    SmartDashboard.putBoolean("ARM LIMIT SWITCH", armExtension.getExtensionLimitSwitch());
     // SmartDashboard.putNumber("ARM ROTATION", arm.getRotationPosition());
 
-    arm.postRotationValues();
+    armRotation.postRotationValues();
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -127,7 +132,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     drive.autoInit(pathJSON);
 
-    TwoPieceAuto auto = new TwoPieceAuto(drive, arm);
+    TwoPieceAuto auto = new TwoPieceAuto(drive, armExtension, armRotation);
 
     auto.schedule();
   }
@@ -141,17 +146,17 @@ public class Robot extends TimedRobot {
     drive.teleopInit(); 
     OI.driverViewButton.whileHeld(new ZeroNavxMidMatch(drive));
 
-    // OI.driverA.whileHeld(new RunWrist(wrist, -0.5));
-    // OI.driverY.whileHeld(new RunWrist(wrist, 0.5));
+    OI.driverA.whileHeld(new RunWrist(wrist, -0.3));
+    OI.driverY.whileHeld(new RunWrist(wrist, 0.5));
 
-    OI.driverA.whenPressed(new AutoPlacement(drive, arm, 0));
-    OI.driverX.whenPressed(new AutoPlacement(drive, arm, -1));
-    OI.driverB.whenPressed(new AutoPlacement(drive, arm, 1));
+    // OI.driverA.whenPressed(new AutoPlacement(drive, armRotation, 0));
+    // OI.driverX.whenPressed(new AutoPlacement(drive, armRotation, -1));
+    // OI.driverB.whenPressed(new AutoPlacement(drive, armRotation, 1));
 
-    OI.operatorA.whenPressed(new SetArmExtensionPosition(arm, 2));
-    OI.operatorB.whileHeld(new SetArmRotationPosition(arm, 0));
-    OI.operatorX.whileHeld(new SetArmRotationPosition(arm, 180));
-    OI.operatorY.whileHeld(new SetArmExtensionPosition(arm, 25));
+    OI.operatorA.whenPressed(new SetArmExtensionPosition(armExtension, 2));
+    OI.operatorB.whileHeld(new SetArmRotationPosition(armRotation, -15));
+    OI.operatorX.whileHeld(new SetArmRotationPosition(armRotation, 190));
+    OI.operatorY.whileHeld(new SetArmExtensionPosition(armExtension, 25));
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

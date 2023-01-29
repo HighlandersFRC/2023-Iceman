@@ -15,7 +15,9 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.Arm;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.ArmRotation;
 import frc.robot.subsystems.Drive;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -39,7 +41,7 @@ public class TwoPieceAuto extends SequentialCommandGroup {
   private JSONArray pathJSON4;
   private JSONObject pathRead4;
 
-  public TwoPieceAuto(Drive drive, Arm arm) {
+  public TwoPieceAuto(Drive drive, ArmExtension armExtension, ArmRotation armRotation) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
@@ -90,18 +92,18 @@ public class TwoPieceAuto extends SequentialCommandGroup {
       System.out.println("ERROR WITH PATH FILE " + e);
     }
 
-    addRequirements(drive, arm);
-    addCommands(new SetArmRotationPosition(arm, 135),
-                new SetArmExtensionPosition(arm, 20),
-                new SetArmExtensionPosition(arm, 1),
-                new ParallelCommandGroup(new SetArmRotationPosition(arm, 0), new AutonomousFollower(drive, pathJSON, true)),
-                new ParallelCommandGroup(new SetArmRotationPosition(arm, 135), new AutonomousFollower(drive, pathJSON2, true)),
-                new SetArmExtensionPosition(arm, 20),
-                new SetArmExtensionPosition(arm, 1),
-                new ParallelCommandGroup(new SetArmRotationPosition(arm, 0), new AutonomousFollower(drive, pathJSON3, true)),
-                new ParallelCommandGroup(new SetArmRotationPosition(arm, 90), new AutonomousFollower(drive, pathJSON4, true)),
-                new SetArmExtensionPosition(arm, 20),
-                new SetArmExtensionPosition(arm, 1)
+    addRequirements(drive, armExtension, armRotation);
+    addCommands(new SetArmRotationPosition(armRotation, 135),
+                new SetArmExtensionPosition(armExtension, 30),
+                new WaitCommand(1),
+                new ParallelCommandGroup(new SetArmExtensionPosition(armExtension, 1), new SetArmRotationPosition(armRotation, 0), new AutonomousFollower(drive, pathJSON, false)),
+                new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 135), new SetArmExtensionPosition(armExtension, 30), new AutonomousFollower(drive, pathJSON2, false)),
+                new WaitCommand(1),
+                new ParallelCommandGroup(new SetArmExtensionPosition(armExtension, 1), new SetArmRotationPosition(armRotation, 0), new AutonomousFollower(drive, pathJSON3, false)),
+                new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 90), new AutonomousFollower(drive, pathJSON4, false)),
+                new AutoBalance(drive),
+                new SetArmExtensionPosition(armExtension, 20),
+                new SetArmExtensionPosition(armExtension, 1)
     );
   }
 }

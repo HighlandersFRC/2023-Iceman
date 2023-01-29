@@ -2,19 +2,16 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.defaults;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmExtension;
 
-public class ExtendArm extends CommandBase {
-  /** Creates a new ExtendArm. */
+public class ArmExtensionDefaultCommand extends CommandBase {
+  /** Creates a new ArmExtensionDefaultCommand. */
   private ArmExtension arm;
-  private double percent;
-
-  public ExtendArm(ArmExtension arm, double percent) {
+  public ArmExtensionDefaultCommand(ArmExtension arm) {
     this.arm = arm;
-    this.percent = percent;
     addRequirements(this.arm);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -26,7 +23,10 @@ public class ExtendArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.setExtensionMotorPercent(percent);
+    if (arm.getExtensionLimitSwitch()) {
+      arm.setExtensionEncoderPosition(0);
+    }
+    arm.setExtensionMotorPercent(0);
   }
 
   // Called once the command ends or is interrupted.
