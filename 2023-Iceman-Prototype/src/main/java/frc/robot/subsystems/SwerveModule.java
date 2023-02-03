@@ -150,6 +150,10 @@ public class SwerveModule extends SubsystemBase {
         return new SwerveModuleState((ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity())), new Rotation2d(Math.toRadians(getAbsolutePosition() - navxOffset)));
     }
 
+    public double getModuleSpeed() {
+        return (ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity()));
+    }
+
     public double getModuleDistance() {
         double currentTics = driveMotor.getSelectedSensorPosition();
         // because current tics is just the current encoder position rather than tics/second, calling the ticsPerSecondToSpeed method will return a distance rather than a speed
@@ -172,7 +176,7 @@ public class SwerveModule extends SubsystemBase {
         angleMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 35, 35 , 0.5));
         angleMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(false, 60, 60, 0.5));
         
-        angleMotor.config_kP(0, 0.15);
+        angleMotor.config_kP(0, 0.2);
         angleMotor.config_kI(0, 0.0);
         angleMotor.config_kD(0, 0.1);
 
@@ -194,7 +198,7 @@ public class SwerveModule extends SubsystemBase {
 
         driveMotor.config_kP(0, 0.25);
         driveMotor.config_kI(0, 0);
-        driveMotor.config_kD(0, 0.02);
+        driveMotor.config_kD(0, 0.06);
 
         angleMotor.setNeutralMode(NeutralMode.Brake);
         driveMotor.setNeutralMode(NeutralMode.Brake);

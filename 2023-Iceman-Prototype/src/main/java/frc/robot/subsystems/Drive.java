@@ -109,6 +109,8 @@ public class Drive extends SubsystemBase {
     private double currentYVelocity = 0;
     private double currentThetaVelocity = 0;
 
+    private Boolean useCameraInOdometry = true;
+
     // location of the target in the center of the field
     private double targetCenterX = 8.2296;
     private double targetCenterY = 4.1148;
@@ -298,13 +300,16 @@ public class Drive extends SubsystemBase {
         previousTheta = currentTheta;
 
         averagedX = (estimatedX + currentX)/2;
-        averagedY = (estimatedY + currentY)/2;
+        averagedY = (estimatedY + currentY)/2;   
         averagedTheta = (estimatedTheta + currentTheta)/2;
 
         initTime = Timer.getFPGATimestamp();
 
         updateOdometryFusedArray();
-        // System.out.println("X: " + getFusedOdometryX() + " Y: " + getFusedOdometryY() + " THETA: "+ getFusedOdometryTheta());
+    }
+
+    public void useCameraInOdometry() {
+        useCameraInOdometry = true;
     }
 
     // method to update odometry by fusing prediction, encoder tics, and camera values
@@ -322,11 +327,11 @@ public class Drive extends SubsystemBase {
         stdDeviation.set(1, 0, 0);
         stdDeviation.set(2, 0, 0);
 
-        if(cameraCoordinates.getDouble(0) != 0) {
+        if(useCameraInOdometry && cameraCoordinates.getDouble(0) != 0) {
             cameraBasedX = cameraCoordinates.getDouble(0);
             cameraBasedY = cameraCoordinates.getDouble(1);
             Pose2d cameraBasedPosition = new Pose2d(new Translation2d(cameraBasedX, cameraBasedY), new Rotation2d(navxOffset));
-            m_odometry.addVisionMeasurement(cameraBasedPosition, Timer.getFPGATimestamp() - (peripherals.getFrontCameraLatency()/1000));
+            m_odometry.addVisionMeasurement(cameraBasedPosition, Timer.getFPGATimestamp() - (peripherals.getBackCameraLatency()/1000));
         }
 
         SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];
@@ -344,19 +349,26 @@ public class Drive extends SubsystemBase {
         currentTime = Timer.getFPGATimestamp() - initTime;
         timeDiff = currentTime - previousTime;
 
-        // determine current velocities based on current position minus previous position divided by time difference
-        currentXVelocity = (currentX - previousX)/timeDiff;
-        currentYVelocity = (currentY - previousY)/timeDiff;
-        currentThetaVelocity = (currentTheta - previousTheta)/timeDiff;
+        // // determine current velocities based on current position minus previous position divided by time difference
+        // currentXVelocity = (currentX - previousX)/timeDiff;
+        // currentYVelocity = (currentY - previousY)/timeDiff;
+        // currentThetaVelocity = (currentTheta - previousTheta)/timeDiff;
 
-        // determine estimated position by integrating current velocity by time and adding previous estimated position
-        estimatedX = previousX + (cyclePeriod * currentXVelocity);
-        estimatedY = previousY + (cyclePeriod * currentYVelocity);
-        estimatedTheta = previousTheta + (cyclePeriod * currentThetaVelocity);
+        SmartDashboard.putNumber("X Diff", (currentX - previousX));
+        SmartDashboard.putNumber("TimeDiff", timeDiff);
 
-        averagedX = (currentX);// + averagedX)/2;
-        averagedY = (currentY);// + averagedY)/2;
-        averagedTheta = (currentTheta);// + averagedTheta)/2;
+        // // determine estimated position by integrating current velocity by time and adding previous estimated position
+        // estimatedX = previousX + (cyclePeriod * currentXVelocity);
+        // estimatedY = previousY + (cyclePeriod * currentYVelocity);
+        // estimatedTheta = previousTheta + (cyclePeriod * currentThetaVelocity);
+
+        // averagedX = (estimatedX + averagedX)/2;
+        // averagedY = (estimatedY + averagedY)/2;
+        // averagedTheta = (estimatedTheta + averagedTheta)/2;
+
+        averagedX = (currentX + averagedX)/2;
+        averagedY = (currentY + averagedY)/2;
+        averagedTheta = (currentTheta + averagedTheta)/2;
 
         previousX = averagedX;
         previousY = averagedY;
@@ -374,6 +386,14 @@ public class Drive extends SubsystemBase {
         SmartDashboard.putNumber("X", averagedX);
         SmartDashboard.putNumber("Y", averagedY);
 
+    }
+
+    public double getFrontRightModuleVelocity() {
+        return rightFront.getModuleSpeed();
+    }
+
+    public double getFrontRightModuleDistance() {
+        return rightFront.getModuleDistance();
     }
 
     public double getCurrentXVelocity() {
@@ -627,6 +647,7 @@ public class Drive extends SubsystemBase {
     // generates a path to place a object on the fly, input is which part of grid to place on (0-8)
     // placement location 0-8, from left to right
     public JSONArray generatePlacementPathOnTheFly(int placementLocation, String fieldSide) {
+        useCameraInOdometry = false;
         updateOdometryFusedArray();
         double[] firstPoint = new double[] {0, getFusedOdometryX(), getFusedOdometryY(), getFusedOdometryTheta(), getCurrentXVelocity(), getCurrentYVelocity(), 0, 0, 0, 0};
         // double[] firstPoint = new double[] {0, 14.3, 2.8, Math.toRadians(-180), 0, 0, 0, 0, 0, 0};
@@ -661,8 +682,8 @@ public class Drive extends SubsystemBase {
         SmartDashboard.putNumber("PathAngle", pathAngle);
 
         if (fieldSide == "red"){
-            midPoint = new double[] {2.5, Constants.PLACEMENT_PATH_MIDPOINT_X_RED, Constants.PLACEMENT_PATH_MIDPOINT_Y_RED[placementLocation], pathAngle, (Constants.PLACEMENT_LOCATION_X_RED - getFusedOdometryX())/3, (Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation] - getFusedOdometryY())/3, 0, 0, 0, 0};
-            placementPoint = new double[] {5, Constants.PLACEMENT_LOCATION_X_RED, Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation], pathAngle, 0, 0, 0, 0, 0, 0};
+            midPoint = new double[] {1.5, Constants.PLACEMENT_PATH_MIDPOINT_X_RED, Constants.PLACEMENT_PATH_MIDPOINT_Y_RED[placementLocation], pathAngle, (Constants.PLACEMENT_LOCATION_X_RED - getFusedOdometryX())/3, (Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation] - getFusedOdometryY())/3, 0, 0, 0, 0};
+            placementPoint = new double[] {3, Constants.PLACEMENT_LOCATION_X_RED, Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation], pathAngle, 0, 0, 0, 0, 0, 0};
             // midPoint = new double[] {1.5, robotX + 1.0, robotY, 0, 0, 0, 0, 0, 0, 0};
             // placementPoint = new double[] {3.0, robotX + 1.0, robotY, 0, 0, 0, 0, 0, 0, 0};
         } else {

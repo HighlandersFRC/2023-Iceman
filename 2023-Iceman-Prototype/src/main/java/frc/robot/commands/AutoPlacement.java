@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmRotation;
 import frc.robot.subsystems.Drive;
 
@@ -14,12 +15,13 @@ import frc.robot.subsystems.Drive;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoPlacement extends SequentialCommandGroup {
   /** Creates a new AutoPlacement. */
-  public AutoPlacement(Drive drive, ArmRotation arm, int rowOffset) {
+  public AutoPlacement(Drive drive, ArmRotation arm, ArmExtension armExtension, int rowOffset) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addRequirements(drive, arm);
     addCommands(
-      new ParallelCommandGroup(new AlignForPlacement(drive, rowOffset), new SetArmRotationPosition(arm, 135))
+      new ParallelCommandGroup(new AlignForPlacement(drive, rowOffset), new SetArmRotationPosition(arm, 235)),
+      new SetArmExtensionPosition(armExtension, 25)
     );
   }
 }

@@ -22,6 +22,7 @@ import frc.robot.commands.AutoPlacement;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
 import frc.robot.commands.ExtendArm;
+import frc.robot.commands.MoveWrist;
 import frc.robot.commands.RotateArm;
 import frc.robot.commands.RunWrist;
 import frc.robot.commands.SetArmExtensionPosition;
@@ -116,7 +117,9 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("Extension", armExtension.getExtensionPosition());
     SmartDashboard.putBoolean("ARM LIMIT SWITCH", armExtension.getExtensionLimitSwitch());
-    // SmartDashboard.putNumber("ARM ROTATION", arm.getRotationPosition());
+    // SmartDashboard.putNumber("X vel", drive.getCurrentXVelocity());
+    // SmartDashboard.putNumber("Y vel", drive.getCurrentYVelocity());
+    // SmartDashboard.putNumber("Theta vel", drive.getCurrentThetaVelocity());
 
     armRotation.postRotationValues();
   }
@@ -132,8 +135,8 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     drive.autoInit(pathJSON);
 
-    TwoPieceAuto auto = new TwoPieceAuto(drive, armExtension, armRotation);
-
+    TwoPieceAuto auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist);
+    // AutonomousFollower auto = new AutonomousFollower(drive, pathJSON, true);
     auto.schedule();
   }
 
@@ -144,19 +147,22 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     drive.teleopInit(); 
-    OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
+    OI.driverViewButton.whileHeld(new ZeroNavxMidMatch(drive));
 
-    OI.driverA.whileTrue(new RunWrist(wrist, -0.3));
-    OI.driverY.whileTrue(new RunWrist(wrist, 0.5));
-    OI.driverX.onTrue(new AutoBalance(drive));
-    // OI.driverA.whenPressed(new AutoPlacement(drive, armRotation, 0));
-    // OI.driverX.whenPressed(new AutoPlacement(drive, armRotation, -1));
-    // OI.driverB.whenPressed(new AutoPlacement(drive, armRotation, 1));
+    OI.driverA.whileHeld(new RunWrist(wrist, -1));
+    OI.driverY.whileHeld(new RunWrist(wrist, 1));
+    // OI.driverX.onTrue(new AutoBalance(drive));
+    // OI.driverA.onTrue(new AutoPlacement(drive, armRotation, armExtension, 0));
+    // OI.driverX.onTrue(new AutoPlacement(drive, armRotation, armExtension, -1));
+    // OI.driverB.onTrue(new AutoPlacement(drive, armRotation, armExtension, 1));
 
     OI.operatorA.onTrue(new SetArmExtensionPosition(armExtension, 2));
-    OI.operatorB.whileTrue(new SetArmRotationPosition(armRotation, -15));
-    OI.operatorX.whileTrue(new SetArmRotationPosition(armRotation, 190));
-    OI.operatorY.whileTrue(new SetArmExtensionPosition(armExtension, 25));
+    OI.operatorY.whileHeld(new SetArmExtensionPosition(armExtension, 35));
+    OI.operatorB.whileHeld(new SetArmRotationPosition(armRotation, 75));
+    // OI.operatorX.whileHeld(new SetArmRotationPosition(armRotation, 270));
+    OI.operatorX.whileHeld(new SetArmRotationPosition(armRotation, 180));
+    OI.operatorRB.whileHeld(new RotateArm(armRotation, 0.25));
+    OI.operatorLB.whileHeld(new RotateArm(armRotation, -0.25));
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
