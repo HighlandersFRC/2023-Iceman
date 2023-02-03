@@ -42,15 +42,17 @@ public class Peripherals extends SubsystemBase {
   private NetworkTableEntry backTableX = backLimeLightTable.getEntry("tx");
   private NetworkTableEntry backTableY = backLimeLightTable.getEntry("ty");
   private NetworkTableEntry backTableLatency = backLimeLightTable.getEntry("tl");
-  // private NetworkTableEntry backRobotPose = backLimeLightTable.getEntry("json");
+  private NetworkTableEntry backTableArea = backLimeLightTable.getEntry("ta");
   private NetworkTableEntry backRobotPose = backLimeLightTable.getEntry("botpose");
+  private NetworkTableEntry backJson = backLimeLightTable.getEntry("json");
 
   private NetworkTable frontLimeLightTable = NetworkTableInstance.getDefault().getTable("limelight-front");
   private NetworkTableEntry frontTableX = frontLimeLightTable.getEntry("tx");
   private NetworkTableEntry frontTableY = frontLimeLightTable.getEntry("ty");
   private NetworkTableEntry frontTableLatency = frontLimeLightTable.getEntry("tl");
-  private NetworkTableEntry frontRobotPose = frontLimeLightTable.getEntry("json");
-  // private NetworkTableEntry frontRobotPose = frontLimeLightTable.getEntry("botpose");
+  private NetworkTableEntry frontTableArea = frontLimeLightTable.getEntry("ta");
+  private NetworkTableEntry frontRobotPose = frontLimeLightTable.getEntry("botpose");
+  private NetworkTableEntry frontJson = frontLimeLightTable.getEntry("json");
 
   private double limeLightX = -1.0;
   private double limeLightY = -1.0;
@@ -75,6 +77,39 @@ public class Peripherals extends SubsystemBase {
     noTrackLimelightArray[4] = 0;
     noTrackLimelightArray[5] = 0;
     setDefaultCommand(new PeripheralsDefault(this));
+  }
+
+  public JSONArray getLimelightBasedPosition(){
+    try {
+      double[] frontPose = frontRobotPose.getDoubleArray(noTrackLimelightArray);
+      double[] backPose = backRobotPose.getDoubleArray(noTrackLimelightArray);
+      double frontArea = frontTableArea.getDouble(0.0);
+      double backArea = backTableArea.getDouble(0.0);
+      JSONArray pose = new JSONArray();
+      JSONArray noTrack = new JSONArray();
+      noTrack.put(0, 0.0);
+      noTrack.put(1, 0.0);
+      if (frontArea > backArea){
+        if (frontPose[0] == 0){
+          return noTrack;
+        }
+        pose.put(0, frontPose[0] + Constants.FIELD_LENGTH / 2.0);
+        pose.put(1, frontPose[1] + Constants.FIELD_WIDTH / 2.0);
+        // System.out.println("Front X:" + pose.getDouble(0) + " Y: " + pose.getDouble(1));
+      } else {
+        if (backPose[0] == 0){
+          return noTrack;
+        }
+        pose.put(0, backPose[0] + Constants.FIELD_LENGTH / 2.0);
+        pose.put(1, backPose[1] + Constants.FIELD_WIDTH / 2.0);
+        // System.out.println("Back X:" + pose.getDouble(0) + " Y: " + pose.getDouble(1));
+      }
+      return pose;
+    } catch (Exception e){
+      JSONArray noTarget = new JSONArray();
+      noTarget.put(0);
+      return noTarget;
+    }
   }
 
   public double getBackLimeLightX() {
@@ -135,24 +170,6 @@ public class Peripherals extends SubsystemBase {
   }
 
   public JSONArray getFrontLimelightBasedPosition() {
-    // // System.out.println(frontRobotPose.getString(""));
-    // JSONArray robotPosArray = new JSONArray();
-    // robotPosArray.put(0, 0);
-    // try {
-    //   String networkTableResult = frontRobotPose.getString("");
-    //   JSONObject camResult = new JSONObject(networkTableResult).getJSONObject("Results");
-    //   JSONArray botPose = camResult.getJSONArray("botpose");
-    //   robotPosArray.put(0, botPose.getDouble(0) + (Constants.FIELD_LENGTH/2));
-    //   robotPosArray.put(1, botPose.getDouble(1) + (Constants.FIELD_WIDTH/2));
-    // } catch (Exception e) {
-    //     JSONArray noTarget = new JSONArray();
-    //     noTarget.put(0);
-    //     return noTarget;
-    //     // TODO: handle exception
-    // }
-    // return robotPosArray;
-
-    // System.out.println(backRobotPose.getString(""));
     JSONArray robotPosArray = new JSONArray();
     robotPosArray.put(0, 0);
     try {
