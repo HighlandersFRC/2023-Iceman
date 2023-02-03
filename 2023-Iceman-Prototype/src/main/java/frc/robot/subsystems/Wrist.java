@@ -17,10 +17,10 @@ import frc.robot.commands.defaults.WristDefaultCommand;
 public class Wrist extends SubsystemBase {
   /** Creates a new Wrist. */
 
-  private final CANSparkMax wristMotor = new CANSparkMax(13, MotorType.kBrushless);
+  private final CANSparkMax grabberMotor = new CANSparkMax(62, MotorType.kBrushless);
   // private final CANSparkMax grabberMotor = new CANSparkMax(14, MotorType.kBrushless);
 
-  private final TalonFX grabberMotor = new TalonFX(15);
+  private final TalonFX wristMotor = new TalonFX(15);
 
   public Wrist() {}
 
@@ -33,11 +33,11 @@ public class Wrist extends SubsystemBase {
   }
 
   public void setWristMotorPercent(double percent) {
-    wristMotor.set(percent);
+    wristMotor.set(ControlMode.PercentOutput, percent);
   }
 
   public void setGrabberMotorPercent(double percent) {
-    grabberMotor.set(ControlMode.PercentOutput, percent);
+    grabberMotor.set(percent);
   }
 
   @Override

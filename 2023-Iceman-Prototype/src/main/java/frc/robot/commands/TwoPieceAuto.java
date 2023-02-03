@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmRotation;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Wrist;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -41,7 +42,7 @@ public class TwoPieceAuto extends SequentialCommandGroup {
   private JSONArray pathJSON4;
   private JSONObject pathRead4;
 
-  public TwoPieceAuto(Drive drive, ArmExtension armExtension, ArmRotation armRotation) {
+  public TwoPieceAuto(Drive drive, ArmExtension armExtension, ArmRotation armRotation, Wrist wrist) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
@@ -92,18 +93,18 @@ public class TwoPieceAuto extends SequentialCommandGroup {
       System.out.println("ERROR WITH PATH FILE " + e);
     }
 
-    addRequirements(drive, armExtension, armRotation);
-    addCommands(new SetArmRotationPosition(armRotation, 135),
+    addRequirements(drive, armExtension, armRotation, wrist);
+    addCommands(new SetArmRotationPosition(armRotation, 225),
                 new SetArmExtensionPosition(armExtension, 30),
-                new WaitCommand(1),
-                new ParallelCommandGroup(new SetArmExtensionPosition(armExtension, 1), new SetArmRotationPosition(armRotation, 0), new AutonomousFollower(drive, pathJSON, false)),
-                new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 135), new SetArmExtensionPosition(armExtension, 30), new AutonomousFollower(drive, pathJSON2, false)),
-                new WaitCommand(1),
-                new ParallelCommandGroup(new SetArmExtensionPosition(armExtension, 1), new SetArmRotationPosition(armRotation, 0), new AutonomousFollower(drive, pathJSON3, false)),
-                new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 90), new AutonomousFollower(drive, pathJSON4, false)),
-                new AutoBalance(drive),
-                new SetArmExtensionPosition(armExtension, 20),
-                new SetArmExtensionPosition(armExtension, 1)
+                new ParallelRaceGroup(new RunWrist(wrist, -1), new WaitCommand(0.5)),
+                new ParallelCommandGroup(new RunWrist(wrist, 1), new SetArmExtensionPosition(armExtension, 1), new SetArmRotationPosition(armRotation, 79), new AutonomousFollower(drive, pathJSON, false)),
+                new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 225), new SetArmExtensionPosition(armExtension, 30), new AutonomousFollower(drive, pathJSON2, false))
+                // new WaitCommand(1),
+                // new ParallelCommandGroup(new SetArmExtensionPosition(armExtension, 1), new SetArmRotationPosition(armRotation, 90), new AutonomousFollower(drive, pathJSON3, false)),
+                // new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 180), new AutonomousFollower(drive, pathJSON4, false)),
+                // new AutoBalance(drive),
+                // new SetArmExtensionPosition(armExtension, 20),
+                // new SetArmExtensionPosition(armExtension, 1)
     );
   }
 }

@@ -29,9 +29,9 @@ public class ArmRotation extends SubsystemBase {
     rotationMotorMaster.configFactoryDefault();
     rotationMotorFollower.configFactoryDefault();
 
-    rotationMotorMaster.config_kP(0, 10);
+    rotationMotorMaster.config_kP(0, 6);
     rotationMotorMaster.config_kI(0, 0);
-    rotationMotorMaster.config_kD(0, 4);
+    rotationMotorMaster.config_kD(0, 6);
 
     rotationMotorFollower.set(ControlMode.Follower, 11);
 

@@ -15,6 +15,6 @@ public class AlignForPlacement extends SequentialCommandGroup {
   // -1, 0, 1 for left, middle, right
   public AlignForPlacement(Drive drive, int rowOffset) {
     addRequirements(drive);
-    addCommands(new AutonomousFollower(drive, true, true, rowOffset));
+    addCommands(new AutonomousFollower(drive, true, false, rowOffset));
   }
 }

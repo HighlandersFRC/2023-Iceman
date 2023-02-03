@@ -106,13 +106,15 @@ public class AutonomousFollower extends CommandBase {
     // previousVelocityY = desiredVelocityArray[1];
     // previousVelocityTheta = desiredThetaChange;
     if (this.record){
-      recordedOdometry.add(new double[] {currentTime, odometryFusedX, odometryFusedY, odometryFusedTheta});
+      // recordedOdometry.add(new double[] {currentTime, odometryFusedX, odometryFusedY, odometryFusedTheta});
+      recordedOdometry.add(new double[] {currentTime, desiredVelocityArray[0], desiredVelocityArray[1], drive.getFrontRightModuleDistance(), drive.getFrontRightModuleVelocity()});
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    drive.useCameraInOdometry();
     // drive.setNavxAfterAuto();
     Vector velocityVector = new Vector(0, 0);
     double desiredThetaChange = 0;

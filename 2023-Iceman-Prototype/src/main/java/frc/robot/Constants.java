@@ -48,7 +48,7 @@ public final class Constants {
 
     public static final double NEO_TICS_PER_ROTATION = 42;
 
-    public static final double ROBOT_WIDTH = inchesToMeters(24); //m
+    public static final double ROBOT_WIDTH = inchesToMeters(25); //m
 
     public static final double ROBOT_LENGTH = inchesToMeters(29); //m
 
