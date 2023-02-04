@@ -316,7 +316,7 @@ public class Drive extends SubsystemBase {
     public void updateOdometryFusedArray() {
         double navxOffset = Math.toRadians(peripherals.getNavxAngle());
 
-        JSONArray cameraCoordinates = peripherals.getBackLimelightBasedPosition();
+        JSONArray cameraCoordinates = peripherals.getLimelightBasedPosition();
 
         double cameraBasedX = 0;
         double cameraBasedY = 0;
@@ -382,7 +382,7 @@ public class Drive extends SubsystemBase {
         currentFusedOdometry[1] = averagedY;
         currentFusedOdometry[2] = currentTheta;
 
-        // System.out.println("X: " + averagedX + " Y: " + averagedY + " Theta: " + currentTheta);
+        // System.out.println("X: " + averagedX + " Y: " + averagedY);
         SmartDashboard.putNumber("X", averagedX);
         SmartDashboard.putNumber("Y", averagedY);
 

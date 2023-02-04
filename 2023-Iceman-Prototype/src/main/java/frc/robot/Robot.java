@@ -149,22 +149,22 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     drive.teleopInit(); 
-    OI.driverViewButton.whileHeld(new ZeroNavxMidMatch(drive));
+    OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 
-    OI.driverA.whileHeld(new RunWrist(wrist, -1));
-    OI.driverY.whileHeld(new RunWrist(wrist, 1));
+    OI.driverA.whileTrue(new RunWrist(wrist, -1));
+    OI.driverY.whileTrue(new RunWrist(wrist, 1));
     // OI.driverX.onTrue(new AutoBalance(drive));
     // OI.driverA.onTrue(new AutoPlacement(drive, armRotation, armExtension, 0));
     // OI.driverX.onTrue(new AutoPlacement(drive, armRotation, armExtension, -1));
     // OI.driverB.onTrue(new AutoPlacement(drive, armRotation, armExtension, 1));
 
     OI.operatorA.onTrue(new SetArmExtensionPosition(armExtension, 2));
-    OI.operatorY.whileHeld(new SetArmExtensionPosition(armExtension, 35));
-    OI.operatorB.whileHeld(new SetArmRotationPosition(armRotation, 75));
-    // OI.operatorX.whileHeld(new SetArmRotationPosition(armRotation, 270));
-    OI.operatorX.whileHeld(new SetArmRotationPosition(armRotation, 180));
-    OI.operatorRB.whileHeld(new RotateArm(armRotation, 0.25));
-    OI.operatorLB.whileHeld(new RotateArm(armRotation, -0.25));
+    OI.operatorY.whileTrue(new SetArmExtensionPosition(armExtension, 35));
+    OI.operatorB.whileTrue(new SetArmRotationPosition(armRotation, 75));
+    // OI.operatorX.whileTrue(new SetArmRotationPosition(armRotation, 270));
+    OI.operatorX.whileTrue(new SetArmRotationPosition(armRotation, 180));
+    OI.operatorRB.whileTrue(new RotateArm(armRotation, 0.25));
+    OI.operatorLB.whileTrue(new RotateArm(armRotation, -0.25));
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
