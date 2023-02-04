@@ -85,24 +85,22 @@ public class Peripherals extends SubsystemBase {
       double[] backPose = backRobotPose.getDoubleArray(noTrackLimelightArray);
       double frontArea = frontTableArea.getDouble(0.0);
       double backArea = backTableArea.getDouble(0.0);
-      JSONArray pose = new JSONArray();
+      JSONArray pose = new JSONArray(new double[] {0.0, 0.0});
       JSONArray noTrack = new JSONArray();
       noTrack.put(0, 0.0);
       noTrack.put(1, 0.0);
       if (frontArea > backArea){
-        if (frontPose[0] == 0){
+        if (frontPose[0] < 1.0 && frontPose[1] < 0.5){
           return noTrack;
         }
         pose.put(0, frontPose[0] + Constants.FIELD_LENGTH / 2.0);
         pose.put(1, frontPose[1] + Constants.FIELD_WIDTH / 2.0);
-        // System.out.println("Front X:" + pose.getDouble(0) + " Y: " + pose.getDouble(1));
       } else {
-        if (backPose[0] == 0){
+        if (backPose[0] < 1.0 && backPose[1] < 0.5){
           return noTrack;
         }
         pose.put(0, backPose[0] + Constants.FIELD_LENGTH / 2.0);
         pose.put(1, backPose[1] + Constants.FIELD_WIDTH / 2.0);
-        // System.out.println("Back X:" + pose.getDouble(0) + " Y: " + pose.getDouble(1));
       }
       return pose;
     } catch (Exception e){
