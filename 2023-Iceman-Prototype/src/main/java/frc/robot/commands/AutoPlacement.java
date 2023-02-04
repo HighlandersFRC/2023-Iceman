@@ -20,8 +20,8 @@ public class AutoPlacement extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addRequirements(drive, arm);
     addCommands(
-      new ParallelCommandGroup(new AlignForPlacement(drive, rowOffset), new SetArmRotationPosition(arm, 235))
-      // new SetArmExtensionPosition(armExtension, 25)
+      new ParallelCommandGroup(new AlignForPlacement(drive, rowOffset), new SetArmRotationPosition(arm, 235)),
+      new SetArmExtensionPosition(armExtension, 25)
     );
   }
 }
