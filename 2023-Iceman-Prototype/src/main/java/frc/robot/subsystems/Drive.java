@@ -382,9 +382,9 @@ public class Drive extends SubsystemBase {
         currentFusedOdometry[1] = averagedY;
         currentFusedOdometry[2] = currentTheta;
 
-        // System.out.println("X: " + averagedX + " Y: " + averagedY);
-        SmartDashboard.putNumber("X", averagedX);
-        SmartDashboard.putNumber("Y", averagedY);
+        System.out.println("X: " + averagedX + " Y: " + averagedY);
+        // SmartDashboard.putNumber("X", averagedX);
+        // SmartDashboard.putNumber("Y", averagedY);
 
     }
 

@@ -115,6 +115,8 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
+    SmartDashboard.putNumber("NAVX", peripherals.getNavxAngle());
+
     SmartDashboard.putNumber("Extension", armExtension.getExtensionPosition());
     SmartDashboard.putBoolean("ARM LIMIT SWITCH", armExtension.getExtensionLimitSwitch());
     // SmartDashboard.putNumber("X vel", drive.getCurrentXVelocity());
