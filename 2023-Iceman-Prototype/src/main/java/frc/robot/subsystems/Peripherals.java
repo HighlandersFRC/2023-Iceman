@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.Arrays;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.photonvision.PhotonCamera;
@@ -99,6 +101,7 @@ public class Peripherals extends SubsystemBase {
     double[] result = new double[6];
     try {
       result = backRobotPose.getDoubleArray(noTrackLimelightArray);
+      System.out.println(Arrays.toString(result));
     } catch (Exception e) {
       JSONArray noTarget = new JSONArray();
       noTarget.put(0);
@@ -106,7 +109,7 @@ public class Peripherals extends SubsystemBase {
       // TODO: handle exception
     }
     
-    if(result.length == 6) {
+    if(result[0] != 0) {
       robotPosArray.put(0, result[0] + (Constants.FIELD_LENGTH/2));
       robotPosArray.put(1, result[1] + (Constants.FIELD_WIDTH/2));
     }

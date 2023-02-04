@@ -25,13 +25,13 @@ public class RunWrist extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Math.abs(Wrist.getGrabberMotorCurrent()) < 35) {
-      this.Wrist.setGrabberMotorPercent(percent);
-    }
-    else {
-      Wrist.setGrabberMotorPercent(0);
-    }
-    // Wrist.setGrabberMotorPercent(0);
+    // if(Math.abs(Wrist.getGrabberMotorCurrent()) < 40) {
+    //   this.Wrist.setGrabberMotorPercent(percent);
+    // }
+    // else {
+    //   Wrist.setGrabberMotorPercent(0);
+    // }
+    Wrist.setGrabberMotorPercent(percent);
   }
 
   // Called once the command ends or is interrupted.

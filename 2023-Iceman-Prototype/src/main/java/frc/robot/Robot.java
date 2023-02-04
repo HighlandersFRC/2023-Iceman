@@ -135,6 +135,8 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     drive.autoInit(pathJSON);
 
+    System.out.println(peripherals.getNavxAngle());
+
     TwoPieceAuto auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist);
     // AutonomousFollower auto = new AutonomousFollower(drive, pathJSON, true);
     auto.schedule();

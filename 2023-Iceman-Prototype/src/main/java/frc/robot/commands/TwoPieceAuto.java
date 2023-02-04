@@ -96,9 +96,11 @@ public class TwoPieceAuto extends SequentialCommandGroup {
     addRequirements(drive, armExtension, armRotation, wrist);
     addCommands(new SetArmRotationPosition(armRotation, 225),
                 new SetArmExtensionPosition(armExtension, 30),
-                new ParallelRaceGroup(new RunWrist(wrist, -1), new WaitCommand(0.5)),
-                new ParallelCommandGroup(new RunWrist(wrist, 1), new SetArmExtensionPosition(armExtension, 1), new SetArmRotationPosition(armRotation, 79), new AutonomousFollower(drive, pathJSON, false)),
-                new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 225), new SetArmExtensionPosition(armExtension, 30), new AutonomousFollower(drive, pathJSON2, false))
+                new ParallelRaceGroup(new RunWrist(wrist, 1), new WaitCommand(0.5)),
+                new ParallelDeadlineGroup(new AutonomousFollower(drive, pathJSON, false), new RunWrist(wrist, 1), new SetArmExtensionPosition(armExtension, 1), new SetArmRotationPosition(armRotation, 79)),
+                new ParallelDeadlineGroup(new AutonomousFollower(drive, pathJSON2, false), new SetArmRotationPosition(armRotation, 135)),
+                new SetArmExtensionPosition(armExtension, 30),
+                new ParallelRaceGroup(new RunWrist(wrist, 1), new WaitCommand(0.5))
                 // new WaitCommand(1),
                 // new ParallelCommandGroup(new SetArmExtensionPosition(armExtension, 1), new SetArmRotationPosition(armRotation, 90), new AutonomousFollower(drive, pathJSON3, false)),
                 // new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 180), new AutonomousFollower(drive, pathJSON4, false)),
