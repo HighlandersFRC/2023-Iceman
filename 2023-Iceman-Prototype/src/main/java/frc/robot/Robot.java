@@ -61,12 +61,8 @@ public class Robot extends TimedRobot {
 
   JSONObject pathRead;
   JSONArray pathJSON;
+  JSONArray pathCommands;
 
-  File pathingFile2;
-  String pathString2;
-
-  JSONObject pathRead2;
-  JSONArray pathJSON2;
   String fieldSide;
 
   @Override
@@ -86,25 +82,15 @@ public class Robot extends TimedRobot {
     armRotation.init();
     wrist.init();
     try {
-      pathingFile = new File("/home/lvuser/deploy/2PiecePart1.json");
+      pathingFile = new File("/home/lvuser/deploy/2Plus1.json");
       FileReader scanner = new FileReader(pathingFile);
       // pathRead = new JSONTokener(scanner);
       pathRead = new JSONObject(new JSONTokener(scanner));
       pathJSON = (JSONArray) pathRead.get("sampled_points");
+      pathCommands = (JSONArray) pathRead.getJSONArray("commands");
       JSONArray first = pathJSON.getJSONArray(0);
       double firstTime = first.getDouble(0);
       System.out.println(first);
-    }
-    catch(Exception e) {
-      System.out.println("ERROR WITH PATH FILE " + e);
-    }
-
-    try {
-      pathingFile2 = new File("/home/lvuser/deploy/2PiecePart2.json");
-      FileReader scanner2 = new FileReader(pathingFile2);
-      // pathRead = new JSONTokener(scanner);
-      pathRead2 = new JSONObject(new JSONTokener(scanner2));
-      pathJSON2 = (JSONArray) pathRead2.get("sampled_points");
     }
     catch(Exception e) {
       System.out.println("ERROR WITH PATH FILE " + e);
@@ -139,8 +125,8 @@ public class Robot extends TimedRobot {
 
     System.out.println(peripherals.getNavxAngle());
 
-    TwoPieceAuto auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist);
-    // AutonomousFollower auto = new AutonomousFollower(drive, pathJSON, true);
+    // TwoPieceAuto auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist);
+    AutonomousFollower auto = new AutonomousFollower(drive, armExtension, armRotation, wrist, pathJSON, pathCommands, true);
     auto.schedule();
   }
 
@@ -153,8 +139,8 @@ public class Robot extends TimedRobot {
     drive.teleopInit(); 
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 
-    OI.driverA.whileTrue(new RunWrist(wrist, -1));
-    OI.driverY.whileTrue(new RunWrist(wrist, 1));
+    OI.driverA.whileTrue(new RunWrist(wrist, -1, -1));
+    OI.driverY.whileTrue(new RunWrist(wrist, 1, -1));
     // OI.driverX.onTrue(new AutoBalance(drive));
     // OI.driverA.onTrue(new AutoPlacement(drive, armRotation, armExtension, 0));
     // OI.driverX.onTrue(new AutoPlacement(drive, armRotation, armExtension, -1));
@@ -164,7 +150,7 @@ public class Robot extends TimedRobot {
     OI.operatorY.whileTrue(new SetArmExtensionPosition(armExtension, 35));
     OI.operatorB.whileTrue(new SetArmRotationPosition(armRotation, 75));
     // OI.operatorX.whileTrue(new SetArmRotationPosition(armRotation, 270));
-    OI.operatorX.whileTrue(new SetArmRotationPosition(armRotation, 180));
+    OI.operatorX.whileTrue(new SetArmRotationPosition(armRotation, 125));
     OI.operatorRB.whileTrue(new RotateArm(armRotation, 0.25));
     OI.operatorLB.whileTrue(new RotateArm(armRotation, -0.25));
 

@@ -18,6 +18,8 @@ public class Wrist extends SubsystemBase {
   /** Creates a new Wrist. */
 
   // private final CANSparkMax grabberMotor = new CANSparkMax(62, MotorType.kBrushless);
+  // private final CANSparkMax rightPinchMotor = new CANSparkMax(25, MotorType.kBrushless);
+  // private final CANSparkMax leftPinchMotor = new CANSparkMax(26, MotorType.kBrushless);
   private final WPI_TalonFX grabberMotor = new WPI_TalonFX(15);
   // private final CANSparkMax grabberMotor = new CANSparkMax(14, MotorType.kBrushless);
 
@@ -40,6 +42,8 @@ public class Wrist extends SubsystemBase {
 
   public void setGrabberMotorPercent(double percent) {
     grabberMotor.set(ControlMode.PercentOutput, percent);
+    // rightPinchMotor.set(percent);
+    // leftPinchMotor.set(-percent);
   }
 
   @Override

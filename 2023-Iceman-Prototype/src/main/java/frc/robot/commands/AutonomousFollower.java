@@ -13,12 +13,20 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.ArmRotation;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Wrist;
 import frc.robot.tools.math.Vector;
 
 public class AutonomousFollower extends CommandBase {
     private Drive drive;
+    private ArmExtension armExtension;
+    private ArmRotation armRotation;
+    private Wrist wrist;
+
     private JSONArray path;
+    private JSONArray commands;
 
     private double initTime;
     private double currentTime;
@@ -35,22 +43,36 @@ public class AutonomousFollower extends CommandBase {
     private String fieldSide;
     private int rowOffset = 0;
 
+    private double[] commandTimes;
+    private String[] commandNames;
+    private double[] commandArgs;
+
+    private int commandChecker = 0;
+
     private ArrayList<double[]> recordedOdometry = new ArrayList<double[]>();
     private boolean generatePath = false;
     /** Creates a new AutonomousFollower. */
-  public AutonomousFollower(Drive drive, JSONArray pathPoints, boolean record) {
+  public AutonomousFollower(Drive drive, ArmExtension armExtension, ArmRotation armRotation, Wrist wrist, JSONArray pathPoints, JSONArray commands, boolean record) {
     this.drive = drive;
+    this.armExtension = armExtension;
+    this.armRotation = armRotation;
+    this.wrist = wrist;
     this.path = pathPoints;
+    this.commands = commands;
     this.record = record;
-    addRequirements(this.drive);
+    addRequirements(this.drive, this.armExtension, this.armRotation, this.wrist);
   }
 
-  public AutonomousFollower(Drive drive, boolean generatePath, boolean record, int rowOffset){
+  public AutonomousFollower(Drive drive, ArmExtension armExtension, ArmRotation armRotation, Wrist wrist, boolean generatePath, boolean record, int rowOffset){
     this.drive = drive;
+    this.armExtension = armExtension;
+    this.armRotation = armRotation;
+    this.wrist = wrist;
     this.rowOffset = rowOffset;
     this.record = record;
     this.generatePath = generatePath;
-    addRequirements(this.drive);
+    this.commands = new JSONArray();
+    addRequirements(this.drive, this.armExtension, this.armRotation, this.wrist);
   }
 
   // Called when the command is initially scheduled.
@@ -74,6 +96,23 @@ public class AutonomousFollower extends CommandBase {
       this.path = drive.generatePlacementPathOnTheFly(row, this.fieldSide);
       // System.out.println("Path: " + this.path.toString());
     }
+
+    double[] commandTimes = new double[commands.length()];
+    String[] commandNames = new String[commands.length()];
+    double[] commandArgs = new double[commands.length()];
+
+    for(int i = 0; i < commands.length(); i++) {
+      commandTimes[i] = (double) commands.getJSONObject(i).get("trigger");
+      commandNames[i] = (String) commands.getJSONObject(i).getJSONObject("command").get("type");
+      commandArgs[i] = (double) commands.getJSONObject(i).getJSONObject("command").getJSONArray("args").getDouble(0);
+    }
+
+    this.commandTimes = commandTimes;
+    this.commandNames = commandNames;
+    this.commandArgs = commandArgs;
+
+    commandChecker = 0;
+
     initTime = Timer.getFPGATimestamp();
   }
 
@@ -89,8 +128,41 @@ public class AutonomousFollower extends CommandBase {
 
     currentTime = Timer.getFPGATimestamp() - initTime;
 
-    // System.out.println("Current time: " + currentTime);
-
+    if(commandChecker < commandTimes.length) {
+      if(Math.abs(currentTime - commandTimes[commandChecker]) < 0.05) {
+        String currentCommand = commandNames[commandChecker];
+        double commandArguement = commandArgs[commandChecker];
+  
+        switch(currentCommand) {
+          case "angle_arm":
+            armRotation.setRotationPosition(commandArguement);
+            // new SetArmRotationPosition(armRotation, commandArguement).schedule();
+            break;
+          case "extend_arm":
+            armExtension.setExtensionPosition(commandArguement);
+            // new SetArmExtensionPosition(armExtension, commandArguement).schedule();
+            break;
+          case "intake":
+            armRotation.setRotationPosition(75);
+            armExtension.setExtensionPosition(0);
+            wrist.setGrabberMotorPercent(-1);
+            // new SetArmRotationPosition(armRotation, 75).schedule();
+            // new SetArmExtensionPosition(armExtension, 0).schedule();
+            // new RunWrist(wrist, -1, -1);
+            break;
+          case "placement":
+            armRotation.setRotationPosition(235);
+            armExtension.setExtensionPosition(30);
+            wrist.setGrabberMotorPercent(1);
+            // new SetArmRotationPosition(armRotation, 125).schedule();
+            // new SetArmExtensionPosition(armExtension, 30).schedule();
+            // new RunWrist(wrist, 1, 0.5).schedule();
+            break;
+        }
+        commandChecker++;
+      }
+    }
+    
     // call PIDController function
     desiredVelocityArray = drive.pidController(odometryFusedX, odometryFusedY, odometryFusedTheta, currentTime, path);
     

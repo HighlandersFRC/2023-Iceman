@@ -149,6 +149,8 @@ public class Drive extends SubsystemBase {
 
     private int lookAheadDistance = 5;
 
+    private double timeSinceLastCameraMeasurement = 0;
+
     private String fieldSide = "red";
 
     public Drive(Peripherals peripherals) {
@@ -327,13 +329,6 @@ public class Drive extends SubsystemBase {
         stdDeviation.set(1, 0, 0);
         stdDeviation.set(2, 0, 0);
 
-        if(useCameraInOdometry && cameraCoordinates.getDouble(0) != 0) {
-            cameraBasedX = cameraCoordinates.getDouble(0);
-            cameraBasedY = cameraCoordinates.getDouble(1);
-            Pose2d cameraBasedPosition = new Pose2d(new Translation2d(cameraBasedX, cameraBasedY), new Rotation2d(navxOffset));
-            m_odometry.addVisionMeasurement(cameraBasedPosition, Timer.getFPGATimestamp() - (peripherals.getBackCameraLatency()/1000));
-        }
-
         SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];
         swerveModulePositions[0] = new SwerveModulePosition(rightFront.getModuleDistance(), new Rotation2d(rightFront.getAbsolutePositionRadians()));
         swerveModulePositions[1] = new SwerveModulePosition(leftFront.getModuleDistance(), new Rotation2d(leftFront.getAbsolutePositionRadians()));
@@ -346,25 +341,30 @@ public class Drive extends SubsystemBase {
         currentY = getOdometryY();
         currentTheta = navxOffset;
 
+        if(useCameraInOdometry && cameraCoordinates.getDouble(0) != 0) {
+            cameraBasedX = cameraCoordinates.getDouble(0);
+            cameraBasedY = cameraCoordinates.getDouble(1);
+            if(Math.sqrt((Math.pow(currentX - cameraBasedX, 2)) + Math.pow(currentY - cameraBasedY, 2)) < 1 * timeSinceLastCameraMeasurement) {
+                timeSinceLastCameraMeasurement = 0;
+                System.out.println("WITHIN ACCEPTABLE DISTANCE |||||||||||||||||||||||||||||||||||||||||");
+                Pose2d cameraBasedPosition = new Pose2d(new Translation2d(cameraBasedX, cameraBasedY), new Rotation2d(navxOffset));
+                m_odometry.addVisionMeasurement(cameraBasedPosition, Timer.getFPGATimestamp() - (peripherals.getBackCameraLatency()/1000));
+            }
+            else {
+                System.out.println("--------------------------------------------");
+                timeSinceLastCameraMeasurement = Timer.getFPGATimestamp() - timeSinceLastCameraMeasurement;
+
+            }
+        }
+        else {
+            timeSinceLastCameraMeasurement = Timer.getFPGATimestamp() - timeSinceLastCameraMeasurement;
+        }
+
         currentTime = Timer.getFPGATimestamp() - initTime;
         timeDiff = currentTime - previousTime;
 
-        // // determine current velocities based on current position minus previous position divided by time difference
-        // currentXVelocity = (currentX - previousX)/timeDiff;
-        // currentYVelocity = (currentY - previousY)/timeDiff;
-        // currentThetaVelocity = (currentTheta - previousTheta)/timeDiff;
-
         SmartDashboard.putNumber("X Diff", (currentX - previousX));
         SmartDashboard.putNumber("TimeDiff", timeDiff);
-
-        // // determine estimated position by integrating current velocity by time and adding previous estimated position
-        // estimatedX = previousX + (cyclePeriod * currentXVelocity);
-        // estimatedY = previousY + (cyclePeriod * currentYVelocity);
-        // estimatedTheta = previousTheta + (cyclePeriod * currentThetaVelocity);
-
-        // averagedX = (estimatedX + averagedX)/2;
-        // averagedY = (estimatedY + averagedY)/2;
-        // averagedTheta = (estimatedTheta + averagedTheta)/2;
 
         averagedX = (currentX + averagedX)/2;
         averagedY = (currentY + averagedY)/2;
@@ -383,9 +383,6 @@ public class Drive extends SubsystemBase {
         currentFusedOdometry[2] = currentTheta;
 
         System.out.println("X: " + averagedX + " Y: " + averagedY);
-        // SmartDashboard.putNumber("X", averagedX);
-        // SmartDashboard.putNumber("Y", averagedY);
-
     }
 
     public double getFrontRightModuleVelocity() {
