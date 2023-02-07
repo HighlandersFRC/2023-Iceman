@@ -48,13 +48,10 @@ public class VisionAlignment extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // turn = peripherals.cameraYawToTarget();
+    peripherals.setRetroreflectivePipeline();
     initialAngle = peripherals.getNavxAngle();
-    target = (initialAngle - turn)%360;
-    SmartDashboard.putNumber("Original Angle", initialAngle);
-    SmartDashboard.putNumber("TARGET", target);
     pid = new PID(kP, kI, kD);
-    pid.setSetPoint(target);
+    pid.setSetPoint(peripherals.getFrontLimelightAngleToTarget());
     pid.setMinOutput(-4);
     pid.setMaxOutput(4);
     angleSettled = 0;
@@ -89,6 +86,7 @@ public class VisionAlignment extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     drive.autoDrive(new Vector(0, 0), 0);
+    peripherals.setAprilTagPipeline();
   }
 
   // Returns true when the command should end.

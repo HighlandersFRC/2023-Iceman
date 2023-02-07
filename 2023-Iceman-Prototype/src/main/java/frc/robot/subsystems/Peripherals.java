@@ -91,6 +91,14 @@ public class Peripherals extends SubsystemBase {
     backLimeLightTable.getEntry("pipeline").setNumber(1);
   }
 
+  public double getFrontLimelightAngleToTarget(){
+    return this.getNavxAngle() + frontTableX.getDouble(0);
+  }
+
+  public double getBackLimelightAngleToTarget(){
+    return this.getNavxAngle() + backTableX.getDouble(0);
+  }
+
   public JSONArray getLimelightBasedPosition(){
     JSONArray noTrack = new JSONArray();
     noTrack.put(0, 0.0);
