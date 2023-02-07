@@ -382,7 +382,7 @@ public class Drive extends SubsystemBase {
         currentFusedOdometry[1] = averagedY;
         currentFusedOdometry[2] = currentTheta;
 
-        System.out.println("X: " + averagedX + " Y: " + averagedY);
+        // System.out.println("X: " + averagedX + " Y: " + averagedY);
     }
 
     public double getFrontRightModuleVelocity() {

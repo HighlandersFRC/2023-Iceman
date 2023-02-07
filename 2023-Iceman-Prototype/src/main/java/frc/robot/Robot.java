@@ -139,8 +139,8 @@ public class Robot extends TimedRobot {
     drive.teleopInit(); 
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 
-    OI.driverA.whileTrue(new RunWrist(wrist, -1, -1));
-    OI.driverY.whileTrue(new RunWrist(wrist, 1, -1));
+    OI.driverA.whileTrue(new RunWrist(wrist, -0.8, -1));
+    OI.driverY.whileTrue(new RunWrist(wrist, 0.8, -1));
     // OI.driverX.onTrue(new AutoBalance(drive));
     // OI.driverA.onTrue(new AutoPlacement(drive, armRotation, armExtension, 0));
     // OI.driverX.onTrue(new AutoPlacement(drive, armRotation, armExtension, -1));

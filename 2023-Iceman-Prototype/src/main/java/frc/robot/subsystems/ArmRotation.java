@@ -28,6 +28,8 @@ public class ArmRotation extends SubsystemBase {
   public void init() {
     rotationMotorMaster.configFactoryDefault();
     rotationMotorFollower.configFactoryDefault();
+    rotationMotorMaster.configPeakOutputForward(0.8);
+    rotationMotorMaster.configPeakOutputReverse(-0.8);
 
     rotationMotorMaster.config_kP(0, 6);
     rotationMotorMaster.config_kI(0, 0);

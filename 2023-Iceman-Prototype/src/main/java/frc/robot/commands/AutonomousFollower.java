@@ -151,8 +151,8 @@ public class AutonomousFollower extends CommandBase {
             // new RunWrist(wrist, -1, -1);
             break;
           case "placement":
-            armRotation.setRotationPosition(235);
-            armExtension.setExtensionPosition(30);
+            // armRotation.setRotationPosition(121);
+            // armExtension.setExtensionPosition(31);
             wrist.setGrabberMotorPercent(1);
             // new SetArmRotationPosition(armRotation, 125).schedule();
             // new SetArmExtensionPosition(armExtension, 30).schedule();

@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
@@ -29,6 +30,7 @@ public class Wrist extends SubsystemBase {
 
   public void init() {
     grabberMotor.configFactoryDefault();
+    grabberMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20.0, 20.0, 0.001));
     setDefaultCommand(new WristDefaultCommand(this));
   }
 
@@ -41,7 +43,11 @@ public class Wrist extends SubsystemBase {
   }
 
   public void setGrabberMotorPercent(double percent) {
-    grabberMotor.set(ControlMode.PercentOutput, percent);
+    if (grabberMotor.getStatorCurrent() > 20.0){
+      grabberMotor.set(ControlMode.PercentOutput, 0.05);
+    } else {
+      grabberMotor.set(ControlMode.PercentOutput, percent);
+    }
     // rightPinchMotor.set(percent);
     // leftPinchMotor.set(-percent);
   }
