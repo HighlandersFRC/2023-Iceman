@@ -23,13 +23,13 @@ public class VisionAlignment extends CommandBase {
 
   private PID pid;
 
-  // private double kP = 6;
-  // private double kI = 0.15;
-  // private double kD = 0.6;
+  // private double kP = 1.25;
+  // private double kI = 0.05;
+  // private double kD = 1;
 
-  private double kP = 0.25;
-  private double kI = 0;
-  private double kD = 2.5;
+  private double kP = 4.5;
+  private double kI = 0.0035;
+  private double kD = 0;
 
   private int angleSettled = 0;
 
@@ -41,7 +41,7 @@ public class VisionAlignment extends CommandBase {
     this.peripherals = peripherals;
     this.drive = drive;
     this.lights = lights;
-    addRequirements(this.drive, this.lights);
+    addRequirements(this.drive, this.peripherals, this.lights);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -49,9 +49,8 @@ public class VisionAlignment extends CommandBase {
   @Override
   public void initialize() {
     peripherals.setRetroreflectivePipeline();
-    initialAngle = peripherals.getNavxAngle();
     pid = new PID(kP, kI, kD);
-    pid.setSetPoint(peripherals.getFrontLimelightAngleToTarget());
+    pid.setSetPoint(0);
     pid.setMinOutput(-4);
     pid.setMaxOutput(4);
     angleSettled = 0;
@@ -60,7 +59,7 @@ public class VisionAlignment extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double currentAngle = peripherals.getNavxAngle();
+    double currentAngle = peripherals.getFrontLimeLightX();
     pid.updatePID(currentAngle);
     double result = -pid.getResult();
     System.out.println("RESULT:   " + result);
@@ -86,15 +85,15 @@ public class VisionAlignment extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     drive.autoDrive(new Vector(0, 0), 0);
-    peripherals.setAprilTagPipeline();
+    // peripherals.setAprilTagPipeline();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // if(Math.abs(target - peripherals.cameraYawToTarget()) <= 2) {
-    //   return true;
-    // }
+    if(peripherals.getFrontLimelightPipeline() == 1 && Math.abs(peripherals.getFrontLimeLightX()) < Math.toRadians(2)) {
+      return true;
+    }
     return false;
   }
 }

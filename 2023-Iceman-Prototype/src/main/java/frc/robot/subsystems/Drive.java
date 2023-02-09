@@ -646,7 +646,7 @@ public class Drive extends SubsystemBase {
     public JSONArray generatePlacementPathOnTheFly(int placementLocation, String fieldSide) {
         useCameraInOdometry = false;
         updateOdometryFusedArray();
-        double[] firstPoint = new double[] {0, getFusedOdometryX(), getFusedOdometryY(), getFusedOdometryTheta(), getCurrentXVelocity(), getCurrentYVelocity(), 0, 0, 0, 0};
+        double[] firstPoint = new double[] {0, getFusedOdometryX(), getFusedOdometryY(), getFusedOdometryTheta(), 0, 0, 0, 0, 0, 0};
         // double[] firstPoint = new double[] {0, 14.3, 2.8, Math.toRadians(-180), 0, 0, 0, 0, 0, 0};
         double robotX = getFusedOdometryX();
         double robotY = getFusedOdometryY();

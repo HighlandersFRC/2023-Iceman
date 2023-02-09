@@ -91,12 +91,32 @@ public class Peripherals extends SubsystemBase {
     backLimeLightTable.getEntry("pipeline").setNumber(1);
   }
 
+  public int getFrontLimelightPipeline(){
+    return (int) frontLimeLightTable.getEntry("pipeline").getInteger(2);
+  }
+
+  public int getBackLimelightPipeline(){
+    return (int) backLimeLightTable.getEntry("pipeline").getInteger(2);
+  }
+
   public double getFrontLimelightAngleToTarget(){
-    return this.getNavxAngle() + frontTableX.getDouble(0);
+    return frontTableX.getDouble(0);
   }
 
   public double getBackLimelightAngleToTarget(){
-    return this.getNavxAngle() + backTableX.getDouble(0);
+    return backTableX.getDouble(0);
+  }
+
+  public double getLimelightAngleToTarget(){
+    double frontX = Math.PI * (frontTableX.getDouble(0)) / 180;
+    double backX = Math.PI * (frontTableX.getDouble(0)) / 180;
+    double frontArea = frontTableArea.getDouble(0);
+    double backArea = backTableArea.getDouble(0);
+    if (frontArea > backArea){
+      return frontArea;
+    } else {
+      return backArea;
+    }
   }
 
   public JSONArray getLimelightBasedPosition(){

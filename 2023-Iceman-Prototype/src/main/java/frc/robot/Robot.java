@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.AutoPlacement;
+import frc.robot.commands.AlignToConePlacement;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
 import frc.robot.commands.ExtendArm;
@@ -139,20 +140,22 @@ public class Robot extends TimedRobot {
     drive.teleopInit(); 
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 
-    OI.driverA.whileTrue(new RunWrist(wrist, -0.8, -1));
-    OI.driverY.whileTrue(new RunWrist(wrist, 0.8, -1));
-    // OI.driverX.onTrue(new AutoBalance(drive));
-    // OI.driverA.onTrue(new AutoPlacement(drive, armRotation, armExtension, 0));
-    // OI.driverX.onTrue(new AutoPlacement(drive, armRotation, armExtension, -1));
-    // OI.driverB.onTrue(new AutoPlacement(drive, armRotation, armExtension, 1));
+    // OI.driverA.whileTrue(new RunWrist(wrist, -0.8, -1));
+    // OI.driverY.whileTrue(new RunWrist(wrist, 0.8, -1));
+    // OI.driverX.whileTrue(new AlignToConePlacement(drive, peripherals, lights));
 
-    OI.operatorA.onTrue(new SetArmExtensionPosition(armExtension, 2));
-    OI.operatorY.whileTrue(new SetArmExtensionPosition(armExtension, 35));
-    OI.operatorB.whileTrue(new SetArmRotationPosition(armRotation, 75));
-    // OI.operatorX.whileTrue(new SetArmRotationPosition(armRotation, 270));
-    OI.operatorX.whileTrue(new SetArmRotationPosition(armRotation, 125));
-    OI.operatorRB.whileTrue(new RotateArm(armRotation, 0.25));
-    OI.operatorLB.whileTrue(new RotateArm(armRotation, -0.25));
+    // OI.driverX.onTrue(new AutoBalance(drive));
+    OI.driverA.onTrue(new AutoPlacement(drive, armRotation, armExtension, wrist, peripherals, lights, 0));
+    OI.driverX.onTrue(new AutoPlacement(drive, armRotation, armExtension, wrist, peripherals, lights, -1));
+    OI.driverB.onTrue(new AutoPlacement(drive, armRotation, armExtension, wrist, peripherals, lights, 1));
+
+    // OI.operatorA.onTrue(new SetArmExtensionPosition(armExtension, 2));
+    // OI.operatorY.whileTrue(new SetArmExtensionPosition(armExtension, 35));
+    // OI.operatorB.whileTrue(new SetArmRotationPosition(armRotation, 75));
+    // // OI.operatorX.whileTrue(new SetArmRotationPosition(armRotation, 270));
+    // OI.operatorX.whileTrue(new SetArmRotationPosition(armRotation, 125));
+    // OI.operatorRB.whileTrue(new RotateArm(armRotation, 0.25));
+    // OI.operatorLB.whileTrue(new RotateArm(armRotation, -0.25));
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
