@@ -20,6 +20,6 @@ public class AlignForPlacement extends SequentialCommandGroup {
   // -1, 0, 1 for left, middle, right
   public AlignForPlacement(Drive drive, ArmExtension armExtension, ArmRotation armRotation, Wrist wrist, int rowOffset) {
     addRequirements(drive, armExtension, armRotation, wrist);
-    addCommands(new AutonomousFollower(drive, armExtension, armRotation, wrist, true, false, rowOffset));
+    addCommands(new AutonomousFollower(drive, true, false, rowOffset));
   }
 }

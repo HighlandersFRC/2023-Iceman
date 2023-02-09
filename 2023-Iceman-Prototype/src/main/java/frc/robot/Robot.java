@@ -61,7 +61,6 @@ public class Robot extends TimedRobot {
 
   JSONObject pathRead;
   JSONArray pathJSON;
-  JSONArray pathCommands;
 
   String fieldSide;
 
@@ -87,7 +86,6 @@ public class Robot extends TimedRobot {
       // pathRead = new JSONTokener(scanner);
       pathRead = new JSONObject(new JSONTokener(scanner));
       pathJSON = (JSONArray) pathRead.get("sampled_points");
-      pathCommands = (JSONArray) pathRead.getJSONArray("commands");
       JSONArray first = pathJSON.getJSONArray(0);
       double firstTime = first.getDouble(0);
       System.out.println(first);
@@ -125,8 +123,7 @@ public class Robot extends TimedRobot {
 
     System.out.println(peripherals.getNavxAngle());
 
-    // TwoPieceAuto auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist);
-    AutonomousFollower auto = new AutonomousFollower(drive, armExtension, armRotation, wrist, pathJSON, pathCommands, true);
+    TwoPieceAuto auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist);
     auto.schedule();
   }
 
@@ -139,20 +136,22 @@ public class Robot extends TimedRobot {
     drive.teleopInit(); 
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 
-    OI.driverA.whileTrue(new RunWrist(wrist, -1, -1));
-    OI.driverY.whileTrue(new RunWrist(wrist, 1, -1));
-    // OI.driverX.onTrue(new AutoBalance(drive));
     // OI.driverA.onTrue(new AutoPlacement(drive, armRotation, armExtension, 0));
     // OI.driverX.onTrue(new AutoPlacement(drive, armRotation, armExtension, -1));
     // OI.driverB.onTrue(new AutoPlacement(drive, armRotation, armExtension, 1));
 
-    OI.operatorA.onTrue(new SetArmExtensionPosition(armExtension, 2));
-    OI.operatorY.whileTrue(new SetArmExtensionPosition(armExtension, 35));
-    OI.operatorB.whileTrue(new SetArmRotationPosition(armRotation, 75));
-    // OI.operatorX.whileTrue(new SetArmRotationPosition(armRotation, 270));
-    OI.operatorX.whileTrue(new SetArmRotationPosition(armRotation, 125));
-    OI.operatorRB.whileTrue(new RotateArm(armRotation, 0.25));
-    OI.operatorLB.whileTrue(new RotateArm(armRotation, -0.25));
+    OI.driverA.whileTrue(new RunWrist(wrist, -1, -1));
+    OI.driverY.whileTrue(new RunWrist(wrist, 1, -1));
+
+    OI.operatorA.onTrue(new SetArmExtensionPosition(armExtension, 1));
+    OI.operatorB.whileTrue(new SetArmExtensionPosition(armExtension, 20));
+    OI.operatorX.whileTrue(new SetArmExtensionPosition(armExtension, 35));
+    OI.operatorY.onTrue(new SetArmRotationPosition(armRotation, 180));
+    OI.operatorLB.whileTrue(new SetArmRotationPosition(armRotation, 75));
+    OI.operatorRB.whileTrue(new SetArmRotationPosition(armRotation, 125));
+    // OI.operatorX.whileTrue(new SetArmRotationPosition(armRotation, 125));
+    // OI.operatorRB.whileTrue(new RotateArm(armRotation, 0.25));
+    // OI.operatorLB.whileTrue(new RotateArm(armRotation, -0.25));
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

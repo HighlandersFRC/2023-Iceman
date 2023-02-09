@@ -52,7 +52,7 @@ public class AutonomousFollower extends CommandBase {
     private ArrayList<double[]> recordedOdometry = new ArrayList<double[]>();
     private boolean generatePath = false;
     /** Creates a new AutonomousFollower. */
-  public AutonomousFollower(Drive drive, ArmExtension armExtension, ArmRotation armRotation, Wrist wrist, JSONArray pathPoints, JSONArray commands, boolean record) {
+  public AutonomousFollower(Drive drive, JSONArray pathPoints, boolean record) {
     this.drive = drive;
     this.armExtension = armExtension;
     this.armRotation = armRotation;
@@ -63,7 +63,7 @@ public class AutonomousFollower extends CommandBase {
     addRequirements(this.drive, this.armExtension, this.armRotation, this.wrist);
   }
 
-  public AutonomousFollower(Drive drive, ArmExtension armExtension, ArmRotation armRotation, Wrist wrist, boolean generatePath, boolean record, int rowOffset){
+  public AutonomousFollower(Drive drive, boolean generatePath, boolean record, int rowOffset){
     this.drive = drive;
     this.armExtension = armExtension;
     this.armRotation = armRotation;
@@ -127,41 +127,6 @@ public class AutonomousFollower extends CommandBase {
     // System.out.println("X: " + odometryFusedX + " Y: " + odometryFusedY + " Theta: " + odometryFusedTheta);
 
     currentTime = Timer.getFPGATimestamp() - initTime;
-
-    if(commandChecker < commandTimes.length) {
-      if(Math.abs(currentTime - commandTimes[commandChecker]) < 0.05) {
-        String currentCommand = commandNames[commandChecker];
-        double commandArguement = commandArgs[commandChecker];
-  
-        switch(currentCommand) {
-          case "angle_arm":
-            armRotation.setRotationPosition(commandArguement);
-            // new SetArmRotationPosition(armRotation, commandArguement).schedule();
-            break;
-          case "extend_arm":
-            armExtension.setExtensionPosition(commandArguement);
-            // new SetArmExtensionPosition(armExtension, commandArguement).schedule();
-            break;
-          case "intake":
-            armRotation.setRotationPosition(75);
-            armExtension.setExtensionPosition(0);
-            wrist.setGrabberMotorPercent(-1);
-            // new SetArmRotationPosition(armRotation, 75).schedule();
-            // new SetArmExtensionPosition(armExtension, 0).schedule();
-            // new RunWrist(wrist, -1, -1);
-            break;
-          case "placement":
-            armRotation.setRotationPosition(235);
-            armExtension.setExtensionPosition(30);
-            wrist.setGrabberMotorPercent(1);
-            // new SetArmRotationPosition(armRotation, 125).schedule();
-            // new SetArmExtensionPosition(armExtension, 30).schedule();
-            // new RunWrist(wrist, 1, 0.5).schedule();
-            break;
-        }
-        commandChecker++;
-      }
-    }
     
     // call PIDController function
     desiredVelocityArray = drive.pidController(odometryFusedX, odometryFusedY, odometryFusedTheta, currentTime, path);

@@ -5,6 +5,7 @@
 package frc.robot.commands.defaults;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.OI;
 import frc.robot.subsystems.ArmExtension;
 
 public class ArmExtensionDefaultCommand extends CommandBase {
@@ -26,7 +27,7 @@ public class ArmExtensionDefaultCommand extends CommandBase {
     if (arm.getExtensionLimitSwitch()) {
       arm.setExtensionEncoderPosition(0);
     }
-    arm.setExtensionMotorPercent(0);
+    arm.setExtensionMotorPercent((OI.operatorController.getRawAxis(1))/10);
   }
 
   // Called once the command ends or is interrupted.

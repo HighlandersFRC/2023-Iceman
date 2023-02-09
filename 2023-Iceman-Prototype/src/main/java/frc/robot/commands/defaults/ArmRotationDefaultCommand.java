@@ -5,6 +5,7 @@
 package frc.robot.commands.defaults;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.OI;
 import frc.robot.subsystems.ArmRotation;
 
 public class ArmRotationDefaultCommand extends CommandBase {
@@ -23,7 +24,7 @@ public class ArmRotationDefaultCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.setRotationMotorPercent(0);
+    arm.setRotationMotorPercent((OI.operatorController.getRawAxis(4))/4);
   }
 
   // Called once the command ends or is interrupted.

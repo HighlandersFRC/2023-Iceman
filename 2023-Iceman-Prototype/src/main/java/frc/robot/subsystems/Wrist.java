@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
@@ -29,6 +30,7 @@ public class Wrist extends SubsystemBase {
 
   public void init() {
     grabberMotor.configFactoryDefault();
+    grabberMotor.setNeutralMode(NeutralMode.Coast);
     setDefaultCommand(new WristDefaultCommand(this));
   }
 
