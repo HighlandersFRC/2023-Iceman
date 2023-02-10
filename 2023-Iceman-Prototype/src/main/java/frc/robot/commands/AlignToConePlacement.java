@@ -4,25 +4,24 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.ArmExtension;
-import frc.robot.subsystems.ArmRotation;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.Lights;
+import frc.robot.subsystems.Peripherals;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutoPlacement extends SequentialCommandGroup {
-  /** Creates a new AutoPlacement. */
-  public AutoPlacement(Drive drive, ArmRotation arm, ArmExtension armExtension, Wrist wrist, int rowOffset) {
+public class AlignToConePlacement extends SequentialCommandGroup {
+  /** Creates a new AlignToConePlacement. */
+  public AlignToConePlacement(Drive drive, Peripherals peripherals, Lights lights) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addRequirements(drive, arm, armExtension, wrist);
-    addCommands(
-      new ParallelCommandGroup(new AlignForPlacement(drive, armExtension, arm, wrist, rowOffset)),
-      new SetArmExtensionPosition(armExtension, 25)
+    addRequirements(drive);
+    addCommands(new SetVisionAlignmentPipeline(peripherals),
+                new WaitCommand(0.31),
+                new VisionAlignment(drive, peripherals, lights)
     );
   }
 }

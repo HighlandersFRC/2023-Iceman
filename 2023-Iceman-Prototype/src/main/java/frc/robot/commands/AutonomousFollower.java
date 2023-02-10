@@ -21,9 +21,6 @@ import frc.robot.tools.math.Vector;
 
 public class AutonomousFollower extends CommandBase {
     private Drive drive;
-    private ArmExtension armExtension;
-    private ArmRotation armRotation;
-    private Wrist wrist;
 
     private JSONArray path;
     private JSONArray commands;
@@ -43,36 +40,23 @@ public class AutonomousFollower extends CommandBase {
     private String fieldSide;
     private int rowOffset = 0;
 
-    private double[] commandTimes;
-    private String[] commandNames;
-    private double[] commandArgs;
-
-    private int commandChecker = 0;
-
     private ArrayList<double[]> recordedOdometry = new ArrayList<double[]>();
     private boolean generatePath = false;
     /** Creates a new AutonomousFollower. */
   public AutonomousFollower(Drive drive, JSONArray pathPoints, boolean record) {
     this.drive = drive;
-    this.armExtension = armExtension;
-    this.armRotation = armRotation;
-    this.wrist = wrist;
     this.path = pathPoints;
-    this.commands = commands;
     this.record = record;
-    addRequirements(this.drive, this.armExtension, this.armRotation, this.wrist);
+    addRequirements(this.drive);
   }
 
   public AutonomousFollower(Drive drive, boolean generatePath, boolean record, int rowOffset){
     this.drive = drive;
-    this.armExtension = armExtension;
-    this.armRotation = armRotation;
-    this.wrist = wrist;
     this.rowOffset = rowOffset;
     this.record = record;
     this.generatePath = generatePath;
     this.commands = new JSONArray();
-    addRequirements(this.drive, this.armExtension, this.armRotation, this.wrist);
+    addRequirements(this.drive);
   }
 
   // Called when the command is initially scheduled.
@@ -96,22 +80,6 @@ public class AutonomousFollower extends CommandBase {
       this.path = drive.generatePlacementPathOnTheFly(row, this.fieldSide);
       // System.out.println("Path: " + this.path.toString());
     }
-
-    double[] commandTimes = new double[commands.length()];
-    String[] commandNames = new String[commands.length()];
-    double[] commandArgs = new double[commands.length()];
-
-    for(int i = 0; i < commands.length(); i++) {
-      commandTimes[i] = (double) commands.getJSONObject(i).get("trigger");
-      commandNames[i] = (String) commands.getJSONObject(i).getJSONObject("command").get("type");
-      commandArgs[i] = (double) commands.getJSONObject(i).getJSONObject("command").getJSONArray("args").getDouble(0);
-    }
-
-    this.commandTimes = commandTimes;
-    this.commandNames = commandNames;
-    this.commandArgs = commandArgs;
-
-    commandChecker = 0;
 
     initTime = Timer.getFPGATimestamp();
   }

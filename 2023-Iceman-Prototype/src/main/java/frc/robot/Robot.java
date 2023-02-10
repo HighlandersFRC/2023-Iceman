@@ -18,7 +18,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.AutoPlacement;
+import frc.robot.commands.AutoPlacementCone;
+import frc.robot.commands.AutoPlacementCube;
+import frc.robot.commands.AlignToConePlacement;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
 import frc.robot.commands.ExtendArm;
@@ -66,14 +68,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    // frontDriverCam = CameraServer.startAutomaticCapture("Front Cam", "/dev/video0");
-    // frontDriverCam.setResolution(320, 240);
-    // frontDriverCam.setFPS(15);
-
-    // backDriverCam = CameraServer.startAutomaticCapture("Back Cam", "/dev/video1");
-    // backDriverCam.setResolution(320, 240);
-    // backDriverCam.setFPS(15);
-
     drive.init();
     peripherals.init();
     lights.init();
@@ -93,6 +87,9 @@ public class Robot extends TimedRobot {
     catch(Exception e) {
       System.out.println("ERROR WITH PATH FILE " + e);
     }
+
+    drive.setFieldSide("red");
+
   }  
 
   @Override
@@ -136,9 +133,9 @@ public class Robot extends TimedRobot {
     drive.teleopInit(); 
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 
-    // OI.driverA.onTrue(new AutoPlacement(drive, armRotation, armExtension, 0));
-    // OI.driverX.onTrue(new AutoPlacement(drive, armRotation, armExtension, -1));
-    // OI.driverB.onTrue(new AutoPlacement(drive, armRotation, armExtension, 1));
+    // OI.driverA.onTrue(new AutoPlacementCube(drive, peripherals, lights, 0));
+    // OI.driverX.onTrue(new AutoPlacementCone(drive, peripherals, lights, -1));
+    // OI.driverB.onTrue(new AutoPlacementCone(drive, peripherals, lights, 1));
 
     OI.driverA.whileTrue(new RunWrist(wrist, -1, -1));
     OI.driverY.whileTrue(new RunWrist(wrist, 1, -1));
@@ -149,9 +146,6 @@ public class Robot extends TimedRobot {
     OI.operatorY.onTrue(new SetArmRotationPosition(armRotation, 180));
     OI.operatorLB.whileTrue(new SetArmRotationPosition(armRotation, 75));
     OI.operatorRB.whileTrue(new SetArmRotationPosition(armRotation, 125));
-    // OI.operatorX.whileTrue(new SetArmRotationPosition(armRotation, 125));
-    // OI.operatorRB.whileTrue(new RotateArm(armRotation, 0.25));
-    // OI.operatorLB.whileTrue(new RotateArm(armRotation, -0.25));
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

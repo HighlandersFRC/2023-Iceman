@@ -81,16 +81,58 @@ public class Peripherals extends SubsystemBase {
     setDefaultCommand(new PeripheralsDefault(this));
   }
 
+  public void setAprilTagPipeline(){
+    frontLimeLightTable.getEntry("pipeline").setNumber(0);
+    backLimeLightTable.getEntry("pipeline").setNumber(0);
+  }
+
+  public void setRetroreflectivePipeline(){
+    frontLimeLightTable.getEntry("pipeline").setNumber(1);
+    backLimeLightTable.getEntry("pipeline").setNumber(1);
+  }
+
+  public int getFrontLimelightPipeline(){
+    return (int) frontLimeLightTable.getEntry("pipeline").getInteger(2);
+  }
+
+  public int getBackLimelightPipeline(){
+    return (int) backLimeLightTable.getEntry("pipeline").getInteger(2);
+  }
+
+  public double getFrontLimelightAngleToTarget(){
+    return frontTableX.getDouble(0);
+  }
+
+  public double getBackLimelightAngleToTarget(){
+    return backTableX.getDouble(0);
+  }
+
+  public double getLimelightAngleToTarget(){
+    double frontX = Math.PI * (frontTableX.getDouble(0)) / 180;
+    double backX = Math.PI * (frontTableX.getDouble(0)) / 180;
+    double frontArea = frontTableArea.getDouble(0);
+    double backArea = backTableArea.getDouble(0);
+    if (frontArea > backArea){
+      return frontArea;
+    } else {
+      return backArea;
+    }
+  }
+
   public JSONArray getLimelightBasedPosition(){
+    JSONArray noTrack = new JSONArray();
+    noTrack.put(0, 0.0);
+    noTrack.put(1, 0.0);
+    if (frontLimeLightTable.getEntry("pipeline").getInteger(2) != 0){
+      return noTrack;
+    }
     try {
       double[] frontPose = frontRobotPose.getDoubleArray(noTrackLimelightArray);
       double[] backPose = backRobotPose.getDoubleArray(noTrackLimelightArray);
       double frontArea = frontTableArea.getDouble(0.0);
       double backArea = backTableArea.getDouble(0.0);
       JSONArray pose = new JSONArray(new double[] {0.0, 0.0});
-      JSONArray noTrack = new JSONArray();
-      noTrack.put(0, 0.0);
-      noTrack.put(1, 0.0);
+      
       if (frontArea > backArea){
         if (frontPose[0] < 1.0 && frontPose[1] < 0.5){
           return noTrack;

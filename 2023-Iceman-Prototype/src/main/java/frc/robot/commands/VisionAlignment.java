@@ -23,13 +23,13 @@ public class VisionAlignment extends CommandBase {
 
   private PID pid;
 
-  // private double kP = 6;
-  // private double kI = 0.15;
-  // private double kD = 0.6;
+  // private double kP = 1.25;
+  // private double kI = 0.05;
+  // private double kD = 1;
 
-  private double kP = 0.25;
-  private double kI = 0;
-  private double kD = 2.5;
+  private double kP = 4.5;
+  private double kI = 0.0035;
+  private double kD = 0;
 
   private int angleSettled = 0;
 
@@ -41,34 +41,33 @@ public class VisionAlignment extends CommandBase {
     this.peripherals = peripherals;
     this.drive = drive;
     this.lights = lights;
-    addRequirements(this.drive, this.lights);
+    addRequirements(this.drive, this.peripherals, this.lights);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // turn = peripherals.cameraYawToTarget();
-    initialAngle = peripherals.getNavxAngle();
-    target = (initialAngle - turn)%360;
-    SmartDashboard.putNumber("Original Angle", initialAngle);
-    SmartDashboard.putNumber("TARGET", target);
+    peripherals.setRetroreflectivePipeline();
     pid = new PID(kP, kI, kD);
-    pid.setSetPoint(target);
-    pid.setMinOutput(-4);
-    pid.setMaxOutput(4);
+    pid.setSetPoint(0);
+    pid.setMinOutput(-1);
+    pid.setMaxOutput(1);
     angleSettled = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double currentAngle = peripherals.getNavxAngle();
+    double currentAngle = peripherals.getFrontLimeLightX();
     pid.updatePID(currentAngle);
     double result = -pid.getResult();
+    if(drive.getFieldSide() == "red") {
+      result = pid.getResult();
+    }
     System.out.println("RESULT:   " + result);
     SmartDashboard.putNumber("Angle Settled", angleSettled);
-    drive.autoDrive(new Vector(0, 0), result);
+    drive.autoDrive(new Vector(0, result), 0);
 
 
     // if(Math.abs(target - currentAngle) <= 1) {
@@ -89,14 +88,15 @@ public class VisionAlignment extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     drive.autoDrive(new Vector(0, 0), 0);
+    // peripherals.setAprilTagPipeline();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // if(Math.abs(target - peripherals.cameraYawToTarget()) <= 2) {
-    //   return true;
-    // }
+    if(peripherals.getFrontLimelightPipeline() == 1 && Math.abs(peripherals.getFrontLimeLightX()) < Math.toRadians(2)) {
+      return true;
+    }
     return false;
   }
 }
