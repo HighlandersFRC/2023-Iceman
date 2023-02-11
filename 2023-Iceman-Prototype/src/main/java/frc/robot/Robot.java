@@ -77,14 +77,10 @@ public class Robot extends TimedRobot {
     armRotation.init();
     wrist.init();
     try {
-      pathingFile = new File("/home/lvuser/deploy/2Plus1.json");
+      pathingFile = new File("/home/lvuser/deploy/2PieceBumpPart1.json");
       FileReader scanner = new FileReader(pathingFile);
-      // pathRead = new JSONTokener(scanner);
       pathRead = new JSONObject(new JSONTokener(scanner));
       pathJSON = (JSONArray) pathRead.get("sampled_points");
-      JSONArray first = pathJSON.getJSONArray(0);
-      double firstTime = first.getDouble(0);
-      System.out.println(first);
     }
     catch(Exception e) {
       System.out.println("ERROR WITH PATH FILE " + e);

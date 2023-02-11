@@ -46,6 +46,7 @@ public class Peripherals extends SubsystemBase {
   private NetworkTableEntry backTableLatency = backLimeLightTable.getEntry("tl");
   private NetworkTableEntry backTableArea = backLimeLightTable.getEntry("ta");
   private NetworkTableEntry backRobotPose = backLimeLightTable.getEntry("botpose");
+  private NetworkTableEntry backTagPose = backLimeLightTable.getEntry("targetpose_cameraspace");
   private NetworkTableEntry backJson = backLimeLightTable.getEntry("json");
 
   private NetworkTable frontLimeLightTable = NetworkTableInstance.getDefault().getTable("limelight-front");
@@ -54,6 +55,7 @@ public class Peripherals extends SubsystemBase {
   private NetworkTableEntry frontTableLatency = frontLimeLightTable.getEntry("tl");
   private NetworkTableEntry frontTableArea = frontLimeLightTable.getEntry("ta");
   private NetworkTableEntry frontRobotPose = frontLimeLightTable.getEntry("botpose");
+  private NetworkTableEntry frontTagPose = frontLimeLightTable.getEntry("targetpose_cameraspace");
   private NetworkTableEntry frontJson = frontLimeLightTable.getEntry("json");
 
   private double limeLightX = -1.0;
@@ -132,16 +134,37 @@ public class Peripherals extends SubsystemBase {
       double[] backPose = backRobotPose.getDoubleArray(noTrackLimelightArray);
       double frontArea = frontTableArea.getDouble(0.0);
       double backArea = backTableArea.getDouble(0.0);
+      double[] frontTargetPose = frontTagPose.getDoubleArray(noTrackLimelightArray);
+      double[] backTargetPose = backTagPose.getDoubleArray(noTrackLimelightArray);
+      JSONArray frontTargetFieldPose = new JSONObject(frontJson.getString("")).getJSONObject("Results").getJSONArray("Fiducial").getJSONObject(0).getJSONArray(getName());
+      JSONArray backTargetFieldPose = new JSONObject(backJson.getString("")).getJSONObject("Results").getJSONArray("Fiducial").getJSONObject(0).getJSONArray(getName());
+      double frontTargetDist = Math.sqrt(Math.pow(frontTargetPose[0], 2) + Math.pow(frontTargetPose[1], 2));
+      double backTargetDist = Math.sqrt(Math.pow(backTargetPose[0], 2) + Math.pow(backTargetPose[1], 2));
+      int numTracksFront = 1;
+      int numTracksBack = 1;
+      if (Math.abs(frontTargetFieldPose.getDouble(0) - frontPose[0]) < 0.01 && Math.abs(frontTargetFieldPose.getDouble(1) - frontPose[1]) < 0.01){
+        numTracksFront = 2;
+      }
+      if (Math.abs(backTargetFieldPose.getDouble(0) - backPose[0]) < 0.01 && Math.abs(backTargetFieldPose.getDouble(1) - backPose[1]) < 0.01){
+        numTracksBack = 2;
+      }
       JSONArray pose = new JSONArray(new double[] {0.0, 0.0});
+      System.out.println(numTracksFront);
       
       if (frontArea > backArea){
         if (frontPose[0] < 1.0 && frontPose[1] < 0.5){
+          return noTrack;
+        }
+        if (frontTargetDist > 5 && numTracksFront <= 1){
           return noTrack;
         }
         pose.put(0, frontPose[0] + Constants.FIELD_LENGTH / 2.0);
         pose.put(1, frontPose[1] + Constants.FIELD_WIDTH / 2.0);
       } else {
         if (backPose[0] < 1.0 && backPose[1] < 0.5){
+          return noTrack;
+        }
+        if (backTargetDist > 5 && numTracksBack <= 1){
           return noTrack;
         }
         pose.put(0, backPose[0] + Constants.FIELD_LENGTH / 2.0);

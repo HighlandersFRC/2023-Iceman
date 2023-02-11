@@ -91,7 +91,7 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
       new RunWrist(wrist, -1, 0.5),
       new SetArmExtensionPosition(armExtension, 1),
       new ParallelDeadlineGroup(
-        new AutonomousFollower(drive, pathJSON, false)
+        new AutonomousFollower(drive, pathJSON, true)
         // new SequentialCommandGroup(
         //   new WaitCommand(1.5),
         //   new SetArmRotationPosition(armRotation, 91),
