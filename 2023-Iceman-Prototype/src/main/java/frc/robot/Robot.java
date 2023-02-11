@@ -87,9 +87,6 @@ public class Robot extends TimedRobot {
     catch(Exception e) {
       System.out.println("ERROR WITH PATH FILE " + e);
     }
-
-    drive.setFieldSide("red");
-
   }  
 
   @Override
@@ -100,9 +97,6 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("Extension", armExtension.getExtensionPosition());
     SmartDashboard.putBoolean("ARM LIMIT SWITCH", armExtension.getExtensionLimitSwitch());
-    // SmartDashboard.putNumber("X vel", drive.getCurrentXVelocity());
-    // SmartDashboard.putNumber("Y vel", drive.getCurrentYVelocity());
-    // SmartDashboard.putNumber("Theta vel", drive.getCurrentThetaVelocity());
 
     armRotation.postRotationValues();
   }
@@ -116,12 +110,20 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    if(OI.isRedSide()) {
+      drive.setFieldSide("red");
+      // System.out.println("GOT RED");
+    }
+    else if(OI.isBlueSide()) {
+      drive.setFieldSide("blue");
+      // System.out.println("GOT BLUE");
+    }
     drive.autoInit(pathJSON);
 
     System.out.println(peripherals.getNavxAngle());
 
     TwoPieceAuto auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist);
-    auto.schedule();
+    // auto.schedule();
   }
 
   /** This function is called periodically during autonomous. */

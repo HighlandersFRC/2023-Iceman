@@ -167,11 +167,11 @@ public class Drive extends SubsystemBase {
     }
 
     public void setFieldSide(String side){
-        this.fieldSide = side;
+        fieldSide = side;
     }
 
     public String getFieldSide(){
-        return this.fieldSide;
+        return fieldSide;
     }
 
     // method to zeroNavx mid match and reset odometry with zeroed angle
@@ -274,6 +274,12 @@ public class Drive extends SubsystemBase {
         double firstPointX = firstPoint.getDouble(1);
         double firstPointY = firstPoint.getDouble(2);
         double firstPointAngle = firstPoint.getDouble(3);
+
+        // changing odometry if on blue side, don't need to change y because it will be the same for autos on either side
+        if(getFieldSide() == "blue") {
+            firstPointX = Constants.FIELD_LENGTH - firstPointX;
+            firstPointAngle = Math.PI - firstPointAngle;
+        }
 
         // System.out.println(firstPointAngle);
         
@@ -826,6 +832,11 @@ public class Drive extends SubsystemBase {
             double targetY = targetPoint.getDouble(2);
             double targetTheta = targetPoint.getDouble(3);
 
+            if(getFieldSide() == "blue") {
+                targetX = Constants.FIELD_LENGTH - targetX;
+                targetTheta = Math.PI - targetTheta;
+            }
+
             if (targetTheta - currentTheta > Math.PI){
                 targetTheta -= 2 * Math.PI;
             } else if (targetTheta - currentTheta < -Math.PI){
@@ -836,6 +847,11 @@ public class Drive extends SubsystemBase {
             double currentPointX = currentPoint.getDouble(1);
             double currentPointY = currentPoint.getDouble(2);
             double currentPointTheta = currentPoint.getDouble(3);
+
+            if(getFieldSide() == "blue") {
+                currentPointX = Constants.FIELD_LENGTH - currentPointX;
+                currentPointTheta = Math.PI - currentPointTheta;
+            }
 
             double feedForwardX = (targetX - currentPointX)/(targetTime - currentPointTime);
             double feedForwardY = (targetY - currentPointY)/(targetTime - currentPointTime);

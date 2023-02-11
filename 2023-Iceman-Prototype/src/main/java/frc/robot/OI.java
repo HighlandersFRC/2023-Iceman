@@ -63,24 +63,12 @@ public class OI {
         return driverController.getAButton();
     }
 
-    public static Boolean is1BallAuto() {
-        return autoChooser.getRawButton(1);
-    }
-
-    public static Boolean is2BallAuto() {
+    public static boolean isRedSide() {
         return autoChooser.getRawButton(6);
     }
 
-    public static Boolean is3BallAuto() {
-        return autoChooser.getRawButton(2);
-    }
-
-    public static Boolean is5BallAuto() {
+    public static boolean isBlueSide() {
         return autoChooser.getRawButton(8);
-    }
-
-    public static Boolean is2BallSteal1() {
-        return autoChooser.getRawButton(7);
     }
 
     public static int getPOV() {
