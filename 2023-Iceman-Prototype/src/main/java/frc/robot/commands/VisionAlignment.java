@@ -30,6 +30,10 @@ public class VisionAlignment extends CommandBase {
   private double kP = 4.5;
   private double kI = 0.0035;
   private double kD = 0;
+  
+  // private double kP = 1.0;
+  // private double kI = 0.0;
+  // private double kD = 0.0;
 
   private int angleSettled = 0;
 
@@ -59,13 +63,12 @@ public class VisionAlignment extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double currentAngle = peripherals.getFrontLimeLightX();
+    double currentAngle = peripherals.getLimelightAngleToTarget();
     pid.updatePID(currentAngle);
     double result = -pid.getResult();
     if(drive.getFieldSide() == "red") {
       result = pid.getResult();
     }
-    System.out.println("RESULT:   " + result);
     SmartDashboard.putNumber("Angle Settled", angleSettled);
     drive.autoDrive(new Vector(0, result), 0);
 
@@ -89,12 +92,14 @@ public class VisionAlignment extends CommandBase {
   public void end(boolean interrupted) {
     drive.autoDrive(new Vector(0, 0), 0);
     // peripherals.setAprilTagPipeline();
+    System.out.println("ENDING VISION ALIGNMENT");
+    System.out.println(peripherals.getLimelightAngleToTarget());
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(peripherals.getFrontLimelightPipeline() == 1 && Math.abs(peripherals.getFrontLimeLightX()) < Math.toRadians(2)) {
+    if(peripherals.getBackLimelightPipeline() == 1 && peripherals.getFrontLimelightPipeline() == 1 && Math.abs(peripherals.getLimelightAngleToTarget()) < Math.toRadians(2)) {
       return true;
     }
     return false;

@@ -120,7 +120,7 @@ public class Robot extends TimedRobot {
 
     System.out.println(peripherals.getNavxAngle());
 
-    TwoPieceAuto auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist);
+    TwoPieceAuto auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist, peripherals, lights);
     auto.schedule();
   }
 
@@ -139,6 +139,7 @@ public class Robot extends TimedRobot {
 
     OI.driverA.whileTrue(new RunWrist(wrist, -1, -1));
     OI.driverY.whileTrue(new RunWrist(wrist, 1, -1));
+    OI.driverB.onTrue(new AlignToConePlacement(drive, peripherals, lights));
 
     OI.operatorA.onTrue(new SetArmExtensionPosition(armExtension, 1));
     OI.operatorB.whileTrue(new SetArmExtensionPosition(armExtension, 20));

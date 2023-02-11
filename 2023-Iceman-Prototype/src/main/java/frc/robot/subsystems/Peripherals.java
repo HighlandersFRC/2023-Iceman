@@ -82,13 +82,13 @@ public class Peripherals extends SubsystemBase {
   }
 
   public void setAprilTagPipeline(){
-    frontLimeLightTable.getEntry("pipeline").setNumber(0);
     backLimeLightTable.getEntry("pipeline").setNumber(0);
+    frontLimeLightTable.getEntry("pipeline").setNumber(0);
   }
 
   public void setRetroreflectivePipeline(){
-    frontLimeLightTable.getEntry("pipeline").setNumber(1);
     backLimeLightTable.getEntry("pipeline").setNumber(1);
+    frontLimeLightTable.getEntry("pipeline").setNumber(1);
   }
 
   public int getFrontLimelightPipeline(){
@@ -112,10 +112,11 @@ public class Peripherals extends SubsystemBase {
     double backX = Math.PI * (frontTableX.getDouble(0)) / 180;
     double frontArea = frontTableArea.getDouble(0);
     double backArea = backTableArea.getDouble(0);
+    System.out.println("Front: " + frontX + " Back: " + backX);
     if (frontArea > backArea){
-      return frontArea;
+      return frontX;
     } else {
-      return backArea;
+      return backX;
     }
   }
 
