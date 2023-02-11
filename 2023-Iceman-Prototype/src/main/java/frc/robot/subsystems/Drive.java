@@ -547,19 +547,19 @@ public class Drive extends SubsystemBase {
             // activate speedy spin
             turnLimit = 1;
         }
-        else {
-            turnLimit = 0.75;
+        // else {
+        //     turnLimit = 0.75;
 
-        }
+        // }
 
         // this is correct, X is forward in field, so originalX should be the y on the joystick
         double originalX = -(Math.copySign(OI.getDriverLeftY() * OI.getDriverLeftY(), OI.getDriverLeftY()));
         double originalY = -(Math.copySign(OI.getDriverLeftX() * OI.getDriverLeftX(), OI.getDriverLeftX()));
 
-        if(Math.abs(originalX) < 0.05) {
+        if(Math.abs(originalX) < 0.075) {
             originalX = 0;
         }
-        if(Math.abs(originalY) < 0.05) {
+        if(Math.abs(originalY) < 0.075) {
             originalY = 0;
         }
 

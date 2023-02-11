@@ -93,12 +93,16 @@ public class Peripherals extends SubsystemBase {
     frontLimeLightTable.getEntry("pipeline").setNumber(1);
   }
 
+  public void setCubeTrackingPipeline(){
+    frontLimeLightTable.getEntry("pipeline").setNumber(2);
+  }
+
   public int getFrontLimelightPipeline(){
-    return (int) frontLimeLightTable.getEntry("pipeline").getInteger(2);
+    return (int) frontLimeLightTable.getEntry("pipeline").getInteger(5);
   }
 
   public int getBackLimelightPipeline(){
-    return (int) backLimeLightTable.getEntry("pipeline").getInteger(2);
+    return (int) backLimeLightTable.getEntry("pipeline").getInteger(5);
   }
 
   public double getFrontLimelightAngleToTarget(){
@@ -126,7 +130,7 @@ public class Peripherals extends SubsystemBase {
     JSONArray noTrack = new JSONArray();
     noTrack.put(0, 0.0);
     noTrack.put(1, 0.0);
-    if (frontLimeLightTable.getEntry("pipeline").getInteger(2) != 0){
+    if (frontLimeLightTable.getEntry("pipeline").getInteger(5) != 0 && backLimeLightTable.getEntry("pipeline").getInteger(5) != 0){
       return noTrack;
     }
     try {
@@ -136,20 +140,30 @@ public class Peripherals extends SubsystemBase {
       double backArea = backTableArea.getDouble(0.0);
       double[] frontTargetPose = frontTagPose.getDoubleArray(noTrackLimelightArray);
       double[] backTargetPose = backTagPose.getDoubleArray(noTrackLimelightArray);
-      JSONArray frontTargetFieldPose = new JSONObject(frontJson.getString("")).getJSONObject("Results").getJSONArray("Fiducial").getJSONObject(0).getJSONArray(getName());
-      JSONArray backTargetFieldPose = new JSONObject(backJson.getString("")).getJSONObject("Results").getJSONArray("Fiducial").getJSONObject(0).getJSONArray(getName());
-      double frontTargetDist = Math.sqrt(Math.pow(frontTargetPose[0], 2) + Math.pow(frontTargetPose[1], 2));
+      JSONArray frontTargetFieldPose = new JSONArray(new double[] {0, 0});
+      JSONArray backTargetFieldPose = new JSONArray(new double[] {0, 0});
+      try {
+        frontTargetFieldPose = new JSONObject(frontJson.getString("")).getJSONObject("Results").getJSONArray("Fiducial").getJSONObject(0).getJSONArray("t6r_fs");
+      } catch(Exception e){}
+      try {
+        backTargetFieldPose = new JSONObject(backJson.getString("")).getJSONObject("Results").getJSONArray("Fiducial").getJSONObject(0).getJSONArray("t6r_fs");
+      } catch(Exception e){}
+        double frontTargetDist = Math.sqrt(Math.pow(frontTargetPose[0], 2) + Math.pow(frontTargetPose[1], 2));
       double backTargetDist = Math.sqrt(Math.pow(backTargetPose[0], 2) + Math.pow(backTargetPose[1], 2));
       int numTracksFront = 1;
       int numTracksBack = 1;
-      if (Math.abs(frontTargetFieldPose.getDouble(0) - frontPose[0]) < 0.01 && Math.abs(frontTargetFieldPose.getDouble(1) - frontPose[1]) < 0.01){
+      if (Math.abs(frontTargetFieldPose.getDouble(0) - frontPose[0]) > 0.01 && Math.abs(frontTargetFieldPose.getDouble(1) - frontPose[1]) > 0.01){
         numTracksFront = 2;
       }
-      if (Math.abs(backTargetFieldPose.getDouble(0) - backPose[0]) < 0.01 && Math.abs(backTargetFieldPose.getDouble(1) - backPose[1]) < 0.01){
+      if (Math.abs(backTargetFieldPose.getDouble(0) - backPose[0]) > 0.01 && Math.abs(backTargetFieldPose.getDouble(1) - backPose[1]) > 0.01){
         numTracksBack = 2;
       }
       JSONArray pose = new JSONArray(new double[] {0.0, 0.0});
-      System.out.println(numTracksFront);
+      // System.out.println("Num Tracks:");
+      // System.out.println(numTracksBack);
+      // System.out.println("Megapose X: " + backPose[0]);
+      // System.out.println("Tag X: " + backTargetFieldPose.getDouble(0));
+      // System.out.println("Dif X: " + Math.abs(backTargetFieldPose.getDouble(0) - backPose[0]));
       
       if (frontArea > backArea){
         if (frontPose[0] < 1.0 && frontPose[1] < 0.5){
@@ -172,6 +186,7 @@ public class Peripherals extends SubsystemBase {
       }
       return pose;
     } catch (Exception e){
+      // System.out.println(e.toString());
       JSONArray noTarget = new JSONArray();
       noTarget.put(0);
       return noTarget;

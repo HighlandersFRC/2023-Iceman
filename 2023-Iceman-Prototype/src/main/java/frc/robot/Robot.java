@@ -24,6 +24,7 @@ import frc.robot.commands.AlignToConePlacement;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
 import frc.robot.commands.ExtendArm;
+import frc.robot.commands.MoveToPiece;
 import frc.robot.commands.MoveWrist;
 import frc.robot.commands.RotateArm;
 import frc.robot.commands.RunWrist;
@@ -121,7 +122,7 @@ public class Robot extends TimedRobot {
     System.out.println(peripherals.getNavxAngle());
 
     TwoPieceBumpAuto auto = new TwoPieceBumpAuto(drive, armExtension, armRotation, wrist, peripherals, lights);
-    // auto.schedule();
+    auto.schedule();
   }
 
   /** This function is called periodically during autonomous. */
@@ -139,6 +140,8 @@ public class Robot extends TimedRobot {
 
     OI.driverA.whileHeld(new RunWrist(wrist, -1, -1));
     OI.driverY.whileHeld(new RunWrist(wrist, 1, -1));
+
+    OI.driverX.whileActiveOnce(new MoveToPiece(drive, peripherals, lights));
 
     OI.operatorA.whenPressed(new SetArmExtensionPosition(armExtension, 1));
     OI.operatorB.whileHeld(new SetArmExtensionPosition(armExtension, 20));
