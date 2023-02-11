@@ -112,7 +112,7 @@ public class Peripherals extends SubsystemBase {
     double backX = Math.PI * (frontTableX.getDouble(0)) / 180;
     double frontArea = frontTableArea.getDouble(0);
     double backArea = backTableArea.getDouble(0);
-    System.out.println("Front: " + frontX + " Back: " + backX);
+    // System.out.println("Front: " + frontX + " Back: " + backX);
     if (frontArea > backArea){
       return frontX;
     } else {

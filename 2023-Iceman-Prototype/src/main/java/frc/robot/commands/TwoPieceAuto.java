@@ -74,7 +74,7 @@ public class TwoPieceAuto extends SequentialCommandGroup {
     }
 
     try {
-      pathingFile3 = new File("/home/lvuser/deploy/2PiecePart3.json");
+      pathingFile3 = new File("/home/lvuser/deploy/2PiecePart3Dock.json");
       FileReader scanner3 = new FileReader(pathingFile3);
       // pathRead = new JSONTokener(scanner);
       pathRead3 = new JSONObject(new JSONTokener(scanner3));
@@ -84,31 +84,46 @@ public class TwoPieceAuto extends SequentialCommandGroup {
       System.out.println("ERROR WITH PATH FILE " + e);
     }
 
-    try {
-      pathingFile4 = new File("/home/lvuser/deploy/2PiecePart4.json");
-      FileReader scanner4 = new FileReader(pathingFile4);
-      // pathRead = new JSONTokener(scanner);
-      pathRead4 = new JSONObject(new JSONTokener(scanner4));
-      pathJSON4 = (JSONArray) pathRead4.get("sampled_points");
-    }
-    catch(Exception e) {
-      System.out.println("ERROR WITH PATH FILE " + e);
-    }
-
     addRequirements(drive, armExtension, armRotation, wrist);
     addCommands(
-      new SetArmRotationPosition(armRotation, 130),
-      new SetArmExtensionPosition(armExtension, 19),
-      new RunWrist(wrist, -1, 0.75),
+      new SetArmRotationPosition(armRotation, 131),
+      new SetArmExtensionPosition(armExtension, 21),
+      new WaitCommand(0.25),
+      new RunWrist(wrist, -1, 0.5),
       new SetArmExtensionPosition(armExtension, 1),
-      new ParallelCommandGroup(
-        new AutonomousFollower(drive, pathJSON, true),
-          new SequentialCommandGroup(
-          new WaitCommand(2.5),
-          new SetArmRotationPosition(armRotation, 90),
+      new ParallelDeadlineGroup(
+        new AutonomousFollower(drive, pathJSON, false),
+        new SequentialCommandGroup(
+          new WaitCommand(1.5),
+          new SetArmRotationPosition(armRotation, 91),
           new RunWrist(wrist, 1, 4)
         )
-      )
+      ),
+      new ParallelCommandGroup(
+        new RunWrist(wrist, -0.1, 4),
+        new AutonomousFollower(drive, pathJSON2, false),
+        new SequentialCommandGroup(
+          new SetArmRotationPosition(armRotation, 180),
+          new WaitCommand(2.5),
+          new ParallelCommandGroup(
+            new SetVisionAlignmentPipeline(peripherals),
+            new SetArmRotationPosition(armRotation, 131)
+          )
+        )
+      ),
+      new VisionAlignment(drive, peripherals, lights),
+      new SetArmExtensionPosition(armExtension, 8),
+      new WaitCommand(0.25),
+      new RunWrist(wrist, -1, 0.5),
+      new SetArmExtensionPosition(armExtension, 1),
+      new ParallelCommandGroup(
+        new AutonomousFollower(drive, pathJSON3, false),
+        new SequentialCommandGroup(
+          new WaitCommand(1),
+          new SetArmRotationPosition(armRotation, 240)
+        )
+      ),
+      new AutoBalance(drive)
     );
   }
 }

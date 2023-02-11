@@ -65,12 +65,9 @@ public class VisionAlignment extends CommandBase {
   public void execute() {
     double currentAngle = peripherals.getLimelightAngleToTarget();
     pid.updatePID(currentAngle);
-    double result = -pid.getResult();
-    if(drive.getFieldSide() == "red") {
-      result = pid.getResult();
-    }
+    double result = pid.getResult();
     SmartDashboard.putNumber("Angle Settled", angleSettled);
-    drive.autoDrive(new Vector(0, result), 0);
+    drive.autoRobotCentricDrive(new Vector(0, result), 0);
 
 
     // if(Math.abs(target - currentAngle) <= 1) {
@@ -90,10 +87,10 @@ public class VisionAlignment extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drive.autoDrive(new Vector(0, 0), 0);
+    drive.autoRobotCentricDrive(new Vector(0, 0), 0);
     // peripherals.setAprilTagPipeline();
-    System.out.println("ENDING VISION ALIGNMENT");
-    System.out.println(peripherals.getLimelightAngleToTarget());
+    // System.out.println("ENDING VISION ALIGNMENT");
+    // System.out.println(peripherals.getLimelightAngleToTarget());
   }
 
   // Returns true when the command should end.

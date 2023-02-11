@@ -174,6 +174,10 @@ public class Drive extends SubsystemBase {
         return this.fieldSide;
     }
 
+    public double getCurrentTime(){
+        return currentTime;
+    }
+
     // method to zeroNavx mid match and reset odometry with zeroed angle
     public void zeroNavxMidMatch() {
         peripherals.zeroNavx();
@@ -227,6 +231,13 @@ public class Drive extends SubsystemBase {
         rightBack.setAnglePID(-Math.PI/4, 0);
         rightFront.setAnglePID(Math.PI/4, 0);
         leftFront.setAnglePID(-Math.PI/4, 0);
+    }
+
+    public void setWheelsHorizontal(){
+        leftBack.setAnglePID(Math.PI / 2, 0);
+        rightBack.setAnglePID(Math.PI / 2, 0);
+        rightFront.setAnglePID(Math.PI / 2, 0);
+        leftFront.setAnglePID(Math.PI / 2, 0);
     }
 
     // get Joystick adjusted y-value
@@ -309,6 +320,8 @@ public class Drive extends SubsystemBase {
 
         updateOdometryFusedArray();
     }
+
+    
 
     public void useCameraInOdometry() {
         useCameraInOdometry = true;
