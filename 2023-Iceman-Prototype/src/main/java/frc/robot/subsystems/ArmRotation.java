@@ -23,7 +23,11 @@ public class ArmRotation extends SubsystemBase {
   
   private final CANCoder armRotationCancoder = new CANCoder(5);
 
-  public ArmRotation() {}
+  private ArmExtension armExtension;
+
+  public ArmRotation(ArmExtension armExtension) {
+    this.armExtension = armExtension;
+  }
 
   public void init() {
     rotationMotorMaster.configFactoryDefault();
@@ -45,7 +49,7 @@ public class ArmRotation extends SubsystemBase {
     rotationMotorMaster.configRemoteFeedbackFilter(armRotationCancoder, 0);
     rotationMotorMaster.configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0);
 
-    setDefaultCommand(new ArmRotationDefaultCommand(this));
+    setDefaultCommand(new ArmRotationDefaultCommand(this, armExtension));
   }
 
   public double getRotationPosition() {

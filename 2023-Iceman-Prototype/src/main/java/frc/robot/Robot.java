@@ -52,7 +52,7 @@ public class Robot extends TimedRobot {
   private Peripherals peripherals = new Peripherals(lights);
   private Drive drive = new Drive(peripherals);
   private ArmExtension armExtension = new ArmExtension();
-  private ArmRotation armRotation = new ArmRotation();
+  private ArmRotation armRotation = new ArmRotation(armExtension);
   private Wrist wrist = new Wrist();
 
   private UsbCamera frontDriverCam;
@@ -137,15 +137,15 @@ public class Robot extends TimedRobot {
     // OI.driverX.onTrue(new AutoPlacementCone(drive, peripherals, lights, -1));
     // OI.driverB.onTrue(new AutoPlacementCone(drive, peripherals, lights, 1));
 
-    OI.driverA.whileTrue(new RunWrist(wrist, -1, -1));
-    OI.driverY.whileTrue(new RunWrist(wrist, 1, -1));
+    OI.driverA.whileHeld(new RunWrist(wrist, -1, -1));
+    OI.driverY.whileHeld(new RunWrist(wrist, 1, -1));
 
-    OI.operatorA.onTrue(new SetArmExtensionPosition(armExtension, 1));
-    OI.operatorB.whileTrue(new SetArmExtensionPosition(armExtension, 20));
-    OI.operatorX.whileTrue(new SetArmExtensionPosition(armExtension, 35));
-    OI.operatorY.onTrue(new SetArmRotationPosition(armRotation, 180));
-    OI.operatorLB.whileTrue(new SetArmRotationPosition(armRotation, 75));
-    OI.operatorRB.whileTrue(new SetArmRotationPosition(armRotation, 125));
+    OI.operatorA.whenPressed(new SetArmExtensionPosition(armExtension, 1));
+    OI.operatorB.whileHeld(new SetArmExtensionPosition(armExtension, 20));
+    OI.operatorX.whileHeld(new SetArmExtensionPosition(armExtension, 35));
+    OI.operatorY.whenPressed(new SetArmRotationPosition(armRotation, 180));
+    OI.operatorLB.whileHeld(new SetArmRotationPosition(armRotation, 90));
+    OI.operatorRB.whileHeld(new SetArmRotationPosition(armRotation, 125));
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
