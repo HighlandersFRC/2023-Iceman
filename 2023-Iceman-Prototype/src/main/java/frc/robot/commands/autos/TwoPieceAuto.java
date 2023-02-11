@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.autos;
 
 import java.io.File;
 import java.io.FileReader;
@@ -16,6 +16,13 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.AutoBalance;
+import frc.robot.commands.AutonomousFollower;
+import frc.robot.commands.RunWrist;
+import frc.robot.commands.SetArmExtensionPosition;
+import frc.robot.commands.SetArmRotationPosition;
+import frc.robot.commands.SetVisionAlignmentPipeline;
+import frc.robot.commands.VisionAlignment;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmRotation;
 import frc.robot.subsystems.Drive;
@@ -45,18 +52,12 @@ public class TwoPieceAuto extends SequentialCommandGroup {
   private JSONObject pathRead4;
 
   public TwoPieceAuto(Drive drive, ArmExtension armExtension, ArmRotation armRotation, Wrist wrist, Peripherals peripherals, Lights lights) {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
 
     try {
       pathingFile = new File("/home/lvuser/deploy/2PiecePart1.json");
       FileReader scanner = new FileReader(pathingFile);
-      // pathRead = new JSONTokener(scanner);
       pathRead = new JSONObject(new JSONTokener(scanner));
       pathJSON = (JSONArray) pathRead.get("sampled_points");
-      JSONArray first = pathJSON.getJSONArray(0);
-      double firstTime = first.getDouble(0);
-      System.out.println(first);
     }
     catch(Exception e) {
       System.out.println("ERROR WITH PATH FILE " + e);
@@ -65,7 +66,6 @@ public class TwoPieceAuto extends SequentialCommandGroup {
     try {
       pathingFile2 = new File("/home/lvuser/deploy/2PiecePart2.json");
       FileReader scanner2 = new FileReader(pathingFile2);
-      // pathRead = new JSONTokener(scanner);
       pathRead2 = new JSONObject(new JSONTokener(scanner2));
       pathJSON2 = (JSONArray) pathRead2.get("sampled_points");
     }
@@ -76,7 +76,6 @@ public class TwoPieceAuto extends SequentialCommandGroup {
     try {
       pathingFile3 = new File("/home/lvuser/deploy/2PiecePart3Dock.json");
       FileReader scanner3 = new FileReader(pathingFile3);
-      // pathRead = new JSONTokener(scanner);
       pathRead3 = new JSONObject(new JSONTokener(scanner3));
       pathJSON3 = (JSONArray) pathRead3.get("sampled_points");
     }
