@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
 import frc.robot.tools.math.Vector;
@@ -39,10 +40,10 @@ public class AutoBalance extends CommandBase {
     } else {
       if (this.roll >= -2.74 + this.rollMargin){
         System.out.println("Backward");
-        drive.autoRobotCentricDrive(new Vector(-0.6, 0), 0);
+        drive.autoRobotCentricDrive(new Vector(-0.8, 0), 0);
       } else if (this.roll <= -2.74 - this.rollMargin){
         System.out.println("Forward");
-        drive.autoRobotCentricDrive(new Vector(0.6, 0), 0);
+        drive.autoRobotCentricDrive(new Vector(0.8, 0), 0);
       } else {
         drive.autoRobotCentricDrive(new Vector(0, 0), 0);
       }
@@ -53,13 +54,15 @@ public class AutoBalance extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     drive.autoRobotCentricDrive(new Vector(0, 0), 0);
-    drive.lockWheels();
+    drive.setWheelsHorizontal();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     if (Math.abs(this.rollDif) < 0.25 && Math.abs(this.roll + 2.74) < this.rollMargin){
+      return true;
+    } else if (drive.getCurrentTime() > 14.9 && drive.getCurrentTime() < 17) {
       return true;
     } else {
       return false;

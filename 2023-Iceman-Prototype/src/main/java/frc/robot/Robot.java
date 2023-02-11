@@ -29,7 +29,6 @@ import frc.robot.commands.RotateArm;
 import frc.robot.commands.RunWrist;
 import frc.robot.commands.SetArmExtensionPosition;
 import frc.robot.commands.SetArmRotationPosition;
-import frc.robot.commands.TwoPieceAuto;
 import frc.robot.commands.VisionAlignment;
 import frc.robot.commands.ZeroNavxMidMatch;
 import frc.robot.subsystems.ArmExtension;
@@ -38,6 +37,9 @@ import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Peripherals;
 import frc.robot.subsystems.Wrist;
+
+import frc.robot.commands.autos.TwoPieceAuto;
+import frc.robot.commands.autos.TwoPieceBumpAuto;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -122,7 +124,7 @@ public class Robot extends TimedRobot {
 
     System.out.println(peripherals.getNavxAngle());
 
-    TwoPieceAuto auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist);
+    TwoPieceBumpAuto auto = new TwoPieceBumpAuto(drive, armExtension, armRotation, wrist, peripherals, lights);
     // auto.schedule();
   }
 

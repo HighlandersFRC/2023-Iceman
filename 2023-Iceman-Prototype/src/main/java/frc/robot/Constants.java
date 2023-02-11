@@ -57,10 +57,14 @@ public final class Constants {
     public static final String CAMERA_NAME = "Limelight";
 
     public static final double PLACEMENT_LOCATION_X_RED = 14.75;
+    public static final double PLACEMENT_LOCATION_X_BLUE = FIELD_LENGTH - PLACEMENT_LOCATION_X_RED;
     public static final double[] PLACEMENT_LOCATIONS_Y_RED = new double[] {0.52, 1.07, 1.62, 2.2, 2.74, 3.3, 3.85, 4.43, 4.98};
+    public static final double[] PLACEMENT_LOCATIONS_Y_BLUE = new double[] {4.98, 4.43, 3.85, 3.3, 2.74, 2.2, 1.07, 0.52};
 
     public static final double PLACEMENT_PATH_MIDPOINT_X_RED = 14.41;
+    public static final double PLACEMENT_PATH_MIDPOINT_X_BLUE = FIELD_LENGTH - PLACEMENT_PATH_MIDPOINT_X_RED;
     public static final double[] PLACEMENT_PATH_MIDPOINT_Y_RED = new double[] {0.52, 1.07, 1.62, 2.2, 2.74, 3.3, 3.85, 4.43, 4.98};
+    public static final double[] PLACEMENT_PATH_MIDPOINT_Y_BLUE = new double[] {4.98, 4.43, 3.85, 3.3, 2.74, 2.2, 1.07, 0.52};
 
     // 3D locations of all 8 april tags {x, y, z} in meters
     public static final double[][] TAG_LOCATIONS = new double[][] {
