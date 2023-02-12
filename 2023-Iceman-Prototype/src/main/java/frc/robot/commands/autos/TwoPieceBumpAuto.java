@@ -133,7 +133,7 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
                 new SetArmRotationPosition(armRotation, 240)
             )
         ),
-        new AutoBalance(drive)
+        new AutoBalance(drive, 1.2)
     );
   }
 }

@@ -77,34 +77,13 @@ public class Robot extends TimedRobot {
     armExtension.init();
     armRotation.init();
     wrist.init();
-
-    if(OI.isBumpSideAuto()) {
-      try {
-        pathingFile = new File("/home/lvuser/deploy/2PieceBumpPart1.json");
-        FileReader scanner = new FileReader(pathingFile);
-        pathRead = new JSONObject(new JSONTokener(scanner));
-        pathJSON = (JSONArray) pathRead.get("sampled_points");
-      }
-      catch(Exception e) {
-        System.out.println("ERROR WITH PATH FILE " + e);
-      }
-    }
-    else if(OI.isClearSideAuto()) {
-      try {
-        pathingFile = new File("/home/lvuser/deploy/2PiecePart1.json");
-        FileReader scanner = new FileReader(pathingFile);
-        pathRead = new JSONObject(new JSONTokener(scanner));
-        pathJSON = (JSONArray) pathRead.get("sampled_points");
-      }
-      catch(Exception e) {
-        System.out.println("ERROR WITH PATH FILE " + e);
-      }
-    }
   }  
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+
+    SmartDashboard.putBoolean("IS CLEAR SIDe", OI.isClearSideAuto());
 
     SmartDashboard.putNumber("NAVX", peripherals.getNavxAngle());
 
@@ -123,6 +102,31 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    if(OI.isBumpSideAuto()) {
+      System.out.println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
+      try {
+        pathingFile = new File("/home/lvuser/deploy/2PieceBumpPart1.json");
+        FileReader scanner = new FileReader(pathingFile);
+        pathRead = new JSONObject(new JSONTokener(scanner));
+        pathJSON = (JSONArray) pathRead.get("sampled_points");
+      }
+      catch(Exception e) {
+        System.out.println("ERROR WITH PATH FILE " + e);
+      }
+    }
+    else if(OI.isClearSideAuto()) {
+      System.out.println("------------------------------------------------------------");
+      try {
+        pathingFile = new File("/home/lvuser/deploy/2PiecePart1.json");
+        FileReader scanner = new FileReader(pathingFile);
+        pathRead = new JSONObject(new JSONTokener(scanner));
+        pathJSON = (JSONArray) pathRead.get("sampled_points");
+      }
+      catch(Exception e) {
+        System.out.println("ERROR WITH PATH FILE " + e);
+      }
+    }
+    
     if(OI.isRedSide()) {
       drive.setFieldSide("red");
       // System.out.println("GOT RED");
@@ -131,6 +135,7 @@ public class Robot extends TimedRobot {
       drive.setFieldSide("blue");
       // System.out.println("GOT BLUE");
     }
+    
     drive.autoInit(pathJSON);
 
     System.out.println(peripherals.getNavxAngle());

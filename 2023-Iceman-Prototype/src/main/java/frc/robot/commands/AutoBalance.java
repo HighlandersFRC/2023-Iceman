@@ -18,9 +18,11 @@ public class AutoBalance extends CommandBase {
   private double rollDif;
   // acceptable margin of roll error from level
   private double rollMargin = 5;
+  private double speed = 0.8;
 
-  public AutoBalance(Drive drive) {
+  public AutoBalance(Drive drive, double speed) {
     this.drive = drive;
+    this.speed = speed;
     addRequirements(this.drive);
   }
 
@@ -40,10 +42,10 @@ public class AutoBalance extends CommandBase {
     } else {
       if (this.roll >= -2.74 + this.rollMargin){
         System.out.println("Backward");
-        drive.autoRobotCentricDrive(new Vector(-0.8, 0), 0);
+        drive.autoRobotCentricDrive(new Vector(-speed, 0), 0);
       } else if (this.roll <= -2.74 - this.rollMargin){
         System.out.println("Forward");
-        drive.autoRobotCentricDrive(new Vector(0.8, 0), 0);
+        drive.autoRobotCentricDrive(new Vector(speed, 0), 0);
       } else {
         drive.autoRobotCentricDrive(new Vector(0, 0), 0);
       }
