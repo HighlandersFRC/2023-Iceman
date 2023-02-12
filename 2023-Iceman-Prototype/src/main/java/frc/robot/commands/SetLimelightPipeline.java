@@ -7,18 +7,20 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Peripherals;
 
-public class SetVisionAlignmentPipeline extends CommandBase {
-  /** Creates a new SetVisionAlignmentPipeline. */
+public class SetLimelightPipeline extends CommandBase {
+  /** Creates a new SetLimelightPipeline. */
   private Peripherals peripherals;
-  public SetVisionAlignmentPipeline(Peripherals peripherals) {
+  private int pipeline;
+  public SetLimelightPipeline(Peripherals peripherals, int pipeline) {
     this.peripherals = peripherals;
+    this.pipeline = pipeline;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    peripherals.setRetroreflectivePipeline();
+    peripherals.setFrontPipeline(pipeline);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

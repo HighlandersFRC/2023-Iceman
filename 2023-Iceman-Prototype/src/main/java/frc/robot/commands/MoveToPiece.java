@@ -27,8 +27,8 @@ public class MoveToPiece extends CommandBase {
   // private double kI = 0.05;
   // private double kD = 1;
 
-  private double kP = 5.5;
-  private double kI = 0.0035;
+  private double kP = 6;
+  private double kI = 0;
   private double kD = 0;
   
   // private double kP = 1.0;
@@ -36,6 +36,8 @@ public class MoveToPiece extends CommandBase {
   // private double kD = 0.0;
 
   private int angleSettled = 0;
+
+  private double startTime;
 
   private double initialAngle = 0;
   private double target = 0;
@@ -52,12 +54,12 @@ public class MoveToPiece extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    peripherals.setRetroreflectivePipeline();
     pid = new PID(kP, kI, kD);
     pid.setSetPoint(0);
     pid.setMinOutput(-4);
     pid.setMaxOutput(4);
     angleSettled = 0;
+    startTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -67,8 +69,14 @@ public class MoveToPiece extends CommandBase {
     pid.updatePID(currentAngle);
     double result = -pid.getResult();
     SmartDashboard.putNumber("Angle Settled", angleSettled);
-    drive.autoRobotCentricDrive(new Vector(2, 0), result);
+    System.out.println("Executing");
 
+    if(peripherals.getFrontTargetArea() < 2.35) {
+      drive.autoRobotCentricDrive(new Vector(2, 0), result * 2);
+    }
+    else {
+      drive.autoRobotCentricDrive(new Vector(4, 0), 0);
+    }
 
     // if(Math.abs(target - currentAngle) <= 1) {
     //   angleSettled++;
@@ -96,7 +104,7 @@ public class MoveToPiece extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(peripherals.getFrontLimeLightY() < -11) {
+    if(peripherals.getFrontLimeLightY() < -13 || Timer.getFPGATimestamp() - startTime > 1.5) {
       return true;
     }
     return false;

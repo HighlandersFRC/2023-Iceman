@@ -83,6 +83,10 @@ public class Peripherals extends SubsystemBase {
     setDefaultCommand(new PeripheralsDefault(this));
   }
 
+  public void setFrontPipeline(int pipeline){
+    frontLimeLightTable.getEntry("pipeline").setNumber(pipeline);
+  }
+
   public void setAprilTagPipeline(){
     backLimeLightTable.getEntry("pipeline").setNumber(0);
     frontLimeLightTable.getEntry("pipeline").setNumber(0);
@@ -249,6 +253,11 @@ public class Peripherals extends SubsystemBase {
   public double getFrontCameraLatency() {
     double latency = frontTableLatency.getDouble(-1);
     return latency;
+  }
+
+  public double getFrontTargetArea() {
+    double area = frontTableArea.getDouble(-1);
+    return area;
   }
 
   public JSONArray getFrontLimelightBasedPosition() {

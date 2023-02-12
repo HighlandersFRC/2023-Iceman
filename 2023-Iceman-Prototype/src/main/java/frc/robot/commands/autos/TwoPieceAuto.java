@@ -21,7 +21,7 @@ import frc.robot.commands.AutonomousFollower;
 import frc.robot.commands.RunWrist;
 import frc.robot.commands.SetArmExtensionPosition;
 import frc.robot.commands.SetArmRotationPosition;
-import frc.robot.commands.SetVisionAlignmentPipeline;
+import frc.robot.commands.SetLimelightPipeline;
 import frc.robot.commands.VisionAlignment;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmRotation;
@@ -105,7 +105,7 @@ public class TwoPieceAuto extends SequentialCommandGroup {
           new SetArmRotationPosition(armRotation, 180),
           new WaitCommand(2.5),
           new ParallelCommandGroup(
-            new SetVisionAlignmentPipeline(peripherals),
+            new SetLimelightPipeline(peripherals, 1),
             new SetArmRotationPosition(armRotation, 131)
           )
         )
