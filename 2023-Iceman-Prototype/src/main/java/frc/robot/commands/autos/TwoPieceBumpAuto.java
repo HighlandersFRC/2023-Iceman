@@ -74,15 +74,15 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
       System.out.println("ERROR WITH PATH FILE " + e);
     }
 
-    // try {
-    //   pathingFile3 = new File("/home/lvuser/deploy/2PiecePart3Dock.json");
-    //   FileReader scanner3 = new FileReader(pathingFile3);
-    //   pathRead3 = new JSONObject(new JSONTokener(scanner3));
-    //   pathJSON3 = (JSONArray) pathRead3.get("sampled_points");
-    // }
-    // catch(Exception e) {
-    //   System.out.println("ERROR WITH PATH FILE " + e);
-    // }
+    try {
+      pathingFile3 = new File("/home/lvuser/deploy/2PieceBumpPart3Dock.json");
+      FileReader scanner3 = new FileReader(pathingFile3);
+      pathRead3 = new JSONObject(new JSONTokener(scanner3));
+      pathJSON3 = (JSONArray) pathRead3.get("sampled_points");
+    }
+    catch(Exception e) {
+      System.out.println("ERROR WITH PATH FILE " + e);
+    }
 
     addRequirements(drive, armExtension, armRotation, wrist);
     addCommands(
@@ -94,9 +94,9 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
         new ParallelDeadlineGroup(
             new AutonomousFollower(drive, pathJSON, false),
             new SequentialCommandGroup(
-                new WaitCommand(3),
-                new SetArmRotationPosition(armRotation, 91),
+                new WaitCommand(2.4),
                 new SetLimelightPipeline(peripherals, 2),
+                new SetArmRotationPosition(armRotation, 91),
                 new RunWrist(wrist, -1, 5)
             )
         ),
@@ -114,7 +114,7 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
             new AutonomousFollower(drive, pathJSON2, false),
             new SequentialCommandGroup(
                 new SetArmRotationPosition(armRotation, 180),
-                new WaitCommand(3.5),
+                new WaitCommand(2.5),
                 new ParallelCommandGroup(
                     new SetArmRotationPosition(armRotation, 131),
                     new SetLimelightPipeline(peripherals, 1)
@@ -124,7 +124,16 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
         new VisionAlignment(drive, peripherals, lights),
         new SetArmExtensionPosition(armExtension, 10),
         new WaitCommand(0.25),
-        new RunWrist(wrist, 1, 0.5)
+        new RunWrist(wrist, 1, 0.5),
+        new SetArmExtensionPosition(armExtension, 1),
+        new ParallelCommandGroup(
+            new AutonomousFollower(drive, pathJSON3, false),
+            new SequentialCommandGroup(
+                new WaitCommand(1),
+                new SetArmRotationPosition(armRotation, 240)
+            )
+        ),
+        new AutoBalance(drive)
     );
   }
 }

@@ -25,16 +25,20 @@ public class SetLimelightPipeline extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    peripherals.setFrontPipeline(pipeline);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    System.out.println("Pipeline: " + peripherals.getFrontLimelightPipeline());
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(peripherals.getFrontLimelightPipeline() == 1) {
+    if(peripherals.getFrontLimelightPipeline() == pipeline) {
       return true;
     }
     return false;

@@ -97,7 +97,7 @@ public class Peripherals extends SubsystemBase {
     frontLimeLightTable.getEntry("pipeline").setNumber(1);
   }
 
-  public void setCubeTrackingPipeline(){
+  public void setConeTrackingPipeline(){
     frontLimeLightTable.getEntry("pipeline").setNumber(2);
   }
 
@@ -174,6 +174,7 @@ public class Peripherals extends SubsystemBase {
           return noTrack;
         }
         if (frontTargetDist > 5 && numTracksFront <= 1){
+          System.out.println("Dist: " + frontTargetDist);
           return noTrack;
         }
         pose.put(0, frontPose[0] + Constants.FIELD_LENGTH / 2.0);

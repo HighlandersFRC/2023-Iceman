@@ -69,7 +69,6 @@ public class MoveToPiece extends CommandBase {
     pid.updatePID(currentAngle);
     double result = -pid.getResult();
     SmartDashboard.putNumber("Angle Settled", angleSettled);
-    System.out.println("Executing");
 
     if(peripherals.getFrontTargetArea() < 2.35) {
       drive.autoRobotCentricDrive(new Vector(2, 0), result * 2);
@@ -104,7 +103,7 @@ public class MoveToPiece extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(peripherals.getFrontLimeLightY() < -13 || Timer.getFPGATimestamp() - startTime > 1.5) {
+    if(peripherals.getFrontLimeLightY() < -13 || Timer.getFPGATimestamp() - startTime > 1) {
       return true;
     }
     return false;

@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
+import frc.robot.commands.MoveToPiece;
 import frc.robot.commands.RunWrist;
 import frc.robot.commands.SetArmExtensionPosition;
 import frc.robot.commands.SetArmRotationPosition;
@@ -94,9 +95,21 @@ public class TwoPieceAuto extends SequentialCommandGroup {
         new AutonomousFollower(drive, pathJSON, false),
         new SequentialCommandGroup(
           new WaitCommand(1.5),
-          new SetArmRotationPosition(armRotation, 91),
+          new ParallelCommandGroup(
+            new SetLimelightPipeline(peripherals, 2),
+            new SetArmRotationPosition(armRotation, 91)
+          ),
           new RunWrist(wrist, 1, 4)
         )
+      ),
+      new ParallelDeadlineGroup(
+            new MoveToPiece(drive, peripherals, lights),
+            new SetArmRotationPosition(armRotation, 91),
+            new RunWrist(wrist, 1, 5)
+      ),
+      new ParallelDeadlineGroup(
+        new WaitCommand(0.25),
+        new SetLimelightPipeline(peripherals, 0)
       ),
       new ParallelCommandGroup(
         new RunWrist(wrist, -0.1, 4),
