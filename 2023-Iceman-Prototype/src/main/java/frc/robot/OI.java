@@ -71,6 +71,14 @@ public class OI {
         return autoChooser.getRawButton(8);
     }
 
+    public static boolean isClearSideAuto() {
+        return autoChooser.getRawButton(1);
+    }
+
+    public static boolean isBumpSideAuto() {
+        return autoChooser.getRawButton(2);
+    }
+
     public static int getPOV() {
         return driverController.getPOV();
     }

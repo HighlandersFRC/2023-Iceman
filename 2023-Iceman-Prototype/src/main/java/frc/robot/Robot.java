@@ -77,14 +77,28 @@ public class Robot extends TimedRobot {
     armExtension.init();
     armRotation.init();
     wrist.init();
-    try {
-      pathingFile = new File("/home/lvuser/deploy/2PieceBumpPart1.json");
-      FileReader scanner = new FileReader(pathingFile);
-      pathRead = new JSONObject(new JSONTokener(scanner));
-      pathJSON = (JSONArray) pathRead.get("sampled_points");
+
+    if(OI.isBumpSideAuto()) {
+      try {
+        pathingFile = new File("/home/lvuser/deploy/2PieceBumpPart1.json");
+        FileReader scanner = new FileReader(pathingFile);
+        pathRead = new JSONObject(new JSONTokener(scanner));
+        pathJSON = (JSONArray) pathRead.get("sampled_points");
+      }
+      catch(Exception e) {
+        System.out.println("ERROR WITH PATH FILE " + e);
+      }
     }
-    catch(Exception e) {
-      System.out.println("ERROR WITH PATH FILE " + e);
+    else if(OI.isClearSideAuto()) {
+      try {
+        pathingFile = new File("/home/lvuser/deploy/2PiecePart1.json");
+        FileReader scanner = new FileReader(pathingFile);
+        pathRead = new JSONObject(new JSONTokener(scanner));
+        pathJSON = (JSONArray) pathRead.get("sampled_points");
+      }
+      catch(Exception e) {
+        System.out.println("ERROR WITH PATH FILE " + e);
+      }
     }
   }  
 
@@ -121,8 +135,14 @@ public class Robot extends TimedRobot {
 
     System.out.println(peripherals.getNavxAngle());
 
-    TwoPieceBumpAuto auto = new TwoPieceBumpAuto(drive, armExtension, armRotation, wrist, peripherals, lights);
-    auto.schedule();
+    if(OI.isBumpSideAuto()) {
+      TwoPieceBumpAuto auto = new TwoPieceBumpAuto(drive, armExtension, armRotation, wrist, peripherals, lights);
+      auto.schedule();
+    }
+    else if(OI.isClearSideAuto()) {
+      TwoPieceAuto auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist, peripherals, lights);
+      auto.schedule();
+    }
   }
 
   /** This function is called periodically during autonomous. */
