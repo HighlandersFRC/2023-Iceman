@@ -103,7 +103,7 @@ public class MoveToPiece extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(peripherals.getFrontLimeLightY() < -13 || Timer.getFPGATimestamp() - startTime > 0.9) {
+    if(peripherals.getFrontLimeLightY() < -13 || Timer.getFPGATimestamp() - startTime > 0.75) {
       return true;
     }
     return false;

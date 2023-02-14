@@ -135,7 +135,7 @@ public class TwoPieceAuto extends SequentialCommandGroup {
           new SetArmRotationPosition(armRotation, 240)
         )
       ),
-      new AutoBalance(drive, 0.8)
+      new AutoBalance(drive, 1.3)
     );
   }
 }
