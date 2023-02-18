@@ -1,0 +1,55 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot.commands;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.ArmRotation;
+
+public class SetArmExtensionPosition extends CommandBase {
+  /** Creates a new SetArmExtensionPosition. */
+  private ArmExtension arm;
+  private ArmRotation armRotation;
+  private double position;
+
+  public SetArmExtensionPosition(ArmExtension arm, ArmRotation armRotation, double Position) {
+    this.arm = arm;
+    this.armRotation = armRotation;
+    this.position = Position;
+    addRequirements(this.arm);
+    // Use addRequirements() here to declare subsystem dependencies.
+  }
+
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    // if(armRotation.getRotationPosition() < 100 || armRotation.getRotationPosition() > 260) {
+    //   arm.setExtensionPosition(0);
+    // }
+    // else {
+      arm.setExtensionPosition(position);
+    // }
+    // SmartDashboard.putNumber("tics", arm.getExtensionRawPosition());
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {}
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    if(Math.abs(arm.getExtensionPosition() - position) < 1) {
+      return true;
+    }
+    return false;
+  }
+}
