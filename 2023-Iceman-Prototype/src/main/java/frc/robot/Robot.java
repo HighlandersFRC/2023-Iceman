@@ -24,7 +24,7 @@ import frc.robot.commands.AlignToConePlacement;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
 import frc.robot.commands.ExtendArm;
-import frc.robot.commands.MoveToPiece;
+import frc.robot.commands.MoveToPieceBackwards;
 import frc.robot.commands.MoveWrist;
 import frc.robot.commands.RotateArm;
 import frc.robot.commands.RunIntake;

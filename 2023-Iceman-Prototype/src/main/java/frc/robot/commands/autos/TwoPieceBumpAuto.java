@@ -18,11 +18,12 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
-import frc.robot.commands.MoveToPiece;
+import frc.robot.commands.MoveToPieceBackwards;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.SetArmExtensionPosition;
 import frc.robot.commands.SetArmRotationPosition;
-import frc.robot.commands.SetLimelightPipeline;
+import frc.robot.commands.SetBackLimelightPipeline;
+import frc.robot.commands.SetFrontLimelightPipeline;
 import frc.robot.commands.VisionAlignment;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmRotation;
@@ -95,19 +96,19 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
             new AutonomousFollower(drive, pathJSON, false),
             new SequentialCommandGroup(
                 new WaitCommand(2.4),
-                new SetLimelightPipeline(peripherals, 2),
+                new SetBackLimelightPipeline(peripherals, 2),
                 new SetArmRotationPosition(armRotation, 91)//,
                 // new RunWrist(wrist, -1, 5)
             )
         ),
         new ParallelDeadlineGroup(
-            new MoveToPiece(drive, peripherals, lights),
+            new MoveToPieceBackwards(drive, peripherals, lights),
             new SetArmRotationPosition(armRotation, 91)//,
             // new RunWrist(wrist, 1, 5)
         ),
         new ParallelDeadlineGroup(
-            new WaitCommand(0.25),
-            new SetLimelightPipeline(peripherals, 0)
+            new WaitCommand(0.25)
+            // new SetLimelightPipeline(peripherals, 0)
         ),
         new ParallelCommandGroup(
             // new RunWrist(wrist, -0.1, 4),
@@ -117,7 +118,7 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
                 new WaitCommand(2.5),
                 new ParallelCommandGroup(
                     new SetArmRotationPosition(armRotation, 131),
-                    new SetLimelightPipeline(peripherals, 1)
+                    new SetFrontLimelightPipeline(peripherals, 1)
                 )
             )
         ),

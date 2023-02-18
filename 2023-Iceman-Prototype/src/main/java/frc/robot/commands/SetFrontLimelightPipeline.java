@@ -7,11 +7,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Peripherals;
 
-public class SetLimelightPipeline extends CommandBase {
-  /** Creates a new SetLimelightPipeline. */
+public class SetFrontLimelightPipeline extends CommandBase {
+  /** Creates a new SetFrontLimelightPipeline. */
   private Peripherals peripherals;
   private int pipeline;
-  public SetLimelightPipeline(Peripherals peripherals, int pipeline) {
+  public SetFrontLimelightPipeline(Peripherals peripherals, int pipeline) {
     this.peripherals = peripherals;
     this.pipeline = pipeline;
     // Use addRequirements() here to declare subsystem dependencies.
