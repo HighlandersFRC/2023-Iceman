@@ -14,7 +14,7 @@ import frc.robot.subsystems.Lights.LEDMode;
 import frc.robot.tools.controlloops.PID;
 import frc.robot.tools.math.Vector;
 
-public class MoveToPiece extends CommandBase {
+public class MoveToPieceBackwards extends CommandBase {
   /** Creates a new VisionAlignment. */
   private Drive drive;
   private Peripherals peripherals;
@@ -43,7 +43,7 @@ public class MoveToPiece extends CommandBase {
   private double target = 0;
 
   private double initTime = 0;
-  public MoveToPiece(Drive drive, Peripherals peripherals, Lights lights) {
+  public MoveToPieceBackwards(Drive drive, Peripherals peripherals, Lights lights) {
     this.peripherals = peripherals;
     this.drive = drive;
     this.lights = lights;
@@ -65,16 +65,16 @@ public class MoveToPiece extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double currentAngle = peripherals.getLimelightAngleToTarget();
+    double currentAngle = peripherals.getBackLimelightAngleToTarget();
     pid.updatePID(currentAngle);
     double result = -pid.getResult();
     SmartDashboard.putNumber("Angle Settled", angleSettled);
 
     if(peripherals.getFrontTargetArea() < 2.35) {
-      drive.autoRobotCentricDrive(new Vector(2, 0), result * 2);
+      drive.autoRobotCentricDrive(new Vector(-2, 0), result * 2);
     }
     else {
-      drive.autoRobotCentricDrive(new Vector(4, 0), 0);
+      drive.autoRobotCentricDrive(new Vector(-4, 0), 0);
     }
 
     // if(Math.abs(target - currentAngle) <= 1) {
@@ -103,7 +103,7 @@ public class MoveToPiece extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(peripherals.getFrontLimeLightY() < -13 || Timer.getFPGATimestamp() - startTime > 0.75) {
+    if(peripherals.getBackLimeLightY() < -13 || Timer.getFPGATimestamp() - startTime > 0.75) {
       return true;
     }
     return false;

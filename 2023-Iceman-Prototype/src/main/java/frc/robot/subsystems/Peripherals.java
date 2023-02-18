@@ -89,6 +89,10 @@ public class Peripherals extends SubsystemBase {
     frontLimeLightTable.getEntry("pipeline").setNumber(pipeline);
   }
 
+  public void setBackPipeline(int pipeline){
+    backLimeLightTable.getEntry("pipeline").setNumber(pipeline);
+  }
+
   public void setAprilTagPipeline(){
     backLimeLightTable.getEntry("pipeline").setNumber(0);
     frontLimeLightTable.getEntry("pipeline").setNumber(0);
@@ -112,11 +116,11 @@ public class Peripherals extends SubsystemBase {
   }
 
   public double getFrontLimelightAngleToTarget(){
-    return frontTableX.getDouble(0);
+    return frontTableX.getDouble(0) * Math.PI / 180;
   }
 
   public double getBackLimelightAngleToTarget(){
-    return backTableX.getDouble(0);
+    return backTableX.getDouble(0) * Math.PI / 180;
   }
 
   public double getLimelightAngleToTarget(){

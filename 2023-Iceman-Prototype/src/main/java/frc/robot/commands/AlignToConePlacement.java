@@ -19,7 +19,7 @@ public class AlignToConePlacement extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addRequirements(drive);
-    addCommands(new SetLimelightPipeline(peripherals, 1),
+    addCommands(new SetBackLimelightPipeline(peripherals, 1),
                 new WaitCommand(0.4),
                 new VisionAlignment(drive, peripherals, lights)
     );

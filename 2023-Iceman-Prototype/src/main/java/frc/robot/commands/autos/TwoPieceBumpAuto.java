@@ -18,11 +18,12 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
-import frc.robot.commands.MoveToPiece;
+import frc.robot.commands.MoveToPieceBackwards;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.SetArmExtensionPosition;
 import frc.robot.commands.SetArmRotationPosition;
-import frc.robot.commands.SetLimelightPipeline;
+import frc.robot.commands.SetBackLimelightPipeline;
+import frc.robot.commands.SetFrontLimelightPipeline;
 import frc.robot.commands.VisionAlignment;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmRotation;
@@ -86,54 +87,7 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
 
     addRequirements(drive, armExtension, armRotation, wrist);
     addCommands(
-      new SetArmRotationPosition(armRotation, wrist, 131, 225),
-        new SetArmExtensionPosition(armExtension, armRotation, 21),
-        new WaitCommand(0.25),
-        // new RunWrist(wrist, -1, 0.5),
-        new SetArmExtensionPosition(armExtension, armRotation, 1),
-        new ParallelDeadlineGroup(
-            new AutonomousFollower(drive, pathJSON, false),
-            new SequentialCommandGroup(
-                new WaitCommand(2.4),
-                new SetLimelightPipeline(peripherals, 2),
-                new SetArmRotationPosition(armRotation, wrist, 91, 90)//,
-                // new RunWrist(wrist, -1, 5)
-            )
-        ),
-        new ParallelDeadlineGroup(
-            new MoveToPiece(drive, peripherals, lights),
-            new SetArmRotationPosition(armRotation, wrist, 91, 90)//,
-            // new RunWrist(wrist, 1, 5)
-        ),
-        new ParallelDeadlineGroup(
-            new WaitCommand(0.25),
-            new SetLimelightPipeline(peripherals, 0)
-        ),
-        new ParallelCommandGroup(
-            // new RunWrist(wrist, -0.1, 4),
-            new AutonomousFollower(drive, pathJSON2, false),
-            new SequentialCommandGroup(
-                new SetArmRotationPosition(armRotation, wrist, 180, 180),
-                new WaitCommand(2.5),
-                new ParallelCommandGroup(
-                    new SetArmRotationPosition(armRotation, wrist, 131, 225),
-                    new SetLimelightPipeline(peripherals, 1)
-                )
-            )
-        ),
-        new VisionAlignment(drive, peripherals, lights),
-        new SetArmExtensionPosition(armExtension, armRotation, 10),
-        new WaitCommand(0.25),
-        // new RunWrist(wrist, 1, 0.5),
-        new SetArmExtensionPosition(armExtension, armRotation, 1),
-        new ParallelCommandGroup(
-            new AutonomousFollower(drive, pathJSON3, false),
-            new SequentialCommandGroup(
-                new WaitCommand(1),
-                new SetArmRotationPosition(armRotation, wrist, 240, 180)
-            )
-        ),
-        new AutoBalance(drive, 1.2)
+      
     );
   }
 }

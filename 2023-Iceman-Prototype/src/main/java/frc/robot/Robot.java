@@ -24,7 +24,7 @@ import frc.robot.commands.AlignToConePlacement;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
 import frc.robot.commands.ExtendArm;
-import frc.robot.commands.MoveToPiece;
+import frc.robot.commands.MoveToPieceBackwards;
 import frc.robot.commands.MoveWrist;
 import frc.robot.commands.RotateArm;
 import frc.robot.commands.RunIntake;
@@ -170,10 +170,10 @@ public class Robot extends TimedRobot {
 
     // OI.operatorA.whenPressed(new SetArmExtensionPosition(armExtension, armRotation, 1));
     OI.operatorB.whileHeld(new SetArmExtensionPosition(armExtension, armRotation, 20));
-    // OI.operatorX.whileHeld(new SetArmExtensionPosition(armExtension, armRotation, 35));
-    // OI.operatorY.whileHeld(new SetArmRotationPosition(armRotation, wrist, 70, 150));
-    OI.operatorLB.whileHeld(new SetArmRotationPosition(armRotation, wrist, 270, 265));
-    OI.operatorRB.whileHeld(new SetArmRotationPosition(armRotation, wrist, 125, 275));
+    OI.operatorX.whileHeld(new SetArmExtensionPosition(armExtension, armRotation, 35));
+    OI.operatorY.whileHeld(new SetArmRotationPosition(armRotation, 89));
+    OI.operatorLB.whileHeld(new SetArmRotationPosition(armRotation, 95));
+    OI.operatorRB.whileHeld(new SetArmRotationPosition(armRotation, 125));
 
     // OI.operatorA.whileHeld(new ExtendArm(armExtension, -0.35));
     // OI.operatorY.whileHeld(new ExtendArm(armExtension, 0.35));
