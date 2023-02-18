@@ -32,8 +32,15 @@ public class ArmExtensionDefaultCommand extends CommandBase {
     if (arm.getExtensionLimitSwitch()) {
       arm.setExtensionEncoderPosition(0);
     }
-    position = SmartDashboard.getNumber("SD Extension", 0);
-    arm.setExtensionPosition(position);
+    // position = SmartDashboard.getNumber("SD Extension", 0);
+    // if(position > 0 && position < 30) {
+    //   arm.setExtensionPosition(position);
+    // }
+    // else {
+    // // arm.setExtensionPosition(0);
+    // arm.setExtensionMotorPercent(position);
+    // }
+    arm.setExtensionPosition(2);
   }
 
   // Called once the command ends or is interrupted.

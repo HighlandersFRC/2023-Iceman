@@ -31,15 +31,20 @@ public class ArmRotationDefaultCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if((OI.operatorController.getRawAxis(4))/4 < 0.0125) {
+    // if((OI.operatorController.getRawAxis(4))/4 < 0.0125) {
       if(armExtension.getExtensionPosition() < 5) {
         position = SmartDashboard.getNumber("SD Rotation", 180);
-        arm.setRotationPosition(position);
+        // if(position > 90 && position < 250) {
+        //   arm.setRotationPosition(position);
+        // }
+        // else {
+        arm.setRotationPosition(180);
+        // }
       }
-    }
-    else {
-      arm.setRotationMotorPercent((OI.operatorController.getRawAxis(4))/4);
-    }
+    // }
+    // else {
+    //   arm.setRotationMotorPercent((OI.operatorController.getRawAxis(4))/4);
+    // }
   }
 
   // Called once the command ends or is interrupted.

@@ -31,13 +31,13 @@ public class SetArmExtensionPosition extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(armRotation.getRotationPosition() < 100 || armRotation.getRotationPosition() > 260) {
-      arm.setExtensionPosition(0);
-    }
-    else {
+    // if(armRotation.getRotationPosition() < 100 || armRotation.getRotationPosition() > 260) {
+    //   arm.setExtensionPosition(0);
+    // }
+    // else {
       arm.setExtensionPosition(position);
-    }
-    SmartDashboard.putNumber("tics", arm.getExtensionRawPosition());
+    // }
+    // SmartDashboard.putNumber("tics", arm.getExtensionRawPosition());
   }
 
   // Called once the command ends or is interrupted.

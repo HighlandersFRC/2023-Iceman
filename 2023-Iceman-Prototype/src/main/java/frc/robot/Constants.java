@@ -78,7 +78,7 @@ public final class Constants {
         {1.02743, 1.071626, 0.462788},
     };
 
-    public static final double EXTENSION_GEAR_RATIO = 6.5;
+    public static final double EXTENSION_GEAR_RATIO = 10.13;
     public static final double EXTENSION_INCHES_PER_ROTATION = 1.5038 * Math.PI;
     public static final double MAX_EXTENSION = 40;
 

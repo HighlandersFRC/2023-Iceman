@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 
@@ -24,7 +25,7 @@ import frc.robot.commands.defaults.ArmExtensionDefaultCommand;
 
 public class ArmExtension extends SubsystemBase {
 
-  private final WPI_TalonFX extensionMotor = new WPI_TalonFX(10);
+  private final TalonFX extensionMotor = new TalonFX(10, "Canivore");
   
   /** Creates a new ArmExtension. */
   public ArmExtension() {}
@@ -34,19 +35,20 @@ public class ArmExtension extends SubsystemBase {
     
     extensionMotor.setNeutralMode(NeutralMode.Brake);
 
-    extensionMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
-    extensionMotor.configClearPositionOnLimitR(false, 0);
+    extensionMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
 
     extensionMotor.configForwardSoftLimitThreshold(Constants.getArmExtensionTics(Constants.MAX_EXTENSION));
     extensionMotor.configForwardSoftLimitEnable(true);
 
     extensionMotor.setSelectedSensorPosition(0);
 
-    extensionMotor.configPeakOutputForward(0.35);
-    extensionMotor.configPeakOutputReverse(-0.1);
+    extensionMotor.configPeakOutputForward(0.5);
+    extensionMotor.configPeakOutputReverse(-0.2);
 
-    extensionMotor.config_kP(0, 0.26);
-    extensionMotor.config_kI(0, 0.0005);
+    extensionMotor.configOpenloopRamp(0.5);
+
+    extensionMotor.config_kP(0, 0.95);
+    extensionMotor.config_kI(0, 0);
     extensionMotor.config_kD(0, 0);
 
     extensionMotor.config_IntegralZone(0, 1000);
@@ -69,9 +71,9 @@ public class ArmExtension extends SubsystemBase {
 
   public boolean getExtensionLimitSwitch() {
     if(extensionMotor.getSensorCollection().isRevLimitSwitchClosed() == 1) {
-      return false;
+      return true;
     }
-    return true;
+    return false;
   }
 
   public void setExtensionEncoderPosition(double inches) {

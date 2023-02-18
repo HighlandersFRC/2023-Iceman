@@ -32,16 +32,16 @@ public class ArmRotation extends SubsystemBase {
   public void init() {
     rotationMotorMaster.configFactoryDefault();
     rotationMotorFollower.configFactoryDefault();
-    rotationMotorMaster.configPeakOutputForward(0.4);
-    rotationMotorMaster.configPeakOutputReverse(-0.4);
+    rotationMotorMaster.configPeakOutputForward(0.5);
+    rotationMotorMaster.configPeakOutputReverse(-0.5);
 
-    rotationMotorMaster.config_kP(0, 4.5);
-    rotationMotorMaster.config_kI(0, 0);
-    rotationMotorMaster.config_kD(0, 6);
+    rotationMotorMaster.config_kP(0, 4.85);
+    rotationMotorMaster.config_kI(0, 0.003);
+    rotationMotorMaster.config_kD(0, 5.5);
+
+    rotationMotorMaster.config_IntegralZone(0, 200);
 
     rotationMotorFollower.set(ControlMode.Follower, 11);
-
-    // rotationMotorFollower.follow(rotationMotorMaster);
 
     rotationMotorMaster.setNeutralMode(NeutralMode.Coast);
     rotationMotorFollower.setNeutralMode(NeutralMode.Coast);

@@ -84,12 +84,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putNumber("WRIST POSITION", wrist.getWristRotationPosition());
+    // SmartDashboard.putNumber("WRIST POSITION", wrist.getWristRotationPosition());
     CommandScheduler.getInstance().run();
-
-    SmartDashboard.putBoolean("IS CLEAR SIDe", OI.isClearSideAuto());
-
-    SmartDashboard.putNumber("NAVX", peripherals.getNavxAngle());
 
     SmartDashboard.putNumber("Extension", armExtension.getExtensionPosition());
     SmartDashboard.putBoolean("ARM LIMIT SWITCH", armExtension.getExtensionLimitSwitch());
@@ -163,21 +159,24 @@ public class Robot extends TimedRobot {
     drive.teleopInit(); 
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 
-    OI.driverA.whileHeld(new AutoPlacementCube(drive, peripherals, lights, 0));
-    OI.driverX.whileHeld(new AutoPlacementCone(drive, peripherals, lights, -1));
-    OI.driverB.whileHeld(new AutoPlacementCone(drive, peripherals, lights, 1));
+    // OI.driverA.whileHeld(new AutoPlacementCube(drive, peripherals, lights, 0));
+    // OI.driverX.whileHeld(new AutoPlacementCone(drive, peripherals, lights, -1));
+    // OI.driverB.whileHeld(new AutoPlacementCone(drive, peripherals, lights, 1));
 
-    OI.driverA.whileHeld(new RunIntake(intake, -1, -1));
-    OI.driverY.whileHeld(new RunIntake(intake, 1, -1));
+    // OI.driverA.whileHeld(new RunIntake(intake, -1, -1));
+    // OI.driverY.whileHeld(new RunIntake(intake, 1, -1));
 
     // OI.driverX.whileActiveOnce(new MoveToPiece(drive, peripherals, lights));
 
-    OI.operatorA.whenPressed(new SetArmExtensionPosition(armExtension, armRotation, 1));
+    // OI.operatorA.whenPressed(new SetArmExtensionPosition(armExtension, armRotation, 1));
     OI.operatorB.whileHeld(new SetArmExtensionPosition(armExtension, armRotation, 20));
-    OI.operatorX.whileHeld(new SetArmExtensionPosition(armExtension, armRotation, 35));
-    OI.operatorY.whileHeld(new SetArmRotationPosition(armRotation, wrist, 89, 275));
-    OI.operatorLB.whileHeld(new SetArmRotationPosition(armRotation, wrist, 95, 275));
+    // OI.operatorX.whileHeld(new SetArmExtensionPosition(armExtension, armRotation, 35));
+    // OI.operatorY.whileHeld(new SetArmRotationPosition(armRotation, wrist, 70, 150));
+    OI.operatorLB.whileHeld(new SetArmRotationPosition(armRotation, wrist, 270, 265));
     OI.operatorRB.whileHeld(new SetArmRotationPosition(armRotation, wrist, 125, 275));
+
+    // OI.operatorA.whileHeld(new ExtendArm(armExtension, -0.35));
+    // OI.operatorY.whileHeld(new ExtendArm(armExtension, 0.35));
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
