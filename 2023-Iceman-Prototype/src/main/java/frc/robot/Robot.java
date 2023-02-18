@@ -130,7 +130,7 @@ public class Robot extends TimedRobot {
         System.out.println("ERROR WITH PATH FILE " + e);
       }
     }
-    
+
     if(OI.isRedSide()) {
       drive.setFieldSide("red");
       // System.out.println("GOT RED");
@@ -163,12 +163,9 @@ public class Robot extends TimedRobot {
     drive.teleopInit(); 
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 
-    // OI.driverA.onTrue(new AutoPlacementCube(drive, peripherals, lights, 0));
-    // OI.driverX.onTrue(new AutoPlacementCone(drive, peripherals, lights, -1));
-    // OI.driverB.onTrue(new AutoPlacementCone(drive, peripherals, lights, 1));
-
-    // OI.driverA.whileHeld(new MoveWrist(wrist, 0.5));
-    // OI.driverY.whileHeld(new MoveWrist(wrist, -0.5));
+    OI.driverA.whileHeld(new AutoPlacementCube(drive, peripherals, lights, 0));
+    OI.driverX.whileHeld(new AutoPlacementCone(drive, peripherals, lights, -1));
+    OI.driverB.whileHeld(new AutoPlacementCone(drive, peripherals, lights, 1));
 
     OI.driverA.whileHeld(new RunIntake(intake, -1, -1));
     OI.driverY.whileHeld(new RunIntake(intake, 1, -1));

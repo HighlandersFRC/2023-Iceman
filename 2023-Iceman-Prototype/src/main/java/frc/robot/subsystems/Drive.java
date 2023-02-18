@@ -151,7 +151,7 @@ public class Drive extends SubsystemBase {
 
     private double timeSinceLastCameraMeasurement = 0;
 
-    private String fieldSide = "red";
+    private String fieldSide = "blue";
 
     public Drive(Peripherals peripherals) {
         this.peripherals = peripherals;
@@ -690,9 +690,23 @@ public class Drive extends SubsystemBase {
         SmartDashboard.putNumber("NavxAngle", getFusedOdometryTheta());
         SmartDashboard.putNumber("PathAngle", pathAngle);
 
+<<<<<<< HEAD
         midPoint = new double[] {1.5, Constants.PLACEMENT_PATH_MIDPOINT_X_RED, Constants.PLACEMENT_PATH_MIDPOINT_Y_RED[placementLocation], pathAngle, (Constants.PLACEMENT_LOCATION_X_RED - getFusedOdometryX())/3, (Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation] - getFusedOdometryY())/3, 0, 0, 0, 0};
         placementPoint = new double[] {3, Constants.PLACEMENT_LOCATION_X_RED, Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation], pathAngle, 0, 0, 0, 0, 0, 0};
         
+=======
+        // if (fieldSide == "red"){
+        midPoint = new double[] {1.5, Constants.PLACEMENT_PATH_MIDPOINT_X_RED, Constants.PLACEMENT_PATH_MIDPOINT_Y_RED[placementLocation], pathAngle, (Constants.PLACEMENT_LOCATION_X_RED - getFusedOdometryX())/3, (Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation] - getFusedOdometryY())/3, 0, 0, 0, 0};
+        placementPoint = new double[] {3, Constants.PLACEMENT_LOCATION_X_RED, Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation], pathAngle, 0, 0, 0, 0, 0, 0};
+            // midPoint = new double[] {1.5, robotX + 1.0, robotY, 0, 0, 0, 0, 0, 0, 0};
+            // placementPoint = new double[] {3.0, robotX + 1.0, robotY, 0, 0, 0, 0, 0, 0, 0};
+        // } else {
+        //     midPoint = new double[] {};
+        //     placementPoint = new double[] {};
+        // }
+        // System.out.print("Placement: " + Arrays.toString(placementPoint));
+
+>>>>>>> 68fa950d35c975e86aaa55e5ea6883e066a6bb7f
         double[] currentPoint;
         double[] nextPoint;
 

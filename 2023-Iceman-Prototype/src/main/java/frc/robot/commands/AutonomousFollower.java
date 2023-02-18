@@ -64,7 +64,7 @@ public class AutonomousFollower extends CommandBase {
   public void initialize() {
     if(generatePath == true) {
       this.fieldSide = drive.getFieldSide();
-      if (this.fieldSide == "red"){
+      // if (this.fieldSide == "red"){
         // System.out.println("Before: " + drive.getNavxAngle());
         while (drive.getNavxAngle() <= -180.0){
           drive.setNavxAngle(360.0);
@@ -75,7 +75,7 @@ public class AutonomousFollower extends CommandBase {
           drive.setNavxAngle(-180.0);
         }
         // System.out.println("After: " + drive.getNavxAngle());
-      }
+      // }
       int row = drive.getClosestPlacementGroup(this.fieldSide, drive.getFusedOdometryX(), drive.getFusedOdometryY()) + this.rowOffset;
       this.path = drive.generatePlacementPathOnTheFly(row, this.fieldSide);
       // System.out.println("Path: " + this.path.toString());

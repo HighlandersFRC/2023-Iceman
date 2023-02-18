@@ -43,7 +43,8 @@ public class Peripherals extends SubsystemBase {
   private NetworkTable backLimeLightTable = NetworkTableInstance.getDefault().getTable("limelight-back");
   private NetworkTableEntry backTableX = backLimeLightTable.getEntry("tx");
   private NetworkTableEntry backTableY = backLimeLightTable.getEntry("ty");
-  private NetworkTableEntry backTableLatency = backLimeLightTable.getEntry("tl");
+  private NetworkTableEntry backTablePipelineLatency = backLimeLightTable.getEntry("tl");
+  private NetworkTableEntry backTableCameraLatency = backLimeLightTable.getEntry("cl");
   private NetworkTableEntry backTableArea = backLimeLightTable.getEntry("ta");
   private NetworkTableEntry backRobotPose = backLimeLightTable.getEntry("botpose");
   private NetworkTableEntry backTagPose = backLimeLightTable.getEntry("targetpose_cameraspace");
@@ -52,7 +53,8 @@ public class Peripherals extends SubsystemBase {
   private NetworkTable frontLimeLightTable = NetworkTableInstance.getDefault().getTable("limelight-front");
   private NetworkTableEntry frontTableX = frontLimeLightTable.getEntry("tx");
   private NetworkTableEntry frontTableY = frontLimeLightTable.getEntry("ty");
-  private NetworkTableEntry frontTableLatency = frontLimeLightTable.getEntry("tl");
+  private NetworkTableEntry frontTablePipelineLatency = frontLimeLightTable.getEntry("tl");
+  private NetworkTableEntry frontTableCameraLatency = frontLimeLightTable.getEntry("cl");
   private NetworkTableEntry frontTableArea = frontLimeLightTable.getEntry("ta");
   private NetworkTableEntry frontRobotPose = frontLimeLightTable.getEntry("botpose");
   private NetworkTableEntry frontTagPose = frontLimeLightTable.getEntry("targetpose_cameraspace");
@@ -209,7 +211,7 @@ public class Peripherals extends SubsystemBase {
   }
 
   public double getBackCameraLatency() {
-    double latency = backTableLatency.getDouble(-1);
+    double latency = backTablePipelineLatency.getDouble(-1) + backTableCameraLatency.getDouble(-1);
     return latency;
   }
 
@@ -217,7 +219,7 @@ public class Peripherals extends SubsystemBase {
     // System.out.println(robotPose.getString(""));
     JSONArray robotPosArray = new JSONArray();
     robotPosArray.put(0, 0);
-    double[] result = new double[6];
+    double[] result = new double[7];
     try {
       result = backRobotPose.getDoubleArray(noTrackLimelightArray);
       System.out.println(Arrays.toString(result));
@@ -252,7 +254,7 @@ public class Peripherals extends SubsystemBase {
   }
 
   public double getFrontCameraLatency() {
-    double latency = frontTableLatency.getDouble(-1);
+    double latency = frontTablePipelineLatency.getDouble(-1) + frontTableCameraLatency.getDouble(-1);
     return latency;
   }
 
