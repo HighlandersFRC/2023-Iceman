@@ -123,6 +123,10 @@ public class Peripherals extends SubsystemBase {
     return backTableX.getDouble(0) * Math.PI / 180;
   }
 
+  public double getBackTargetArea() {
+    return backTableArea.getDouble(0);
+  }
+
   public double getLimelightAngleToTarget(){
     double frontX = Math.PI * (frontTableX.getDouble(0)) / 180;
     double backX = Math.PI * (frontTableX.getDouble(0)) / 180;

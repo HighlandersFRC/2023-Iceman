@@ -96,7 +96,7 @@ public class VisionAlignment extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(peripherals.getBackLimelightPipeline() == 1 && peripherals.getFrontLimelightPipeline() == 1 && Math.abs(peripherals.getLimelightAngleToTarget()) < Math.toRadians(2)) {
+    if(peripherals.getBackLimelightPipeline() == 1 && peripherals.getFrontLimelightPipeline() == 1 && Math.abs(peripherals.getLimelightAngleToTarget()) < Math.toRadians(1)) {
       return true;
     }
     return false;

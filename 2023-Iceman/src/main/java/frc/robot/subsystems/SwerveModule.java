@@ -46,11 +46,6 @@ public class SwerveModule extends SubsystemBase {
         angleMotor.enableVoltageCompensation(true);
         angleMotor.setSensorPhase(true);
         angleMotor.selectProfileSlot(0, 0);
-        angleMotor.config_kF(0, 0.0);
-        angleMotor.config_kP(0, 0.1);
-        angleMotor.config_kI(0, 0);
-        angleMotor.config_kD(0, 0.1);
-        angleMotor.config_IntegralZone(0, 0.01);
 
         // sets drive motor to brake
         driveMotor.setNeutralMode(NeutralMode.Brake);
@@ -60,25 +55,7 @@ public class SwerveModule extends SubsystemBase {
         //       ^ 
         // +y <__|
 
-        // this block creates the turn vector based on the module's relation to the robot(stays constant because robot is square)
-
-
-        // if(moduleNumber == 1) {
-        //     turnVector.setI(-Math.sqrt(2)/2.0);
-        //     turnVector.setJ(-Math.sqrt(2)/2.0);
-        // }
-        // if(moduleNumber == 2) {
-        //     turnVector.setI(Math.sqrt(2)/2.0);
-        //     turnVector.setJ(-Math.sqrt(2)/2.0);
-        // }
-        // if(moduleNumber == 3) {
-        //     turnVector.setI(Math.sqrt(2)/2.0);
-        //     turnVector.setJ(Math.sqrt(2)/2.0);
-        // }
-        // if(moduleNumber == 4) {
-        //     turnVector.setI(-Math.sqrt(2)/2.0);
-        //     turnVector.setJ(Math.sqrt(2)/2.0);
-        // }
+        // this block creates the turn vector based on the module's relation to the robot
 
         if(moduleNumber == 1) {
             turnVector.setI(-xTurnAngle);
@@ -176,9 +153,9 @@ public class SwerveModule extends SubsystemBase {
         angleMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 35, 35 , 0.5));
         angleMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(false, 60, 60, 0.5));
         
-        angleMotor.config_kP(0, 0.3);
+        angleMotor.config_kP(0, 0.2);
         angleMotor.config_kI(0, 0.0);
-        angleMotor.config_kD(0, 0.0);
+        angleMotor.config_kD(0, 0.1);
 
         // angleMotor.config_kP(0, 0.1);
         // angleMotor.config_kI(0, 0.0);
@@ -198,7 +175,7 @@ public class SwerveModule extends SubsystemBase {
 
         driveMotor.config_kP(0, 0.15);
         driveMotor.config_kI(0, 0);
-        driveMotor.config_kD(0, 0.0);
+        driveMotor.config_kD(0, 0.75);
 
         angleMotor.setNeutralMode(NeutralMode.Brake);
         driveMotor.setNeutralMode(NeutralMode.Brake);

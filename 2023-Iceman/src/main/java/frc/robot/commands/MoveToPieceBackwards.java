@@ -103,7 +103,7 @@ public class MoveToPieceBackwards extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(peripherals.getBackLimeLightY() < -13 || Timer.getFPGATimestamp() - startTime > 0.75) {
+    if(peripherals.getBackLimeLightY() < -18 && peripherals.getBackTargetArea() > 2 || Timer.getFPGATimestamp() - startTime > 0.75) {
       return true;
     }
     return false;
