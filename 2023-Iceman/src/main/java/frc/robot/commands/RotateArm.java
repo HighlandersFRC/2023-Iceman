@@ -5,14 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.ArmRotation;
 
-public class ExtendArm extends CommandBase {
-  /** Creates a new ExtendArm. */
-  private ArmExtension arm;
+public class RotateArm extends CommandBase {
+  /** Creates a new RotateArm. */
+  private ArmRotation arm;
   private double percent;
 
-  public ExtendArm(ArmExtension arm, double percent) {
+  public RotateArm(ArmRotation arm, double percent) {
     this.arm = arm;
     this.percent = percent;
     addRequirements(this.arm);
@@ -26,8 +26,7 @@ public class ExtendArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("HASDFLKAJSDFKLAJSDKLFJA");
-    arm.setExtensionMotorPercent(percent);
+    arm.setRotationMotorPercent(percent);
   }
 
   // Called once the command ends or is interrupted.

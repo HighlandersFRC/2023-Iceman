@@ -2,20 +2,17 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.defaults;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.Wrist;
 
-public class ExtendArm extends CommandBase {
-  /** Creates a new ExtendArm. */
-  private ArmExtension arm;
-  private double percent;
-
-  public ExtendArm(ArmExtension arm, double percent) {
-    this.arm = arm;
-    this.percent = percent;
-    addRequirements(this.arm);
+public class WristDefaultCommand extends CommandBase {
+  /** Creates a new WristDefaultCommand. */
+  private Wrist Wrist;
+  public WristDefaultCommand(Wrist Wrist) {
+    this.Wrist = Wrist;
+    addRequirements(this.Wrist);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -26,8 +23,14 @@ public class ExtendArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("HASDFLKAJSDFKLAJSDKLFJA");
-    arm.setExtensionMotorPercent(percent);
+    // if(Math.abs(Wrist.getGrabberMotorCurrent()) < 25) {
+    //   this.Wrist.setGrabberMotorPercent(0.1);
+    // }
+    // else {
+    //   Wrist.setGrabberMotorPercent(0);
+    // }
+    // Wrist.setGrabberMotorPercent(0.1);
+    Wrist.setWristRotationPosition(150);
   }
 
   // Called once the command ends or is interrupted.

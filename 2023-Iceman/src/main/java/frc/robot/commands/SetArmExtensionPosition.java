@@ -4,30 +4,40 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.ArmRotation;
 
-public class ExtendArm extends CommandBase {
-  /** Creates a new ExtendArm. */
+public class SetArmExtensionPosition extends CommandBase {
+  /** Creates a new SetArmExtensionPosition. */
   private ArmExtension arm;
-  private double percent;
+  private ArmRotation armRotation;
+  private double position;
 
-  public ExtendArm(ArmExtension arm, double percent) {
+  public SetArmExtensionPosition(ArmExtension arm, ArmRotation armRotation, double Position) {
     this.arm = arm;
-    this.percent = percent;
+    this.armRotation = armRotation;
+    this.position = Position;
     addRequirements(this.arm);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("HASDFLKAJSDFKLAJSDKLFJA");
-    arm.setExtensionMotorPercent(percent);
+    // if(armRotation.getRotationPosition() < 100 || armRotation.getRotationPosition() > 260) {
+    //   arm.setExtensionPosition(0);
+    // }
+    // else {
+      arm.setExtensionPosition(position);
+    // }
+    // SmartDashboard.putNumber("tics", arm.getExtensionRawPosition());
   }
 
   // Called once the command ends or is interrupted.
@@ -37,6 +47,9 @@ public class ExtendArm extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(Math.abs(arm.getExtensionPosition() - position) < 1) {
+      return true;
+    }
     return false;
   }
 }

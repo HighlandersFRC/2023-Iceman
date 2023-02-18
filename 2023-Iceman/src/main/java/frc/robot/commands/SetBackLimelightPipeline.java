@@ -5,38 +5,42 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.Peripherals;
 
-public class ExtendArm extends CommandBase {
-  /** Creates a new ExtendArm. */
-  private ArmExtension arm;
-  private double percent;
-
-  public ExtendArm(ArmExtension arm, double percent) {
-    this.arm = arm;
-    this.percent = percent;
-    addRequirements(this.arm);
+public class SetBackLimelightPipeline extends CommandBase {
+  /** Creates a new SetBackLimelightPipeline. */
+  private Peripherals peripherals;
+  private int pipeline;
+  public SetBackLimelightPipeline(Peripherals peripherals, int pipeline) {
+    this.peripherals = peripherals;
+    this.pipeline = pipeline;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    peripherals.setBackPipeline(pipeline);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("HASDFLKAJSDFKLAJSDKLFJA");
-    arm.setExtensionMotorPercent(percent);
+    peripherals.setBackPipeline(pipeline);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    System.out.println("Pipeline: " + peripherals.getBackLimelightPipeline());
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(peripherals.getBackLimelightPipeline() == pipeline) {
+      return true;
+    }
     return false;
   }
 }
