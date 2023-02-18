@@ -163,12 +163,13 @@ public class Robot extends TimedRobot {
     drive.teleopInit(); 
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 
-    OI.driverA.whileHeld(new AutoPlacementCube(drive, peripherals, lights, 0));
-    OI.driverX.whileHeld(new AutoPlacementCone(drive, peripherals, lights, -1));
-    OI.driverB.whileHeld(new AutoPlacementCone(drive, peripherals, lights, 1));
+    // OI.driverA.whileHeld(new AutoPlacementCube(drive, peripherals, lights, 0));
+    // OI.driverX.whileHeld(new AutoPlacementCone(drive, peripherals, lights, -1));
+    // OI.driverB.whileHeld(new AutoPlacementCone(drive, peripherals, lights, 1));
 
-    OI.driverA.whileHeld(new RunIntake(intake, -1, -1));
-    OI.driverY.whileHeld(new RunIntake(intake, 1, -1));
+    // OI.driverA.whileHeld(new RunIntake(intake, -1, -1));
+    // OI.driverY.whileHeld(new RunIntake(intake, 1, -1));
+    OI.driverA.whileHeld(new AutoBalance(drive, 0.8));
 
     // OI.driverX.whileActiveOnce(new MoveToPiece(drive, peripherals, lights));
 

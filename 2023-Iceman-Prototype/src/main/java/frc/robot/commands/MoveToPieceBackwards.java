@@ -71,7 +71,7 @@ public class MoveToPieceBackwards extends CommandBase {
     SmartDashboard.putNumber("Angle Settled", angleSettled);
 
     if(peripherals.getFrontTargetArea() < 2.35) {
-      drive.autoRobotCentricDrive(new Vector(-2, 0), -result * 2);
+      drive.autoRobotCentricDrive(new Vector(-2, 0), result * 2);
     }
     else {
       drive.autoRobotCentricDrive(new Vector(-4, 0), 0);

@@ -18,6 +18,7 @@ public class AutoBalance extends CommandBase {
   private double rollDif;
   // acceptable margin of roll error from level
   private double rollMargin = 5;
+  private double movingRollMargin = 1.5;
   private double speed = 0.8;
 
   public AutoBalance(Drive drive, double speed) {
@@ -35,16 +36,15 @@ public class AutoBalance extends CommandBase {
   public void execute() {
     this.rollDif = drive.getNavxRoll() - this.roll;
     this.roll = drive.getNavxRoll();
-    System.out.println("Navx Roll: " + this.roll);
-    if (Math.abs(this.rollDif) > 3){
-      System.out.println("Moving");
+    System.out.println("Roll Dif" + this.rollDif);
+    if (Math.abs(this.rollDif) > this.movingRollMargin){
       drive.autoRobotCentricDrive(new Vector(0, 0), 0);
+      System.out.println("Stop");
     } else {
+      System.out.println("Drive");
       if (this.roll >= -2.74 + this.rollMargin){
-        System.out.println("Backward");
         drive.autoRobotCentricDrive(new Vector(-speed, 0), 0);
       } else if (this.roll <= -2.74 - this.rollMargin){
-        System.out.println("Forward");
         drive.autoRobotCentricDrive(new Vector(speed, 0), 0);
       } else {
         drive.autoRobotCentricDrive(new Vector(0, 0), 0);
@@ -64,7 +64,7 @@ public class AutoBalance extends CommandBase {
   public boolean isFinished() {
     if (Math.abs(this.rollDif) < 0.25 && Math.abs(this.roll + 2.74) < this.rollMargin){
       return true;
-    } else if (drive.getCurrentTime() > 14.9 && drive.getCurrentTime() < 17) {
+    } else if (drive.getCurrentTime() > 14.9 && drive.getCurrentTime() < 25) {
       return true;
     } else {
       return false;

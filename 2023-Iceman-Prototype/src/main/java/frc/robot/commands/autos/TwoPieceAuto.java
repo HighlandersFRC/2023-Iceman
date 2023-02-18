@@ -88,36 +88,22 @@ public class TwoPieceAuto extends SequentialCommandGroup {
     addRequirements(drive, armExtension, armRotation, wrist);
     addCommands(
       new SetArmRotationPosition(armRotation, 131),
-      // new SetArmExtensionPosition(armExtension, armRotation, 21),
-      new WaitCommand(0.25),
-      // new RunIntake(wrist, -1, 0.5),
-      // new SetArmExtensionPosition(armExtension, armRotation, 1),
+      new WaitCommand(0.5),
       new ParallelDeadlineGroup(
         new AutonomousFollower(drive, pathJSON, false),
-        new SequentialCommandGroup(
-          new WaitCommand(1.5),
-          new ParallelCommandGroup(
-            new SetBackLimelightPipeline(peripherals, 2),
-            new SetArmRotationPosition(armRotation, 269)
-          )//,
-          // new RunIntake(wrist, 1, 4)
-        )
+        new SetArmRotationPosition(armRotation, 269),
+        new SetBackLimelightPipeline(peripherals, 2)
       ),
       new ParallelDeadlineGroup(
-            new MoveToPieceBackwards(drive, peripherals, lights),
-            new SetArmRotationPosition(armRotation, 269)//,
-            // new RunIntake(wrist, 1, 5)
+        new MoveToPieceBackwards(drive, peripherals, lights),
+        new SetArmRotationPosition(armRotation, 269)
       ),
+      new WaitCommand(0.25),
       new ParallelDeadlineGroup(
-        new WaitCommand(0.25)
-        // new SetLimelightPipeline(peripherals, 0)
-      ),
-      new ParallelCommandGroup(
-        // new RunIntake(wrist, -0.1, 4),
         new AutonomousFollower(drive, pathJSON2, false),
         new SequentialCommandGroup(
           new SetArmRotationPosition(armRotation, 180),
-          new WaitCommand(2.5),
+          new WaitCommand(1),
           new ParallelCommandGroup(
             new SetFrontLimelightPipeline(peripherals, 1),
             new SetArmRotationPosition(armRotation, 131)
@@ -125,21 +111,18 @@ public class TwoPieceAuto extends SequentialCommandGroup {
         )
       ),
       new VisionAlignment(drive, peripherals, lights),
-      // new SetArmExtensionPosition(armExtension, armRotation, 8),
       new ParallelDeadlineGroup(
         new WaitCommand(0.25),
         new SetFrontLimelightPipeline(peripherals, 0)
       ),
-      // new RunIntake(wrist, -1, 0.5),
-      // new SetArmExtensionPosition(armExtension, armRotation, 1),
-      new ParallelCommandGroup(
+      new ParallelDeadlineGroup(
         new AutonomousFollower(drive, pathJSON3, false),
         new SequentialCommandGroup(
-          new WaitCommand(1),
+          new WaitCommand(0.9),
           new SetArmRotationPosition(armRotation, 240)
         )
       ),
-      new AutoBalance(drive, 1.35)
+      new AutoBalance(drive, 1.1)
     );
   }
 }
