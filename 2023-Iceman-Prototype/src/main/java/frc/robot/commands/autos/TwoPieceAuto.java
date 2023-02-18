@@ -86,7 +86,7 @@ public class TwoPieceAuto extends SequentialCommandGroup {
 
     addRequirements(drive, armExtension, armRotation, wrist);
     addCommands(
-      new SetArmRotationPosition(armRotation, wrist, 131, 225),
+      new SetArmRotationPosition(armRotation, 131),
       new SetArmExtensionPosition(armExtension, armRotation, 21),
       new WaitCommand(0.25),
       // new RunIntake(wrist, -1, 0.5),
@@ -97,14 +97,14 @@ public class TwoPieceAuto extends SequentialCommandGroup {
           new WaitCommand(1.5),
           new ParallelCommandGroup(
             new SetLimelightPipeline(peripherals, 2),
-            new SetArmRotationPosition(armRotation, wrist, 91, 90)
+            new SetArmRotationPosition(armRotation, 91)
           )//,
           // new RunIntake(wrist, 1, 4)
         )
       ),
       new ParallelDeadlineGroup(
             new MoveToPiece(drive, peripherals, lights),
-            new SetArmRotationPosition(armRotation, wrist, 91, 90)//,
+            new SetArmRotationPosition(armRotation, 91)//,
             // new RunIntake(wrist, 1, 5)
       ),
       new ParallelDeadlineGroup(
@@ -115,11 +115,11 @@ public class TwoPieceAuto extends SequentialCommandGroup {
         // new RunIntake(wrist, -0.1, 4),
         new AutonomousFollower(drive, pathJSON2, false),
         new SequentialCommandGroup(
-          new SetArmRotationPosition(armRotation, wrist, 180, 180),
+          new SetArmRotationPosition(armRotation, 180),
           new WaitCommand(2.5),
           new ParallelCommandGroup(
             new SetLimelightPipeline(peripherals, 1),
-            new SetArmRotationPosition(armRotation, wrist, 131, 225)
+            new SetArmRotationPosition(armRotation, 131)
           )
         )
       ),
@@ -132,7 +132,7 @@ public class TwoPieceAuto extends SequentialCommandGroup {
         new AutonomousFollower(drive, pathJSON3, false),
         new SequentialCommandGroup(
           new WaitCommand(1),
-          new SetArmRotationPosition(armRotation, wrist, 240, 180)
+          new SetArmRotationPosition(armRotation, 240)
         )
       ),
       new AutoBalance(drive, 1.35)

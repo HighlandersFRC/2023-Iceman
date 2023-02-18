@@ -175,9 +175,9 @@ public class Robot extends TimedRobot {
     OI.operatorA.whenPressed(new SetArmExtensionPosition(armExtension, armRotation, 1));
     OI.operatorB.whileHeld(new SetArmExtensionPosition(armExtension, armRotation, 20));
     OI.operatorX.whileHeld(new SetArmExtensionPosition(armExtension, armRotation, 35));
-    OI.operatorY.whileHeld(new SetArmRotationPosition(armRotation, wrist, 89, 275));
-    OI.operatorLB.whileHeld(new SetArmRotationPosition(armRotation, wrist, 95, 275));
-    OI.operatorRB.whileHeld(new SetArmRotationPosition(armRotation, wrist, 125, 275));
+    OI.operatorY.whileHeld(new SetArmRotationPosition(armRotation, 89));
+    OI.operatorLB.whileHeld(new SetArmRotationPosition(armRotation, 95));
+    OI.operatorRB.whileHeld(new SetArmRotationPosition(armRotation, 125));
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

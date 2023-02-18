@@ -13,15 +13,11 @@ public class SetArmRotationPosition extends CommandBase {
   /** Creates a new SetArmRotationPosition. */
   private ArmRotation arm;
   private double position;
-  private Wrist wrist;
-  private double wristRotation;
 
-  public SetArmRotationPosition(ArmRotation arm, Wrist wrist, double Position, double wristRotation) {
+  public SetArmRotationPosition(ArmRotation arm, double Position) {
     this.arm = arm;
-    this.wrist = wrist;
     this.position = Position;
-    this.wristRotation = wristRotation;
-    addRequirements(this.arm, this.wrist);
+    addRequirements(this.arm);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -29,7 +25,6 @@ public class SetArmRotationPosition extends CommandBase {
   @Override
   public void initialize() {
     arm.setRotationPosition(position);
-    wrist.setWristRotationPosition(wristRotation);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
