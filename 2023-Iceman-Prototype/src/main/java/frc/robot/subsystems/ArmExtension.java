@@ -43,7 +43,7 @@ public class ArmExtension extends SubsystemBase {
     extensionMotor.setSelectedSensorPosition(0);
 
     extensionMotor.configPeakOutputForward(0.35);
-    extensionMotor.configPeakOutputReverse(-0.35);
+    extensionMotor.configPeakOutputReverse(-0.1);
 
     extensionMotor.config_kP(0, 0.26);
     extensionMotor.config_kI(0, 0.0005);

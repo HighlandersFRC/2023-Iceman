@@ -27,7 +27,7 @@ import frc.robot.commands.ExtendArm;
 import frc.robot.commands.MoveToPiece;
 import frc.robot.commands.MoveWrist;
 import frc.robot.commands.RotateArm;
-import frc.robot.commands.RunWrist;
+import frc.robot.commands.RunIntake;
 import frc.robot.commands.SetArmExtensionPosition;
 import frc.robot.commands.SetArmRotationPosition;
 import frc.robot.commands.VisionAlignment;
@@ -35,6 +35,7 @@ import frc.robot.commands.ZeroNavxMidMatch;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmRotation;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Peripherals;
 import frc.robot.subsystems.Wrist;
@@ -57,6 +58,7 @@ public class Robot extends TimedRobot {
   private ArmExtension armExtension = new ArmExtension();
   private ArmRotation armRotation = new ArmRotation(armExtension);
   private Wrist wrist = new Wrist();
+  private Intake intake = new Intake();
 
   private UsbCamera frontDriverCam;
   private UsbCamera backDriverCam;
@@ -77,10 +79,12 @@ public class Robot extends TimedRobot {
     armExtension.init();
     armRotation.init();
     wrist.init();
+    intake.init();
   }  
 
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putNumber("WRIST POSITION", wrist.getWristRotationPosition());
     CommandScheduler.getInstance().run();
 
     SmartDashboard.putBoolean("IS CLEAR SIDe", OI.isClearSideAuto());
@@ -163,17 +167,20 @@ public class Robot extends TimedRobot {
     // OI.driverX.onTrue(new AutoPlacementCone(drive, peripherals, lights, -1));
     // OI.driverB.onTrue(new AutoPlacementCone(drive, peripherals, lights, 1));
 
-    OI.driverA.whileHeld(new RunWrist(wrist, -1, -1));
-    OI.driverY.whileHeld(new RunWrist(wrist, 1, -1));
+    // OI.driverA.whileHeld(new MoveWrist(wrist, 0.5));
+    // OI.driverY.whileHeld(new MoveWrist(wrist, -0.5));
 
-    OI.driverX.whileActiveOnce(new MoveToPiece(drive, peripherals, lights));
+    OI.driverA.whileHeld(new RunIntake(intake, -1, -1));
+    OI.driverY.whileHeld(new RunIntake(intake, 1, -1));
 
-    OI.operatorA.whenPressed(new SetArmExtensionPosition(armExtension, 1));
-    OI.operatorB.whileHeld(new SetArmExtensionPosition(armExtension, 20));
-    OI.operatorX.whileHeld(new SetArmExtensionPosition(armExtension, 35));
-    OI.operatorY.whenPressed(new SetArmRotationPosition(armRotation, 180));
-    OI.operatorLB.whileHeld(new SetArmRotationPosition(armRotation, 90));
-    OI.operatorRB.whileHeld(new SetArmRotationPosition(armRotation, 125));
+    // OI.driverX.whileActiveOnce(new MoveToPiece(drive, peripherals, lights));
+
+    OI.operatorA.whenPressed(new SetArmExtensionPosition(armExtension, armRotation, 1));
+    OI.operatorB.whileHeld(new SetArmExtensionPosition(armExtension, armRotation, 20));
+    OI.operatorX.whileHeld(new SetArmExtensionPosition(armExtension, armRotation, 35));
+    OI.operatorY.whileHeld(new SetArmRotationPosition(armRotation, wrist, 89, 275));
+    OI.operatorLB.whileHeld(new SetArmRotationPosition(armRotation, wrist, 95, 275));
+    OI.operatorRB.whileHeld(new SetArmRotationPosition(armRotation, wrist, 125, 275));
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

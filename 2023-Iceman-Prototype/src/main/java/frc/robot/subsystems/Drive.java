@@ -666,21 +666,14 @@ public class Drive extends SubsystemBase {
         useCameraInOdometry = false;
         updateOdometryFusedArray();
         double[] firstPoint = new double[] {0, getFusedOdometryX(), getFusedOdometryY(), getFusedOdometryTheta(), 0, 0, 0, 0, 0, 0};
-        // double[] firstPoint = new double[] {0, 14.3, 2.8, Math.toRadians(-180), 0, 0, 0, 0, 0, 0};
+        if(getFieldSide().equals("blue")) {
+            firstPoint[1] = Constants.FIELD_LENGTH - getFusedOdometryX();
+            firstPoint[3] = getFusedOdometryTheta() - Math.PI;
+        }
+
         double robotX = getFusedOdometryX();
         double robotY = getFusedOdometryY();
         double robotAngle = getFusedOdometryTheta();
-
-        // System.out.println(robotAngle);
-
-        // double placementAngle = Math.toRadians(-180);
-
-        // if(placementAngle - robotAngle >= Math.PI) {
-        //     placementAngle = placementAngle - (2 * Math.PI);
-        // }
-        // else if(placementAngle - robotAngle <= -Math.PI){
-        //     placementAngle = placementAngle + (2 * Math.PI);
-        // }
 
         double[] midPoint;
         double[] placementPoint;
@@ -697,17 +690,9 @@ public class Drive extends SubsystemBase {
         SmartDashboard.putNumber("NavxAngle", getFusedOdometryTheta());
         SmartDashboard.putNumber("PathAngle", pathAngle);
 
-        if (fieldSide == "red"){
-            midPoint = new double[] {1.5, Constants.PLACEMENT_PATH_MIDPOINT_X_RED, Constants.PLACEMENT_PATH_MIDPOINT_Y_RED[placementLocation], pathAngle, (Constants.PLACEMENT_LOCATION_X_RED - getFusedOdometryX())/3, (Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation] - getFusedOdometryY())/3, 0, 0, 0, 0};
-            placementPoint = new double[] {3, Constants.PLACEMENT_LOCATION_X_RED, Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation], pathAngle, 0, 0, 0, 0, 0, 0};
-            // midPoint = new double[] {1.5, robotX + 1.0, robotY, 0, 0, 0, 0, 0, 0, 0};
-            // placementPoint = new double[] {3.0, robotX + 1.0, robotY, 0, 0, 0, 0, 0, 0, 0};
-        } else {
-            midPoint = new double[] {};
-            placementPoint = new double[] {};
-        }
-        // System.out.print("Placement: " + Arrays.toString(placementPoint));
-
+        midPoint = new double[] {1.5, Constants.PLACEMENT_PATH_MIDPOINT_X_RED, Constants.PLACEMENT_PATH_MIDPOINT_Y_RED[placementLocation], pathAngle, (Constants.PLACEMENT_LOCATION_X_RED - getFusedOdometryX())/3, (Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation] - getFusedOdometryY())/3, 0, 0, 0, 0};
+        placementPoint = new double[] {3, Constants.PLACEMENT_LOCATION_X_RED, Constants.PLACEMENT_LOCATIONS_Y_RED[placementLocation], pathAngle, 0, 0, 0, 0, 0, 0};
+        
         double[] currentPoint;
         double[] nextPoint;
 

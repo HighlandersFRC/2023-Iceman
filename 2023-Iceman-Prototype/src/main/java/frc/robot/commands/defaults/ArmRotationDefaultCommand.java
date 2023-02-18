@@ -4,6 +4,7 @@
 
 package frc.robot.commands.defaults;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OI;
 import frc.robot.subsystems.ArmExtension;
@@ -13,6 +14,7 @@ public class ArmRotationDefaultCommand extends CommandBase {
   /** Creates a new ArmDefaultCommand. */
   private ArmRotation arm;
   private ArmExtension armExtension;
+  double position = 0;
   public ArmRotationDefaultCommand(ArmRotation arm, ArmExtension armExtension) {
     this.arm = arm;
     this.armExtension = armExtension;
@@ -22,14 +24,17 @@ public class ArmRotationDefaultCommand extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    SmartDashboard.putNumber("SD Rotation", 180);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if((OI.operatorController.getRawAxis(4))/4 < 0.0125) {
       if(armExtension.getExtensionPosition() < 5) {
-        arm.setRotationPosition(180);
+        position = SmartDashboard.getNumber("SD Rotation", 180);
+        arm.setRotationPosition(position);
       }
     }
     else {

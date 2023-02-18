@@ -7,14 +7,17 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.ArmRotation;
 
 public class SetArmExtensionPosition extends CommandBase {
   /** Creates a new SetArmExtensionPosition. */
   private ArmExtension arm;
+  private ArmRotation armRotation;
   private double position;
 
-  public SetArmExtensionPosition(ArmExtension arm, double Position) {
+  public SetArmExtensionPosition(ArmExtension arm, ArmRotation armRotation, double Position) {
     this.arm = arm;
+    this.armRotation = armRotation;
     this.position = Position;
     addRequirements(this.arm);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -23,12 +26,17 @@ public class SetArmExtensionPosition extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    arm.setExtensionPosition(position);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(armRotation.getRotationPosition() < 100 || armRotation.getRotationPosition() > 260) {
+      arm.setExtensionPosition(0);
+    }
+    else {
+      arm.setExtensionPosition(position);
+    }
     SmartDashboard.putNumber("tics", arm.getExtensionRawPosition());
   }
 

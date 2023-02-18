@@ -9,49 +9,56 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.EncoderType;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
+import com.revrobotics.SparkMaxAnalogSensor;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxAnalogSensor.Mode;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.defaults.WristDefaultCommand;
 
 public class Wrist extends SubsystemBase {
-  /** Creates a new Wrist. */
 
-  // private final CANSparkMax grabberMotor = new CANSparkMax(62, MotorType.kBrushless);
-  // private final CANSparkMax rightPinchMotor = new CANSparkMax(25, MotorType.kBrushless);
-  // private final CANSparkMax leftPinchMotor = new CANSparkMax(26, MotorType.kBrushless);
-  private final WPI_TalonFX grabberMotor = new WPI_TalonFX(15);
-  // private final CANSparkMax grabberMotor = new CANSparkMax(14, MotorType.kBrushless);
+  private final CANSparkMax rotationMotor = new CANSparkMax(14, MotorType.kBrushless);
 
-  // private final TalonFX wristMotor = new TalonFX(15);
+  private final SparkMaxAnalogSensor rotationAbsoluteEncoder = rotationMotor.getAnalog(SparkMaxAnalogSensor.Mode.kAbsolute);
+
+  private final double ABSOLUTE_ENCODER_ROTATION_MAX_VOLTAGE = 3.3;
+  private final SparkMaxPIDController rotationPidController = rotationMotor.getPIDController();
+
+  private double rotationSetPoint = 180;
 
   public Wrist() {}
 
   public void init() {
-    grabberMotor.configFactoryDefault();
-    grabberMotor.setNeutralMode(NeutralMode.Brake);
-    grabberMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20.0, 20.0, 0.001));
+    rotationMotor.setSmartCurrentLimit(40, 25);
+    rotationPidController.setFeedbackDevice(rotationAbsoluteEncoder);
+    rotationPidController.setP(0.5);
+    rotationPidController.setI(0.00005);
+    rotationPidController.setD(0);
+    rotationPidController.setOutputRange(-1, 1);
+
     setDefaultCommand(new WristDefaultCommand(this));
   }
 
-  public double getGrabberMotorCurrent() {
-    return grabberMotor.getStatorCurrent();
+  public void setRotationMotorPercent(double percent) {
+    rotationMotor.set(percent);
   }
 
-  public void setWristMotorPercent(double percent) {
-    // wristMotor.set(ControlMode.PercentOutput, percent);
+  public double getWristRotationPosition() {
+    return 360 * (rotationAbsoluteEncoder.getPosition())/ABSOLUTE_ENCODER_ROTATION_MAX_VOLTAGE;
   }
 
-  public void setGrabberMotorPercent(double percent) {
-    if (grabberMotor.getStatorCurrent() > 20.0){
-      grabberMotor.set(ControlMode.PercentOutput, 0.05);
-    } else {
-      grabberMotor.set(ControlMode.PercentOutput, percent);
-    }
-    // rightPinchMotor.set(percent);
-    // leftPinchMotor.set(-percent);
+  public void setWristRotationPosition(double position) {
+    position = (position * ABSOLUTE_ENCODER_ROTATION_MAX_VOLTAGE)/360;
+    rotationPidController.setReference(position, ControlType.kPosition);
   }
 
   @Override

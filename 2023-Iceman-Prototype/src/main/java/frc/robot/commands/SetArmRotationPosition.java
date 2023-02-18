@@ -7,16 +7,21 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmRotation;
+import frc.robot.subsystems.Wrist;
 
 public class SetArmRotationPosition extends CommandBase {
   /** Creates a new SetArmRotationPosition. */
   private ArmRotation arm;
   private double position;
+  private Wrist wrist;
+  private double wristRotation;
 
-  public SetArmRotationPosition(ArmRotation arm, double Position) {
+  public SetArmRotationPosition(ArmRotation arm, Wrist wrist, double Position, double wristRotation) {
     this.arm = arm;
+    this.wrist = wrist;
     this.position = Position;
-    addRequirements(this.arm);
+    this.wristRotation = wristRotation;
+    addRequirements(this.arm, this.wrist);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -24,6 +29,7 @@ public class SetArmRotationPosition extends CommandBase {
   @Override
   public void initialize() {
     arm.setRotationPosition(position);
+    wrist.setWristRotationPosition(wristRotation);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -4,6 +4,7 @@
 
 package frc.robot.commands.defaults;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OI;
 import frc.robot.subsystems.ArmExtension;
@@ -12,6 +13,7 @@ import frc.robot.subsystems.ArmRotation;
 public class ArmExtensionDefaultCommand extends CommandBase {
   /** Creates a new ArmExtensionDefaultCommand. */
   private ArmExtension arm;
+  double position;
   public ArmExtensionDefaultCommand(ArmExtension arm) {
     this.arm = arm;
     addRequirements(this.arm);
@@ -20,7 +22,9 @@ public class ArmExtensionDefaultCommand extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    SmartDashboard.putNumber("SD Extension", 0);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -28,7 +32,8 @@ public class ArmExtensionDefaultCommand extends CommandBase {
     if (arm.getExtensionLimitSwitch()) {
       arm.setExtensionEncoderPosition(0);
     }
-    arm.setExtensionPosition(0);
+    position = SmartDashboard.getNumber("SD Extension", 0);
+    arm.setExtensionPosition(position);
   }
 
   // Called once the command ends or is interrupted.

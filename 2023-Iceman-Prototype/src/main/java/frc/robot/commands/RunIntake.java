@@ -6,19 +6,19 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.Intake;
 
-public class RunWrist extends CommandBase {
+public class RunIntake extends CommandBase {
   /** Creates a new RunIntake. */
-  private Wrist Wrist;
+  private Intake Intake;
   private double percent;
   private double time;
   private double initTime;
-  public RunWrist(Wrist Wrist, double percent, double time) {
-    this.Wrist = Wrist;
+  public RunIntake(Intake Intake, double percent, double time) {
+    this.Intake = Intake;
     this.percent = percent;
     this.time = time;
-    addRequirements(this.Wrist);
+    addRequirements(this.Intake);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -31,13 +31,13 @@ public class RunWrist extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // if(Math.abs(Wrist.getGrabberMotorCurrent()) < 40) {
-    //   this.Wrist.setGrabberMotorPercent(percent);
+    // if(Math.abs(Intake.getGrabberMotorCurrent()) < 40) {
+    //   this.Intake.setGrabberMotorPercent(percent);
     // }
     // else {
-    //   Wrist.setGrabberMotorPercent(0);
+    //   Intake.setGrabberMotorPercent(0);
     // }
-    Wrist.setGrabberMotorPercent(percent);
+    Intake.setGrabberMotorPercent(percent);
   }
 
   // Called once the command ends or is interrupted.
