@@ -133,11 +133,11 @@ public class Robot extends TimedRobot {
 
     if(OI.isRedSide()) {
       drive.setFieldSide("red");
-      // System.out.println("GOT RED");
+      lights.setFieldSide("red");
     }
     else if(OI.isBlueSide()) {
       drive.setFieldSide("blue");
-      // System.out.println("GOT BLUE");
+      lights.setFieldSide("blue");
     }
     
     drive.autoInit(pathJSON);

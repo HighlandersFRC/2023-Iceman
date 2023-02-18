@@ -11,33 +11,45 @@ import frc.robot.subsystems.ArmRotation;
 
 public class SetArmExtensionPosition extends CommandBase {
   /** Creates a new SetArmExtensionPosition. */
-  private ArmExtension arm;
+  private ArmExtension armExtension;
   private ArmRotation armRotation;
   private double position;
+  private boolean clearLights = false;
 
-  public SetArmExtensionPosition(ArmExtension arm, ArmRotation armRotation, double Position) {
-    this.arm = arm;
+  public SetArmExtensionPosition(ArmExtension armExtension, ArmRotation armRotation, double position) {
+    this.armExtension = armExtension;
     this.armRotation = armRotation;
-    this.position = Position;
-    addRequirements(this.arm);
+    this.position = position;
+    addRequirements(this.armExtension);
     // Use addRequirements() here to declare subsystem dependencies.
+  }
+
+  public SetArmExtensionPosition(ArmExtension armExtension, ArmRotation armRotation, double position, boolean clearLights){
+    this.armExtension = armExtension;
+    this.armRotation = armRotation;
+    this.position = position;
+    this.clearLights = clearLights;
+    addRequirements(this.armExtension);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    if (this.clearLights){
+      
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if(armRotation.getRotationPosition() < 100 || armRotation.getRotationPosition() > 260) {
-      arm.setExtensionPosition(0);
+      armExtension.setExtensionPosition(0);
     }
     else {
-      arm.setExtensionPosition(position);
+      armExtension.setExtensionPosition(position);
     }
-    SmartDashboard.putNumber("tics", arm.getExtensionRawPosition());
+    SmartDashboard.putNumber("tics", armExtension.getExtensionRawPosition());
   }
 
   // Called once the command ends or is interrupted.
@@ -47,7 +59,7 @@ public class SetArmExtensionPosition extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Math.abs(arm.getExtensionPosition() - position) < 1) {
+    if(Math.abs(armExtension.getExtensionPosition() - position) < 1) {
       return true;
     }
     return false;

@@ -52,7 +52,7 @@ public class VisionAlignment extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    peripherals.setRetroreflectivePipeline();
+    peripherals.setFrontPipeline(1);
     pid = new PID(kP, kI, kD);
     pid.setSetPoint(0);
     pid.setMinOutput(-1);
@@ -63,40 +63,28 @@ public class VisionAlignment extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double currentAngle = peripherals.getLimelightAngleToTarget();
+    double currentAngle = peripherals.getFrontLimelightAngleToTarget();
+    if (currentAngle == 0){
+      lights.setMode(LEDMode.GOLDSTROBE);
+    } else {
+      lights.setMode(LEDMode.GREEN);
+    }
     pid.updatePID(currentAngle);
     double result = pid.getResult();
     SmartDashboard.putNumber("Angle Settled", angleSettled);
     drive.autoRobotCentricDrive(new Vector(0, result), 0);
-
-
-    // if(Math.abs(target - currentAngle) <= 1) {
-    //   angleSettled++;
-    // }
-    // else {
-    //   angleSettled = 0;
-    // }
-
-    // if (peripherals.cameraYawToTarget()!= (0)/180) {
-    //   lights.setMode(LEDMode.GREEN);
-    // } else {
-    //   lights.setMode(LEDMode.REDFLASH);
-    // }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     drive.autoRobotCentricDrive(new Vector(0, 0), 0);
-    // peripherals.setAprilTagPipeline();
-    // System.out.println("ENDING VISION ALIGNMENT");
-    // System.out.println(peripherals.getLimelightAngleToTarget());
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(peripherals.getBackLimelightPipeline() == 1 && peripherals.getFrontLimelightPipeline() == 1 && Math.abs(peripherals.getLimelightAngleToTarget()) < Math.toRadians(2)) {
+    if(peripherals.getFrontLimelightPipeline() == 1 && Math.abs(peripherals.getFrontLimelightAngleToTarget()) < Math.toRadians(2)) {
       return true;
     }
     return false;
