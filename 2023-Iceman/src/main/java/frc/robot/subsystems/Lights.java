@@ -5,38 +5,48 @@ import frc.robot.commands.defaults.LightsDefault;
 import com.fasterxml.jackson.databind.deser.impl.CreatorCandidate;
 
 import edu.wpi.first.wpilibj.PWM;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 public class Lights extends SubsystemBase {
-  private PWM ledPWM;
-  private PWM ledPWM2;
-  private double currentLedMode;
-  private int counter;
+  private Spark leds = new Spark(0);
+  private String fieldSide = "red";
+  private double currentLedMode = LEDMode.RED.value;
+  private String lightMode = "side";
 
   public Lights() {
-    ledPWM = new PWM(1);
-    ledPWM2 = new PWM(0);
-    ledPWM.setBounds(2.0, 1.6, 1.5, 1.4, 1.0);
-    currentLedMode = LEDMode.REDONBLUE.value;
-    counter = 0;
   }
 
-  public void switchAmericaLights(){
-    if (counter % 3 == 0){
-      currentLedMode = LEDMode.RED.value;
-    } else if (counter % 3 == 1){
-      currentLedMode = LEDMode.WHITE.value;
-    } else {
-      currentLedMode = LEDMode.BLUE.value;
-    }
-    counter ++;
+  public void setFieldSide(String side){
+    this.fieldSide = side;
+    setCorrectMode();
   }
+
+  public void setLightMode(String mode){
+    lightMode = mode;
+    setCorrectMode();
+  }
+
+  private void setCorrectMode(){
+    if (this.lightMode == "side"){
+      if (this.fieldSide == "red"){
+        setMode(LEDMode.RED);
+      } else if (this.fieldSide == "blue"){
+        setMode(LEDMode.BLUE);
+      }
+    } else if (this.lightMode == "cube"){
+      setMode(LEDMode.VIOLET);
+    } else if (this.lightMode == "cone"){
+      setMode(LEDMode.YELLOW);
+    }
+  }
+
   // setMode method uses constants from the LEDMode enum
   public void setMode(LEDMode mode){
     currentLedMode = mode.value;
   }
   
   public enum LEDMode{
-    BLUE(0.87), RED(0.61), GREEN(0.75), YELLOW(0.67), RAINBOW(-0.97), OFF(0.99), ORANGE(0.65), REDFLASH(-0.11), VIOLET(0.91), REDONBLUE(0.53), BLUEONRED(0.41), WHITE(0.93);
+    BLUE(0.87), RED(0.61), GREEN(0.75), YELLOW(0.67), RAINBOW(-0.97), OFF(0.99), ORANGE(0.65), REDFLASH(-0.11), VIOLET(0.91), REDONBLUE(0.53), BLUEONRED(0.41), WHITE(0.93), GOLDSTROBE(-0.07);
 
     public final double value;
     private LEDMode(double value){
@@ -45,8 +55,7 @@ public class Lights extends SubsystemBase {
   }
 
   public void periodic() {
-   ledPWM.setPosition(currentLedMode);
-   ledPWM2.setPosition(currentLedMode);
+    leds.set(currentLedMode);
   }
   
   public void init() {

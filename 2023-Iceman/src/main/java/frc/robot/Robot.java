@@ -30,6 +30,7 @@ import frc.robot.commands.RotateArm;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.SetArmExtensionPosition;
 import frc.robot.commands.SetArmRotationPosition;
+import frc.robot.commands.SetLightMode;
 import frc.robot.commands.VisionAlignment;
 import frc.robot.commands.ZeroNavxMidMatch;
 import frc.robot.subsystems.ArmExtension;
@@ -129,11 +130,11 @@ public class Robot extends TimedRobot {
 
     if(OI.isRedSide()) {
       drive.setFieldSide("red");
-      // System.out.println("GOT RED");
+      lights.setFieldSide("red");
     }
     else if(OI.isBlueSide()) {
       drive.setFieldSide("blue");
-      // System.out.println("GOT BLUE");
+      drive.setFieldSide("blue");
     }
     
     drive.autoInit(pathJSON);
@@ -169,14 +170,17 @@ public class Robot extends TimedRobot {
     // OI.driverX.whileActiveOnce(new MoveToPiece(drive, peripherals, lights));
 
     // OI.operatorA.whenPressed(new SetArmExtensionPosition(armExtension, armRotation, 1));
-    OI.operatorB.whileHeld(new SetArmExtensionPosition(armExtension, armRotation, 20));
-    OI.operatorX.whileHeld(new SetArmExtensionPosition(armExtension, armRotation, 35));
+    OI.operatorB.whileHeld(new SetArmExtensionPosition(lights, armExtension, armRotation, 20));
+    OI.operatorX.whileHeld(new SetArmExtensionPosition(lights, armExtension, armRotation, 35));
     OI.operatorY.whileHeld(new SetArmRotationPosition(armRotation, 89));
     OI.operatorLB.whileHeld(new SetArmRotationPosition(armRotation, 95));
     OI.operatorRB.whileHeld(new SetArmRotationPosition(armRotation, 125));
 
     // OI.operatorA.whileHeld(new ExtendArm(armExtension, -0.35));
     // OI.operatorY.whileHeld(new ExtendArm(armExtension, 0.35));
+
+    OI.operatorViewButton.whenPressed(new SetLightMode(lights, "cube"));
+    OI.operatorMenuButton.whenPressed(new SetLightMode(lights, "cone"));
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
