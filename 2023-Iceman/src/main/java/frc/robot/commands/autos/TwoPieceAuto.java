@@ -92,10 +92,10 @@ public class TwoPieceAuto extends SequentialCommandGroup {
       new ParallelCommandGroup(
         new RotateWrist(wrist, 127),
         new SetArmRotationPosition(armRotation, 139),
-        new SetArmExtensionPosition(armExtension, armRotation, 37)
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 37)
       ),
       new WaitCommand(0.25),
-      new SetArmExtensionPosition(armExtension, armRotation, 2),
+      new SetArmExtensionPosition(lights, armExtension, armRotation, 2),
       new ParallelDeadlineGroup(
         new ParallelCommandGroup(
           new AutonomousFollower(drive, pathJSON, false),
@@ -123,14 +123,14 @@ public class TwoPieceAuto extends SequentialCommandGroup {
       new VisionAlignment(drive, peripherals, lights),
       new ParallelDeadlineGroup(
         new ParallelCommandGroup(
-          new SetArmExtensionPosition(armExtension, armRotation, 14),
+          new SetArmExtensionPosition(lights, armExtension, armRotation, 14),
           new SetArmRotationPosition(armRotation, 139),
           new RotateWrist(wrist, 123)
         ),
         new SetFrontLimelightPipeline(peripherals, 0)
       ),
       new WaitCommand(0.25),
-      new SetArmExtensionPosition(armExtension, armRotation, 2),
+      new SetArmExtensionPosition(lights, armExtension, armRotation, 2),
       new ParallelDeadlineGroup(
         new AutonomousFollower(drive, pathJSON3, false),
         new SequentialCommandGroup(

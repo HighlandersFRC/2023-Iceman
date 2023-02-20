@@ -32,6 +32,7 @@ import frc.robot.commands.RotateWrist;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.SetArmExtensionPosition;
 import frc.robot.commands.SetArmRotationPosition;
+import frc.robot.commands.SetLightMode;
 import frc.robot.commands.VisionAlignment;
 import frc.robot.commands.ZeroNavxMidMatch;
 import frc.robot.subsystems.ArmExtension;
@@ -134,11 +135,11 @@ public class Robot extends TimedRobot {
 
     if(OI.isRedSide()) {
       drive.setFieldSide("red");
-      // System.out.println("GOT RED");
+      lights.setFieldSide("red");
     }
     else if(OI.isBlueSide()) {
       drive.setFieldSide("blue");
-      // System.out.println("GOT BLUE");
+      drive.setFieldSide("blue");
     }
     
     drive.autoInit(pathJSON);
@@ -164,8 +165,8 @@ public class Robot extends TimedRobot {
     drive.teleopInit(); 
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 
-    OI.operatorA.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 221), new RotateWrist(wrist, -123), new SetArmExtensionPosition(armExtension, armRotation, 14)));
-    OI.operatorY.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 221), new RotateWrist(wrist, -127), new SetArmExtensionPosition(armExtension, armRotation, 37)));
+    OI.operatorA.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 221), new RotateWrist(wrist, -123), new SetArmExtensionPosition(lights, armExtension, armRotation, 14)));
+    OI.operatorY.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 221), new RotateWrist(wrist, -127), new SetArmExtensionPosition(lights, armExtension, armRotation, 37)));
 
 
     // OI.operatorB.whileHeld(new SetArmExtensionPosition(armExtension, armRotation, 14));
@@ -177,6 +178,9 @@ public class Robot extends TimedRobot {
 
     // OI.operatorRB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 291.5), new RotateWrist(wrist, 3)));
     // OI.operatorLB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 69.5), new RotateWrist(wrist, -3)));
+
+    OI.operatorViewButton.whenPressed(new SetLightMode(lights, "cube"));
+    OI.operatorMenuButton.whenPressed(new SetLightMode(lights, "cone"));
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

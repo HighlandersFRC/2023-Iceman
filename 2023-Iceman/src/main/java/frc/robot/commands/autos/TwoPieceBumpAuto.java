@@ -87,7 +87,46 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
 
     addRequirements(drive, armExtension, armRotation, wrist);
     addCommands(
-      
+      new SetArmRotationPosition(armRotation, 131),
+      new SetArmExtensionPosition(lights, armExtension, armRotation, 21),
+      new WaitCommand(0.25),
+      new SetArmExtensionPosition(lights, armExtension, armRotation, 2),
+      new ParallelDeadlineGroup(
+        new AutonomousFollower(drive, pathJSON, false),
+        new SetArmRotationPosition(armRotation, 269),
+        new SetBackLimelightPipeline(peripherals, 2)
+      ),
+      new ParallelDeadlineGroup(
+        new MoveToPieceBackwards(drive, peripherals, lights),
+        new SetArmRotationPosition(armRotation, 269)
+      ),
+      new WaitCommand(0.25),
+      new ParallelDeadlineGroup(
+        new AutonomousFollower(drive, pathJSON2, false),
+        new SequentialCommandGroup(
+          new SetArmRotationPosition(armRotation, 180),
+          new WaitCommand(2),
+          new ParallelCommandGroup(
+            new SetFrontLimelightPipeline(peripherals, 1),
+            new SetArmRotationPosition(armRotation, 131)
+          )
+        )
+      ),
+      new VisionAlignment(drive, peripherals, lights),
+      new ParallelDeadlineGroup(
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 8),
+        new SetFrontLimelightPipeline(peripherals, 0)
+      ),
+      new WaitCommand(0.25),
+      new SetArmExtensionPosition(lights, armExtension, armRotation, 2),
+      new ParallelDeadlineGroup(
+        new AutonomousFollower(drive, pathJSON3, false),
+        new SequentialCommandGroup(
+          new WaitCommand(0.9),
+          new SetArmRotationPosition(armRotation, 240)
+        )
+      ),
+      new AutoBalance(drive, 0.55)
     );
   }
 }

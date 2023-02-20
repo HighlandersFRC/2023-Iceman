@@ -66,6 +66,11 @@ public class MoveToPieceBackwards extends CommandBase {
   @Override
   public void execute() {
     double currentAngle = peripherals.getBackLimelightAngleToTarget();
+    if (currentAngle == 0){
+      lights.setMode(LEDMode.GOLDSTROBE);
+    } else {
+      lights.setMode(LEDMode.GREEN);
+    }
     pid.updatePID(currentAngle);
     double result = -pid.getResult();
     SmartDashboard.putNumber("Angle Settled", angleSettled);
