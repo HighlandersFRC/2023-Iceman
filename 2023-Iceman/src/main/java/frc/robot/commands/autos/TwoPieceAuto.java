@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
 import frc.robot.commands.MoveToPieceBackwards;
+import frc.robot.commands.RotateArm;
+import frc.robot.commands.RotateWrist;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.SetArmExtensionPosition;
 import frc.robot.commands.SetArmRotationPosition;
@@ -87,13 +89,19 @@ public class TwoPieceAuto extends SequentialCommandGroup {
 
     addRequirements(drive, armExtension, armRotation, wrist);
     addCommands(
-      new SetArmRotationPosition(armRotation, 131),
-      new SetArmExtensionPosition(armExtension, armRotation, 21),
+      new ParallelCommandGroup(
+        new RotateWrist(wrist, 127),
+        new SetArmRotationPosition(armRotation, 139),
+        new SetArmExtensionPosition(armExtension, armRotation, 37)
+      ),
       new WaitCommand(0.25),
       new SetArmExtensionPosition(armExtension, armRotation, 2),
       new ParallelDeadlineGroup(
-        new AutonomousFollower(drive, pathJSON, false),
-        new SetArmRotationPosition(armRotation, 269),
+        new ParallelCommandGroup(
+          new AutonomousFollower(drive, pathJSON, false),
+          new SetArmRotationPosition(armRotation, 270.5),
+          new RotateWrist(wrist, -63)
+        ),
         new SetBackLimelightPipeline(peripherals, 2)
       ),
       new ParallelDeadlineGroup(
@@ -114,7 +122,11 @@ public class TwoPieceAuto extends SequentialCommandGroup {
       ),
       new VisionAlignment(drive, peripherals, lights),
       new ParallelDeadlineGroup(
-        new SetArmExtensionPosition(armExtension, armRotation, 8),
+        new ParallelCommandGroup(
+          new SetArmExtensionPosition(armExtension, armRotation, 14),
+          new SetArmRotationPosition(armRotation, 139),
+          new RotateWrist(wrist, 123)
+        ),
         new SetFrontLimelightPipeline(peripherals, 0)
       ),
       new WaitCommand(0.25),

@@ -5,6 +5,7 @@
 package frc.robot.commands.defaults;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.OI;
 import frc.robot.subsystems.Intake;
 
 public class IntakeDefaultCommand extends CommandBase {
@@ -29,7 +30,17 @@ public class IntakeDefaultCommand extends CommandBase {
     // else {
     //   Intake.setGrabberMotorPercent(0);
     // }
-    Intake.setGrabberMotorPercent(0.1);
+    if(OI.driverController.getLeftTriggerAxis() > 0.5) {
+      Intake.setGrabberMotorPercent(1);
+      System.out.println("OUTTAKING");
+    }
+    else if(OI.driverController.getRightTriggerAxis() > 0.5) {
+      Intake.setGrabberMotorPercent(-1);
+      System.out.println("INTAKING");
+    }
+    else {
+      Intake.setGrabberMotorPercent(-0.1);
+    }
     // Intake.setIntakeRotationPosition(150);
   }
 

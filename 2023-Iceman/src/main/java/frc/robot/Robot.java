@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.AutoPlacementCone;
 import frc.robot.commands.AutoPlacementCube;
 import frc.robot.commands.AlignToConePlacement;
@@ -27,6 +28,7 @@ import frc.robot.commands.ExtendArm;
 import frc.robot.commands.MoveToPieceBackwards;
 import frc.robot.commands.MoveWrist;
 import frc.robot.commands.RotateArm;
+import frc.robot.commands.RotateWrist;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.SetArmExtensionPosition;
 import frc.robot.commands.SetArmRotationPosition;
@@ -91,6 +93,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("ARM LIMIT SWITCH", armExtension.getExtensionLimitSwitch());
 
     armRotation.postRotationValues();
+    // System.out.println(armRotation.getRotationPosition());
+    System.out.println((wrist.getWristRotationPosition()) - 180 + 13);
+    // SmartDashboard.putNumber("WRIST ROTATION", (wrist.getWristRotationPosition()) - 180 + 13);
   }
 
   @Override
@@ -159,24 +164,19 @@ public class Robot extends TimedRobot {
     drive.teleopInit(); 
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 
-    // OI.driverA.whileHeld(new AutoPlacementCube(drive, peripherals, lights, 0));
-    // OI.driverX.whileHeld(new AutoPlacementCone(drive, peripherals, lights, -1));
-    // OI.driverB.whileHeld(new AutoPlacementCone(drive, peripherals, lights, 1));
+    OI.operatorA.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 221), new RotateWrist(wrist, -123), new SetArmExtensionPosition(armExtension, armRotation, 14)));
+    OI.operatorY.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 221), new RotateWrist(wrist, -127), new SetArmExtensionPosition(armExtension, armRotation, 37)));
 
-    // OI.driverA.whileHeld(new RunIntake(intake, -1, -1));
-    // OI.driverY.whileHeld(new RunIntake(intake, 1, -1));
 
-    // OI.driverX.whileActiveOnce(new MoveToPiece(drive, peripherals, lights));
+    // OI.operatorB.whileHeld(new SetArmExtensionPosition(armExtension, armRotation, 14));
+    // OI.operatorX.whileHeld(new SetArmExtensionPosition(armExtension, armRotation, 30));
 
-    // OI.operatorA.whenPressed(new SetArmExtensionPosition(armExtension, armRotation, 1));
-    OI.operatorB.whileHeld(new SetArmExtensionPosition(armExtension, armRotation, 20));
-    OI.operatorX.whileHeld(new SetArmExtensionPosition(armExtension, armRotation, 35));
-    OI.operatorY.whileHeld(new SetArmRotationPosition(armRotation, 89));
-    OI.operatorLB.whileHeld(new SetArmRotationPosition(armRotation, 95));
-    OI.operatorRB.whileHeld(new SetArmRotationPosition(armRotation, 125));
+    // intake positions for upright cone
+    OI.operatorX.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 87.5), new RotateWrist(wrist, 61)));
+    OI.operatorB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 269.5), new RotateWrist(wrist, -63)));
 
-    // OI.operatorA.whileHeld(new ExtendArm(armExtension, -0.35));
-    // OI.operatorY.whileHeld(new ExtendArm(armExtension, 0.35));
+    // OI.operatorRB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 291.5), new RotateWrist(wrist, 3)));
+    // OI.operatorLB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 69.5), new RotateWrist(wrist, -3)));
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

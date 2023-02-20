@@ -30,7 +30,9 @@ public class WristDefaultCommand extends CommandBase {
     //   Wrist.setGrabberMotorPercent(0);
     // }
     // Wrist.setGrabberMotorPercent(0.1);
-    Wrist.setWristRotationPosition(150);
+    // System.out.println("adjflakdj");
+    Wrist.setWristRotationPosition(0);
+    // Wrist.setRotationMotorPercent(0);
   }
 
   // Called once the command ends or is interrupted.

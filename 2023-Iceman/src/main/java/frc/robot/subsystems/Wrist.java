@@ -15,7 +15,9 @@ import com.revrobotics.EncoderType;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxAnalogSensor;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAnalogSensor.Mode;
 
@@ -34,15 +36,22 @@ public class Wrist extends SubsystemBase {
   private final SparkMaxPIDController rotationPidController = rotationMotor.getPIDController();
 
   private double rotationSetPoint = 180;
+  
+  private double uprightOffset = -13;
 
   public Wrist() {}
 
   public void init() {
+    rotationMotor.restoreFactoryDefaults();
+    rotationMotor.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyClosed).enableLimitSwitch(false);
+    rotationMotor.getReverseLimitSwitch(LimitSwitchPolarity.kNormallyClosed).enableLimitSwitch(false);
     rotationMotor.setSmartCurrentLimit(40, 25);
+    // rotationMotor.setSoftLimit(SoftLimitDirection.kForward, 63);
+    // rotationMotor.setSoftLimit(SoftLimitDirection.kReverse, -63);
     rotationPidController.setFeedbackDevice(rotationAbsoluteEncoder);
-    rotationPidController.setP(0.5);
-    rotationPidController.setI(0.00005);
-    rotationPidController.setD(0);
+    rotationPidController.setP(1.45);
+    rotationPidController.setI(0.0001);
+    rotationPidController.setD(0.5);
     rotationPidController.setOutputRange(-1, 1);
 
     setDefaultCommand(new WristDefaultCommand(this));
@@ -52,13 +61,25 @@ public class Wrist extends SubsystemBase {
     rotationMotor.set(percent);
   }
 
+  public double getWristMotorPosition() {
+    return rotationMotor.getEncoder().getPosition();
+  }
+
   public double getWristRotationPosition() {
     return 360 * (rotationAbsoluteEncoder.getPosition())/ABSOLUTE_ENCODER_ROTATION_MAX_VOLTAGE;
   }
 
   public void setWristRotationPosition(double position) {
-    position = (position * ABSOLUTE_ENCODER_ROTATION_MAX_VOLTAGE)/360;
-    rotationPidController.setReference(position, ControlType.kPosition);
+    position = 180 + position;
+    // if(position >= (39 - uprightOffset) && position <= (317 - uprightOffset)) {
+      position = position + uprightOffset;
+      position = (position * ABSOLUTE_ENCODER_ROTATION_MAX_VOLTAGE)/360;
+      rotationPidController.setReference(position, ControlType.kPosition);
+    // }
+  }
+
+  public double getWristCurrent() {
+    return rotationMotor.getAppliedOutput();
   }
 
   @Override

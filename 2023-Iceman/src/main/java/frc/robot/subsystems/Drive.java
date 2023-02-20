@@ -545,7 +545,7 @@ public class Drive extends SubsystemBase {
 
         if(OI.driverController.getLeftBumper()) {
             // activate speedy spin
-            turnLimit = 1;
+            turnLimit = 0.75;
         }
         // else {
         //     turnLimit = 0.75;
