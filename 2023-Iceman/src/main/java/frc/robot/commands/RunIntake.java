@@ -37,7 +37,7 @@ public class RunIntake extends CommandBase {
     // else {
     //   Intake.setGrabberMotorPercent(0);
     // }
-    Intake.setGrabberMotorPercent(percent);
+    Intake.setGrabberMotorMaxPercent(percent);
   }
 
   // Called once the command ends or is interrupted.

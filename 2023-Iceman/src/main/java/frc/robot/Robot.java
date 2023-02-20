@@ -176,8 +176,11 @@ public class Robot extends TimedRobot {
     OI.operatorX.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 87.5), new RotateWrist(wrist, 61)));
     OI.operatorB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 269.5), new RotateWrist(wrist, -63)));
 
-    // OI.operatorRB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 291.5), new RotateWrist(wrist, 3)));
-    // OI.operatorLB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 69.5), new RotateWrist(wrist, -3)));
+    OI.operatorRB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 291.5), new RotateWrist(wrist, 3)));
+    OI.operatorLB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 69.5), new RotateWrist(wrist, -3)));
+
+    // OI.operatorA.whileHeld(new RunIntake(intake, 6, 1));
+    // OI.operatorY.whileHeld(new RunIntake(intake, -6, 1));
 
     OI.operatorViewButton.whenPressed(new SetLightMode(lights, "cube"));
     OI.operatorMenuButton.whenPressed(new SetLightMode(lights, "cone"));
