@@ -14,7 +14,7 @@ import frc.robot.subsystems.Lights.LEDMode;
 import frc.robot.tools.controlloops.PID;
 import frc.robot.tools.math.Vector;
 
-public class MoveToPieceBackwards extends CommandBase {
+public class MoveToPieceForwards extends CommandBase {
   /** Creates a new VisionAlignment. */
   private Drive drive;
   private Peripherals peripherals;
@@ -43,7 +43,7 @@ public class MoveToPieceBackwards extends CommandBase {
   private double target = 0;
 
   private double initTime = 0;
-  public MoveToPieceBackwards(Drive drive, Peripherals peripherals, Lights lights) {
+  public MoveToPieceForwards(Drive drive, Peripherals peripherals, Lights lights) {
     this.peripherals = peripherals;
     this.drive = drive;
     this.lights = lights;
@@ -65,7 +65,7 @@ public class MoveToPieceBackwards extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double currentAngle = peripherals.getBackLimelightAngleToTarget();
+    double currentAngle = peripherals.getFrontLimelightAngleToTarget();
     if (currentAngle == 0){
       lights.setMode(LEDMode.GOLDSTROBE);
     } else {
@@ -75,12 +75,12 @@ public class MoveToPieceBackwards extends CommandBase {
     double result = -pid.getResult();
     SmartDashboard.putNumber("Angle Settled", angleSettled);
 
-    if(peripherals.getFrontTargetArea() < 2.35) {
-      drive.autoRobotCentricDrive(new Vector(-2, 0), result * 2);
-    }
-    else {
-      drive.autoRobotCentricDrive(new Vector(-4, 0), 0);
-    }
+    // if(peripherals.getFrontTargetArea() < 2.5) {
+    drive.autoRobotCentricDrive(new Vector(1.75, 0), result);
+    // }
+    // else {
+      // drive.autoRobotCentricDrive(new Vector(3, 0), 0);
+    // }
 
     // if(Math.abs(target - currentAngle) <= 1) {
     //   angleSettled++;
@@ -100,15 +100,12 @@ public class MoveToPieceBackwards extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     drive.autoRobotCentricDrive(new Vector(0, 0), 0);
-    // peripherals.setAprilTagPipeline();
-    // System.out.println("ENDING VISION ALIGNMENT");
-    // System.out.println(peripherals.getLimelightAngleToTarget());
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Timer.getFPGATimestamp() - startTime > 0.75) {
+    if(Timer.getFPGATimestamp() - startTime > 0.95) {
       return true;
     }
     return false;

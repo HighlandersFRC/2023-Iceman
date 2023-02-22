@@ -43,7 +43,7 @@ public class ArmExtension extends SubsystemBase {
     extensionMotor.setSelectedSensorPosition(0);
 
     extensionMotor.configPeakOutputForward(0.5);
-    extensionMotor.configPeakOutputReverse(-0.2);
+    extensionMotor.configPeakOutputReverse(-0.5);
 
     extensionMotor.configOpenloopRamp(0.5);
 
@@ -59,6 +59,10 @@ public class ArmExtension extends SubsystemBase {
     extensionMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 40, 0));
     
     setDefaultCommand(new ArmExtensionDefaultCommand(this));
+  }
+
+  public void teleopInit() {
+    extensionMotor.configPeakOutputReverse(-0.2);
   }
 
   public double getExtensionPosition() {

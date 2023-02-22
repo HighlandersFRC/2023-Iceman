@@ -39,6 +39,15 @@ public class ArmRotationDefaultCommand extends CommandBase {
         // }
         // else {
         arm.setRotationPosition(180);
+        // if(OI.operatorController.getLeftTriggerAxis() > 0.25) {
+        //   arm.setRotationMotorPercent(OI.operatorController.getLeftTriggerAxis()/4);
+        // }
+        // if(OI.operatorController.getRightTriggerAxis() > 0.25) {
+        //   arm.setRotationMotorPercent(-OI.operatorController.getRightTriggerAxis()/4);
+        // }
+        // else {
+        //   arm.setRotationMotorPercent(0);
+        // }
         // }
       }
     // }

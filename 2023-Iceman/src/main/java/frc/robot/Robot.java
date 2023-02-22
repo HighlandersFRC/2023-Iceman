@@ -26,6 +26,7 @@ import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
 import frc.robot.commands.ExtendArm;
 import frc.robot.commands.MoveToPieceBackwards;
+import frc.robot.commands.MoveToPieceForwards;
 import frc.robot.commands.MoveWrist;
 import frc.robot.commands.RotateArm;
 import frc.robot.commands.RotateWrist;
@@ -38,6 +39,7 @@ import frc.robot.commands.ZeroNavxMidMatch;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmRotation;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.FlipChecker;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Peripherals;
@@ -62,6 +64,7 @@ public class Robot extends TimedRobot {
   private ArmRotation armRotation = new ArmRotation(armExtension);
   private Wrist wrist = new Wrist();
   private Intake intake = new Intake();
+  private FlipChecker flipChecker = new FlipChecker();
 
   private UsbCamera frontDriverCam;
   private UsbCamera backDriverCam;
@@ -87,16 +90,16 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    // SmartDashboard.putNumber("WRIST POSITION", wrist.getWristRotationPosition());
     CommandScheduler.getInstance().run();
+
+    flipChecker.periodic();
 
     SmartDashboard.putNumber("Extension", armExtension.getExtensionPosition());
     SmartDashboard.putBoolean("ARM LIMIT SWITCH", armExtension.getExtensionLimitSwitch());
 
     armRotation.postRotationValues();
-    // System.out.println(armRotation.getRotationPosition());
-    System.out.println((wrist.getWristRotationPosition()) - 180 + 13);
-    // SmartDashboard.putNumber("WRIST ROTATION", (wrist.getWristRotationPosition()) - 180 + 13);
+    // System.out.println("ARM: " + armRotation.getRotationPosition());
+    // System.out.println("WRIST: " + wrist.getAdustedWristRotation());
   }
 
   @Override
@@ -147,11 +150,11 @@ public class Robot extends TimedRobot {
     System.out.println(peripherals.getNavxAngle());
 
     if(OI.isBumpSideAuto()) {
-      TwoPieceBumpAuto auto = new TwoPieceBumpAuto(drive, armExtension, armRotation, wrist, peripherals, lights);
+      TwoPieceBumpAuto auto = new TwoPieceBumpAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights);
       auto.schedule();
     }
     else if(OI.isClearSideAuto()) {
-      TwoPieceAuto auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist, peripherals, lights);
+      TwoPieceAuto auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
       auto.schedule();
     }
   }
@@ -163,24 +166,33 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     drive.teleopInit(); 
+    armExtension.teleopInit();
+
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 
-    OI.operatorA.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 221), new RotateWrist(wrist, -123), new SetArmExtensionPosition(lights, armExtension, armRotation, 14)));
-    OI.operatorY.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 221), new RotateWrist(wrist, -127), new SetArmExtensionPosition(lights, armExtension, armRotation, 37)));
+    OI.driverX.whileHeld(new MoveToPieceForwards(drive, peripherals, lights));
+
+    // OI.operatorA.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 221), new RotateWrist(wrist, -123), new SetArmExtensionPosition(lights, armExtension, armRotation, 14)));
+    // OI.operatorY.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 221), new RotateWrist(wrist, -127), new SetArmExtensionPosition(lights, armExtension, armRotation, 38)));
+    
+    // OI.operatorB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 269.5), new RotateWrist(wrist, -63)));
+
+    // OI.operatorRB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 95), new RotateWrist(wrist, 132)));
+    // OI.operatorLB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 89), new RotateWrist(wrist, 132)));
 
 
-    // OI.operatorB.whileHeld(new SetArmExtensionPosition(armExtension, armRotation, 14));
-    // OI.operatorX.whileHeld(new SetArmExtensionPosition(armExtension, armRotation, 30));
+    // placement position mid
+    OI.operatorA.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, flipChecker, Constants.PLACEMENT_PRESET_ARM_ROTATION_MID), new RotateWrist(wrist, flipChecker, Constants.PLACEMENT_PRESET_MID_WRIST_ROTATION), new SetArmExtensionPosition(lights, armExtension, armRotation, 12)));
+    // placement position high
+    OI.operatorY.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, flipChecker, Constants.PLACEMENT_PRESET_ARM_ROTATION_HIGH), new RotateWrist(wrist, flipChecker, Constants.PLACEMENT_PRESET_HIGH_WRIST_ROTATION), new SetArmExtensionPosition(lights, armExtension, armRotation, 37.5)));
+    
+    // intake position for upright cone
+    OI.operatorX.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, flipChecker, Constants.UPRIGHT_CONE_PRESET_ARM_ROTATION), new RotateWrist(wrist, flipChecker, Constants.UPRIGHT_CONE_PRESET_WRIST_ROTATION)));
+    // intake position for a tipped cone
+    OI.operatorB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, flipChecker, Constants.TIPPED_CONE_PRESET_ARM_ROTATION), new RotateWrist(wrist, flipChecker, Constants.TIPPED_CONE_PRESET_WRIST_ROTATION)));
 
-    // intake positions for upright cone
-    OI.operatorX.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 87.5), new RotateWrist(wrist, 61)));
-    OI.operatorB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 269.5), new RotateWrist(wrist, -63)));
-
-    OI.operatorRB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 291.5), new RotateWrist(wrist, 3)));
-    OI.operatorLB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 69.5), new RotateWrist(wrist, -3)));
-
-    // OI.operatorA.whileHeld(new RunIntake(intake, 6, 1));
-    // OI.operatorY.whileHeld(new RunIntake(intake, -6, 1));
+    OI.operatorRB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, flipChecker, 96), new RotateWrist(wrist, flipChecker, 132)));
+    // OI.operatorRB.whenRelease
 
     OI.operatorViewButton.whenPressed(new SetLightMode(lights, "cube"));
     OI.operatorMenuButton.whenPressed(new SetLightMode(lights, "cone"));
@@ -194,12 +206,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     SmartDashboard.putNumber("NAVX", peripherals.getNavxAngle());
-    // System.out.println(Constants.testTagToRobot());
-    // System.out.println(Constants.calculateCameraBasedPosition());
-    // System.out.println(peripherals.cameraToTarget());
-    // SmartDashboard.putNumber("X", peripherals.cameraToTarget().getX());
-    // SmartDashboard.putNumber("Y", peripherals.cameraToTarget().getY());
-    // System.out.println(Constants.testDistanceToTagZero());
+
+    
+
   }
 
   @Override

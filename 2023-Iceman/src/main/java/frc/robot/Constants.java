@@ -56,6 +56,26 @@ public final class Constants {
 
     public static final String CAMERA_NAME = "Limelight";
 
+    public static final double UPRIGHT_CONE_PRESET_ARM_ROTATION = 89;
+    public static final double UPRIGHT_CONE_PRESET_FLIPPED_ARM_ROTATION = 266.5;
+    public static final double TIPPED_CONE_PRESET_ARM_ROTATION = 71;
+    public static final double TIPPED_CONE_PRESET_FLIPPED_ARM_ROTATION = 291.5;
+
+    public static final double PLACEMENT_PRESET_ARM_ROTATION_MID = 139;
+    public static final double PLACEMENT_PRESET_ARM_ROTATION_HIGH = 140;
+    public static final double PLACEMENT_PRESET_FLIPPED_ARM_ROTATION_MID = 216;
+    public static final double PLACEMENT_PRESET_FLIPPED_ARM_ROTATION_HIGH = 221;
+
+    public static final double UPRIGHT_CONE_PRESET_WRIST_ROTATION = 79;
+    public static final double UPRIGHT_CONE_PRESET_FLIPPED_WRIST_ROTATION = -55.1;
+    public static final double TIPPED_CONE_PRESET_WRIST_ROTATION = 6;
+    public static final double TIPPED_CONE_PRESET_FLIPPED_WRIST_ROTATION = 18;
+
+    public static final double PLACEMENT_PRESET_MID_WRIST_ROTATION = 148;
+    public static final double PLACEMENT_PRESET_HIGH_WRIST_ROTATION = 152;
+    public static final double PLACEMENT_PRESET_MID_FLIPPED_WRIST_ROTATION = -113;
+    public static final double PLACEMENT_PRESET_HIGH_FLIPPED_WRIST_ROTATION = -117;
+
     public static final double PLACEMENT_LOCATION_X_RED = 14.75;
     public static final double PLACEMENT_LOCATION_X_BLUE = FIELD_LENGTH - PLACEMENT_LOCATION_X_RED;
     public static final double[] PLACEMENT_LOCATIONS_Y_RED = new double[] {0.52, 1.07, 1.62, 2.2, 2.74, 3.3, 3.85, 4.43, 4.98};

@@ -20,7 +20,7 @@ public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
 
   private final TalonFX grabberMotor = new TalonFX(15, "Canivore");
-  // private final TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(10);
+  private final TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(10, 0.1, 0, false);
   private final VoltageOut percentRequest = new VoltageOut(-6);
   
 
@@ -38,9 +38,13 @@ public class Intake extends SubsystemBase {
   }
 
   public void setGrabberMotorMaxPercent(double percent) {
-    System.out.println("Runnging: " + percent + " percent max");
+    // System.out.println("Runnging: " + percent + " percent max");
     // grabberMotor.setControl(this.torqueRequest.withOutput(10));
     grabberMotor.setControl(this.percentRequest.withOutput(percent));
+  }
+
+  public void setIntakeTorqueOutput(double amps, double maxPercent){
+    grabberMotor.setControl(this.torqueRequest.withOutput(amps).withMaxAbsDutyCycle(maxPercent));
   }
 
   // public double getGrabberMotorCurrent() {

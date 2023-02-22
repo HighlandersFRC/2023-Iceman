@@ -11,13 +11,12 @@ import frc.robot.subsystems.Intake;
 public class RunIntake extends CommandBase {
   /** Creates a new RunIntake. */
   private Intake Intake;
-  private double percent;
-  private double time;
-  private double initTime;
-  public RunIntake(Intake Intake, double percent, double time) {
+  private double maxPercent;
+  private double amps;
+  public RunIntake(Intake Intake, double amps, double maxPercent) {
     this.Intake = Intake;
-    this.percent = percent;
-    this.time = time;
+    this.maxPercent = maxPercent;
+    this.amps = amps;
     addRequirements(this.Intake);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -25,7 +24,6 @@ public class RunIntake extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    initTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,7 +35,7 @@ public class RunIntake extends CommandBase {
     // else {
     //   Intake.setGrabberMotorPercent(0);
     // }
-    Intake.setGrabberMotorMaxPercent(percent);
+    Intake.setIntakeTorqueOutput(amps, maxPercent);
   }
 
   // Called once the command ends or is interrupted.
@@ -47,9 +45,10 @@ public class RunIntake extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if((Timer.getFPGATimestamp() - initTime) > time && time != -1) {
-      return true;
-    }
-    return false;
+    // if((Timer.getFPGATimestamp() - initTime) > time && time != -1) {
+    //   return true;
+    // }
+    // return false;
+    return true;
   }
 }

@@ -6,7 +6,10 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
+import frc.robot.OI;
 import frc.robot.subsystems.ArmRotation;
+import frc.robot.subsystems.FlipChecker;
 import frc.robot.subsystems.Wrist;
 
 public class SetArmRotationPosition extends CommandBase {
@@ -14,9 +17,12 @@ public class SetArmRotationPosition extends CommandBase {
   private ArmRotation arm;
   private double position;
 
-  public SetArmRotationPosition(ArmRotation arm, double Position) {
+  private FlipChecker flipChecker;
+
+  public SetArmRotationPosition(ArmRotation arm, FlipChecker flipChecker, double Position) {
     this.arm = arm;
     this.position = Position;
+    this.flipChecker = flipChecker;
     addRequirements(this.arm);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -24,14 +30,37 @@ public class SetArmRotationPosition extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    arm.setRotationPosition(position);
+    // upright cone and check to see which side to intake on
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putNumber("degrees", arm.getRotationPosition());
-    arm.postRotationValues();
+    // System.out.println("Position: " + position);
+    double setPosition = position;
+    if(position == Constants.UPRIGHT_CONE_PRESET_ARM_ROTATION) {
+      if(flipChecker.getFlip()) {
+        setPosition = Constants.UPRIGHT_CONE_PRESET_FLIPPED_ARM_ROTATION;
+      }
+    }
+    // tipped over cone and check to see which side to intake on
+    else if(position == Constants.TIPPED_CONE_PRESET_ARM_ROTATION) {
+      if(flipChecker.getFlip()) {
+        setPosition = Constants.TIPPED_CONE_PRESET_FLIPPED_ARM_ROTATION;
+      }
+    }
+    else if(position == Constants.PLACEMENT_PRESET_ARM_ROTATION_MID) {
+      if(flipChecker.getFlip()) {
+        setPosition = Constants.PLACEMENT_PRESET_FLIPPED_ARM_ROTATION_MID;
+      }
+    }
+    else if(position == Constants.PLACEMENT_PRESET_ARM_ROTATION_HIGH) {
+      System.out.println("ajsdfklajsdklfja;sdklfja;klsdjflk");
+      if(flipChecker.getFlip()) {
+        setPosition = Constants.PLACEMENT_PRESET_FLIPPED_ARM_ROTATION_HIGH;
+      }
+    }
+    arm.setRotationPosition(setPosition);
   }
 
   // Called once the command ends or is interrupted.
@@ -41,7 +70,7 @@ public class SetArmRotationPosition extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Math.abs(arm.getRotationPosition() - position) < 2) {
+    if(Math.abs(arm.getRotationPosition() - position) < 2.5) {
       return true;
     }
     return false;

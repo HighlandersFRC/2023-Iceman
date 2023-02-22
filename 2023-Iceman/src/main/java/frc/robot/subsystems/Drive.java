@@ -541,16 +541,12 @@ public class Drive extends SubsystemBase {
     // method run in teleop that accepts controller values to move swerve drive
     public void teleopDrive() {
         updateOdometryFusedArray();
-        double turnLimit = 1;
+        double turnLimit = 0.75;
 
         if(OI.driverController.getLeftBumper()) {
             // activate speedy spin
-            turnLimit = 0.75;
+            turnLimit = 1;
         }
-        // else {
-        //     turnLimit = 0.75;
-
-        // }
 
         // this is correct, X is forward in field, so originalX should be the y on the joystick
         double originalX = -(Math.copySign(OI.getDriverLeftY() * OI.getDriverLeftY(), OI.getDriverLeftY()));
