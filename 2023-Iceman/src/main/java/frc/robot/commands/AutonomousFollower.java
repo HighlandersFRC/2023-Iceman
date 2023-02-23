@@ -119,8 +119,6 @@ public class AutonomousFollower extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drive.useCameraInOdometry();
-    // drive.setNavxAfterAuto();
     Vector velocityVector = new Vector(0, 0);
     double desiredThetaChange = 0;
     drive.autoDrive(velocityVector, desiredThetaChange);
@@ -169,16 +167,6 @@ public class AutonomousFollower extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // if(generatePath == true) {
-    //   if(currentTime > (path.getJSONArray(path.length() - 1).getDouble(0) + 0.5)) {
-    //     return true;
-    //   }
-    //   // if(Math.abs(drive.getFusedOdometryX() - path.getJSONArray(path.length() - 1).getDouble(1)) < 0.05) {
-    //   //   if(Math.abs(drive.getFusedOdometryY() - path.getJSONArray(path.length() - 1).getDouble(2)) < 0.1) {
-    //   //     return true;
-    //   //   }
-    //   // }
-    // }
     if(currentTime > path.getJSONArray(path.length() - 1).getDouble(0)) {
       return true;
     }

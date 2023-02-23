@@ -57,7 +57,7 @@ public final class Constants {
     public static final String CAMERA_NAME = "Limelight";
 
     public static final double UPRIGHT_CONE_PRESET_ARM_ROTATION = 89;
-    public static final double UPRIGHT_CONE_PRESET_FLIPPED_ARM_ROTATION = 266.5;
+    public static final double UPRIGHT_CONE_PRESET_FLIPPED_ARM_ROTATION = 267.5;
     public static final double TIPPED_CONE_PRESET_ARM_ROTATION = 71;
     public static final double TIPPED_CONE_PRESET_FLIPPED_ARM_ROTATION = 291.5;
 
@@ -67,7 +67,7 @@ public final class Constants {
     public static final double PLACEMENT_PRESET_FLIPPED_ARM_ROTATION_HIGH = 221;
 
     public static final double UPRIGHT_CONE_PRESET_WRIST_ROTATION = 79;
-    public static final double UPRIGHT_CONE_PRESET_FLIPPED_WRIST_ROTATION = -55.1;
+    public static final double UPRIGHT_CONE_PRESET_FLIPPED_WRIST_ROTATION = -53.1;
     public static final double TIPPED_CONE_PRESET_WRIST_ROTATION = 6;
     public static final double TIPPED_CONE_PRESET_FLIPPED_WRIST_ROTATION = 18;
 

@@ -150,7 +150,7 @@ public class Robot extends TimedRobot {
     System.out.println(peripherals.getNavxAngle());
 
     if(OI.isBumpSideAuto()) {
-      TwoPieceBumpAuto auto = new TwoPieceBumpAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights);
+      TwoPieceBumpAuto auto = new TwoPieceBumpAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
       auto.schedule();
     }
     else if(OI.isClearSideAuto()) {
