@@ -37,7 +37,7 @@ public class Wrist extends SubsystemBase {
 
   private double rotationSetPoint = 180;
   
-  private double uprightOffset = -25;
+  private double uprightOffset = 0;
 
   public Wrist() {}
 
@@ -74,16 +74,13 @@ public class Wrist extends SubsystemBase {
   }
 
   public double getAdustedWristRotation() {
-    return getWristRotationPosition() - 180 - uprightOffset;
+    return getWristRotationPosition() - 180;
   }
 
   public void setWristRotationPosition(double position) {
     position = 180 + position;
-    // if(position >= (39 - uprightOffset) && position <= (317 - uprightOffset)) {
-      position = position + uprightOffset;
-      position = (position * ABSOLUTE_ENCODER_ROTATION_MAX_VOLTAGE)/360;
-      rotationPidController.setReference(position, ControlType.kPosition);
-    // }
+    position = (position * ABSOLUTE_ENCODER_ROTATION_MAX_VOLTAGE)/360;
+    rotationPidController.setReference(position, ControlType.kPosition);
   }
 
   public double getWristCurrent() {

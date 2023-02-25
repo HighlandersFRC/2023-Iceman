@@ -60,7 +60,15 @@ public class SetArmRotationPosition extends CommandBase {
         setPosition = Constants.PLACEMENT_PRESET_FLIPPED_ARM_ROTATION_HIGH;
       }
     }
-    arm.setRotationPosition(setPosition);
+    if(OI.operatorController.getLeftTriggerAxis() > 0.25) {
+      arm.setRotationMotorPercent((-OI.operatorController.getLeftTriggerAxis()/4));
+    }
+    else if(OI.operatorController.getRightTriggerAxis() > 0.25) {
+      arm.setRotationMotorPercent((OI.operatorController.getLeftTriggerAxis())/4);
+    }
+    else {
+      arm.setRotationPosition(setPosition);
+    }
   }
 
   // Called once the command ends or is interrupted.

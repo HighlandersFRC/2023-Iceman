@@ -99,7 +99,7 @@ public class Robot extends TimedRobot {
 
     armRotation.postRotationValues();
     // System.out.println("ARM: " + armRotation.getRotationPosition());
-    // System.out.println("WRIST: " + wrist.getAdustedWristRotation());
+    System.out.println("WRIST: " + wrist.getAdustedWristRotation());
   }
 
   @Override
@@ -180,6 +180,8 @@ public class Robot extends TimedRobot {
     // OI.operatorRB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 95), new RotateWrist(wrist, 132)));
     // OI.operatorLB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 89), new RotateWrist(wrist, 132)));
 
+    // OI.operatorA.whileHeld(new RotateWrist(wrist, flipChecker, 50));
+    // OI.operatorY.whileHeld(new RotateWrist(wrist, flipChecker, -50));
 
     // placement position mid
     OI.operatorA.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, flipChecker, Constants.PLACEMENT_PRESET_ARM_ROTATION_MID), new RotateWrist(wrist, flipChecker, Constants.PLACEMENT_PRESET_MID_WRIST_ROTATION), new SetArmExtensionPosition(lights, armExtension, armRotation, 12)));
@@ -191,7 +193,7 @@ public class Robot extends TimedRobot {
     // intake position for a tipped cone
     OI.operatorB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, flipChecker, Constants.TIPPED_CONE_PRESET_ARM_ROTATION), new RotateWrist(wrist, flipChecker, Constants.TIPPED_CONE_PRESET_WRIST_ROTATION)));
 
-    OI.operatorRB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, flipChecker, 96), new RotateWrist(wrist, flipChecker, 132)));
+    OI.operatorRB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_PRESET_ARM_ROTATION), new RotateWrist(wrist, flipChecker, Constants.CUBE_PRESET_WRIST_ROTATION)));
     // OI.operatorRB.whenRelease
 
     OI.operatorViewButton.whenPressed(new SetLightMode(lights, "cube"));

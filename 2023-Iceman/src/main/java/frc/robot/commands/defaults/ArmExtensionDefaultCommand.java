@@ -40,7 +40,13 @@ public class ArmExtensionDefaultCommand extends CommandBase {
     // // arm.setExtensionPosition(0);
     // arm.setExtensionMotorPercent(position);
     // }
-    arm.setExtensionPosition(0);
+
+    if(arm.getExtensionPosition() > 10) {
+      arm.setExtensionPosition(5);
+    }
+    else {
+      arm.setExtensionPosition(0);
+    }
   }
 
   // Called once the command ends or is interrupted.

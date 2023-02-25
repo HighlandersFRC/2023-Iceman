@@ -62,7 +62,7 @@ public class ArmExtension extends SubsystemBase {
   }
 
   public void teleopInit() {
-    extensionMotor.configPeakOutputReverse(-0.2);
+    extensionMotor.configPeakOutputReverse(-0.25);
   }
 
   public double getExtensionPosition() {

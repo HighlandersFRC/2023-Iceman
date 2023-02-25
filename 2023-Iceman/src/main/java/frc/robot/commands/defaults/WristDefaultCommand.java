@@ -5,6 +5,7 @@
 package frc.robot.commands.defaults;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Wrist;
 
 public class WristDefaultCommand extends CommandBase {
@@ -31,7 +32,7 @@ public class WristDefaultCommand extends CommandBase {
     // }
     // Wrist.setGrabberMotorPercent(0.1);
     // System.out.println("adjflakdj");
-    Wrist.setWristRotationPosition(0);
+    Wrist.setWristRotationPosition(Constants.uprightOffset);
     // Wrist.setRotationMotorPercent(0);
   }
 

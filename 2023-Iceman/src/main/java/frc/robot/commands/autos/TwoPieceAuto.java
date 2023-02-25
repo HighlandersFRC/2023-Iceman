@@ -110,8 +110,8 @@ public class TwoPieceAuto extends SequentialCommandGroup {
       new ParallelDeadlineGroup(
         new ParallelDeadlineGroup(
           new AutonomousFollower(drive, pathJSON, false),
-          new SetArmRotationPosition(armRotation, flipChecker, 96),
-          new RotateWrist(wrist, flipChecker, 132),
+          new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_PRESET_ARM_ROTATION),
+          new RotateWrist(wrist, flipChecker, Constants.CUBE_PRESET_WRIST_ROTATION),
           new RunIntake(intake, 55, 1)
         ),
         new SetArmExtensionPosition(lights, armExtension, armRotation, 1),
