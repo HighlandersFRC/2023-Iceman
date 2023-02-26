@@ -17,6 +17,7 @@ import com.revrobotics.SparkMaxAnalogSensor;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAnalogSensor.Mode;
@@ -54,6 +55,8 @@ public class Wrist extends SubsystemBase {
     rotationPidController.setD(0.5);
     rotationPidController.setOutputRange(-1, 1);
 
+    rotationMotor.setIdleMode(IdleMode.kBrake);
+
     setDefaultCommand(new WristDefaultCommand(this));
   }
 
@@ -74,7 +77,7 @@ public class Wrist extends SubsystemBase {
   }
 
   public double getAdustedWristRotation() {
-    return getWristRotationPosition() - 180;
+    return getWristRotationPosition()-180;
   }
 
   public void setWristRotationPosition(double position) {

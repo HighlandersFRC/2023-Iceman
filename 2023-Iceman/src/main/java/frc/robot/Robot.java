@@ -14,6 +14,7 @@ import org.json.JSONTokener;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -44,6 +45,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Peripherals;
 import frc.robot.subsystems.Wrist;
+// import edu.wpi.first.util.net.PortForwarder;
 
 import frc.robot.commands.autos.TwoPieceAuto;
 import frc.robot.commands.autos.TwoPieceBumpAuto;
@@ -86,6 +88,14 @@ public class Robot extends TimedRobot {
     armRotation.init();
     wrist.init();
     intake.init();
+
+    PortForwarder.add(5800, "limelight-front.local", 5800);
+    PortForwarder.add(5801, "limelight-front.local", 5801);
+    PortForwarder.add(5805, "limelight-front.local", 5805);
+
+    PortForwarder.add(5800, "limelight-back.local", 5800);
+    PortForwarder.add(5801, "limelight-back.local", 5801);
+    PortForwarder.add(5805, "limelight-back.local", 5805);
   }  
 
   @Override
@@ -100,6 +110,7 @@ public class Robot extends TimedRobot {
     armRotation.postRotationValues();
     // System.out.println("ARM: " + armRotation.getRotationPosition());
     System.out.println("WRIST: " + wrist.getAdustedWristRotation());
+    // System.out.println("EXTENSION: " + armExtension.getExtensionPosition());
   }
 
   @Override
@@ -170,7 +181,7 @@ public class Robot extends TimedRobot {
 
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 
-    OI.driverX.whileHeld(new MoveToPieceForwards(drive, peripherals, lights));
+    // OI.driverX.whileHeld(new MoveToPieceForwards(drive, peripherals, lights));
 
     // OI.operatorA.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 221), new RotateWrist(wrist, -123), new SetArmExtensionPosition(lights, armExtension, armRotation, 14)));
     // OI.operatorY.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 221), new RotateWrist(wrist, -127), new SetArmExtensionPosition(lights, armExtension, armRotation, 38)));
@@ -179,6 +190,8 @@ public class Robot extends TimedRobot {
 
     // OI.operatorRB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 95), new RotateWrist(wrist, 132)));
     // OI.operatorLB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 89), new RotateWrist(wrist, 132)));
+
+    OI.driverRB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, flipChecker, 145), new RotateWrist(wrist, flipChecker, 121), new SetArmExtensionPosition(lights, armExtension, armRotation, 19)));
 
     // OI.operatorA.whileHeld(new RotateWrist(wrist, flipChecker, 50));
     // OI.operatorY.whileHeld(new RotateWrist(wrist, flipChecker, -50));

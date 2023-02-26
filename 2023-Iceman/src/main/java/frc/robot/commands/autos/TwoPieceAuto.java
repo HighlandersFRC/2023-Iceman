@@ -96,7 +96,7 @@ public class TwoPieceAuto extends SequentialCommandGroup {
       new ParallelCommandGroup(
         new RotateWrist(wrist, flipChecker, Constants.PLACEMENT_PRESET_HIGH_FLIPPED_WRIST_ROTATION),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.PLACEMENT_PRESET_FLIPPED_ARM_ROTATION_HIGH),
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 37.5)
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 39)
       ),
       new WaitCommand(0.25),
       new ParallelDeadlineGroup(
@@ -147,15 +147,15 @@ public class TwoPieceAuto extends SequentialCommandGroup {
       new ParallelDeadlineGroup(
         new SetArmExtensionPosition(lights, armExtension, armRotation, 2),
         new RotateWrist(wrist, flipChecker, 0)
-      ),
-      new ParallelDeadlineGroup(
-        new AutonomousFollower(drive, pathJSON3, false),
-        new SequentialCommandGroup(
-          new WaitCommand(0.9),
-          new SetArmRotationPosition(armRotation, flipChecker, 180)
-        )
-      ),
-      new AutoBalance(drive, 1.25)
+      )//,
+      // new ParallelDeadlineGroup(
+      //   new AutonomousFollower(drive, pathJSON3, false),
+      //   new SequentialCommandGroup(
+      //     new WaitCommand(0.9),
+      //     new SetArmRotationPosition(armRotation, flipChecker, 180)
+      //   )
+      // ),
+      // new AutoBalance(drive, 1.25)
     );
   }
 }

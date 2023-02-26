@@ -51,7 +51,12 @@ public class RotateWrist extends CommandBase {
         setAngle = Constants.PLACEMENT_PRESET_MID_FLIPPED_WRIST_ROTATION;
       }
     }
-    this.wrist.setWristRotationPosition(setAngle);
+    if(Math.abs(OI.operatorController.getRawAxis(5)) > 0.1) {
+      this.wrist.setRotationMotorPercent(OI.operatorController.getRawAxis(5)/4);
+    }
+    else {
+      this.wrist.setWristRotationPosition(setAngle);
+    }
   }
 
   // Called once the command ends or is interrupted.

@@ -63,7 +63,7 @@ public final class Constants {
     public static final double TIPPED_CONE_PRESET_ARM_ROTATION = 69.5;
     public static final double TIPPED_CONE_PRESET_FLIPPED_ARM_ROTATION = 294;
 
-    public static final double CUBE_PRESET_ARM_ROTATION = 96;
+    public static final double CUBE_PRESET_ARM_ROTATION = 94.5;
 
     public static final double PLACEMENT_PRESET_ARM_ROTATION_MID = 139;
     public static final double PLACEMENT_PRESET_ARM_ROTATION_HIGH = 140;
