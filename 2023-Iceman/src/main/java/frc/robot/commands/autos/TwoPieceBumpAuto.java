@@ -93,8 +93,8 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
     addRequirements(drive, armExtension, armRotation, wrist);
     addCommands(
       new ParallelCommandGroup(
-        new RotateWrist(wrist, flipChecker, Constants.PLACEMENT_PRESET_HIGH_FLIPPED_WRIST_ROTATION),
-        new SetArmRotationPosition(armRotation, flipChecker, Constants.PLACEMENT_PRESET_FLIPPED_ARM_ROTATION_HIGH),
+        new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION),
+        new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_ARM_ROTATION),
         new SetArmExtensionPosition(lights, armExtension, armRotation, 37.5)
       ),
       new WaitCommand(0.25),
@@ -126,15 +126,15 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
         new SequentialCommandGroup(
           new ParallelCommandGroup(new RotateWrist(wrist, flipChecker, 0), new SetArmRotationPosition(armRotation, flipChecker, 180)),
           new WaitCommand(2),
-          new SetArmRotationPosition(armRotation, flipChecker, Constants.PLACEMENT_PRESET_FLIPPED_ARM_ROTATION_MID)
+          new SetArmRotationPosition(armRotation, flipChecker, Constants.MID_PLACEMENT_FLIPPED_ARM_ROTATION)
         ),
         new RunIntake(intake, 35, 0.1)
       ),
       new ParallelDeadlineGroup(
         new ParallelCommandGroup(
           new SetArmExtensionPosition(lights, armExtension, armRotation, 37.5),
-          new SetArmRotationPosition(armRotation, flipChecker, Constants.PLACEMENT_PRESET_FLIPPED_ARM_ROTATION_HIGH),
-          new RotateWrist(wrist, flipChecker, Constants.PLACEMENT_PRESET_HIGH_FLIPPED_WRIST_ROTATION)
+          new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_ARM_ROTATION),
+          new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION)
         ),
         new SetBackLimelightPipeline(peripherals, 0)
       ),

@@ -41,8 +41,8 @@ import frc.robot.subsystems.Wrist;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TwoPieceAuto extends SequentialCommandGroup {
-  /** Creates a new TwoPieceAuto. */
+public class TwoPieceAutoNoDock extends SequentialCommandGroup {
+  /** Creates a new TwoPieceAutoNoDock. */
   private File pathingFile;
   private JSONArray pathJSON;
   private JSONObject pathRead;
@@ -50,16 +50,8 @@ public class TwoPieceAuto extends SequentialCommandGroup {
   private File pathingFile2;
   private JSONArray pathJSON2;
   private JSONObject pathRead2;
-  
-  private File pathingFile3;
-  private JSONArray pathJSON3;
-  private JSONObject pathRead3;
 
-  private File pathingFile4;
-  private JSONArray pathJSON4;
-  private JSONObject pathRead4;
-
-  public TwoPieceAuto(Drive drive, ArmExtension armExtension, ArmRotation armRotation, Wrist wrist, FlipChecker flipChecker, Peripherals peripherals, Lights lights, Intake intake) {
+  public TwoPieceAutoNoDock(Drive drive, ArmExtension armExtension, ArmRotation armRotation, Wrist wrist, FlipChecker flipChecker, Peripherals peripherals, Lights lights, Intake intake) {
 
     try {
       pathingFile = new File("/home/lvuser/deploy/2PiecePart1.json");
@@ -76,16 +68,6 @@ public class TwoPieceAuto extends SequentialCommandGroup {
       FileReader scanner2 = new FileReader(pathingFile2);
       pathRead2 = new JSONObject(new JSONTokener(scanner2));
       pathJSON2 = (JSONArray) pathRead2.get("sampled_points");
-    }
-    catch(Exception e) {
-      System.out.println("ERROR WITH PATH FILE " + e);
-    }
-
-    try {
-      pathingFile3 = new File("/home/lvuser/deploy/2PiecePart3Dock.json");
-      FileReader scanner3 = new FileReader(pathingFile3);
-      pathRead3 = new JSONObject(new JSONTokener(scanner3));
-      pathJSON3 = (JSONArray) pathRead3.get("sampled_points");
     }
     catch(Exception e) {
       System.out.println("ERROR WITH PATH FILE " + e);
@@ -147,15 +129,7 @@ public class TwoPieceAuto extends SequentialCommandGroup {
       new ParallelDeadlineGroup(
         new SetArmExtensionPosition(lights, armExtension, armRotation, 2)//,
         // new RotateWrist(wrist, flipChecker, 0)
-      ),
-      new ParallelDeadlineGroup(
-        new AutonomousFollower(drive, pathJSON3, false),
-        new SequentialCommandGroup(
-          new WaitCommand(0.9),
-          new SetArmRotationPosition(armRotation, flipChecker, 180)
-        )
-      ),
-      new AutoBalance(drive, 1.25)
+      )
     );
   }
 }

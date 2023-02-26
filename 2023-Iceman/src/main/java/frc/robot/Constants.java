@@ -56,31 +56,54 @@ public final class Constants {
 
     public static final String CAMERA_NAME = "Limelight";
 
-    public static final double uprightOffset = -40;
+    public static final double uprightOffset = -86;
 
-    public static final double UPRIGHT_CONE_PRESET_ARM_ROTATION = 88.5;
-    public static final double UPRIGHT_CONE_PRESET_FLIPPED_ARM_ROTATION = 268;
-    public static final double TIPPED_CONE_PRESET_ARM_ROTATION = 69.5;
-    public static final double TIPPED_CONE_PRESET_FLIPPED_ARM_ROTATION = 294;
+    // FRONT SIDE (battery), extensions are same on both sides
+    // High row placement
+    public static final double HIGH_PLACEMENT_ARM_ROTATION = 140;
+    public static final double HIGH_PLACEMENT_WRIST_ROTATION = 175 + uprightOffset;
 
-    public static final double CUBE_PRESET_ARM_ROTATION = 94.5;
+    // Mid row placement
+    public static final double MID_PLACEMENT_ARM_ROTATION = 139;
+    public static final double MID_PLACEMENT_WRIST_ROTATION = 164 + uprightOffset;
 
-    public static final double PLACEMENT_PRESET_ARM_ROTATION_MID = 139;
-    public static final double PLACEMENT_PRESET_ARM_ROTATION_HIGH = 140;
-    public static final double PLACEMENT_PRESET_FLIPPED_ARM_ROTATION_MID = 216;
-    public static final double PLACEMENT_PRESET_FLIPPED_ARM_ROTATION_HIGH = 221;
+    // Upright cone intaking
+    public static final double UPRIGHT_CONE_ARM_ROTATION = 88.5;
+    public static final double UPRIGHT_CONE_WRIST_ROTATION = 60 + uprightOffset;
 
-    public static final double UPRIGHT_CONE_PRESET_WRIST_ROTATION = 60 + uprightOffset;
-    public static final double UPRIGHT_CONE_PRESET_FLIPPED_WRIST_ROTATION = -45 + uprightOffset;
-    public static final double TIPPED_CONE_PRESET_WRIST_ROTATION = -3 + uprightOffset;
-    public static final double TIPPED_CONE_PRESET_FLIPPED_WRIST_ROTATION = 45 + uprightOffset;
+    // Tipped cone intaking
+    public static final double TIPPED_CONE_ARM_ROTATION = 69.5;
+    public static final double TIPPED_CONE_WRIST_ROTATION = -3 + uprightOffset;
 
-    public static final double CUBE_PRESET_WRIST_ROTATION = 90;
+    // Cube intaking
+    public static final double CUBE_ARM_ROTATION = 94.5;
+    public static final double CUBE_WRIST_ROTATION = 90 + uprightOffset;
 
-    public static final double PLACEMENT_PRESET_MID_WRIST_ROTATION = 164 + uprightOffset;
-    public static final double PLACEMENT_PRESET_HIGH_WRIST_ROTATION = 175 + uprightOffset;
-    public static final double PLACEMENT_PRESET_MID_FLIPPED_WRIST_ROTATION = -100 + uprightOffset;
-    public static final double PLACEMENT_PRESET_HIGH_FLIPPED_WRIST_ROTATION = -105 + uprightOffset;
+    // Ramp intaking
+    public static final double RAMP_INTAKE_ARM_ROTATION = 145;
+    public static final double RAMP_INTAKE_WRIST_ROTATION = 121 + uprightOffset;
+    public static final double RAMP_INTAKE_ARM_EXTENSION = 19;
+
+    // BACK SIDE (worm gear)
+    // High row placement
+    public static final double HIGH_PLACEMENT_FLIPPED_ARM_ROTATION = 221;
+    public static final double HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION = -105 + uprightOffset;
+
+    // Mid row placement
+    public static final double MID_PLACEMENT_FLIPPED_ARM_ROTATION = 216;
+    public static final double MID_PLACEMENT_FLIPPED_WRIST_ROTATION = -100 + uprightOffset;
+
+    // Upright cone intaking
+    public static final double UPRIGHT_CONE_FLIPPED_ARM_ROTATION = 268;
+    public static final double UPRIGHT_CONE_FLIPPED_WRIST_ROTATION = -45 + uprightOffset;
+
+    // Tipped cone intaking
+    public static final double TIPPED_CONE_FLIPPED_ARM_ROTATION = 294;
+    public static final double TIPPED_CONE_FLIPPED_WRIST_ROTATION = 45 + uprightOffset;
+
+    // Cube intaking
+
+
 
     public static final double PLACEMENT_LOCATION_X_RED = 14.75;
     public static final double PLACEMENT_LOCATION_X_BLUE = FIELD_LENGTH - PLACEMENT_LOCATION_X_RED;

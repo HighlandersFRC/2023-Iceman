@@ -80,6 +80,14 @@ public class OI {
         return autoChooser.getRawButton(2);
     }
 
+    public static boolean isCenterAuto() {
+        return autoChooser.getRawButton(3);
+    }
+
+    public static boolean isDocking() {
+        return autoChooser.getRawButton(7);
+    }
+
     public static int getPOV() {
         return driverController.getPOV();
     }

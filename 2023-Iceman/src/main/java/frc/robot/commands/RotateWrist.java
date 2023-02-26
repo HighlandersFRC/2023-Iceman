@@ -30,25 +30,25 @@ public class RotateWrist extends CommandBase {
   public void execute() {
     double setAngle = angle;
     // upright cone and check to see which side to intake on
-    if(angle == Constants.UPRIGHT_CONE_PRESET_WRIST_ROTATION) {
+    if(angle == Constants.UPRIGHT_CONE_WRIST_ROTATION) {
       if(flipChecker.getFlip()) {
-        setAngle = Constants.UPRIGHT_CONE_PRESET_FLIPPED_WRIST_ROTATION;
+        setAngle = Constants.UPRIGHT_CONE_FLIPPED_WRIST_ROTATION;
       }
     }
     // tipped over cone and check to see which side to intake on
-    else if(angle == Constants.TIPPED_CONE_PRESET_WRIST_ROTATION) {
+    else if(angle == Constants.TIPPED_CONE_WRIST_ROTATION) {
       if(flipChecker.getFlip()) {
-        setAngle = Constants.TIPPED_CONE_PRESET_FLIPPED_WRIST_ROTATION;
+        setAngle = Constants.TIPPED_CONE_FLIPPED_WRIST_ROTATION;
       }
     }
-    else if(angle == Constants.PLACEMENT_PRESET_HIGH_WRIST_ROTATION) {
+    else if(angle == Constants.HIGH_PLACEMENT_WRIST_ROTATION) {
       if(flipChecker.getFlip()) {
-        setAngle = Constants.PLACEMENT_PRESET_HIGH_FLIPPED_WRIST_ROTATION;
+        setAngle = Constants.HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION;
       }
     }
-    else if(angle == Constants.PLACEMENT_PRESET_MID_WRIST_ROTATION) {
+    else if(angle == Constants.MID_PLACEMENT_WRIST_ROTATION) {
       if(flipChecker.getFlip()) {
-        setAngle = Constants.PLACEMENT_PRESET_MID_FLIPPED_WRIST_ROTATION;
+        setAngle = Constants.MID_PLACEMENT_FLIPPED_WRIST_ROTATION;
       }
     }
     if(Math.abs(OI.operatorController.getRawAxis(5)) > 0.1) {

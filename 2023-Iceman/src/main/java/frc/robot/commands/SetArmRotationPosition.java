@@ -38,26 +38,26 @@ public class SetArmRotationPosition extends CommandBase {
   public void execute() {
     // System.out.println("Position: " + position);
     double setPosition = position;
-    if(position == Constants.UPRIGHT_CONE_PRESET_ARM_ROTATION) {
+    if(position == Constants.UPRIGHT_CONE_ARM_ROTATION) {
       if(flipChecker.getFlip()) {
-        setPosition = Constants.UPRIGHT_CONE_PRESET_FLIPPED_ARM_ROTATION;
+        setPosition = Constants.UPRIGHT_CONE_FLIPPED_ARM_ROTATION;
       }
     }
     // tipped over cone and check to see which side to intake on
-    else if(position == Constants.TIPPED_CONE_PRESET_ARM_ROTATION) {
+    else if(position == Constants.TIPPED_CONE_ARM_ROTATION) {
       if(flipChecker.getFlip()) {
-        setPosition = Constants.TIPPED_CONE_PRESET_FLIPPED_ARM_ROTATION;
+        setPosition = Constants.TIPPED_CONE_FLIPPED_ARM_ROTATION;
       }
     }
-    else if(position == Constants.PLACEMENT_PRESET_ARM_ROTATION_MID) {
+    else if(position == Constants.MID_PLACEMENT_ARM_ROTATION) {
       if(flipChecker.getFlip()) {
-        setPosition = Constants.PLACEMENT_PRESET_FLIPPED_ARM_ROTATION_MID;
+        setPosition = Constants.MID_PLACEMENT_FLIPPED_ARM_ROTATION;
       }
     }
-    else if(position == Constants.PLACEMENT_PRESET_ARM_ROTATION_HIGH) {
+    else if(position == Constants.HIGH_PLACEMENT_ARM_ROTATION) {
       System.out.println("ajsdfklajsdklfja;sdklfja;klsdjflk");
       if(flipChecker.getFlip()) {
-        setPosition = Constants.PLACEMENT_PRESET_FLIPPED_ARM_ROTATION_HIGH;
+        setPosition = Constants.HIGH_PLACEMENT_FLIPPED_ARM_ROTATION;
       }
     }
     if(OI.operatorController.getLeftTriggerAxis() > 0.1) {

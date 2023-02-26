@@ -46,9 +46,18 @@ import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Peripherals;
 import frc.robot.subsystems.Wrist;
 // import edu.wpi.first.util.net.PortForwarder;
-
+import frc.robot.commands.autos.OnePieceAuto;
+import frc.robot.commands.autos.OnePieceAutoNoDock;
 import frc.robot.commands.autos.TwoPieceAuto;
+import frc.robot.commands.autos.TwoPieceAutoNoDock;
 import frc.robot.commands.autos.TwoPieceBumpAuto;
+import frc.robot.commands.autos.TwoPieceBumpAutoNoDock;
+import frc.robot.commands.presets.CubePreset;
+import frc.robot.commands.presets.HighPlacementPreset;
+import frc.robot.commands.presets.MidPlacementPreset;
+import frc.robot.commands.presets.RampIntakePreset;
+import frc.robot.commands.presets.TippedConePreset;
+import frc.robot.commands.presets.UprightConePreset;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -123,50 +132,69 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     if(OI.isBumpSideAuto()) {
-      System.out.println("||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
       try {
         pathingFile = new File("/home/lvuser/deploy/2PieceBumpPart1.json");
         FileReader scanner = new FileReader(pathingFile);
         pathRead = new JSONObject(new JSONTokener(scanner));
         pathJSON = (JSONArray) pathRead.get("sampled_points");
-      }
-      catch(Exception e) {
+      } catch(Exception e) {
         System.out.println("ERROR WITH PATH FILE " + e);
       }
     }
     else if(OI.isClearSideAuto()) {
-      System.out.println("------------------------------------------------------------");
       try {
         pathingFile = new File("/home/lvuser/deploy/2PiecePart1.json");
         FileReader scanner = new FileReader(pathingFile);
         pathRead = new JSONObject(new JSONTokener(scanner));
         pathJSON = (JSONArray) pathRead.get("sampled_points");
+      } catch(Exception e) {
+        System.out.println("ERROR WITH PATH FILE " + e);
       }
-      catch(Exception e) {
+    } else if (OI.isCenterAuto()) {
+      try {
+        pathingFile = new File("/home/lvuser/deploy/1PieceDock.json");
+        FileReader scanner = new FileReader(pathingFile);
+        pathRead = new JSONObject(new JSONTokener(scanner));
+        pathJSON = (JSONArray) pathRead.get("sampled_points");
+      } catch (Exception e){
         System.out.println("ERROR WITH PATH FILE " + e);
       }
     }
 
-    if(OI.isRedSide()) {
+    if (OI.isRedSide()) {
       drive.setFieldSide("red");
       lights.setFieldSide("red");
-    }
-    else if(OI.isBlueSide()) {
+    } else if (OI.isBlueSide()) {
       drive.setFieldSide("blue");
       drive.setFieldSide("blue");
     }
     
     drive.autoInit(pathJSON);
 
-    System.out.println(peripherals.getNavxAngle());
-
-    if(OI.isBumpSideAuto()) {
-      TwoPieceBumpAuto auto = new TwoPieceBumpAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
-      auto.schedule();
-    }
-    else if(OI.isClearSideAuto()) {
-      TwoPieceAuto auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
-      auto.schedule();
+    if (OI.isBumpSideAuto()) {
+      if (OI.isDocking()) {
+        TwoPieceBumpAuto auto = new TwoPieceBumpAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        auto.schedule();
+      } else {
+        TwoPieceBumpAutoNoDock auto = new TwoPieceBumpAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        auto.schedule();
+      }
+    } else if (OI.isClearSideAuto()) {
+      if (OI.isDocking()) {
+        TwoPieceAuto auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        auto.schedule();
+      } else {
+        TwoPieceAutoNoDock auto = new TwoPieceAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        auto.schedule();
+      }
+    } else if (OI.isCenterAuto()) {
+      if (OI.isDocking()){
+        OnePieceAuto auto = new OnePieceAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        auto.schedule();
+      } else {
+        OnePieceAutoNoDock auto = new OnePieceAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        auto.schedule();
+      }
     }
   }
 
@@ -181,33 +209,23 @@ public class Robot extends TimedRobot {
 
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 
-    // OI.driverX.whileHeld(new MoveToPieceForwards(drive, peripherals, lights));
-
-    // OI.operatorA.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 221), new RotateWrist(wrist, -123), new SetArmExtensionPosition(lights, armExtension, armRotation, 14)));
-    // OI.operatorY.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 221), new RotateWrist(wrist, -127), new SetArmExtensionPosition(lights, armExtension, armRotation, 38)));
-    
-    // OI.operatorB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 269.5), new RotateWrist(wrist, -63)));
-
-    // OI.operatorRB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 95), new RotateWrist(wrist, 132)));
-    // OI.operatorLB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, 89), new RotateWrist(wrist, 132)));
-
-    OI.driverRB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, flipChecker, 145), new RotateWrist(wrist, flipChecker, 121), new SetArmExtensionPosition(lights, armExtension, armRotation, 19)));
-
-    // OI.operatorA.whileHeld(new RotateWrist(wrist, flipChecker, 50));
-    // OI.operatorY.whileHeld(new RotateWrist(wrist, flipChecker, -50));
+    // ramp intake position
+    OI.driverRB.whileHeld(new RampIntakePreset(armExtension, armRotation, flipChecker, wrist, lights));
 
     // placement position mid
-    OI.operatorA.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, flipChecker, Constants.PLACEMENT_PRESET_ARM_ROTATION_MID), new RotateWrist(wrist, flipChecker, Constants.PLACEMENT_PRESET_MID_WRIST_ROTATION), new SetArmExtensionPosition(lights, armExtension, armRotation, 12)));
+    OI.operatorA.whileHeld(new MidPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights));
+
     // placement position high
-    OI.operatorY.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, flipChecker, Constants.PLACEMENT_PRESET_ARM_ROTATION_HIGH), new RotateWrist(wrist, flipChecker, Constants.PLACEMENT_PRESET_HIGH_WRIST_ROTATION), new SetArmExtensionPosition(lights, armExtension, armRotation, 37.5)));
+    OI.operatorY.whileHeld(new HighPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights));
     
     // intake position for upright cone
-    OI.operatorX.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, flipChecker, Constants.UPRIGHT_CONE_PRESET_ARM_ROTATION), new RotateWrist(wrist, flipChecker, Constants.UPRIGHT_CONE_PRESET_WRIST_ROTATION)));
+    OI.operatorX.whileHeld(new UprightConePreset(armExtension, armRotation, flipChecker, wrist, lights));
+   
     // intake position for a tipped cone
-    OI.operatorB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, flipChecker, Constants.TIPPED_CONE_PRESET_ARM_ROTATION), new RotateWrist(wrist, flipChecker, Constants.TIPPED_CONE_PRESET_WRIST_ROTATION)));
+    OI.operatorB.whileHeld(new TippedConePreset(armExtension, armRotation, flipChecker, wrist, lights));
 
-    OI.operatorRB.whileHeld(new ParallelCommandGroup(new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_PRESET_ARM_ROTATION), new RotateWrist(wrist, flipChecker, Constants.CUBE_PRESET_WRIST_ROTATION)));
-    // OI.operatorRB.whenRelease
+    // intake position for cube
+    OI.operatorRB.whileHeld(new CubePreset(armExtension, armRotation, flipChecker, wrist, lights));
 
     OI.operatorViewButton.whenPressed(new SetLightMode(lights, "cube"));
     OI.operatorMenuButton.whenPressed(new SetLightMode(lights, "cone"));
