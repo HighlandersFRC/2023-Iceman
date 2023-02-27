@@ -56,8 +56,6 @@ public final class Constants {
 
     public static final String CAMERA_NAME = "Limelight";
 
-    public static final double UPRIGHT_WRIST_OFFSET = -86;
-
     public static enum PRESET {
         HIGH_PLACEMENT,
         MID_PLACEMENT,
@@ -70,55 +68,55 @@ public final class Constants {
     // FRONT SIDE (battery), extensions are same on both sides
     // High row placement
     public static final double HIGH_PLACEMENT_ARM_ROTATION = 140;
-    public static final double HIGH_PLACEMENT_WRIST_ROTATION = 175 + UPRIGHT_WRIST_OFFSET;
+    public static final double HIGH_PLACEMENT_WRIST_ROTATION = 175;
     public static final double HIGH_PLACEMENT_ARM_EXTENSION = 37.5;
 
     // Mid row placement
-    public static final double MID_PLACEMENT_ARM_ROTATION = 139;
-    public static final double MID_PLACEMENT_WRIST_ROTATION = 164 + UPRIGHT_WRIST_OFFSET;
-    public static final double MID_PLACEMENT_ARM_EXTENSION = 12;
+    public static final double MID_PLACEMENT_ARM_ROTATION = 140.7;
+    public static final double MID_PLACEMENT_WRIST_ROTATION = 79.9;
+    public static final double MID_PLACEMENT_ARM_EXTENSION = 18;
 
     // Upright cone intaking
-    public static final double UPRIGHT_CONE_ARM_ROTATION = 88.5;
-    public static final double UPRIGHT_CONE_WRIST_ROTATION = 60 + UPRIGHT_WRIST_OFFSET;
+    public static final double UPRIGHT_CONE_ARM_ROTATION = 89.7;
+    public static final double UPRIGHT_CONE_WRIST_ROTATION = 151;
 
     // Tipped cone intaking
-    public static final double TIPPED_CONE_ARM_ROTATION = 69.5;
-    public static final double TIPPED_CONE_WRIST_ROTATION = -3 + UPRIGHT_WRIST_OFFSET;
+    public static final double TIPPED_CONE_ARM_ROTATION = 68.5;
+    public static final double TIPPED_CONE_WRIST_ROTATION = 186.2;
 
     // Cube intaking
-    public static final double CUBE_ARM_ROTATION = 94.5;
-    public static final double CUBE_WRIST_ROTATION = 90 + UPRIGHT_WRIST_OFFSET;
+    public static final double CUBE_ARM_ROTATION = 91.4;
+    public static final double CUBE_WRIST_ROTATION = 124.8;
 
     // Ramp intaking
     public static final double RAMP_INTAKE_ARM_ROTATION = 145;
-    public static final double RAMP_INTAKE_WRIST_ROTATION = 121 + UPRIGHT_WRIST_OFFSET;
+    public static final double RAMP_INTAKE_WRIST_ROTATION = 121;
     public static final double RAMP_INTAKE_ARM_EXTENSION = 19;
 
     // BACK SIDE (worm gear)
     // High row placement
     public static final double HIGH_PLACEMENT_FLIPPED_ARM_ROTATION = 221;
-    public static final double HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION = -105 + UPRIGHT_WRIST_OFFSET;
+    public static final double HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION = -105;
 
     // Mid row placement
-    public static final double MID_PLACEMENT_FLIPPED_ARM_ROTATION = 216;
-    public static final double MID_PLACEMENT_FLIPPED_WRIST_ROTATION = -100 + UPRIGHT_WRIST_OFFSET;
+    public static final double MID_PLACEMENT_FLIPPED_ARM_ROTATION = 219.3;
+    public static final double MID_PLACEMENT_FLIPPED_WRIST_ROTATION = 280.3;
 
     // Upright cone intaking
-    public static final double UPRIGHT_CONE_FLIPPED_ARM_ROTATION = 268;
-    public static final double UPRIGHT_CONE_FLIPPED_WRIST_ROTATION = -45 + UPRIGHT_WRIST_OFFSET;
+    public static final double UPRIGHT_CONE_FLIPPED_ARM_ROTATION = 267.7;
+    public static final double UPRIGHT_CONE_FLIPPED_WRIST_ROTATION = 209.5;
 
     // Tipped cone intaking
-    public static final double TIPPED_CONE_FLIPPED_ARM_ROTATION = 294;
-    public static final double TIPPED_CONE_FLIPPED_WRIST_ROTATION = 45 + UPRIGHT_WRIST_OFFSET;
+    public static final double TIPPED_CONE_FLIPPED_ARM_ROTATION = 289.7;
+    public static final double TIPPED_CONE_FLIPPED_WRIST_ROTATION = 175.4;
 
     // Cube intaking
-    public static final double CUBE_FLIPPED_ARM_ROTATION = 265.5;
-    public static final double CUBE_FLIPPED_WRIST_ROTATION = 270 + UPRIGHT_WRIST_OFFSET;
+    public static final double CUBE_FLIPPED_ARM_ROTATION = 264.6;
+    public static final double CUBE_FLIPPED_WRIST_ROTATION = 235;
 
     // Ramp intaking
     public static final double RAMP_INTAKE_FLIPPED_ARM_ROTATION = -90;
-    public static final double RAMP_INTAKE_FLIPPED_WRIST_ROTATION = -121 + UPRIGHT_WRIST_OFFSET;
+    public static final double RAMP_INTAKE_FLIPPED_WRIST_ROTATION = -121;
 
 
     public static final double PLACEMENT_LOCATION_X_RED = 14.75;

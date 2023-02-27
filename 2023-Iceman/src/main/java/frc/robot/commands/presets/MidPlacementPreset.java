@@ -23,9 +23,9 @@ public class MidPlacementPreset extends ParallelCommandGroup {
   /** Creates a new MidPlacementPreset. */
   public MidPlacementPreset(ArmExtension armExtension, ArmRotation armRotation, FlipChecker flipChecker, Wrist wrist, Lights lights, Peripherals peripherals) {
     addCommands(
-      new SetArmRotationPosition(armRotation, peripherals, flipChecker, Constants.PRESET.MID_PLACEMENT)//,
-      // new RotateWrist(wrist, flipChecker, Constants.MID_PLACEMENT_WRIST_ROTATION),
-      // new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.MID_PLACEMENT_ARM_EXTENSION)
+      new SetArmRotationPosition(armRotation, peripherals, flipChecker, Constants.PRESET.MID_PLACEMENT),
+      new RotateWrist(wrist, flipChecker, peripherals, Constants.PRESET.MID_PLACEMENT),
+      new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.MID_PLACEMENT_ARM_EXTENSION)
     );
   }
 }

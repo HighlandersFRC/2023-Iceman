@@ -52,7 +52,6 @@ public class SetArmRotationPosition extends CommandBase {
       while (angle < 0) {
         angle += 360;
       }
-      System.out.println("angle: " + angle);
       if (angle >= 90 && angle <= 270){
         // Case where robot is facing towards driver
         switch(preset) {
@@ -122,15 +121,21 @@ public class SetArmRotationPosition extends CommandBase {
         if(flipChecker.getFlip()) {
           setPosition = Constants.HIGH_PLACEMENT_FLIPPED_ARM_ROTATION;
         }
+      } else if (position == Constants.CUBE_ARM_ROTATION) {
+        if (flipChecker.getFlip()) {
+          setPosition = Constants.CUBE_FLIPPED_ARM_ROTATION;
+        }
+      } else if (position == Constants.RAMP_INTAKE_ARM_ROTATION) {
+        if (flipChecker.getFlip()) {
+          setPosition = Constants.RAMP_INTAKE_FLIPPED_ARM_ROTATION;
+        }
       }
     }
-    if(OI.operatorController.getLeftTriggerAxis() > 0.1) {
+    if (OI.operatorController.getLeftTriggerAxis() > 0.1) {
       arm.setRotationMotorPercent((-OI.operatorController.getLeftTriggerAxis()/4));
-    }
-    else if(OI.operatorController.getRightTriggerAxis() > 0.1) {
+    } else if(OI.operatorController.getRightTriggerAxis() > 0.1) {
       arm.setRotationMotorPercent((OI.operatorController.getLeftTriggerAxis())/4);
-    }
-    else {
+    } else {
       if (useNavx){
         arm.setRotationPosition(this.position);
       } else {

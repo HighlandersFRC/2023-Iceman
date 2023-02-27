@@ -121,6 +121,7 @@ public class Robot extends TimedRobot {
     // System.out.println("WRIST: " + wrist.getAdustedWristRotation());
     // System.out.println("EXTENSION: " + armExtension.getExtensionPosition());
     // lights.periodic();
+    // System.out.println("Extension: " + armExtension.getExtensionPosition());
   }
 
   @Override
@@ -217,7 +218,7 @@ public class Robot extends TimedRobot {
     OI.operatorA.whileHeld(new MidPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
 
     // placement position high
-    OI.operatorY.whileHeld(new HighPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights));
+    OI.operatorY.whileHeld(new HighPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
     
     // intake position for upright cone
     OI.operatorX.whileHeld(new UprightConePreset(armExtension, armRotation, flipChecker, wrist, lights));

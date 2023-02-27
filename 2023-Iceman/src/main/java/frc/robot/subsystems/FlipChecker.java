@@ -30,6 +30,7 @@ public class FlipChecker extends SubsystemBase {
     else {
       setFlip(false);
     }
+    // System.out.println("Flipped: " + this.flip);
     // This method will be called once per scheduler run
   }
 }

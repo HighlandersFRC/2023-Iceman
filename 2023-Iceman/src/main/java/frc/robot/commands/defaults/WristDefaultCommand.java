@@ -7,33 +7,43 @@ package frc.robot.commands.defaults;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Wrist;
+import frc.robot.tools.controlloops.PID;
 
 public class WristDefaultCommand extends CommandBase {
   /** Creates a new WristDefaultCommand. */
-  private Wrist Wrist;
-  public WristDefaultCommand(Wrist Wrist) {
-    this.Wrist = Wrist;
-    addRequirements(this.Wrist);
+  private Wrist wrist;
+  private PID pid;
+
+  private double kP = 0.03;
+  private double kI = 0.001;
+  private double kD = 0.0;
+
+  public WristDefaultCommand(Wrist wrist) {
+    this.wrist = wrist;
+    addRequirements(this.wrist);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    pid = new PID(kP, kI, kD);
+    pid.setSetPoint(180);
+    pid.setMaxOutput(0.3);
+    pid.setMinOutput(-0.3);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // if(Math.abs(Wrist.getGrabberMotorCurrent()) < 25) {
-    //   this.Wrist.setGrabberMotorPercent(0.1);
-    // }
-    // else {
-    //   Wrist.setGrabberMotorPercent(0);
-    // }
-    // Wrist.setGrabberMotorPercent(0.1);
-    // System.out.println("adjflakdj");
-    Wrist.setWristRotationPosition(Constants.UPRIGHT_WRIST_OFFSET);
-    // Wrist.setRotationMotorPercent(0);
+    double angle = wrist.getWristRotationPosition();
+    pid.updatePID(angle);
+    double result = pid.getResult();
+    if (Math.abs(angle - 180) < 2){
+      wrist.setRotationMotorPercent(0);
+    } else {
+      wrist.setRotationMotorPercent(-result);
+    }
   }
 
   // Called once the command ends or is interrupted.

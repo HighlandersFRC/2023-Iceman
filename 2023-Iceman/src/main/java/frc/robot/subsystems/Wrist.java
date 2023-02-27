@@ -9,6 +9,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenixpro.controls.CoastOut;
 import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.EncoderType;
@@ -31,7 +33,9 @@ public class Wrist extends SubsystemBase {
 
   private final CANSparkMax rotationMotor = new CANSparkMax(14, MotorType.kBrushless);
 
-  private final SparkMaxAnalogSensor rotationAbsoluteEncoder = rotationMotor.getAnalog(SparkMaxAnalogSensor.Mode.kAbsolute);
+  private final CANCoder rotationEncoder = new CANCoder(6, "Canivore");
+
+  // private final SparkMaxAnalogSensor rotationAbsoluteEncoder = rotationMotor.getAnalog(SparkMaxAnalogSensor.Mode.kAbsolute);
 
   private final double ABSOLUTE_ENCODER_ROTATION_MAX_VOLTAGE = 3.3;
   private final SparkMaxPIDController rotationPidController = rotationMotor.getPIDController();
@@ -47,13 +51,11 @@ public class Wrist extends SubsystemBase {
     rotationMotor.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyClosed).enableLimitSwitch(false);
     rotationMotor.getReverseLimitSwitch(LimitSwitchPolarity.kNormallyClosed).enableLimitSwitch(false);
     rotationMotor.setSmartCurrentLimit(40, 25);
-    // rotationMotor.setSoftLimit(SoftLimitDirection.kForward, 63);
-    // rotationMotor.setSoftLimit(SoftLimitDirection.kReverse, -63);
-    rotationPidController.setFeedbackDevice(rotationAbsoluteEncoder);
-    rotationPidController.setP(1.3);
-    rotationPidController.setI(0);
-    rotationPidController.setD(0.5);
-    rotationPidController.setOutputRange(-1, 1);
+    // rotationPidController.setFeedbackDevice(rotationAbsoluteEncoder);
+    // rotationPidController.setP(1.3);
+    // rotationPidController.setI(0);
+    // rotationPidController.setD(0.5);
+    // rotationPidController.setOutputRange(-1, 1);
 
     rotationMotor.setIdleMode(IdleMode.kBrake);
 
@@ -61,7 +63,13 @@ public class Wrist extends SubsystemBase {
   }
 
   public void setRotationMotorPercent(double percent) {
-    rotationMotor.set(percent);
+    if (getWristRotationPosition() >= 320 && percent < 0){
+      rotationMotor.set(0);
+    } else if (getWristRotationPosition() <= 47 && percent > 0){
+      rotationMotor.set(0);
+    } else {
+      rotationMotor.set(percent);
+    }
   }
 
   public double getWristMotorPosition() {
@@ -73,7 +81,7 @@ public class Wrist extends SubsystemBase {
   }
 
   public double getWristRotationPosition() {
-    return 360 * (rotationAbsoluteEncoder.getPosition())/ABSOLUTE_ENCODER_ROTATION_MAX_VOLTAGE;
+    return rotationEncoder.getAbsolutePosition();
   }
 
   public double getAdustedWristRotation() {

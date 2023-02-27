@@ -31,15 +31,15 @@ public class IntakeDefaultCommand extends CommandBase {
     //   Intake.setGrabberMotorPercent(0);
     // }
     if(OI.driverController.getLeftTriggerAxis() > 0.5) {
-      Intake.setIntakeTorqueOutput(-55, 1);
+      Intake.setIntakeTorqueOutput(55, 1);
       System.out.println("OUTTAKING");
     }
     else if(OI.driverController.getRightTriggerAxis() > 0.5) {
-      Intake.setIntakeTorqueOutput(55, 1);
+      Intake.setIntakeTorqueOutput(-55, 1);
       System.out.println("INTAKING");
     }
     else {
-      Intake.setIntakeTorqueOutput(55, 0.10);
+      Intake.setIntakeTorqueOutput(-40, 0.10);
     }
     // Intake.setIntakeRotationPosition(150);
   }

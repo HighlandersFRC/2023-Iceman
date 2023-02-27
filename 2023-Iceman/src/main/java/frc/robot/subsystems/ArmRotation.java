@@ -35,13 +35,14 @@ public class ArmRotation extends SubsystemBase {
     rotationMotorMaster.configPeakOutputForward(0.5);
     rotationMotorMaster.configPeakOutputReverse(-0.5);
 
-    rotationMotorMaster.config_kP(0, 4.5);
-    rotationMotorMaster.config_kI(0, 0);
-    rotationMotorMaster.config_kD(0, 6);
+    rotationMotorMaster.config_kP(0, 4.2);
+    rotationMotorMaster.config_kI(0, 0.0);
+    rotationMotorMaster.config_kD(0, 9);
 
     rotationMotorMaster.config_IntegralZone(0, 200);
 
     rotationMotorMaster.configClosedloopRamp(0.5);
+    rotationMotorMaster.configAllowableClosedloopError(0, 20);
 
     rotationMotorFollower.set(ControlMode.Follower, 11);
 
