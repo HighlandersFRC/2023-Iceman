@@ -5,15 +5,19 @@ import frc.robot.commands.defaults.LightsDefault;
 import com.fasterxml.jackson.databind.deser.impl.CreatorCandidate;
 
 import edu.wpi.first.wpilibj.PWM;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 public class Lights extends SubsystemBase {
-  private Spark leds = new Spark(0);
+  private Spark leds;
   private String fieldSide = "red";
   private double currentLedMode = LEDMode.RED.value;
   private String lightMode = "side";
+  private double startTime = Timer.getFPGATimestamp();
 
   public Lights() {
+    leds = new Spark(1);
+    // leds.setBounds(1.0, 0.8, 0.0, -0.8, -1.0);
   }
 
   public void setFieldSide(String side){
@@ -22,11 +26,15 @@ public class Lights extends SubsystemBase {
   }
 
   public void setLightMode(String mode){
+    startTime = Timer.getFPGATimestamp();
     lightMode = mode;
     setCorrectMode();
   }
 
-  private void setCorrectMode(){
+  public void setCorrectMode(){
+    if (Timer.getFPGATimestamp() - startTime > 10){
+      this.lightMode = "side";
+    }
     if (this.lightMode == "side"){
       if (this.fieldSide == "red"){
         setMode(LEDMode.RED);
@@ -50,12 +58,13 @@ public class Lights extends SubsystemBase {
 
     public final double value;
     private LEDMode(double value){
-        this.value = (value + 1.0) / 2.0;
+        this.value = value;
     }
   }
 
   public void periodic() {
-    leds.set(currentLedMode);
+    // System.out.println("Setting mode: " + currentLedMode);
+    leds.set(currentLedMode);;
   }
   
   public void init() {

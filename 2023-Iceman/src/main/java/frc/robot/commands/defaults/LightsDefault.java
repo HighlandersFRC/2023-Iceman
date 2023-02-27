@@ -22,12 +22,7 @@ public class LightsDefault extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //System.out.println("In lights default");
-    if (Timer.getFPGATimestamp() - startTime > 0.5){
-      startTime = Timer.getFPGATimestamp();
-      // lights.switchAmericaLights();
-      lights.setMode(LEDMode.BLUE);
-    }
+    lights.setCorrectMode();
   }
 
   // Called once the command ends or is interrupted.

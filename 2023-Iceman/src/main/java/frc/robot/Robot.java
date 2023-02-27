@@ -118,8 +118,9 @@ public class Robot extends TimedRobot {
 
     armRotation.postRotationValues();
     // System.out.println("ARM: " + armRotation.getRotationPosition());
-    System.out.println("WRIST: " + wrist.getAdustedWristRotation());
+    // System.out.println("WRIST: " + wrist.getAdustedWristRotation());
     // System.out.println("EXTENSION: " + armExtension.getExtensionPosition());
+    // lights.periodic();
   }
 
   @Override
@@ -166,7 +167,7 @@ public class Robot extends TimedRobot {
       lights.setFieldSide("red");
     } else if (OI.isBlueSide()) {
       drive.setFieldSide("blue");
-      drive.setFieldSide("blue");
+      lights.setFieldSide("blue");
     }
     
     drive.autoInit(pathJSON);
@@ -213,7 +214,7 @@ public class Robot extends TimedRobot {
     OI.driverRB.whileHeld(new RampIntakePreset(armExtension, armRotation, flipChecker, wrist, lights));
 
     // placement position mid
-    OI.operatorA.whileHeld(new MidPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights));
+    OI.operatorA.whileHeld(new MidPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
 
     // placement position high
     OI.operatorY.whileHeld(new HighPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights));
@@ -240,7 +241,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     SmartDashboard.putNumber("NAVX", peripherals.getNavxAngle());
 
-    
+    lights.periodic();
 
   }
 

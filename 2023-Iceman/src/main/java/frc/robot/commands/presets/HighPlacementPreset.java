@@ -23,8 +23,8 @@ public class HighPlacementPreset extends ParallelCommandGroup {
   public HighPlacementPreset(ArmExtension armExtension, ArmRotation armRotation, FlipChecker flipChecker, Wrist wrist, Lights lights) {
     addCommands(
       new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_ARM_ROTATION),
-      new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_WRIST_ROTATION),
-      new SetArmExtensionPosition(lights, armExtension, armRotation, 37.5)
+      // new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_WRIST_ROTATION),
+      new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
     );
   }
 }

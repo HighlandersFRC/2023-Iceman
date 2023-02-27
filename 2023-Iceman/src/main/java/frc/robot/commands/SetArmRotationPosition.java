@@ -8,56 +8,120 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.OI;
+import frc.robot.Constants.PRESET;
 import frc.robot.subsystems.ArmRotation;
 import frc.robot.subsystems.FlipChecker;
+import frc.robot.subsystems.Peripherals;
 import frc.robot.subsystems.Wrist;
 
 public class SetArmRotationPosition extends CommandBase {
-  /** Creates a new SetArmRotationPosition. */
   private ArmRotation arm;
-  private double position;
+  private double position = 180;
 
   private FlipChecker flipChecker;
+  private boolean useNavx = false;
+  private PRESET preset;
+  private Peripherals peripherals;
 
-  public SetArmRotationPosition(ArmRotation arm, FlipChecker flipChecker, double Position) {
+  public SetArmRotationPosition(ArmRotation arm, FlipChecker flipChecker, double position) {
     this.arm = arm;
-    this.position = Position;
+    this.position = position;
     this.flipChecker = flipChecker;
+    this.useNavx = false;
     addRequirements(this.arm);
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
-  // Called when the command is initially scheduled.
+  public SetArmRotationPosition(ArmRotation arm, Peripherals peripherals, FlipChecker flipChecker, PRESET preset){
+    this.arm = arm;
+    this.flipChecker = flipChecker;
+    this.useNavx = true;
+    this.preset = preset;
+    this.peripherals = peripherals;
+    addRequirements(this.arm);
+  }
+
   @Override
-  public void initialize() {
-    // upright cone and check to see which side to intake on
-  }
+  public void initialize() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // System.out.println("Position: " + position);
     double setPosition = position;
-    if(position == Constants.UPRIGHT_CONE_ARM_ROTATION) {
-      if(flipChecker.getFlip()) {
-        setPosition = Constants.UPRIGHT_CONE_FLIPPED_ARM_ROTATION;
+    
+    if (useNavx){
+      double angle = peripherals.getNavxAngle() % 360;
+      while (angle < 0) {
+        angle += 360;
       }
-    }
-    // tipped over cone and check to see which side to intake on
-    else if(position == Constants.TIPPED_CONE_ARM_ROTATION) {
-      if(flipChecker.getFlip()) {
-        setPosition = Constants.TIPPED_CONE_FLIPPED_ARM_ROTATION;
+      System.out.println("angle: " + angle);
+      if (angle >= 90 && angle <= 270){
+        // Case where robot is facing towards driver
+        switch(preset) {
+          case HIGH_PLACEMENT:
+            this.position = Constants.HIGH_PLACEMENT_ARM_ROTATION;
+            break;
+          case MID_PLACEMENT:
+            this.position = Constants.MID_PLACEMENT_ARM_ROTATION;
+            break;
+          case UPRIGHT_CONE:
+            this.position = Constants.UPRIGHT_CONE_ARM_ROTATION;
+            break;
+          case TIPPED_CONE:
+            this.position = Constants.TIPPED_CONE_ARM_ROTATION;
+            break;
+          case CUBE:
+            this.position = Constants.CUBE_ARM_ROTATION;
+            break;
+          case RAMP_INTAKE:
+            this.position = Constants.RAMP_INTAKE_ARM_ROTATION;
+            break;
+          default:
+            this.position = 180;
+        }
+      } else {
+        // Case where robot is facing away from driver
+        switch(preset) {
+          case HIGH_PLACEMENT:
+            this.position = Constants.HIGH_PLACEMENT_FLIPPED_ARM_ROTATION;
+            break;
+          case MID_PLACEMENT:
+            this.position = Constants.MID_PLACEMENT_FLIPPED_ARM_ROTATION;
+            break;
+          case UPRIGHT_CONE:
+            this.position = Constants.UPRIGHT_CONE_FLIPPED_ARM_ROTATION;
+            break;
+          case TIPPED_CONE:
+            this.position = Constants.TIPPED_CONE_FLIPPED_ARM_ROTATION;
+            break;
+          case CUBE:
+            this.position = Constants.CUBE_FLIPPED_ARM_ROTATION;
+            break;
+          case RAMP_INTAKE:
+            this.position = Constants.RAMP_INTAKE_FLIPPED_ARM_ROTATION;
+            break;
+          default:
+            this.position = 180;
+        }
       }
-    }
-    else if(position == Constants.MID_PLACEMENT_ARM_ROTATION) {
-      if(flipChecker.getFlip()) {
-        setPosition = Constants.MID_PLACEMENT_FLIPPED_ARM_ROTATION;
+    } else {
+      if(position == Constants.UPRIGHT_CONE_ARM_ROTATION) {
+        if(flipChecker.getFlip()) {
+          setPosition = Constants.UPRIGHT_CONE_FLIPPED_ARM_ROTATION;
+        }
       }
-    }
-    else if(position == Constants.HIGH_PLACEMENT_ARM_ROTATION) {
-      System.out.println("ajsdfklajsdklfja;sdklfja;klsdjflk");
-      if(flipChecker.getFlip()) {
-        setPosition = Constants.HIGH_PLACEMENT_FLIPPED_ARM_ROTATION;
+      else if(position == Constants.TIPPED_CONE_ARM_ROTATION) {
+        if(flipChecker.getFlip()) {
+          setPosition = Constants.TIPPED_CONE_FLIPPED_ARM_ROTATION;
+        }
+      }
+      else if(position == Constants.MID_PLACEMENT_ARM_ROTATION) {
+        if(flipChecker.getFlip()) {
+          setPosition = Constants.MID_PLACEMENT_FLIPPED_ARM_ROTATION;
+        }
+      }
+      else if(position == Constants.HIGH_PLACEMENT_ARM_ROTATION) {
+        if(flipChecker.getFlip()) {
+          setPosition = Constants.HIGH_PLACEMENT_FLIPPED_ARM_ROTATION;
+        }
       }
     }
     if(OI.operatorController.getLeftTriggerAxis() > 0.1) {
@@ -67,15 +131,17 @@ public class SetArmRotationPosition extends CommandBase {
       arm.setRotationMotorPercent((OI.operatorController.getLeftTriggerAxis())/4);
     }
     else {
-      arm.setRotationPosition(setPosition);
+      if (useNavx){
+        arm.setRotationPosition(this.position);
+      } else {
+        arm.setRotationPosition(setPosition);
+      }
     }
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     if(Math.abs(arm.getRotationPosition() - position) < 2.5) {
