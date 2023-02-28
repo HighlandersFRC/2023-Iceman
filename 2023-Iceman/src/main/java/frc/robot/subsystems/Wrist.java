@@ -28,6 +28,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.defaults.WristDefaultCommand;
+import frc.robot.tools.controlloops.PID;
 
 public class Wrist extends SubsystemBase {
 
@@ -41,6 +42,12 @@ public class Wrist extends SubsystemBase {
   private final SparkMaxPIDController rotationPidController = rotationMotor.getPIDController();
 
   private double rotationSetPoint = 180;
+
+  private PID pid;
+
+  private double kP = 0.05;
+  private double kI = 0.0007;
+  private double kD = 0.0;
   
   private double uprightOffset = 0;
 
@@ -56,6 +63,9 @@ public class Wrist extends SubsystemBase {
     // rotationPidController.setI(0);
     // rotationPidController.setD(0.5);
     // rotationPidController.setOutputRange(-1, 1);
+    pid = new PID(kP, kI, kD);
+    pid.setMaxOutput(0.7);
+    pid.setMinOutput(-0.6);
 
     rotationMotor.setIdleMode(IdleMode.kBrake);
 
@@ -88,10 +98,8 @@ public class Wrist extends SubsystemBase {
     return getWristRotationPosition()-180;
   }
 
-  public void setWristRotationPosition(double position) {
-    position = 180 + position;
-    position = (position * ABSOLUTE_ENCODER_ROTATION_MAX_VOLTAGE)/360;
-    rotationPidController.setReference(position, ControlType.kPosition);
+  public void setRotationPosition(double position) {
+
   }
 
   public double getWristCurrent() {
@@ -100,6 +108,6 @@ public class Wrist extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+
   }
 }

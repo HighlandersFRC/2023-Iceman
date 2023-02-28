@@ -76,59 +76,63 @@ public class TwoPieceAutoNoDock extends SequentialCommandGroup {
     addRequirements(drive, armExtension, armRotation, wrist, flipChecker);
     addCommands(
       new ParallelCommandGroup(
-        // new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION),
+        new RunIntake(intake, -35, 0.1),
+        new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION, false),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_ARM_ROTATION),
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 39)
+        new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
       ),
       new WaitCommand(0.25),
       new ParallelDeadlineGroup(
         new WaitCommand(0.25),
-        new RunIntake(intake, -55, 1)
+        new RunIntake(intake, 55, 1)
       ),
       new ParallelDeadlineGroup(
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 5)//,
-        // new RotateWrist(wrist, flipChecker, 132)
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 5),
+        new RotateWrist(wrist, flipChecker, 180, false)
       ),
       new ParallelDeadlineGroup(
         new ParallelDeadlineGroup(
           new AutonomousFollower(drive, pathJSON, false),
           new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_ARM_ROTATION),
-          // new RotateWrist(wrist, flipChecker, Constants.CUBE_WRIST_ROTATION),
-          new RunIntake(intake, 55, 1)
+          new RotateWrist(wrist, flipChecker, Constants.CUBE_WRIST_ROTATION, false),
+          new RunIntake(intake, -55, 1)
         ),
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 1),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 0),
         new SetFrontLimelightPipeline(peripherals, 2)
       ),
       new ParallelDeadlineGroup(
         new MoveToPieceForwards(drive, peripherals, lights),
-        new SetArmRotationPosition(armRotation, flipChecker, 96)
+        new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_ARM_ROTATION)
       ),
       new WaitCommand(0.25),
       new ParallelDeadlineGroup(
         new AutonomousFollower(drive, pathJSON2, false),
         new SequentialCommandGroup(
-          new ParallelCommandGroup(new RotateWrist(wrist, flipChecker, 0), new SetArmRotationPosition(armRotation, flipChecker, 180)),
+          new ParallelCommandGroup(
+            new RotateWrist(wrist, flipChecker, 180, false),
+            new SetArmRotationPosition(armRotation, flipChecker, 180)
+          ),
           new WaitCommand(1.5),
           new SetArmRotationPosition(armRotation, flipChecker, Constants.MID_PLACEMENT_FLIPPED_ARM_ROTATION)
         ),
-        new RunIntake(intake, 35, 0.1)
+        new RunIntake(intake, -35, 0.1)
       ),
       new ParallelDeadlineGroup(
         new ParallelCommandGroup(
-          new SetArmExtensionPosition(lights, armExtension, armRotation, 37.5),
-          new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_ARM_ROTATION)//,
-          // new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION)
+          new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION),
+          new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_ARM_ROTATION),
+          new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION, false)
         ),
         new SetBackLimelightPipeline(peripherals, 0)
       ),
       new WaitCommand(0.25),
       new ParallelDeadlineGroup(
         new WaitCommand(0.25),
-        new RunIntake(intake, -45, 1)
+        new RunIntake(intake, 45, 1)
       ),
       new ParallelDeadlineGroup(
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 2)//,
-        // new RotateWrist(wrist, flipChecker, 0)
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 3),
+        new RotateWrist(wrist, flipChecker, 180, false)
       )
     );
   }

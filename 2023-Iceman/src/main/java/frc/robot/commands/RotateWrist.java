@@ -17,18 +17,14 @@ public class RotateWrist extends CommandBase {
   private Peripherals peripherals;
   private PRESET preset;
   private boolean useNavx = false;
-
-  private PID pid;
-
-  private double kP = 0.035;
-  private double kI = 0.0015;
-  private double kD = 0.0;
+  private boolean end = true;
 
   public RotateWrist(Wrist wrist, FlipChecker flipChecker, double angle) {
     this.wrist = wrist;
     this.angle = angle;
     this.flipChecker = flipChecker;
     this.useNavx = false;
+    this.end = true;
     addRequirements(this.wrist);
   }
 
@@ -44,8 +40,8 @@ public class RotateWrist extends CommandBase {
   @Override
   public void initialize() {
     pid = new PID(kP, kI, kD);
-    pid.setMaxOutput(0.5);
-    pid.setMinOutput(-0.5);
+    pid.setMaxOutput(0.7);
+    pid.setMinOutput(-0.7);
   }
 
   @Override
@@ -140,6 +136,8 @@ public class RotateWrist extends CommandBase {
       pid.updatePID(currentAngle);
       double result = pid.getResult();
       wrist.setRotationMotorPercent(-result);
+      System.out.println("Wrist Setpoint: " + setAngle);
+    System.out.println("Wrist Angle: " + wrist.getWristRotationPosition());
     }
   }
 
@@ -150,8 +148,7 @@ public class RotateWrist extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    System.out.println(wrist.getWristRotationPosition());
-    if (Math.abs(wrist.getWristRotationPosition() - angle) < 1) {
+    if (Math.abs(wrist.getWristRotationPosition() - angle) < 1 && this.end) {
       return true;
     }
     return false;

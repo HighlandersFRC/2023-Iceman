@@ -14,8 +14,8 @@ public class WristDefaultCommand extends CommandBase {
   private Wrist wrist;
   private PID pid;
 
-  private double kP = 0.03;
-  private double kI = 0.001;
+  private double kP = 0.02;
+  private double kI = 0.0015;
   private double kD = 0.0;
 
   public WristDefaultCommand(Wrist wrist) {
@@ -29,8 +29,8 @@ public class WristDefaultCommand extends CommandBase {
   public void initialize() {
     pid = new PID(kP, kI, kD);
     pid.setSetPoint(180);
-    pid.setMaxOutput(0.3);
-    pid.setMinOutput(-0.3);
+    pid.setMaxOutput(0.5);
+    pid.setMinOutput(-0.5);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

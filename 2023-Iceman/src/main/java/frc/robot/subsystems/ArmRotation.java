@@ -35,9 +35,9 @@ public class ArmRotation extends SubsystemBase {
     rotationMotorMaster.configPeakOutputForward(0.5);
     rotationMotorMaster.configPeakOutputReverse(-0.5);
 
-    rotationMotorMaster.config_kP(0, 4.2);
+    rotationMotorMaster.config_kP(0, 3.5);
     rotationMotorMaster.config_kI(0, 0.0);
-    rotationMotorMaster.config_kD(0, 9);
+    rotationMotorMaster.config_kD(0, 7);
 
     rotationMotorMaster.config_IntegralZone(0, 200);
 

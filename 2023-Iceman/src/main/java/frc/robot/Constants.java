@@ -67,12 +67,12 @@ public final class Constants {
 
     // FRONT SIDE (battery), extensions are same on both sides
     // High row placement
-    public static final double HIGH_PLACEMENT_ARM_ROTATION = 140;
-    public static final double HIGH_PLACEMENT_WRIST_ROTATION = 175;
-    public static final double HIGH_PLACEMENT_ARM_EXTENSION = 37.5;
+    public static final double HIGH_PLACEMENT_ARM_ROTATION = 134.2;
+    public static final double HIGH_PLACEMENT_WRIST_ROTATION = 79;
+    public static final double HIGH_PLACEMENT_ARM_EXTENSION = 40;
 
     // Mid row placement
-    public static final double MID_PLACEMENT_ARM_ROTATION = 140.7;
+    public static final double MID_PLACEMENT_ARM_ROTATION = 138.7;
     public static final double MID_PLACEMENT_WRIST_ROTATION = 79.9;
     public static final double MID_PLACEMENT_ARM_EXTENSION = 18;
 
@@ -85,18 +85,18 @@ public final class Constants {
     public static final double TIPPED_CONE_WRIST_ROTATION = 186.2;
 
     // Cube intaking
-    public static final double CUBE_ARM_ROTATION = 91.4;
+    public static final double CUBE_ARM_ROTATION = 92.9;
     public static final double CUBE_WRIST_ROTATION = 124.8;
 
     // Ramp intaking
-    public static final double RAMP_INTAKE_ARM_ROTATION = 145;
-    public static final double RAMP_INTAKE_WRIST_ROTATION = 121;
-    public static final double RAMP_INTAKE_ARM_EXTENSION = 19;
+    public static final double RAMP_INTAKE_ARM_ROTATION = 122.2;
+    public static final double RAMP_INTAKE_WRIST_ROTATION = 161.5;
+    public static final double RAMP_INTAKE_ARM_EXTENSION = 0;
 
     // BACK SIDE (worm gear)
     // High row placement
-    public static final double HIGH_PLACEMENT_FLIPPED_ARM_ROTATION = 221;
-    public static final double HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION = -105;
+    public static final double HIGH_PLACEMENT_FLIPPED_ARM_ROTATION = 224.3;
+    public static final double HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION = 280;
 
     // Mid row placement
     public static final double MID_PLACEMENT_FLIPPED_ARM_ROTATION = 219.3;
@@ -115,8 +115,8 @@ public final class Constants {
     public static final double CUBE_FLIPPED_WRIST_ROTATION = 235;
 
     // Ramp intaking
-    public static final double RAMP_INTAKE_FLIPPED_ARM_ROTATION = -90;
-    public static final double RAMP_INTAKE_FLIPPED_WRIST_ROTATION = -121;
+    public static final double RAMP_INTAKE_FLIPPED_ARM_ROTATION = 237.8;
+    public static final double RAMP_INTAKE_FLIPPED_WRIST_ROTATION = 198.5;
 
 
     public static final double PLACEMENT_LOCATION_X_RED = 14.75;
