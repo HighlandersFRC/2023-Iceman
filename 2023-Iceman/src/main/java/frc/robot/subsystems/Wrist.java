@@ -45,8 +45,9 @@ public class Wrist extends SubsystemBase {
 
   private PID pid;
 
-  private double kP = 0.05;
-  private double kI = 0.0007;
+  private double kP = 0.0225;
+  //kI MUST be 0
+  private double kI = 0.0;
   private double kD = 0.0;
   
   private double uprightOffset = 0;
@@ -65,11 +66,26 @@ public class Wrist extends SubsystemBase {
     // rotationPidController.setOutputRange(-1, 1);
     pid = new PID(kP, kI, kD);
     pid.setMaxOutput(0.7);
-    pid.setMinOutput(-0.6);
+    pid.setMinOutput(-0.7);
+    pid.setSetPoint(180);
+    pid.updatePID(getWristRotationPosition());
+    rotationMotor.set(0);
 
     rotationMotor.setIdleMode(IdleMode.kBrake);
 
     setDefaultCommand(new WristDefaultCommand(this));
+  }
+
+  public void teleopInit(){
+    pid.setSetPoint(180);
+    pid.updatePID(getWristRotationPosition());
+    rotationMotor.set(0);
+  }
+
+  public void autoInit(){
+    pid.setSetPoint(180);
+    pid.updatePID(getWristRotationPosition());
+    rotationMotor.set(0);
   }
 
   public void setRotationMotorPercent(double percent) {
@@ -82,10 +98,6 @@ public class Wrist extends SubsystemBase {
     }
   }
 
-  public double getWristMotorPosition() {
-    return rotationMotor.getEncoder().getPosition();
-  }
-
   public double getUprightOffset() {
     return uprightOffset;
   }
@@ -94,12 +106,8 @@ public class Wrist extends SubsystemBase {
     return rotationEncoder.getAbsolutePosition();
   }
 
-  public double getAdustedWristRotation() {
-    return getWristRotationPosition()-180;
-  }
-
   public void setRotationPosition(double position) {
-
+    this.rotationSetPoint = position;
   }
 
   public double getWristCurrent() {
@@ -108,6 +116,9 @@ public class Wrist extends SubsystemBase {
 
   @Override
   public void periodic() {
-
+    this.pid.setSetPoint(this.rotationSetPoint);
+    this.pid.updatePID(getWristRotationPosition());
+    double result = pid.getResult();
+    setRotationMotorPercent(-result);
   }
 }

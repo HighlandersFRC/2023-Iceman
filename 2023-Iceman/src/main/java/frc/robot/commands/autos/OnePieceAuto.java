@@ -52,7 +52,7 @@ public class OnePieceAuto extends SequentialCommandGroup {
     addCommands(
       new ParallelCommandGroup(
         new RunIntake(intake, -35, 0.1),
-        new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION, true),
+        new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_ARM_ROTATION),
         new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
       ),
@@ -63,7 +63,7 @@ public class OnePieceAuto extends SequentialCommandGroup {
       ),
       new ParallelDeadlineGroup(
         new SetArmExtensionPosition(lights, armExtension, armRotation, 5),
-        new RotateWrist(wrist, flipChecker, 180, true)
+        new RotateWrist(wrist, flipChecker, 180)
       ),
       new ParallelDeadlineGroup(
         new AutonomousFollower(drive, pathJSON, false),

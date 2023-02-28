@@ -94,7 +94,7 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
     addCommands(
       new ParallelCommandGroup(
         new RunIntake(intake, -35, 0.1),
-        new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION, true),
+        new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_ARM_ROTATION),
         new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
       ),
@@ -105,13 +105,13 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
       ),
       new ParallelDeadlineGroup(
         new SetArmExtensionPosition(lights, armExtension, armRotation, 10),
-        new RotateWrist(wrist, flipChecker, Constants.CUBE_WRIST_ROTATION, true)
+        new RotateWrist(wrist, flipChecker, Constants.CUBE_WRIST_ROTATION)
       ),
       new ParallelDeadlineGroup(
         new ParallelDeadlineGroup(
           new AutonomousFollower(drive, pathJSON, false),
           new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_ARM_ROTATION),
-          new RotateWrist(wrist, flipChecker, Constants.CUBE_WRIST_ROTATION, true),
+          new RotateWrist(wrist, flipChecker, Constants.CUBE_WRIST_ROTATION),
           new RunIntake(intake, -55, 1)
         ),
         new SetArmExtensionPosition(lights, armExtension, armRotation, 1),
@@ -126,7 +126,7 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
         new AutonomousFollower(drive, pathJSON2, false),
         new SequentialCommandGroup(
           new ParallelCommandGroup(
-            new RotateWrist(wrist, flipChecker, 180, true),
+            new RotateWrist(wrist, flipChecker, 180),
             new SetArmRotationPosition(armRotation, flipChecker, 180)
           ),
           new WaitCommand(2),
@@ -138,7 +138,7 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
         new ParallelCommandGroup(
           new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION),
           new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_ARM_ROTATION),
-          new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION, true)
+          new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION)
         ),
         new SetBackLimelightPipeline(peripherals, 0)
       ),
@@ -149,7 +149,7 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
       ),
       new ParallelDeadlineGroup(
         new SetArmExtensionPosition(lights, armExtension, armRotation, 2),
-        new RotateWrist(wrist, flipChecker, 180, true)
+        new RotateWrist(wrist, flipChecker, 180)
       ),
       new ParallelDeadlineGroup(
         new AutonomousFollower(drive, pathJSON3, false),

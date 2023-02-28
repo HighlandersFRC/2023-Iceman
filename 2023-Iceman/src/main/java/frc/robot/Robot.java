@@ -122,6 +122,10 @@ public class Robot extends TimedRobot {
     // System.out.println("EXTENSION: " + armExtension.getExtensionPosition());
     // lights.periodic();
     // System.out.println("Extension: " + armExtension.getExtensionPosition());
+
+    //DO NOT COMMENT OUT!!!
+    wrist.periodic();
+    //DO NOT COMMENT OUT!!!
   }
 
   @Override
@@ -172,6 +176,7 @@ public class Robot extends TimedRobot {
     }
     
     drive.autoInit(pathJSON);
+    wrist.autoInit();
 
     if (OI.isBumpSideAuto()) {
       if (OI.isDocking()) {
@@ -208,6 +213,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     drive.teleopInit(); 
     armExtension.teleopInit();
+    wrist.teleopInit();
 
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 

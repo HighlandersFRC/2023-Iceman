@@ -12,11 +12,11 @@ import frc.robot.tools.controlloops.PID;
 public class WristDefaultCommand extends CommandBase {
   /** Creates a new WristDefaultCommand. */
   private Wrist wrist;
-  private PID pid;
+  // private PID pid;
 
-  private double kP = 0.02;
-  private double kI = 0.0015;
-  private double kD = 0.0;
+  // private double kP = 0.02;
+  // private double kI = 0.0015;
+  // private double kD = 0.0;
 
   public WristDefaultCommand(Wrist wrist) {
     this.wrist = wrist;
@@ -27,23 +27,24 @@ public class WristDefaultCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pid = new PID(kP, kI, kD);
-    pid.setSetPoint(180);
-    pid.setMaxOutput(0.5);
-    pid.setMinOutput(-0.5);
+    // pid = new PID(kP, kI, kD);
+    // pid.setSetPoint(180);
+    // pid.setMaxOutput(0.5);
+    // pid.setMinOutput(-0.5);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double angle = wrist.getWristRotationPosition();
-    pid.updatePID(angle);
-    double result = pid.getResult();
-    if (Math.abs(angle - 180) < 2){
-      wrist.setRotationMotorPercent(0);
-    } else {
-      wrist.setRotationMotorPercent(-result);
-    }
+    // double angle = wrist.getWristRotationPosition();
+    // pid.updatePID(angle);
+    // double result = pid.getResult();
+    // if (Math.abs(angle - 180) < 2){
+    //   wrist.setRotationMotorPercent(0);
+    // } else {
+    //   wrist.setRotationMotorPercent(-result);
+    // }
+    wrist.setRotationPosition(180);
   }
 
   // Called once the command ends or is interrupted.
