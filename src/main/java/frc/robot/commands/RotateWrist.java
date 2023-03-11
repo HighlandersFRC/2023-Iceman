@@ -64,8 +64,8 @@ public class RotateWrist extends CommandBase {
           case CUBE:
             this.angle = Constants.CUBE_WRIST_ROTATION;
             break;
-          case RAMP_INTAKE:
-            this.angle = Constants.RAMP_INTAKE_WRIST_ROTATION;
+          case SHELF:
+            this.angle = Constants.SHELF_WRIST_ROTATION;
             break;
           default:
             this.angle = 180;
@@ -88,8 +88,8 @@ public class RotateWrist extends CommandBase {
           case CUBE:
             this.angle = Constants.CUBE_FLIPPED_WRIST_ROTATION;
             break;
-          case RAMP_INTAKE:
-            this.angle = Constants.RAMP_INTAKE_FLIPPED_WRIST_ROTATION;
+          case SHELF:
+            this.angle = Constants.SHELF_FLIPPED_WRIST_ROTATION;
             break;
           default:
             this.angle = 180;
@@ -116,9 +116,9 @@ public class RotateWrist extends CommandBase {
         if (flipChecker.getFlip()) {
           setAngle = Constants.CUBE_FLIPPED_WRIST_ROTATION;
         }
-      } else if (angle == Constants.RAMP_INTAKE_WRIST_ROTATION) {
+      } else if (angle == Constants.SHELF_WRIST_ROTATION) {
         if (flipChecker.getFlip()) {
-          setAngle = Constants.RAMP_INTAKE_FLIPPED_WRIST_ROTATION;
+          setAngle = Constants.SHELF_FLIPPED_WRIST_ROTATION;
         }
       }
     }

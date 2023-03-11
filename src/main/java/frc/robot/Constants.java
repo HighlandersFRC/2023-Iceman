@@ -64,7 +64,7 @@ public final class Constants {
         UPRIGHT_CONE,
         TIPPED_CONE,
         CUBE,
-        RAMP_INTAKE
+        SHELF
     }
 
     // FRONT SIDE (battery), extensions are same on both sides
@@ -91,9 +91,9 @@ public final class Constants {
     public static final double CUBE_WRIST_ROTATION = 124.8;
 
     // Ramp intaking
-    public static final double RAMP_INTAKE_ARM_ROTATION = 161;
-    public static final double RAMP_INTAKE_WRIST_ROTATION = 68;
-    public static final double RAMP_INTAKE_ARM_EXTENSION = 18.7;
+    public static final double SHELF_ARM_ROTATION = 161;
+    public static final double SHELF_WRIST_ROTATION = 68;
+    public static final double SHELF_ARM_EXTENSION = 18.7;
 
     // BACK SIDE (worm gear)
     // High row placement
@@ -117,8 +117,8 @@ public final class Constants {
     public static final double CUBE_FLIPPED_WRIST_ROTATION = 235;
 
     // Ramp intaking
-    public static final double RAMP_INTAKE_FLIPPED_ARM_ROTATION = 198;
-    public static final double RAMP_INTAKE_FLIPPED_WRIST_ROTATION = 292;
+    public static final double SHELF_FLIPPED_ARM_ROTATION = 198;
+    public static final double SHELF_FLIPPED_WRIST_ROTATION = 292;
 
 
     public static final double PLACEMENT_LOCATION_X_RED = 14.75;

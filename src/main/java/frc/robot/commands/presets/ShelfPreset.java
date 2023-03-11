@@ -18,13 +18,13 @@ import frc.robot.subsystems.Wrist;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class RampIntakePreset extends ParallelCommandGroup {
-  /** Creates a new RampIntakePreset. */
-  public RampIntakePreset(ArmExtension armExtension, ArmRotation armRotation, FlipChecker flipChecker, Wrist wrist, Lights lights) {
+public class ShelfPreset extends ParallelCommandGroup {
+  /** Creates a new ShelfPreset. */
+  public ShelfPreset(ArmExtension armExtension, ArmRotation armRotation, FlipChecker flipChecker, Wrist wrist, Lights lights) {
     addCommands(
-      new SetArmRotationPosition(armRotation, flipChecker, Constants.RAMP_INTAKE_ARM_ROTATION),
-      new RotateWrist(wrist, flipChecker, Constants.RAMP_INTAKE_WRIST_ROTATION),
-      new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.RAMP_INTAKE_ARM_EXTENSION)
+      new SetArmRotationPosition(armRotation, flipChecker, Constants.SHELF_ARM_ROTATION),
+      new RotateWrist(wrist, flipChecker, Constants.SHELF_WRIST_ROTATION),
+      new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.SHELF_ARM_EXTENSION)
     );
   }
 }

@@ -70,8 +70,8 @@ public class SetArmRotationPosition extends CommandBase {
           case CUBE:
             this.position = Constants.CUBE_ARM_ROTATION;
             break;
-          case RAMP_INTAKE:
-            this.position = Constants.RAMP_INTAKE_ARM_ROTATION;
+          case SHELF:
+            this.position = Constants.SHELF_ARM_ROTATION;
             break;
           default:
             this.position = 180;
@@ -94,8 +94,8 @@ public class SetArmRotationPosition extends CommandBase {
           case CUBE:
             this.position = Constants.CUBE_FLIPPED_ARM_ROTATION;
             break;
-          case RAMP_INTAKE:
-            this.position = Constants.RAMP_INTAKE_FLIPPED_ARM_ROTATION;
+          case SHELF:
+            this.position = Constants.SHELF_FLIPPED_ARM_ROTATION;
             break;
           default:
             this.position = 180;
@@ -125,9 +125,9 @@ public class SetArmRotationPosition extends CommandBase {
         if (flipChecker.getFlip()) {
           setPosition = Constants.CUBE_FLIPPED_ARM_ROTATION;
         }
-      } else if (position == Constants.RAMP_INTAKE_ARM_ROTATION) {
+      } else if (position == Constants.SHELF_ARM_ROTATION) {
         if (flipChecker.getFlip()) {
-          setPosition = Constants.RAMP_INTAKE_FLIPPED_ARM_ROTATION;
+          setPosition = Constants.SHELF_FLIPPED_ARM_ROTATION;
         }
       }
     }

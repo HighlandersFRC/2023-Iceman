@@ -55,7 +55,7 @@ import frc.robot.commands.autos.TwoPieceBumpAutoNoDock;
 import frc.robot.commands.presets.CubePreset;
 import frc.robot.commands.presets.HighPlacementPreset;
 import frc.robot.commands.presets.MidPlacementPreset;
-import frc.robot.commands.presets.RampIntakePreset;
+import frc.robot.commands.presets.ShelfPreset;
 import frc.robot.commands.presets.TippedConePreset;
 import frc.robot.commands.presets.UprightConePreset;
 
@@ -238,7 +238,7 @@ public class Robot extends TimedRobot {
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 
     // ramp intake position
-    OI.operatorMenuButton.whileHeld(new RampIntakePreset(armExtension, armRotation, flipChecker, wrist, lights));
+    OI.operatorMenuButton.whileHeld(new ShelfPreset(armExtension, armRotation, flipChecker, wrist, lights));
 
     // OI.driverB.whenPressed(new AutoBalance(drive, 0.4));
 
