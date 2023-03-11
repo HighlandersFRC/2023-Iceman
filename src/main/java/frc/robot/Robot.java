@@ -25,6 +25,7 @@ import frc.robot.commands.AutoPlacementCube;
 import frc.robot.commands.AlignToConePlacement;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
+import frc.robot.commands.DriveAutoAligned;
 import frc.robot.commands.ExtendArm;
 import frc.robot.commands.MoveToPieceBackwards;
 import frc.robot.commands.MoveToPieceForwards;
@@ -236,11 +237,10 @@ public class Robot extends TimedRobot {
     wrist.teleopInit();
 
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
+    OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals, lights));
 
     // ramp intake position
     OI.operatorMenuButton.whileHeld(new RampIntakePreset(armExtension, armRotation, flipChecker, wrist, lights));
-
-    // OI.driverB.whenPressed(new AutoBalance(drive, 0.4));
 
     // placement position mid
     OI.operatorA.whileHeld(new MidPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
