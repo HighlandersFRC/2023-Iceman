@@ -71,7 +71,7 @@ public class SetArmRotationPosition extends CommandBase {
             this.position = Constants.CUBE_FRONTSIDE_ARM_ROTATION;
             break;
           case SHELF:
-            this.position = Constants.SHELF_FRONTSIDE_ARM_ROTATION;
+            this.position = Constants.SHELF_BACKSIDE_ARM_ROTATION;
             break;
           default:
             this.position = 180;
@@ -95,7 +95,7 @@ public class SetArmRotationPosition extends CommandBase {
             this.position = Constants.CUBE_BACKSIDE_ARM_ROTATION;
             break;
           case SHELF:
-            this.position = Constants.SHELF_BACKSIDE_ARM_ROTATION;
+            this.position = Constants.SHELF_FRONTSIDE_ARM_ROTATION;
             break;
           default:
             this.position = 180;
