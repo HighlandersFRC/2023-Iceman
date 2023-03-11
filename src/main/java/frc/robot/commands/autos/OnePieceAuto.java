@@ -52,8 +52,8 @@ public class OnePieceAuto extends SequentialCommandGroup {
     addCommands(
       new ParallelCommandGroup(
         new RunIntake(intake, -35, 0.1),
-        new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION),
-        new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_FLIPPED_ARM_ROTATION),
+        new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION),
+        new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
         new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
       ),
       new WaitCommand(0.25),

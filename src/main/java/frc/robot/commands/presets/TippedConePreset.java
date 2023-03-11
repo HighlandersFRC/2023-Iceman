@@ -21,8 +21,8 @@ public class TippedConePreset extends ParallelCommandGroup {
   /** Creates a new TippedConePreset. */
   public TippedConePreset(ArmExtension armExtension, ArmRotation armRotation, FlipChecker flipChecker, Wrist wrist, Lights lights) {
     addCommands(
-      new SetArmRotationPosition(armRotation, flipChecker, Constants.TIPPED_CONE_ARM_ROTATION),
-      new RotateWrist(wrist, flipChecker, Constants.TIPPED_CONE_WRIST_ROTATION)
+      new SetArmRotationPosition(armRotation, flipChecker, Constants.TIPPED_CONE_FRONTSIDE_ARM_ROTATION),
+      new RotateWrist(wrist, flipChecker, Constants.TIPPED_CONE_FRONTSIDE_WRIST_ROTATION)
     );
   }
 }

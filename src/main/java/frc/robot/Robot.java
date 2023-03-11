@@ -238,7 +238,7 @@ public class Robot extends TimedRobot {
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 
     // ramp intake position
-    OI.operatorMenuButton.whileHeld(new ShelfPreset(armExtension, armRotation, flipChecker, wrist, lights));
+    OI.operatorMenuButton.whileHeld(new ShelfPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
 
     // OI.driverB.whenPressed(new AutoBalance(drive, 0.4));
 

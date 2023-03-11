@@ -50,22 +50,22 @@ public class RotateWrist extends CommandBase {
         // Case where robot is facing towards driver
         switch(preset) {
           case HIGH_PLACEMENT:
-            this.angle = Constants.HIGH_PLACEMENT_WRIST_ROTATION;
+            this.angle = Constants.HIGH_PLACEMENT_FRONTSIDE_WRIST_ROTATION;
             break;
           case MID_PLACEMENT:
-            this.angle = Constants.MID_PLACEMENT_WRIST_ROTATION;
+            this.angle = Constants.MID_PLACEMENT_FRONTSIDE_WRIST_ROTATION;
             break;
           case UPRIGHT_CONE:
-            this.angle = Constants.UPRIGHT_CONE_WRIST_ROTATION;
+            this.angle = Constants.UPRIGHT_CONE_FRONTSIDE_WRIST_ROTATION;
             break;
           case TIPPED_CONE:
-            this.angle = Constants.TIPPED_CONE_WRIST_ROTATION;
+            this.angle = Constants.TIPPED_CONE_FRONTSIDE_WRIST_ROTATION;
             break;
           case CUBE:
-            this.angle = Constants.CUBE_WRIST_ROTATION;
+            this.angle = Constants.CUBE_FRONTSIDE_WRIST_ROTATION;
             break;
           case SHELF:
-            this.angle = Constants.SHELF_WRIST_ROTATION;
+            this.angle = Constants.SHELF_BACKSIDE_WRIST_ROTATION;
             break;
           default:
             this.angle = 180;
@@ -74,51 +74,51 @@ public class RotateWrist extends CommandBase {
         // Case where robot is facing away from driver
         switch(preset) {
           case HIGH_PLACEMENT:
-            this.angle = Constants.HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION;
+            this.angle = Constants.HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION;
             break;
           case MID_PLACEMENT:
-            this.angle = Constants.MID_PLACEMENT_FLIPPED_WRIST_ROTATION;
+            this.angle = Constants.MID_PLACEMENT_BACKSIDE_WRIST_ROTATION;
             break;
           case UPRIGHT_CONE:
-            this.angle = Constants.UPRIGHT_CONE_FLIPPED_WRIST_ROTATION;
+            this.angle = Constants.UPRIGHT_CONE_BACKSIDE_WRIST_ROTATION;
             break;
           case TIPPED_CONE:
-            this.angle = Constants.TIPPED_CONE_FLIPPED_WRIST_ROTATION;
+            this.angle = Constants.TIPPED_CONE_BACKSIDE_WRIST_ROTATION;
             break;
           case CUBE:
-            this.angle = Constants.CUBE_FLIPPED_WRIST_ROTATION;
+            this.angle = Constants.CUBE_BACKSIDE_WRIST_ROTATION;
             break;
           case SHELF:
-            this.angle = Constants.SHELF_FLIPPED_WRIST_ROTATION;
+            this.angle = Constants.SHELF_FRONTSIDE_WRIST_ROTATION;
             break;
           default:
             this.angle = 180;
         }
       }
     } else {
-      if (angle == Constants.UPRIGHT_CONE_WRIST_ROTATION) {
+      if (angle == Constants.UPRIGHT_CONE_FRONTSIDE_WRIST_ROTATION) {
         if (flipChecker.getFlip()) {
-          setAngle = Constants.UPRIGHT_CONE_FLIPPED_WRIST_ROTATION;
+          setAngle = Constants.UPRIGHT_CONE_BACKSIDE_WRIST_ROTATION;
         }
-      } else if (angle == Constants.TIPPED_CONE_WRIST_ROTATION) {
+      } else if (angle == Constants.TIPPED_CONE_FRONTSIDE_WRIST_ROTATION) {
         if (flipChecker.getFlip()) {
-          setAngle = Constants.TIPPED_CONE_FLIPPED_WRIST_ROTATION;
+          setAngle = Constants.TIPPED_CONE_BACKSIDE_WRIST_ROTATION;
         }
-      } else if (angle == Constants.HIGH_PLACEMENT_WRIST_ROTATION) {
+      } else if (angle == Constants.HIGH_PLACEMENT_FRONTSIDE_WRIST_ROTATION) {
         if (flipChecker.getFlip()) {
-          setAngle = Constants.HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION;
+          setAngle = Constants.HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION;
         }
-      } else if (angle == Constants.MID_PLACEMENT_WRIST_ROTATION) {
+      } else if (angle == Constants.MID_PLACEMENT_FRONTSIDE_WRIST_ROTATION) {
         if (flipChecker.getFlip()) {
-          setAngle = Constants.MID_PLACEMENT_FLIPPED_WRIST_ROTATION;
+          setAngle = Constants.MID_PLACEMENT_BACKSIDE_WRIST_ROTATION;
         }
-      } else if (angle == Constants.CUBE_WRIST_ROTATION) {
+      } else if (angle == Constants.CUBE_FRONTSIDE_WRIST_ROTATION) {
         if (flipChecker.getFlip()) {
-          setAngle = Constants.CUBE_FLIPPED_WRIST_ROTATION;
+          setAngle = Constants.CUBE_BACKSIDE_WRIST_ROTATION;
         }
-      } else if (angle == Constants.SHELF_WRIST_ROTATION) {
+      } else if (angle == Constants.SHELF_FRONTSIDE_WRIST_ROTATION) {
         if (flipChecker.getFlip()) {
-          setAngle = Constants.SHELF_FLIPPED_WRIST_ROTATION;
+          setAngle = Constants.SHELF_BACKSIDE_WRIST_ROTATION;
         }
       }
     }
