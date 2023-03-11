@@ -21,8 +21,8 @@ public class UprightConePreset extends ParallelCommandGroup {
   /** Creates a new UprightConePreset. */
   public UprightConePreset(ArmExtension armExtension, ArmRotation armRotation, FlipChecker flipChecker, Wrist wrist, Lights lights) {
     addCommands(
-      new SetArmRotationPosition(armRotation, flipChecker, Constants.UPRIGHT_CONE_ARM_ROTATION),
-      new RotateWrist(wrist, flipChecker, Constants.UPRIGHT_CONE_WRIST_ROTATION)
+      new SetArmRotationPosition(armRotation, flipChecker, Constants.UPRIGHT_CONE_FRONTSIDE_ARM_ROTATION),
+      new RotateWrist(wrist, flipChecker, Constants.UPRIGHT_CONE_FRONTSIDE_WRIST_ROTATION)
     );
   }
 }

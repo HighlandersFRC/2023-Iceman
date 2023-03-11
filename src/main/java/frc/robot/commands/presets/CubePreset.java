@@ -21,8 +21,8 @@ public class CubePreset extends ParallelCommandGroup {
   /** Creates a new CubePreset. */
   public CubePreset(ArmExtension armExtension, ArmRotation armRotation, FlipChecker flipChecker, Wrist wrist, Lights lights) {
     addCommands(
-      new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_ARM_ROTATION),
-      new RotateWrist(wrist, flipChecker, Constants.CUBE_WRIST_ROTATION)
+      new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION),
+      new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION)
     );
   }
 }

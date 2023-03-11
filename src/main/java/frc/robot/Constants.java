@@ -64,61 +64,61 @@ public final class Constants {
         UPRIGHT_CONE,
         TIPPED_CONE,
         CUBE,
-        RAMP_INTAKE
+        SHELF
     }
 
     // FRONT SIDE (battery), extensions are same on both sides
     // High row placement
-    public static final double HIGH_PLACEMENT_ARM_ROTATION = 135.2;
-    public static final double HIGH_PLACEMENT_WRIST_ROTATION = 79;
+    public static final double HIGH_PLACEMENT_FRONTSIDE_ARM_ROTATION = 135.2;
+    public static final double HIGH_PLACEMENT_FRONTSIDE_WRIST_ROTATION = 79;
     public static final double HIGH_PLACEMENT_ARM_EXTENSION = 40;
 
     // Mid row placement
-    public static final double MID_PLACEMENT_ARM_ROTATION = 138.7;
-    public static final double MID_PLACEMENT_WRIST_ROTATION = 79.9;
+    public static final double MID_PLACEMENT_FRONTSIDE_ARM_ROTATION = 138.7;
+    public static final double MID_PLACEMENT_FRONTSIDE_WRIST_ROTATION = 79.9;
     public static final double MID_PLACEMENT_ARM_EXTENSION = 18;
 
     // Upright cone intaking
-    public static final double UPRIGHT_CONE_ARM_ROTATION = 89.7;
-    public static final double UPRIGHT_CONE_WRIST_ROTATION = 152;
+    public static final double UPRIGHT_CONE_FRONTSIDE_ARM_ROTATION = 89.7;
+    public static final double UPRIGHT_CONE_FRONTSIDE_WRIST_ROTATION = 152;
 
     // Tipped cone intaking
-    public static final double TIPPED_CONE_ARM_ROTATION = 66.0;
-    public static final double TIPPED_CONE_WRIST_ROTATION = 186.2;
+    public static final double TIPPED_CONE_FRONTSIDE_ARM_ROTATION = 66.0;
+    public static final double TIPPED_CONE_FRONTSIDE_WRIST_ROTATION = 186.2;
 
     // Cube intaking
-    public static final double CUBE_ARM_ROTATION = 92.9;
-    public static final double CUBE_WRIST_ROTATION = 124.8;
+    public static final double CUBE_FRONTSIDE_ARM_ROTATION = 92.9;
+    public static final double CUBE_FRONTSIDE_WRIST_ROTATION = 124.8;
 
-    // Ramp intaking
-    public static final double RAMP_INTAKE_ARM_ROTATION = 161;
-    public static final double RAMP_INTAKE_WRIST_ROTATION = 68;
-    public static final double RAMP_INTAKE_ARM_EXTENSION = 18.7;
+    // Shelf intaking
+    public static final double SHELF_FRONTSIDE_ARM_ROTATION = 161;
+    public static final double SHELF_FRONTSIDE_WRIST_ROTATION = 68;
+    public static final double SHELF_ARM_EXTENSION = 18.7;
 
     // BACK SIDE (worm gear)
     // High row placement
-    public static final double HIGH_PLACEMENT_FLIPPED_ARM_ROTATION = 223.3;
-    public static final double HIGH_PLACEMENT_FLIPPED_WRIST_ROTATION = 280;
+    public static final double HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION = 223.3;
+    public static final double HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION = 280;
 
     // Mid row placement
-    public static final double MID_PLACEMENT_FLIPPED_ARM_ROTATION = 219.3;
-    public static final double MID_PLACEMENT_FLIPPED_WRIST_ROTATION = 280.3;
+    public static final double MID_PLACEMENT_BACKSIDE_ARM_ROTATION = 219.3;
+    public static final double MID_PLACEMENT_BACKSIDE_WRIST_ROTATION = 280.3;
 
     // Upright cone intaking
-    public static final double UPRIGHT_CONE_FLIPPED_ARM_ROTATION = 267.7;
-    public static final double UPRIGHT_CONE_FLIPPED_WRIST_ROTATION = 207;
+    public static final double UPRIGHT_CONE_BACKSIDE_ARM_ROTATION = 267.7;
+    public static final double UPRIGHT_CONE_BACKSIDE_WRIST_ROTATION = 207;
 
     // Tipped cone intaking
-    public static final double TIPPED_CONE_FLIPPED_ARM_ROTATION = 292.2;
-    public static final double TIPPED_CONE_FLIPPED_WRIST_ROTATION = 175.4;
+    public static final double TIPPED_CONE_BACKSIDE_ARM_ROTATION = 292.2;
+    public static final double TIPPED_CONE_BACKSIDE_WRIST_ROTATION = 175.4;
 
     // Cube intaking
-    public static final double CUBE_FLIPPED_ARM_ROTATION = 264.6;
-    public static final double CUBE_FLIPPED_WRIST_ROTATION = 235;
+    public static final double CUBE_BACKSIDE_ARM_ROTATION = 264.6;
+    public static final double CUBE_BACKSIDE_WRIST_ROTATION = 235;
 
-    // Ramp intaking
-    public static final double RAMP_INTAKE_FLIPPED_ARM_ROTATION = 198;
-    public static final double RAMP_INTAKE_FLIPPED_WRIST_ROTATION = 292;
+    // Shelf intaking
+    public static final double SHELF_BACKSIDE_ARM_ROTATION = 198;
+    public static final double SHELF_BACKSIDE_WRIST_ROTATION = 292;
 
 
     public static final double PLACEMENT_LOCATION_X_RED = 14.75;

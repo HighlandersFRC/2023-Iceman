@@ -56,7 +56,7 @@ import frc.robot.commands.autos.TwoPieceBumpAutoNoDock;
 import frc.robot.commands.presets.CubePreset;
 import frc.robot.commands.presets.HighPlacementPreset;
 import frc.robot.commands.presets.MidPlacementPreset;
-import frc.robot.commands.presets.RampIntakePreset;
+import frc.robot.commands.presets.ShelfPreset;
 import frc.robot.commands.presets.TippedConePreset;
 import frc.robot.commands.presets.UprightConePreset;
 
@@ -108,6 +108,70 @@ public class Robot extends TimedRobot {
     PortForwarder.add(5800, "limelight-back.local", 5800);
     PortForwarder.add(5801, "limelight-back.local", 5801);
     PortForwarder.add(5805, "limelight-back.local", 5805);
+
+    if (OI.isRedSide()) {
+      drive.setFieldSide("red");
+      lights.setFieldSide("red");
+    } else if (OI.isBlueSide()) {
+      drive.setFieldSide("blue");
+      lights.setFieldSide("blue");
+    }
+
+    if(OI.isBumpSideAuto()) {
+      try {
+        pathingFile = new File("/home/lvuser/deploy/2PieceBumpPart1.json");
+        FileReader scanner = new FileReader(pathingFile);
+        pathRead = new JSONObject(new JSONTokener(scanner));
+        pathJSON = (JSONArray) pathRead.get("sampled_points");
+      } catch(Exception e) {
+        System.out.println("ERROR WITH PATH FILE " + e);
+      }
+    }
+    else if(OI.isClearSideAuto()) {
+      try {
+        pathingFile = new File("/home/lvuser/deploy/2PiecePart1.json");
+        FileReader scanner = new FileReader(pathingFile);
+        pathRead = new JSONObject(new JSONTokener(scanner));
+        pathJSON = (JSONArray) pathRead.get("sampled_points");
+      } catch(Exception e) {
+        System.out.println("ERROR WITH PATH FILE " + e);
+      }
+    } else if (OI.isCenterAuto()) {
+      try {
+        pathingFile = new File("/home/lvuser/deploy/1PieceDock.json");
+        FileReader scanner = new FileReader(pathingFile);
+        pathRead = new JSONObject(new JSONTokener(scanner));
+        pathJSON = (JSONArray) pathRead.get("sampled_points");
+      } catch (Exception e){
+        System.out.println("ERROR WITH PATH FILE " + e);
+      }
+    }
+
+    if (OI.isBumpSideAuto()) {
+      if (OI.isDocking()) {
+        TwoPieceBumpAuto auto = new TwoPieceBumpAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        auto.schedule();
+      } else {
+        TwoPieceBumpAutoNoDock auto = new TwoPieceBumpAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        auto.schedule();
+      }
+    } else if (OI.isClearSideAuto()) {
+      if (OI.isDocking()) {
+        TwoPieceAuto auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        auto.schedule();
+      } else {
+        TwoPieceAutoNoDock auto = new TwoPieceAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        auto.schedule();
+      }
+    } else if (OI.isCenterAuto()) {
+      if (OI.isDocking()){
+        OnePieceAuto auto = new OnePieceAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        auto.schedule();
+      } else {
+        OnePieceAutoNoDock auto = new OnePieceAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        auto.schedule();
+      }
+    }
   }  
 
   @Override
@@ -157,73 +221,9 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {}
 
   @Override
-  public void autonomousInit() {
-    if(OI.isBumpSideAuto()) {
-      try {
-        pathingFile = new File("/home/lvuser/deploy/2PieceBumpPart1.json");
-        FileReader scanner = new FileReader(pathingFile);
-        pathRead = new JSONObject(new JSONTokener(scanner));
-        pathJSON = (JSONArray) pathRead.get("sampled_points");
-      } catch(Exception e) {
-        System.out.println("ERROR WITH PATH FILE " + e);
-      }
-    }
-    else if(OI.isClearSideAuto()) {
-      try {
-        pathingFile = new File("/home/lvuser/deploy/2PiecePart1.json");
-        FileReader scanner = new FileReader(pathingFile);
-        pathRead = new JSONObject(new JSONTokener(scanner));
-        pathJSON = (JSONArray) pathRead.get("sampled_points");
-      } catch(Exception e) {
-        System.out.println("ERROR WITH PATH FILE " + e);
-      }
-    } else if (OI.isCenterAuto()) {
-      try {
-        pathingFile = new File("/home/lvuser/deploy/1PieceDock.json");
-        FileReader scanner = new FileReader(pathingFile);
-        pathRead = new JSONObject(new JSONTokener(scanner));
-        pathJSON = (JSONArray) pathRead.get("sampled_points");
-      } catch (Exception e){
-        System.out.println("ERROR WITH PATH FILE " + e);
-      }
-    }
-
-    if (OI.isRedSide()) {
-      drive.setFieldSide("red");
-      lights.setFieldSide("red");
-    } else if (OI.isBlueSide()) {
-      drive.setFieldSide("blue");
-      lights.setFieldSide("blue");
-    }
-    
+  public void autonomousInit() {    
     drive.autoInit(pathJSON);
     wrist.autoInit();
-
-    if (OI.isBumpSideAuto()) {
-      if (OI.isDocking()) {
-        TwoPieceBumpAuto auto = new TwoPieceBumpAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
-        auto.schedule();
-      } else {
-        TwoPieceBumpAutoNoDock auto = new TwoPieceBumpAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
-        auto.schedule();
-      }
-    } else if (OI.isClearSideAuto()) {
-      if (OI.isDocking()) {
-        TwoPieceAuto auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
-        auto.schedule();
-      } else {
-        TwoPieceAutoNoDock auto = new TwoPieceAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
-        auto.schedule();
-      }
-    } else if (OI.isCenterAuto()) {
-      if (OI.isDocking()){
-        OnePieceAuto auto = new OnePieceAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
-        auto.schedule();
-      } else {
-        OnePieceAutoNoDock auto = new OnePieceAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
-        auto.schedule();
-      }
-    }
   }
 
   /** This function is called periodically during autonomous. */
@@ -240,7 +240,7 @@ public class Robot extends TimedRobot {
     OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals, lights));
 
     // ramp intake position
-    OI.operatorMenuButton.whileHeld(new RampIntakePreset(armExtension, armRotation, flipChecker, wrist, lights));
+    OI.operatorMenuButton.whileHeld(new ShelfPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
 
     // placement position mid
     OI.operatorA.whileHeld(new MidPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));

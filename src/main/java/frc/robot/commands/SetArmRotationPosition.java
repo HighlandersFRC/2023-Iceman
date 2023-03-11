@@ -56,22 +56,22 @@ public class SetArmRotationPosition extends CommandBase {
         // Case where robot is facing towards driver
         switch(preset) {
           case HIGH_PLACEMENT:
-            this.position = Constants.HIGH_PLACEMENT_ARM_ROTATION;
+            this.position = Constants.HIGH_PLACEMENT_FRONTSIDE_ARM_ROTATION;
             break;
           case MID_PLACEMENT:
-            this.position = Constants.MID_PLACEMENT_ARM_ROTATION;
+            this.position = Constants.MID_PLACEMENT_FRONTSIDE_ARM_ROTATION;
             break;
           case UPRIGHT_CONE:
-            this.position = Constants.UPRIGHT_CONE_ARM_ROTATION;
+            this.position = Constants.UPRIGHT_CONE_FRONTSIDE_ARM_ROTATION;
             break;
           case TIPPED_CONE:
-            this.position = Constants.TIPPED_CONE_ARM_ROTATION;
+            this.position = Constants.TIPPED_CONE_FRONTSIDE_ARM_ROTATION;
             break;
           case CUBE:
-            this.position = Constants.CUBE_ARM_ROTATION;
+            this.position = Constants.CUBE_FRONTSIDE_ARM_ROTATION;
             break;
-          case RAMP_INTAKE:
-            this.position = Constants.RAMP_INTAKE_ARM_ROTATION;
+          case SHELF:
+            this.position = Constants.SHELF_FRONTSIDE_ARM_ROTATION;
             break;
           default:
             this.position = 180;
@@ -80,54 +80,54 @@ public class SetArmRotationPosition extends CommandBase {
         // Case where robot is facing away from driver
         switch(preset) {
           case HIGH_PLACEMENT:
-            this.position = Constants.HIGH_PLACEMENT_FLIPPED_ARM_ROTATION;
+            this.position = Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION;
             break;
           case MID_PLACEMENT:
-            this.position = Constants.MID_PLACEMENT_FLIPPED_ARM_ROTATION;
+            this.position = Constants.MID_PLACEMENT_BACKSIDE_ARM_ROTATION;
             break;
           case UPRIGHT_CONE:
-            this.position = Constants.UPRIGHT_CONE_FLIPPED_ARM_ROTATION;
+            this.position = Constants.UPRIGHT_CONE_BACKSIDE_ARM_ROTATION;
             break;
           case TIPPED_CONE:
-            this.position = Constants.TIPPED_CONE_FLIPPED_ARM_ROTATION;
+            this.position = Constants.TIPPED_CONE_BACKSIDE_ARM_ROTATION;
             break;
           case CUBE:
-            this.position = Constants.CUBE_FLIPPED_ARM_ROTATION;
+            this.position = Constants.CUBE_BACKSIDE_ARM_ROTATION;
             break;
-          case RAMP_INTAKE:
-            this.position = Constants.RAMP_INTAKE_FLIPPED_ARM_ROTATION;
+          case SHELF:
+            this.position = Constants.SHELF_BACKSIDE_ARM_ROTATION;
             break;
           default:
             this.position = 180;
         }
       }
     } else {
-      if(position == Constants.UPRIGHT_CONE_ARM_ROTATION) {
+      if(position == Constants.UPRIGHT_CONE_FRONTSIDE_ARM_ROTATION) {
         if(flipChecker.getFlip()) {
-          setPosition = Constants.UPRIGHT_CONE_FLIPPED_ARM_ROTATION;
+          setPosition = Constants.UPRIGHT_CONE_BACKSIDE_ARM_ROTATION;
         }
       }
-      else if(position == Constants.TIPPED_CONE_ARM_ROTATION) {
+      else if(position == Constants.TIPPED_CONE_FRONTSIDE_ARM_ROTATION) {
         if(flipChecker.getFlip()) {
-          setPosition = Constants.TIPPED_CONE_FLIPPED_ARM_ROTATION;
+          setPosition = Constants.TIPPED_CONE_BACKSIDE_ARM_ROTATION;
         }
       }
-      else if(position == Constants.MID_PLACEMENT_ARM_ROTATION) {
+      else if(position == Constants.MID_PLACEMENT_FRONTSIDE_ARM_ROTATION) {
         if(flipChecker.getFlip()) {
-          setPosition = Constants.MID_PLACEMENT_FLIPPED_ARM_ROTATION;
+          setPosition = Constants.MID_PLACEMENT_BACKSIDE_ARM_ROTATION;
         }
       }
-      else if(position == Constants.HIGH_PLACEMENT_ARM_ROTATION) {
+      else if(position == Constants.HIGH_PLACEMENT_FRONTSIDE_ARM_ROTATION) {
         if(flipChecker.getFlip()) {
-          setPosition = Constants.HIGH_PLACEMENT_FLIPPED_ARM_ROTATION;
+          setPosition = Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION;
         }
-      } else if (position == Constants.CUBE_ARM_ROTATION) {
+      } else if (position == Constants.CUBE_FRONTSIDE_ARM_ROTATION) {
         if (flipChecker.getFlip()) {
-          setPosition = Constants.CUBE_FLIPPED_ARM_ROTATION;
+          setPosition = Constants.CUBE_BACKSIDE_ARM_ROTATION;
         }
-      } else if (position == Constants.RAMP_INTAKE_ARM_ROTATION) {
+      } else if (position == Constants.SHELF_FRONTSIDE_ARM_ROTATION) {
         if (flipChecker.getFlip()) {
-          setPosition = Constants.RAMP_INTAKE_FLIPPED_ARM_ROTATION;
+          setPosition = Constants.SHELF_BACKSIDE_ARM_ROTATION;
         }
       }
     }
