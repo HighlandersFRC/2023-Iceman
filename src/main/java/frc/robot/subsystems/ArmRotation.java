@@ -18,10 +18,10 @@ import frc.robot.commands.defaults.ArmRotationDefaultCommand;
 public class ArmRotation extends SubsystemBase {
   /** Creates a new ArmRotation. */
 
-  private final WPI_TalonFX rotationMotorMaster = new WPI_TalonFX(11);
-  private final WPI_TalonFX rotationMotorFollower = new WPI_TalonFX(12);
+  private final WPI_TalonFX rotationMotorMaster = new WPI_TalonFX(11, "Canivore");
+  private final WPI_TalonFX rotationMotorFollower = new WPI_TalonFX(12, "Canivore");
   
-  private final CANCoder armRotationCancoder = new CANCoder(5);
+  private final CANCoder armRotationCancoder = new CANCoder(5, "Canivore");
 
   private ArmExtension armExtension;
 
