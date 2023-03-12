@@ -4,93 +4,106 @@
 
 package frc.robot.subsystems;
 
-import java.util.ResourceBundle.Control;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
-import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenixpro.configs.CurrentLimitsConfigs;
+import com.ctre.phoenixpro.configs.MotionMagicConfigs;
+import com.ctre.phoenixpro.configs.MotorOutputConfigs;
+import com.ctre.phoenixpro.configs.Slot0Configs;
+import com.ctre.phoenixpro.configs.TalonFXConfiguration;
+import com.ctre.phoenixpro.controls.MotionMagicVoltage;
+// import com.ctre.phoenix.motorcontrol.can.TalonFX;
+// import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenixpro.controls.TorqueCurrentFOC;
+import com.ctre.phoenixpro.controls.VoltageOut;
+import com.ctre.phoenixpro.hardware.TalonFX;
+import com.ctre.phoenixpro.signals.NeutralModeValue;
 
-import edu.wpi.first.networktables.NetworkTableInstance.NetworkMode;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.defaults.ArmExtensionDefaultCommand;
+import com.ctre.phoenixpro.configs.TalonFXConfigurator;
 
 public class ArmExtension extends SubsystemBase {
 
   private final TalonFX extensionMotor = new TalonFX(10, "Canivore");
+
+  private TalonFXConfigurator configurator = extensionMotor.getConfigurator();
+
+  private MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
+  private MotorOutputConfigs motorOutputConfigs = new MotorOutputConfigs();
+  private CurrentLimitsConfigs currentLimitConfigs = new CurrentLimitsConfigs();
+
+  private final VoltageOut percentRequest = new VoltageOut(0);
+  private MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0).withSlot(0);
+
   
   /** Creates a new ArmExtension. */
   public ArmExtension() {}
 
   public void init() {
-    extensionMotor.configFactoryDefault();
-    
-    extensionMotor.setNeutralMode(NeutralMode.Brake);
+    configurator.apply(new TalonFXConfiguration());
 
-    extensionMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+    motorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
 
-    extensionMotor.configForwardSoftLimitThreshold(Constants.getArmExtensionTics(Constants.MAX_EXTENSION));
-    extensionMotor.configForwardSoftLimitEnable(true);
+    currentLimitConfigs.StatorCurrentLimitEnable = false;
+    currentLimitConfigs.SupplyCurrentLimitEnable = false;
 
-    extensionMotor.setSelectedSensorPosition(0);
+    // motorOutputConfigs.DutyCycleNeutralDeadband = 0.125;
 
-    extensionMotor.configPeakOutputForward(0.5);
-    extensionMotor.configPeakOutputReverse(-0.5);
+    Slot0Configs slot0Configs = new Slot0Configs();
+    slot0Configs.kS = 0; // Add 0.05 V output to overcome static friction
+    slot0Configs.kV = 0; // A velocity target of 1 rps results in 0.12 V output
+    slot0Configs.kP = 24; // A position error of 0.5 rotations results in 12 V output
+    slot0Configs.kI = 0; // no output for integrated error
+    slot0Configs.kD = 0.1; // A velocity error of 1 rps results in 0.1 V output
 
-    extensionMotor.configOpenloopRamp(0.5);
+    motionMagicConfigs.MotionMagicCruiseVelocity = Constants.MAX_FALCON_ROTATIONS_PER_SECOND;
+    motionMagicConfigs.MotionMagicAcceleration = Constants.MAX_FALCON_ROTATIONS_PER_SECOND_PER_SECOND;
+    motionMagicConfigs.MotionMagicJerk = Constants.MAX_FALCON_ROTATIONS_PER_SECOND_PER_SECOND_PER_SECOND;
 
-    extensionMotor.config_kP(0, 0.95);
-    extensionMotor.config_kI(0, 0);
-    extensionMotor.config_kD(0, 0);
+    configurator.apply(motorOutputConfigs);
+    configurator.apply(motionMagicConfigs);
+    configurator.apply(slot0Configs);
 
-    extensionMotor.config_IntegralZone(0, 1000);
-    extensionMotor.configNeutralDeadband(0.15, 100);
-    extensionMotor.configAllowableClosedloopError(0, 800, 100);
+    configurator.apply(currentLimitConfigs);
 
-    extensionMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 40, 0));
-    extensionMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 40, 0));
-    
     setDefaultCommand(new ArmExtensionDefaultCommand(this));
   }
 
   public void teleopInit() {
-    extensionMotor.configPeakOutputReverse(-0.25);
+    // extensionMotor.configPeakOutputReverse(-0.25);
   }
 
   public double getExtensionPosition() {
-    return Constants.getArmExtensionInches(extensionMotor.getSelectedSensorPosition());
+    return Constants.getArmExtensionInchesFromRotations(extensionMotor.getRotorPosition().getValue());
   }
 
   public double getExtensionRawPosition() {
-    return extensionMotor.getSelectedSensorPosition();
+    return extensionMotor.getRotorPosition().getValue();
   }
 
   public boolean getExtensionLimitSwitch() {
-    if(extensionMotor.getSensorCollection().isRevLimitSwitchClosed() == 1) {
-      return true;
+    if(extensionMotor.getReverseLimit().getValue().value == 1) {
+      return false;
     }
-    return false;
+    return true;
   }
 
   public void setExtensionEncoderPosition(double inches) {
-    extensionMotor.setSelectedSensorPosition(Constants.getArmExtensionTics(inches));
+    extensionMotor.setRotorPosition(Constants.getArmExtensionRotations(inches));
   }
 
   public void setExtensionMotorPercent(double percent) {
-    extensionMotor.set(ControlMode.PercentOutput, percent);
+    extensionMotor.setControl(this.percentRequest.withOutput(percent));
   }
 
   public void setExtensionPosition(double inches) {
     SmartDashboard.putNumber("Desired", Constants.getArmExtensionTics(inches));
-    extensionMotor.set(ControlMode.Position, Constants.getArmExtensionTics(inches));
+    extensionMotor.setControl(motionMagicRequest.withPosition(Constants.getArmExtensionRotations(inches)));
+    // extensionMotor.set(ControlMode.Position, Constants.getArmExtensionTics(inches));
   }
 
   @Override
@@ -98,3 +111,5 @@ public class ArmExtension extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 }
+
+

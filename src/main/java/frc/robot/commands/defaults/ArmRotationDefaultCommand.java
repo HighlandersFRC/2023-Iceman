@@ -31,25 +31,26 @@ public class ArmRotationDefaultCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    arm.setRotationMotorPercent(0);
     // if((OI.operatorController.getRawAxis(4))/4 < 0.0125) {
-      if(armExtension.getExtensionPosition() < 5) {
-        position = SmartDashboard.getNumber("SD Rotation", 180);
-        // if(position > 90 && position < 250) {
-        //   arm.setRotationPosition(position);
-        // }
-        // else {
-        arm.setRotationPosition(180);
-        // if(OI.operatorController.getLeftTriggerAxis() > 0.25) {
-        //   arm.setRotationMotorPercent(OI.operatorController.getLeftTriggerAxis()/4);
-        // }
-        // if(OI.operatorController.getRightTriggerAxis() > 0.25) {
-        //   arm.setRotationMotorPercent(-OI.operatorController.getRightTriggerAxis()/4);
-        // }
-        // else {
-        //   arm.setRotationMotorPercent(0);
-        // }
-        // }
-      }
+      // if(armExtension.getExtensionPosition() < 5) {
+      //   position = SmartDashboard.getNumber("SD Rotation", 180);
+      //   // if(position > 90 && position < 250) {
+      //   //   arm.setRotationPosition(position);
+      //   // }
+      //   // else {
+      //   arm.setRotationPosition(180);
+      //   // if(OI.operatorController.getLeftTriggerAxis() > 0.25) {
+      //   //   arm.setRotationMotorPercent(OI.operatorController.getLeftTriggerAxis()/4);
+      //   // }
+      //   // if(OI.operatorController.getRightTriggerAxis() > 0.25) {
+      //   //   arm.setRotationMotorPercent(-OI.operatorController.getRightTriggerAxis()/4);
+      //   // }
+      //   // else {
+      //   //   arm.setRotationMotorPercent(0);
+      //   // }
+      //   // }
+      // }
     // }
     // else {
     //   arm.setRotationMotorPercent((OI.operatorController.getRawAxis(4))/4);
