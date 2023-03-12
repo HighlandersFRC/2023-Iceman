@@ -147,6 +147,13 @@ public final class Constants {
     public static final double EXTENSION_INCHES_PER_ROTATION = 1.5038 * Math.PI;
     public static final double MAX_EXTENSION = 40;
 
+    // max of falcon with regular firmware = 6380 rpm, with phoenix pro ~ 6000 rpm, converting to rps
+    public static final double MAX_FALCON_ROTATIONS_PER_SECOND = 75;
+    // max acceleration of a falcon - calculated by deciding that we need to reach max speed in 1 second
+    public static final double MAX_FALCON_ROTATIONS_PER_SECOND_PER_SECOND = 200;
+    // max jerk of a falcon - calculated by deciding that we need to reach max acceleration in 1 second
+    public static final double MAX_FALCON_ROTATIONS_PER_SECOND_PER_SECOND_PER_SECOND = 8000;
+
     public static final double TOTAL_TICS_PER_INCH = (2.0 * ((1.0 / FALCON_TICS_PER_ROTATION) / EXTENSION_GEAR_RATIO) * EXTENSION_INCHES_PER_ROTATION);
 
     public static void increaseWristOffset() {
@@ -171,6 +178,14 @@ public final class Constants {
 
     public static double getArmExtensionTics(double inches) {
         return inches/TOTAL_TICS_PER_INCH;
+    }
+
+    public static double getArmExtensionRotations(double inches) {
+        return getArmExtensionTics(inches)/FALCON_TICS_PER_ROTATION;
+    }
+
+    public static double getArmExtensionInchesFromRotations(double rotations) {
+        return getArmExtensionInches(rotations) * FALCON_TICS_PER_ROTATION;
     }
 
     public static final Transform3d ROBOT_TO_CAM =
