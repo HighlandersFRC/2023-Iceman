@@ -148,11 +148,17 @@ public final class Constants {
     public static final double MAX_EXTENSION = 40;
 
     // max of falcon with regular firmware = 6380 rpm, with phoenix pro ~ 6000 rpm, converting to rps
-    public static final double MAX_FALCON_ROTATIONS_PER_SECOND = 75;
+    public static final double MAX_FALCON_ROTATIONS_PER_SECOND = 80;
     // max acceleration of a falcon - calculated by deciding that we need to reach max speed in 1 second
     public static final double MAX_FALCON_ROTATIONS_PER_SECOND_PER_SECOND = 200;
     // max jerk of a falcon - calculated by deciding that we need to reach max acceleration in 1 second
-    public static final double MAX_FALCON_ROTATIONS_PER_SECOND_PER_SECOND_PER_SECOND = 8000;
+    public static final double MAX_FALCON_ROTATIONS_PER_SECOND_PER_SECOND_PER_SECOND = 2000;
+
+    public static final double MAX_FALCON_TICS_PER_SECOND = (25 * FALCON_TICS_PER_ROTATION)/10; // raw sensor units/100 ms
+    
+    public static final double MAX_FALCON_TICS_PER_SECOND_PER_SECOND = (75 * FALCON_TICS_PER_ROTATION)/10; // raw sensor units/100 ms
+
+    public static final double MAX_FALCON_TICS_PER_SECOND_PER_SECOND_PER_SECOND = (MAX_FALCON_ROTATIONS_PER_SECOND_PER_SECOND_PER_SECOND * FALCON_TICS_PER_ROTATION)/10; // raw sensor units/100 ms
 
     public static final double TOTAL_TICS_PER_INCH = (2.0 * ((1.0 / FALCON_TICS_PER_ROTATION) / EXTENSION_GEAR_RATIO) * EXTENSION_INCHES_PER_ROTATION);
 

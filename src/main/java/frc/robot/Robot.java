@@ -261,21 +261,25 @@ public class Robot extends TimedRobot {
     // // COMPETITION CONTROLS - DO NOT DELETE
     // // shelf intake position
     // OI.operatorMenuButton.whileHeld(new ShelfPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
+    OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals, lights));
+
+    // // ramp intake position
+    OI.operatorMenuButton.whileHeld(new ShelfPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
 
     // // placement position mid
-    // OI.operatorA.whileHeld(new MidPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
+    OI.operatorA.whileHeld(new MidPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
 
     // // placement position high
-    // OI.operatorY.whileHeld(new HighPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
+    OI.operatorY.whileHeld(new HighPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
     
     // // intake position for upright cone
-    // OI.operatorX.whileHeld(new UprightConePreset(armExtension, armRotation, flipChecker, wrist, lights));
+    OI.operatorX.whileHeld(new UprightConePreset(armExtension, armRotation, flipChecker, wrist, lights));
    
     // // intake position for a tipped cone
-    // OI.operatorB.whileHeld(new TippedConePreset(armExtension, armRotation, flipChecker, wrist, lights));
+    OI.operatorB.whileHeld(new TippedConePreset(armExtension, armRotation, flipChecker, wrist, lights));
 
     // // intake position for cube
-    // OI.operatorRB.whileHeld(new CubePreset(armExtension, armRotation, flipChecker, wrist, lights));
+    OI.operatorRB.whileHeld(new CubePreset(armExtension, armRotation, flipChecker, wrist, lights));
 
     // // drive rotationally aligned to 0 or 180
     // OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals, lights));

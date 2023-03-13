@@ -32,17 +32,14 @@ public class ArmRotation extends SubsystemBase {
   public void init() {
     rotationMotorMaster.configFactoryDefault();
     rotationMotorFollower.configFactoryDefault();
-    rotationMotorMaster.configPeakOutputForward(0.5);
-    rotationMotorMaster.configPeakOutputReverse(-0.5);
 
-    rotationMotorMaster.config_kP(0, 3.5);
+    rotationMotorMaster.configMotionCruiseVelocity(Constants.MAX_FALCON_TICS_PER_SECOND);
+    rotationMotorMaster.configMotionAcceleration(Constants.MAX_FALCON_TICS_PER_SECOND_PER_SECOND);
+    rotationMotorMaster.configMotionSCurveStrength(6);
+
+    rotationMotorMaster.config_kP(0, 3);
     rotationMotorMaster.config_kI(0, 0.0);
-    rotationMotorMaster.config_kD(0, 7);
-
-    rotationMotorMaster.config_IntegralZone(0, 200);
-
-    rotationMotorMaster.configClosedloopRamp(0.5);
-    rotationMotorMaster.configAllowableClosedloopError(0, 20);
+    rotationMotorMaster.config_kD(0, 17);
 
     rotationMotorFollower.set(ControlMode.Follower, 11);
 
@@ -72,7 +69,7 @@ public class ArmRotation extends SubsystemBase {
 
   public void setRotationPosition(double degrees) {
     // SmartDashboard.putNumber("Setpoint", degrees);
-    rotationMotorMaster.set(ControlMode.Position, Constants.convertArmRotationDegreesToTics(degrees));
+    rotationMotorMaster.set(ControlMode.MotionMagic, Constants.convertArmRotationDegreesToTics(degrees));
   }
 
   @Override
