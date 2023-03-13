@@ -12,6 +12,7 @@ import com.ctre.phoenixpro.configs.MotionMagicConfigs;
 import com.ctre.phoenixpro.configs.MotorOutputConfigs;
 import com.ctre.phoenixpro.configs.Slot0Configs;
 import com.ctre.phoenixpro.configs.TalonFXConfiguration;
+import com.ctre.phoenixpro.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenixpro.controls.MotionMagicVoltage;
 // import com.ctre.phoenix.motorcontrol.can.TalonFX;
 // import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -37,7 +38,7 @@ public class ArmExtension extends SubsystemBase {
   private CurrentLimitsConfigs currentLimitConfigs = new CurrentLimitsConfigs();
 
   private final VoltageOut percentRequest = new VoltageOut(0);
-  private MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0).withSlot(0);
+  private MotionMagicTorqueCurrentFOC motionMagicRequest = new MotionMagicTorqueCurrentFOC(0).withSlot(0);
 
   
   /** Creates a new ArmExtension. */
@@ -54,7 +55,7 @@ public class ArmExtension extends SubsystemBase {
     // motorOutputConfigs.DutyCycleNeutralDeadband = 0.125;
 
     Slot0Configs slot0Configs = new Slot0Configs();
-    slot0Configs.kS = 0; // Add 0.05 V output to overcome static friction
+    slot0Configs.kS = 0.1; // Add 0.05 V output to overcome static friction
     slot0Configs.kV = 0; // A velocity target of 1 rps results in 0.12 V output
     slot0Configs.kP = 24; // A position error of 0.5 rotations results in 12 V output
     slot0Configs.kI = 0; // no output for integrated error

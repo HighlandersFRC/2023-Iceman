@@ -241,28 +241,25 @@ public class Robot extends TimedRobot {
     wrist.teleopInit();
 
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
-    // OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals, lights));
-
-    OI.driverA.whileHeld(new SetArmExtensionPosition(lights, armExtension, armRotation, 18));
-    // OI.driverY.whileHeld(new ExtendArm(armExtension, 3));
+    OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals, lights));
 
     // // ramp intake position
-    // OI.operatorMenuButton.whileHeld(new ShelfPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
+    OI.operatorMenuButton.whileHeld(new ShelfPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
 
     // // placement position mid
-    // OI.operatorA.whileHeld(new MidPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
+    OI.operatorA.whileHeld(new MidPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
 
     // // placement position high
-    // OI.operatorY.whileHeld(new HighPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
+    OI.operatorY.whileHeld(new HighPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
     
     // // intake position for upright cone
-    // OI.operatorX.whileHeld(new UprightConePreset(armExtension, armRotation, flipChecker, wrist, lights));
+    OI.operatorX.whileHeld(new UprightConePreset(armExtension, armRotation, flipChecker, wrist, lights));
    
     // // intake position for a tipped cone
-    // OI.operatorB.whileHeld(new TippedConePreset(armExtension, armRotation, flipChecker, wrist, lights));
+    OI.operatorB.whileHeld(new TippedConePreset(armExtension, armRotation, flipChecker, wrist, lights));
 
     // // intake position for cube
-    // OI.operatorRB.whileHeld(new CubePreset(armExtension, armRotation, flipChecker, wrist, lights));
+    OI.operatorRB.whileHeld(new CubePreset(armExtension, armRotation, flipChecker, wrist, lights));
 
     // OI.operatorViewButton.whenPressed(new SetLightMode(lights, "cube"));
     // OI.operatorMenuButton.whenPressed(new SetLightMode(lights, "cone"));

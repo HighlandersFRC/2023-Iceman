@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import org.apache.commons.math3.analysis.function.StepFunction;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -143,7 +145,8 @@ public class SetArmRotationPosition extends CommandBase {
       if (useNavx){
         arm.setRotationPosition(this.position);
       } else {
-        arm.setRotationPosition(setPosition);
+        position = setPosition;
+        arm.setRotationPosition(position);
       }
     }
   }
@@ -153,9 +156,7 @@ public class SetArmRotationPosition extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    if(Math.abs(arm.getRotationPosition() - position) < 2.5) {
-      return true;
-    }
-    return false;
+    System.out.println(Math.abs(arm.getRotationPosition() - this.position) < 3.5);
+    return (Math.abs(arm.getRotationPosition() - this.position) < 3.5);
   }
 }
