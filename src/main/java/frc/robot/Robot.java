@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoPlacementCone;
 import frc.robot.commands.AutoPlacementCube;
 import frc.robot.commands.AlignToConePlacement;
@@ -91,6 +92,8 @@ public class Robot extends TimedRobot {
 
   String fieldSide;
 
+  SequentialCommandGroup auto;
+
   @Override
   public void robotInit() {
     drive.init();
@@ -149,28 +152,31 @@ public class Robot extends TimedRobot {
 
     if (OI.isBumpSideAuto()) {
       if (OI.isDocking()) {
-        TwoPieceBumpAuto auto = new TwoPieceBumpAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        this.auto = new TwoPieceBumpAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       } else {
-        TwoPieceBumpAutoNoDock auto = new TwoPieceBumpAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        this.auto = new TwoPieceBumpAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       }
     } else if (OI.isClearSideAuto()) {
       if (OI.isDocking()) {
-        TwoPieceAuto auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        this.auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       } else {
-        TwoPieceAutoNoDock auto = new TwoPieceAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        this.auto = new TwoPieceAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       }
     } else if (OI.isCenterAuto()) {
+      // System.out.println("CENTER AUTO");
       if (OI.isDocking()){
-        OnePieceAuto auto = new OnePieceAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        this.auto = new OnePieceAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       } else {
-        OnePieceAutoNoDock auto = new OnePieceAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        this.auto = new OnePieceAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       }
+    } else {
+      System.out.println("NO AUTO SELECTED");
     }
   }  
 
@@ -225,7 +231,12 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {}
 
   @Override
-  public void autonomousInit() {    
+  public void autonomousInit() {
+    try {
+      this.auto.schedule();
+    } catch (Exception e){
+      System.out.println("No auto is selected");
+    } 
     drive.autoInit(pathJSON);
     wrist.autoInit();
   }
@@ -241,12 +252,14 @@ public class Robot extends TimedRobot {
     wrist.teleopInit();
 
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
-    // OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals, lights));
 
-    OI.driverA.whileHeld(new SetArmExtensionPosition(lights, armExtension, armRotation, 18));
+    // OI.driverA.whileHeld(new SetArmExtensionPosition(lights, armExtension, armRotation, 18));
     // OI.driverY.whileHeld(new ExtendArm(armExtension, 3));
 
-    // // ramp intake position
+    OI.driverA.whileHeld(new AutoBalance(drive, 0.4));
+
+    // // COMPETITION CONTROLS - DO NOT DELETE
+    // // shelf intake position
     // OI.operatorMenuButton.whileHeld(new ShelfPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
 
     // // placement position mid
@@ -264,8 +277,13 @@ public class Robot extends TimedRobot {
     // // intake position for cube
     // OI.operatorRB.whileHeld(new CubePreset(armExtension, armRotation, flipChecker, wrist, lights));
 
+    // // drive rotationally aligned to 0 or 180
+    // OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals, lights));
+
+    // // operator change light color
     // OI.operatorViewButton.whenPressed(new SetLightMode(lights, "cube"));
     // OI.operatorMenuButton.whenPressed(new SetLightMode(lights, "cone"));
+    // // COMPETITION CONTROLS - DO NOT DELETE
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
