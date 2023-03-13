@@ -54,6 +54,8 @@ import frc.robot.commands.autos.TwoPieceAuto;
 import frc.robot.commands.autos.TwoPieceAutoNoDock;
 import frc.robot.commands.autos.TwoPieceBumpAuto;
 import frc.robot.commands.autos.TwoPieceBumpAutoNoDock;
+import frc.robot.commands.autos.TwoPlusOneAuto;
+import frc.robot.commands.autos.TwoPlusOneAutoNoDock;
 import frc.robot.commands.presets.CubePreset;
 import frc.robot.commands.presets.HighPlacementPreset;
 import frc.robot.commands.presets.MidPlacementPreset;
@@ -122,7 +124,7 @@ public class Robot extends TimedRobot {
       lights.setFieldSide("blue");
     }
 
-    if (OI.isBumpSideAuto()) {
+    if (OI.is2PieceBumpSideAuto()) {
       try {
         pathingFile = new File("/home/lvuser/deploy/2PieceBumpPart1.json");
         FileReader scanner = new FileReader(pathingFile);
@@ -131,7 +133,7 @@ public class Robot extends TimedRobot {
       } catch(Exception e) {
         System.out.println("ERROR WITH PATH FILE " + e);
       }
-    } else if (OI.isClearSideAuto()) {
+    } else if (OI.is2PieceClearSideAuto()) {
       try {
         pathingFile = new File("/home/lvuser/deploy/2PiecePart1.json");
         FileReader scanner = new FileReader(pathingFile);
@@ -140,18 +142,27 @@ public class Robot extends TimedRobot {
       } catch (Exception e) {
         System.out.println("ERROR WITH PATH FILE " + e);
       }
-    } else if (OI.isCenterAuto()) {
+    } else if (OI.is1PieceCenterAuto()) {
       try {
         pathingFile = new File("/home/lvuser/deploy/1PieceDock.json");
         FileReader scanner = new FileReader(pathingFile);
         pathRead = new JSONObject(new JSONTokener(scanner));
         pathJSON = (JSONArray) pathRead.get("sampled_points");
-      } catch (Exception e){
+      } catch (Exception e) {
+        System.out.println("ERROR WITH PATH FILE " + e);
+      }
+    } else if (OI.is2Plus1ClearSideAuto()) {
+      try {
+        pathingFile = new File("/home/lvuser/deploy/2PiecePart1.json");
+        FileReader scanner = new FileReader(pathingFile);
+        pathRead = new JSONObject(new JSONTokener(scanner));
+        pathJSON = (JSONArray) pathRead.get("sampled_points");
+      } catch (Exception e) {
         System.out.println("ERROR WITH PATH FILE " + e);
       }
     }
 
-    if (OI.isBumpSideAuto()) {
+    if (OI.is2PieceBumpSideAuto()) {
       if (OI.isDocking()) {
         this.auto = new TwoPieceBumpAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
@@ -159,22 +170,28 @@ public class Robot extends TimedRobot {
         this.auto = new TwoPieceBumpAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       }
-    } else if (OI.isClearSideAuto()) {
-      System.out.println("CLEAR SIDE");
+    } else if (OI.is2PieceClearSideAuto()) {
       if (OI.isDocking()) {
         this.auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       } else {
-        System.out.println("NON-DOCKING");
         this.auto = new TwoPieceAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       }
-    } else if (OI.isCenterAuto()) {
+    } else if (OI.is1PieceCenterAuto()) {
       if (OI.isDocking()){
         this.auto = new OnePieceAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       } else {
         this.auto = new OnePieceAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        auto.schedule();
+      }
+    } else if (OI.is2Plus1ClearSideAuto()) {
+      if (OI.isDocking()){
+        this.auto = new TwoPlusOneAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        auto.schedule();
+      } else {
+        this.auto = new TwoPlusOneAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       }
     } else {

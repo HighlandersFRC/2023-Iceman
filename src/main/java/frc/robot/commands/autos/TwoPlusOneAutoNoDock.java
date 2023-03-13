@@ -41,8 +41,8 @@ import frc.robot.subsystems.Wrist;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TwoPlusOneAuto extends SequentialCommandGroup {
-  /** Creates a new TwoPlusOneAuto. */
+public class TwoPlusOneAutoNoDock extends SequentialCommandGroup {
+  /** Creates a new TwoPlusOneAutoNoDock. */
   private File pathingFile;
   private JSONArray pathJSON;
   private JSONObject pathRead;
@@ -55,7 +55,7 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
   private JSONArray pathJSON3;
   private JSONObject pathRead3;
 
-  public TwoPlusOneAuto(Drive drive, ArmExtension armExtension, ArmRotation armRotation, Wrist wrist, FlipChecker flipChecker, Peripherals peripherals, Lights lights, Intake intake) {
+  public TwoPlusOneAutoNoDock(Drive drive, ArmExtension armExtension, ArmRotation armRotation, Wrist wrist, FlipChecker flipChecker, Peripherals peripherals, Lights lights, Intake intake) {
 
     try {
       pathingFile = new File("/home/lvuser/deploy/2PiecePart1.json");

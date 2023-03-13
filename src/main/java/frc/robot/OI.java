@@ -72,15 +72,19 @@ public class OI {
         return autoChooser.getRawButton(8);
     }
 
-    public static boolean isClearSideAuto() {
+    public static boolean is2Plus1ClearSideAuto(){
+        return autoChooser.getRawButton(4);
+    }
+
+    public static boolean is2PieceClearSideAuto() {
         return autoChooser.getRawButton(1);
     }
 
-    public static boolean isBumpSideAuto() {
+    public static boolean is2PieceBumpSideAuto() {
         return autoChooser.getRawButton(2);
     }
 
-    public static boolean isCenterAuto() {
+    public static boolean is1PieceCenterAuto() {
         return autoChooser.getRawButton(3);
     }
 
