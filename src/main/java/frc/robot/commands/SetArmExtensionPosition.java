@@ -63,6 +63,7 @@ public class SetArmExtensionPosition extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    System.out.println("Arm Extension Error: " + Math.abs(armExtension.getExtensionPosition() - position));
     if(Math.abs(armExtension.getExtensionPosition() - position) < 1) {
       return true;
     }

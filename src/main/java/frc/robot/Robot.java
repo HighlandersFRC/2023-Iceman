@@ -113,14 +113,16 @@ public class Robot extends TimedRobot {
     PortForwarder.add(5805, "limelight-back.local", 5805);
 
     if (OI.isRedSide()) {
+      System.out.println("ON RED SIDE");
       drive.setFieldSide("red");
       lights.setFieldSide("red");
     } else if (OI.isBlueSide()) {
+      System.out.println("ON BLUE SIDE");
       drive.setFieldSide("blue");
       lights.setFieldSide("blue");
     }
 
-    if(OI.isBumpSideAuto()) {
+    if (OI.isBumpSideAuto()) {
       try {
         pathingFile = new File("/home/lvuser/deploy/2PieceBumpPart1.json");
         FileReader scanner = new FileReader(pathingFile);
@@ -129,14 +131,13 @@ public class Robot extends TimedRobot {
       } catch(Exception e) {
         System.out.println("ERROR WITH PATH FILE " + e);
       }
-    }
-    else if(OI.isClearSideAuto()) {
+    } else if (OI.isClearSideAuto()) {
       try {
         pathingFile = new File("/home/lvuser/deploy/2PiecePart1.json");
         FileReader scanner = new FileReader(pathingFile);
         pathRead = new JSONObject(new JSONTokener(scanner));
         pathJSON = (JSONArray) pathRead.get("sampled_points");
-      } catch(Exception e) {
+      } catch (Exception e) {
         System.out.println("ERROR WITH PATH FILE " + e);
       }
     } else if (OI.isCenterAuto()) {
@@ -159,15 +160,16 @@ public class Robot extends TimedRobot {
         auto.schedule();
       }
     } else if (OI.isClearSideAuto()) {
+      System.out.println("CLEAR SIDE");
       if (OI.isDocking()) {
         this.auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       } else {
+        System.out.println("NON-DOCKING");
         this.auto = new TwoPieceAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       }
     } else if (OI.isCenterAuto()) {
-      // System.out.println("CENTER AUTO");
       if (OI.isDocking()){
         this.auto = new OnePieceAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
@@ -237,7 +239,7 @@ public class Robot extends TimedRobot {
     } catch (Exception e){
       System.out.println("No auto is selected");
     } 
-    drive.autoInit(pathJSON);
+    drive.autoInit(this.pathJSON);
     wrist.autoInit();
   }
 

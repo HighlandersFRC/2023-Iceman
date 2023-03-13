@@ -292,7 +292,7 @@ public class Drive extends SubsystemBase {
             firstPointAngle = Math.PI - firstPointAngle;
         }
 
-        // System.out.println(firstPointAngle);
+        // System.out.println("First point angle: " + firstPointAngle);
         
         peripherals.setNavxAngle(Math.toDegrees(firstPointAngle));
         SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];

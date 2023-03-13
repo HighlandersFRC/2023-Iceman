@@ -156,7 +156,7 @@ public class SetArmRotationPosition extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    System.out.println(Math.abs(arm.getRotationPosition() - this.position) < 3.5);
+    System.out.println("Arm Rotation Error: " + Math.abs(arm.getRotationPosition() - this.position));
     return (Math.abs(arm.getRotationPosition() - this.position) < 3.5);
   }
 }

@@ -127,7 +127,7 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
         new SequentialCommandGroup(
           new ParallelCommandGroup(
             new RotateWrist(wrist, flipChecker, 180),
-            new SetArmRotationPosition(armRotation, flipChecker, 180)
+            new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION)
           ),
           new WaitCommand(2),
           new SetArmRotationPosition(armRotation, flipChecker, Constants.MID_PLACEMENT_BACKSIDE_ARM_ROTATION)

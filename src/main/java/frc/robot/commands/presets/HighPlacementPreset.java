@@ -25,7 +25,10 @@ public class HighPlacementPreset extends SequentialCommandGroup {
   public HighPlacementPreset(ArmExtension armExtension, ArmRotation armRotation, FlipChecker flipChecker, Wrist wrist, Lights lights, Peripherals periphals) {
     addCommands(
       new SetArmRotationPosition(armRotation, periphals, flipChecker, Constants.PRESET.HIGH_PLACEMENT),
-      new ParallelCommandGroup(new RotateWrist(wrist, flipChecker, periphals,  Constants.PRESET.HIGH_PLACEMENT), new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION))
+      new ParallelCommandGroup(
+        new RotateWrist(wrist, flipChecker, periphals,  Constants.PRESET.HIGH_PLACEMENT),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
+      )
     );
   }
 }

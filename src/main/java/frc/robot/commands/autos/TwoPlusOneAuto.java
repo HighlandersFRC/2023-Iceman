@@ -21,6 +21,7 @@ import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
 import frc.robot.commands.MoveToPieceBackwards;
 import frc.robot.commands.MoveToPieceForwards;
+import frc.robot.commands.RotateArm;
 import frc.robot.commands.RotateWrist;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.SetArmExtensionPosition;
@@ -40,8 +41,8 @@ import frc.robot.subsystems.Wrist;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TwoPieceBumpAutoNoDock extends SequentialCommandGroup {
-  /** Creates a new TwoPieceAuto. */
+public class TwoPlusOneAuto extends SequentialCommandGroup {
+  /** Creates a new TwoPlusOneAuto. */
   private File pathingFile;
   private JSONArray pathJSON;
   private JSONObject pathRead;
@@ -50,10 +51,14 @@ public class TwoPieceBumpAutoNoDock extends SequentialCommandGroup {
   private JSONArray pathJSON2;
   private JSONObject pathRead2;
 
-  public TwoPieceBumpAutoNoDock(Drive drive, ArmExtension armExtension, ArmRotation armRotation, Wrist wrist, FlipChecker flipChecker, Peripherals peripherals, Lights lights, Intake intake) {
+  private File pathingFile3;
+  private JSONArray pathJSON3;
+  private JSONObject pathRead3;
+
+  public TwoPlusOneAuto(Drive drive, ArmExtension armExtension, ArmRotation armRotation, Wrist wrist, FlipChecker flipChecker, Peripherals peripherals, Lights lights, Intake intake) {
 
     try {
-      pathingFile = new File("/home/lvuser/deploy/2PieceBumpPart1.json");
+      pathingFile = new File("/home/lvuser/deploy/2PiecePart1.json");
       FileReader scanner = new FileReader(pathingFile);
       pathRead = new JSONObject(new JSONTokener(scanner));
       pathJSON = (JSONArray) pathRead.get("sampled_points");
@@ -63,7 +68,7 @@ public class TwoPieceBumpAutoNoDock extends SequentialCommandGroup {
     }
 
     try {
-      pathingFile2 = new File("/home/lvuser/deploy/2PieceBumpPart2.json");
+      pathingFile2 = new File("/home/lvuser/deploy/2PiecePart2.json");
       FileReader scanner2 = new FileReader(pathingFile2);
       pathRead2 = new JSONObject(new JSONTokener(scanner2));
       pathJSON2 = (JSONArray) pathRead2.get("sampled_points");
@@ -72,7 +77,17 @@ public class TwoPieceBumpAutoNoDock extends SequentialCommandGroup {
       System.out.println("ERROR WITH PATH FILE " + e);
     }
 
-    addRequirements(drive, armExtension, armRotation, wrist);
+    try {
+        pathingFile3 = new File("/home/lvuser/deploy/2PiecePart3.json");
+        FileReader scanner3 = new FileReader(pathingFile3);
+        pathRead3 = new JSONObject(new JSONTokener(scanner3));
+        pathJSON3 = (JSONArray) pathRead2.get("sampled_points");
+      }
+      catch(Exception e) {
+        System.out.println("ERROR WITH PATH FILE " + e);
+      }
+
+    addRequirements(drive, armExtension, armRotation, wrist, flipChecker);
     addCommands(
       new ParallelCommandGroup(
         new RunIntake(intake, -35, 0.1),
@@ -82,37 +97,33 @@ public class TwoPieceBumpAutoNoDock extends SequentialCommandGroup {
       ),
       new WaitCommand(0.25),
       new ParallelDeadlineGroup(
-        new WaitCommand(0.15),
+        new WaitCommand(0.25),
         new RunIntake(intake, 55, 1)
       ),
       new ParallelDeadlineGroup(
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 10),
-        new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION)
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 0),
+        new RotateWrist(wrist, flipChecker, 180)
       ),
       new ParallelDeadlineGroup(
-        new ParallelDeadlineGroup(
-          new AutonomousFollower(drive, pathJSON, false),
-          new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION),
-          new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION),
-          new RunIntake(intake, -55, 1)
-        ),
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 1),
+        new AutonomousFollower(drive, pathJSON, false),
+        new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION),
+        new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION),
+        new RunIntake(intake, -55, 1),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 0),
         new SetFrontLimelightPipeline(peripherals, 2)
       ),
       new ParallelDeadlineGroup(
         new MoveToPieceForwards(drive, peripherals, lights),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION)
       ),
-      new WaitCommand(0.1),
+      new WaitCommand(0.25),
       new ParallelDeadlineGroup(
         new AutonomousFollower(drive, pathJSON2, false),
         new SequentialCommandGroup(
           new ParallelCommandGroup(
             new RotateWrist(wrist, flipChecker, 180),
             new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION)
-          ),
-          new WaitCommand(2),
-          new SetArmRotationPosition(armRotation, flipChecker, Constants.MID_PLACEMENT_BACKSIDE_ARM_ROTATION)
+          )
         ),
         new RunIntake(intake, -35, 0.1)
       ),
@@ -124,14 +135,18 @@ public class TwoPieceBumpAutoNoDock extends SequentialCommandGroup {
         ),
         new SetBackLimelightPipeline(peripherals, 0)
       ),
-      new WaitCommand(0.1),
+      new WaitCommand(0.25),
       new ParallelDeadlineGroup(
-        new WaitCommand(0.1),
+        new WaitCommand(0.25),
         new RunIntake(intake, 45, 1)
       ),
       new ParallelDeadlineGroup(
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 2),
-        new RotateWrist(wrist, flipChecker, 180)
+        new AutonomousFollower(drive, pathJSON3, false),
+        new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION),
+        new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION),
+        new RunIntake(intake, -55, 1),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 0),
+        new SetFrontLimelightPipeline(peripherals, 2)
       )
     );
   }

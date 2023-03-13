@@ -47,6 +47,7 @@ public class AutonomousFollower extends CommandBase {
     this.drive = drive;
     this.path = pathPoints;
     this.record = record;
+    this.generatePath = false;
     addRequirements(this.drive);
   }
 

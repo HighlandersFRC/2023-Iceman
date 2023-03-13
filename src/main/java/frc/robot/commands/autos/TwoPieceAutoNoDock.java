@@ -87,7 +87,7 @@ public class TwoPieceAutoNoDock extends SequentialCommandGroup {
         new RunIntake(intake, 55, 1)
       ),
       new ParallelDeadlineGroup(
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 5),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 0),
         new RotateWrist(wrist, flipChecker, 180)
       ),
       new ParallelDeadlineGroup(
@@ -110,10 +110,8 @@ public class TwoPieceAutoNoDock extends SequentialCommandGroup {
         new SequentialCommandGroup(
           new ParallelCommandGroup(
             new RotateWrist(wrist, flipChecker, 180),
-            new SetArmRotationPosition(armRotation, flipChecker, 180)
-          ),
-          new WaitCommand(1.5),
-          new SetArmRotationPosition(armRotation, flipChecker, Constants.MID_PLACEMENT_BACKSIDE_ARM_ROTATION)
+            new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION)
+          )
         ),
         new RunIntake(intake, -35, 0.1)
       ),

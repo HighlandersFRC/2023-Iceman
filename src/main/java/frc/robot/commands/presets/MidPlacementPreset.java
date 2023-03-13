@@ -24,8 +24,11 @@ public class MidPlacementPreset extends SequentialCommandGroup {
   /** Creates a new MidPlacementPreset. */
   public MidPlacementPreset(ArmExtension armExtension, ArmRotation armRotation, FlipChecker flipChecker, Wrist wrist, Lights lights, Peripherals peripherals) {
     addCommands(
-      new ParallelCommandGroup(new SetArmRotationPosition(armRotation, peripherals, flipChecker, Constants.PRESET.MID_PLACEMENT)),
-      new ParallelCommandGroup(new RotateWrist(wrist, flipChecker, peripherals, Constants.PRESET.MID_PLACEMENT), new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.MID_PLACEMENT_ARM_EXTENSION))
+      new SetArmRotationPosition(armRotation, peripherals, flipChecker, Constants.PRESET.MID_PLACEMENT),
+      new ParallelCommandGroup(
+        new RotateWrist(wrist, flipChecker, peripherals, Constants.PRESET.MID_PLACEMENT),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.MID_PLACEMENT_ARM_EXTENSION)
+      )
     );
   }
 }

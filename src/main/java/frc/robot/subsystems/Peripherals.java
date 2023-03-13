@@ -74,7 +74,6 @@ public class Peripherals extends SubsystemBase {
   }
 
   public void init() {
-    System.out.print("INSIDE PERIPHERALS INIT");
     zeroNavx();
     noTrackLimelightArray[0] = 0;
     noTrackLimelightArray[1] = 0;

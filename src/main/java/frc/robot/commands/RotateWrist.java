@@ -136,6 +136,7 @@ public class RotateWrist extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    System.out.println("Wrist Error: " + Math.abs(wrist.getWristRotationPosition() - angle));
     if (Math.abs(wrist.getWristRotationPosition() - angle) < 1) {
       return true;
     }

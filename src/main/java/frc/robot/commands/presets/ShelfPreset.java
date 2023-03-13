@@ -5,6 +5,7 @@
 package frc.robot.commands.presets;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.RotateWrist;
 import frc.robot.commands.SetArmExtensionPosition;
@@ -19,13 +20,15 @@ import frc.robot.subsystems.Wrist;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ShelfPreset extends ParallelCommandGroup {
+public class ShelfPreset extends SequentialCommandGroup {
   /** Creates a new ShelfPreset. */
   public ShelfPreset(ArmExtension armExtension, ArmRotation armRotation, FlipChecker flipChecker, Wrist wrist, Lights lights, Peripherals peripherals) {
     addCommands(
       new SetArmRotationPosition(armRotation, peripherals, flipChecker, Constants.PRESET.SHELF),
-      new RotateWrist(wrist, flipChecker, peripherals, Constants.PRESET.SHELF),
-      new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.SHELF_ARM_EXTENSION)
+      new ParallelCommandGroup(
+        new RotateWrist(wrist, flipChecker, peripherals, Constants.PRESET.SHELF),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.SHELF_ARM_EXTENSION)
+      )
     );
   }
 }
