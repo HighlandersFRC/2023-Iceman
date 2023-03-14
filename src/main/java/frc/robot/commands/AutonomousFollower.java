@@ -83,6 +83,7 @@ public class AutonomousFollower extends CommandBase {
     }
 
     initTime = Timer.getFPGATimestamp();
+    // System.out.println("Path points: " + path.toString());
   }
 
   // Called every time the scheduler runs while the command is scheduled.

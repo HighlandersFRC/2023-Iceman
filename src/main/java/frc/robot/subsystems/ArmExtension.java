@@ -78,6 +78,10 @@ public class ArmExtension extends SubsystemBase {
     // extensionMotor.configPeakOutputReverse(-0.25);
   }
 
+  public double getExtensionCurrent() {
+    return extensionMotor.getStatorCurrent().getValue();
+  }
+
   public double getExtensionPosition() {
     return Constants.getArmExtensionInchesFromRotations(extensionMotor.getRotorPosition().getValue());
   }
