@@ -202,9 +202,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+
     CommandScheduler.getInstance().run();
 
     flipChecker.periodic();
+    lights.periodic();
 
     SmartDashboard.putNumber("Extension", armExtension.getExtensionPosition());
     SmartDashboard.putBoolean("ARM LIMIT SWITCH", armExtension.getExtensionLimitSwitch());

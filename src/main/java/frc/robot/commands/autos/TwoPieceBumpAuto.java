@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.commands.AprilTagBalance;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
 import frc.robot.commands.MoveToPieceBackwards;
@@ -158,7 +159,7 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
           new SetArmRotationPosition(armRotation, flipChecker, 180)
         )
       ),
-      new AutoBalance(drive, 1.25)
+      new AprilTagBalance(drive, peripherals, lights, 2.25)
     );
   }
 }

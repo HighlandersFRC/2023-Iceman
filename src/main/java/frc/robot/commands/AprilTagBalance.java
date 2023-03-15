@@ -18,7 +18,7 @@ public class AprilTagBalance extends CommandBase {
   private Lights lights;
   
   private PID pid;
-  private double kP = 3;
+  private double kP = 3.5;
   private double kI = 0.0;
   private double kD = 0.0;
 
