@@ -63,7 +63,7 @@ public class Lights extends SubsystemBase {
   }
 
   public void periodic() {
-    // System.out.println("Setting mode: " + currentLedMode);
+    setCorrectMode();
     leds.set(currentLedMode);;
   }
   

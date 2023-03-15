@@ -55,10 +55,6 @@ public class TwoPlusOneAutoNoDock extends SequentialCommandGroup {
   private JSONArray pathJSON3;
   private JSONObject pathRead3;
 
-  private File pathingFile4;
-  private JSONArray pathJSON4;
-  private JSONObject pathRead4;
-
   public TwoPlusOneAutoNoDock(Drive drive, ArmExtension armExtension, ArmRotation armRotation, Wrist wrist, FlipChecker flipChecker, Peripherals peripherals, Lights lights, Intake intake) {
 
     try {
@@ -91,16 +87,6 @@ public class TwoPlusOneAutoNoDock extends SequentialCommandGroup {
         System.out.println("ERROR WITH PATH FILE " + e);
     }
 
-    try {
-        pathingFile4 = new File("/home/lvuser/deploy/2PiecePart4Dock.json");
-        FileReader scanner4 = new FileReader(pathingFile4);
-        pathRead4 = new JSONObject(new JSONTokener(scanner4));
-        pathJSON4 = (JSONArray) pathRead4.get("sampled_points");
-    }
-    catch(Exception e) {
-        System.out.println("ERROR WITH PATH FILE " + e);
-    }
-
     addRequirements(drive, armExtension, armRotation, wrist, flipChecker);
     addCommands(
       new ParallelCommandGroup(
@@ -109,9 +95,9 @@ public class TwoPlusOneAutoNoDock extends SequentialCommandGroup {
         new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
         new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
       ),
-      new WaitCommand(0.25),
+      new WaitCommand(0.1),
       new ParallelDeadlineGroup(
-        new WaitCommand(0.25),
+        new WaitCommand(0.15),
         new RunIntake(intake, 55, 1)
       ),
       new ParallelDeadlineGroup(
@@ -134,8 +120,9 @@ public class TwoPlusOneAutoNoDock extends SequentialCommandGroup {
       new ParallelDeadlineGroup(
         new AutonomousFollower(drive, pathJSON2, false),
         new ParallelCommandGroup(
-        new RotateWrist(wrist, flipChecker, 180),
-        new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION)
+          new RotateWrist(wrist, flipChecker, 180),
+          new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
+          new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.MID_PLACEMENT_ARM_EXTENSION)
         ),
         new RunIntake(intake, -35, 0.1)
       ),

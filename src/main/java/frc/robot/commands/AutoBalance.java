@@ -39,8 +39,8 @@ public class AutoBalance extends CommandBase {
   public void execute() {
     this.rollDif = drive.getNavxRoll() - this.roll;
     this.roll = drive.getNavxRoll();
-    System.out.println("Navx: " + roll);
-    System.out.println("Roll Dif" + this.rollDif);
+    // System.out.println("Navx: " + roll);
+    // System.out.println("Roll Dif" + this.rollDif);
     if (Math.abs(this.rollDif) > this.movingRollMargin){
       drive.autoRobotCentricDrive(new Vector(0, 0), 0);
       this.timeSinceStoppedMoving = Timer.getFPGATimestamp();

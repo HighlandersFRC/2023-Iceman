@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoPlacementCone;
 import frc.robot.commands.AutoPlacementCube;
 import frc.robot.commands.AlignToConePlacement;
+import frc.robot.commands.AprilTagBalance;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
 import frc.robot.commands.DriveAutoAligned;
@@ -275,7 +276,7 @@ public class Robot extends TimedRobot {
     // OI.driverA.whileHeld(new SetArmExtensionPosition(lights, armExtension, armRotation, 18));
     // OI.driverY.whileHeld(new ExtendArm(armExtension, 3));
 
-    OI.driverA.whileHeld(new AutoBalance(drive, 0.4));
+    OI.driverA.whenPressed(new AprilTagBalance(drive, peripherals, lights, 2.25));
 
     // // COMPETITION CONTROLS - DO NOT DELETE
     // // shelf intake position
