@@ -44,6 +44,11 @@ public class Intake extends SubsystemBase {
     setDefaultCommand(new IntakeDefaultCommand(this));
   }
 
+  public double getVelocity() {
+    double velocity = grabberMotor.getVelocity().getValue();
+    return velocity;
+  }
+
   public void setGrabberMotorMaxPercent(double percent) {
     // System.out.println("Runnging: " + percent + " percent max");
     // grabberMotor.setControl(this.torqueRequest.withOutput(10));
