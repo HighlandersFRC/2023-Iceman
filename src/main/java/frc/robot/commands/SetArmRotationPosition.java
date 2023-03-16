@@ -145,8 +145,7 @@ public class SetArmRotationPosition extends CommandBase {
       if (useNavx){
         arm.setRotationPosition(this.position);
       } else {
-        position = setPosition;
-        arm.setRotationPosition(position);
+        arm.setRotationPosition(setPosition);
       }
     }
   }
@@ -156,7 +155,7 @@ public class SetArmRotationPosition extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    System.out.println("Arm Rotation Error: " + Math.abs(arm.getRotationPosition() - this.position));
+    // System.out.println("Arm Rotation Error: " + Math.abs(arm.getRotationPosition() - this.position));
     return (Math.abs(arm.getRotationPosition() - this.position) < 3.5);
   }
 }

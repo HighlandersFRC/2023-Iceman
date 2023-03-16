@@ -152,7 +152,7 @@ public final class Constants {
     // max acceleration of a falcon - calculated by deciding that we need to reach max speed in 1 second
     public static final double MAX_FALCON_ROTATIONS_PER_SECOND_PER_SECOND = 150;
     // max jerk of a falcon - calculated by deciding that we need to reach max acceleration in 1 second
-    public static final double MAX_FALCON_ROTATIONS_PER_SECOND_PER_SECOND_PER_SECOND = 2000;
+    public static final double MAX_FALCON_ROTATIONS_PER_SECOND_PER_SECOND_PER_SECOND = 1250;
 
     public static final double MAX_FALCON_TICS_PER_SECOND = (25 * FALCON_TICS_PER_ROTATION)/10; // raw sensor units/100 ms
     

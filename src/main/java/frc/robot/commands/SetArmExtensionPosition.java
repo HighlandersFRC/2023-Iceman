@@ -54,6 +54,7 @@ public class SetArmExtensionPosition extends CommandBase {
       armExtension.setExtensionPosition(position);
     }
     SmartDashboard.putNumber("tics", armExtension.getExtensionRawPosition());
+    SmartDashboard.putNumber("Extension Current", armExtension.getExtensionCurrent());
   }
 
   // Called once the command ends or is interrupted.
@@ -63,8 +64,8 @@ public class SetArmExtensionPosition extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    System.out.println("Arm Extension Error: " + Math.abs(armExtension.getExtensionPosition() - position));
-    if(Math.abs(armExtension.getExtensionPosition() - position) < 1) {
+    // System.out.println("Arm Extension Error: " + Math.abs(armExtension.getExtensionPosition() - position));
+    if(Math.abs(armExtension.getExtensionPosition() - position) < 2) {
       return true;
     }
     return false;

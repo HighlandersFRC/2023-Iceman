@@ -78,7 +78,7 @@ public class MoveToPieceForwards extends CommandBase {
     SmartDashboard.putNumber("Angle Settled", angleSettled);
 
     // if(peripherals.getFrontTargetArea() < 2.5) {
-    drive.autoRobotCentricDrive(new Vector(1.75, 0), result);
+    drive.autoRobotCentricDrive(new Vector(1.75 * 1.5, 0), result * 1.5);
     // }
     // else {
       // drive.autoRobotCentricDrive(new Vector(3, 0), 0);
@@ -107,7 +107,7 @@ public class MoveToPieceForwards extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Timer.getFPGATimestamp() - startTime > 0.95) {
+    if(Timer.getFPGATimestamp() - startTime > 0.75) {
       return true;
     }
     return false;

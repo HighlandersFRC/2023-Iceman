@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.commands.AprilTagBalance;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
 import frc.robot.commands.MoveToPieceBackwards;
@@ -55,6 +56,10 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
   private JSONArray pathJSON3;
   private JSONObject pathRead3;
 
+  private File pathingFile4;
+  private JSONArray pathJSON4;
+  private JSONObject pathRead4;
+
   public TwoPlusOneAuto(Drive drive, ArmExtension armExtension, ArmRotation armRotation, Wrist wrist, FlipChecker flipChecker, Peripherals peripherals, Lights lights, Intake intake) {
 
     try {
@@ -68,24 +73,34 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
     }
 
     try {
-      pathingFile2 = new File("/home/lvuser/deploy/2PiecePart2.json");
-      FileReader scanner2 = new FileReader(pathingFile2);
-      pathRead2 = new JSONObject(new JSONTokener(scanner2));
-      pathJSON2 = (JSONArray) pathRead2.get("sampled_points");
+        pathingFile2 = new File("/home/lvuser/deploy/2PiecePart2.json");
+        FileReader scanner2 = new FileReader(pathingFile2);
+        pathRead2 = new JSONObject(new JSONTokener(scanner2));
+        pathJSON2 = (JSONArray) pathRead2.get("sampled_points");
     }
     catch(Exception e) {
-      System.out.println("ERROR WITH PATH FILE " + e);
+        System.out.println("ERROR WITH PATH FILE " + e);
     }
 
     try {
         pathingFile3 = new File("/home/lvuser/deploy/2PiecePart3.json");
         FileReader scanner3 = new FileReader(pathingFile3);
         pathRead3 = new JSONObject(new JSONTokener(scanner3));
-        pathJSON3 = (JSONArray) pathRead2.get("sampled_points");
-      }
-      catch(Exception e) {
+        pathJSON3 = (JSONArray) pathRead3.get("sampled_points");
+    }
+    catch(Exception e) {
         System.out.println("ERROR WITH PATH FILE " + e);
-      }
+    }
+
+    try {
+        pathingFile4 = new File("/home/lvuser/deploy/2PiecePart4Dock.json");
+        FileReader scanner4 = new FileReader(pathingFile4);
+        pathRead4 = new JSONObject(new JSONTokener(scanner4));
+        pathJSON4 = (JSONArray) pathRead4.get("sampled_points");
+    }
+    catch(Exception e) {
+        System.out.println("ERROR WITH PATH FILE " + e);
+    }
 
     addRequirements(drive, armExtension, armRotation, wrist, flipChecker);
     addCommands(
@@ -95,9 +110,9 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
         new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
         new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
       ),
-      new WaitCommand(0.25),
+      new WaitCommand(0.1),
       new ParallelDeadlineGroup(
-        new WaitCommand(0.25),
+        new WaitCommand(0.15),
         new RunIntake(intake, 55, 1)
       ),
       new ParallelDeadlineGroup(
@@ -116,27 +131,32 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
         new MoveToPieceForwards(drive, peripherals, lights),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION)
       ),
-      new WaitCommand(0.25),
+      new WaitCommand(0.1),
       new ParallelDeadlineGroup(
         new AutonomousFollower(drive, pathJSON2, false),
         new ParallelCommandGroup(
-        new RotateWrist(wrist, flipChecker, 180),
-        new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION)
+          new RotateWrist(wrist, flipChecker, 180),
+          new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
+          new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.MID_PLACEMENT_ARM_EXTENSION)
         ),
         new RunIntake(intake, -35, 0.1)
       ),
       new ParallelDeadlineGroup(
         new ParallelCommandGroup(
-          new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION),
+          new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.MID_PLACEMENT_ARM_EXTENSION),
           new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
-          new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION)
+          new RotateWrist(wrist, flipChecker, 215)
         ),
         new SetBackLimelightPipeline(peripherals, 0)
       ),
-      new WaitCommand(0.25),
+      new WaitCommand(0.1),
       new ParallelDeadlineGroup(
-        new WaitCommand(0.25),
-        new RunIntake(intake, 45, 1)
+        new WaitCommand(0.1),
+        new RunIntake(intake, 55, 1)
+      ),
+      new ParallelDeadlineGroup(
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 0),
+        new RotateWrist(wrist, flipChecker, 180)
       ),
       new ParallelDeadlineGroup(
         new AutonomousFollower(drive, pathJSON3, false),
@@ -150,12 +170,13 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
         new MoveToPieceForwards(drive, peripherals, lights),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION)
       ),
-      new WaitCommand(0.25),
+      new WaitCommand(0.1),
       new ParallelDeadlineGroup(
-        // new AutonomousFollower(drive, pathJSON4, false),
+        new AutonomousFollower(drive, pathJSON4, false),
         new SetArmRotationPosition(armRotation, flipChecker, 180),
         new RotateWrist(wrist, flipChecker, 180)
-      )
+      ),
+      new AprilTagBalance(drive, peripherals, lights, 2.75)
     );
   }
 }

@@ -49,6 +49,7 @@ public class Peripherals extends SubsystemBase {
   private NetworkTableEntry backRobotPose = backLimeLightTable.getEntry("botpose");
   private NetworkTableEntry backTagPose = backLimeLightTable.getEntry("targetpose_cameraspace");
   private NetworkTableEntry backJson = backLimeLightTable.getEntry("json");
+  private NetworkTableEntry backTagToRobotPose = backLimeLightTable.getEntry("botpose_targetspace");
 
   private NetworkTable frontLimeLightTable = NetworkTableInstance.getDefault().getTable("limelight-front");
   private NetworkTableEntry frontTableX = frontLimeLightTable.getEntry("tx");
@@ -59,6 +60,7 @@ public class Peripherals extends SubsystemBase {
   private NetworkTableEntry frontRobotPose = frontLimeLightTable.getEntry("botpose");
   private NetworkTableEntry frontTagPose = frontLimeLightTable.getEntry("targetpose_cameraspace");
   private NetworkTableEntry frontJson = frontLimeLightTable.getEntry("json");
+  private NetworkTableEntry frontTagToRobotPose = frontLimeLightTable.getEntry("botpose_targetspace");
 
   private double limeLightX = -1.0;
   private double limeLightY = -1.0;
@@ -82,6 +84,11 @@ public class Peripherals extends SubsystemBase {
     noTrackLimelightArray[4] = 0;
     noTrackLimelightArray[5] = 0;
     setDefaultCommand(new PeripheralsDefault(this));
+  }
+
+  public double getBackHorizontalDistToTag(){
+    double[] pose = backTagToRobotPose.getDoubleArray(new double[] {0, 0, 0, 0, 0, 0});
+    return -pose[2];
   }
 
   public void setFrontPipeline(int pipeline){
