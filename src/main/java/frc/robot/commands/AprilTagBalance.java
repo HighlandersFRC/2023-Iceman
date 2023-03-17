@@ -18,16 +18,21 @@ public class AprilTagBalance extends CommandBase {
   private Lights lights;
   
   private PID pid;
-  private double kP = 3.5;
-  private double kI = 0.0;
+  private double kP = 2.8;
+  private double kI = 0.1;
   private double kD = 0.0;
 
   // horizontal (x) distance from apriltag to center of charging station
   private double desiredDistance;
 
-  // side specific distances
-  private double desiredBlueSideDistance = 2.86;
-  private double desiredRedSideDistance = 2.86;
+  // side and color specific distances
+  private double blueSideCloseDistance = 2.86;
+  private double redSideCloseDistance = 2.86;
+  private double blueSideFarDistance = 2.94;
+  private double redSideFarDistance = 2.94;
+
+  // is coming from close side (true) or far side (false) of charging station
+  private boolean isCloseSide;
 
   // horizontal (x) acceptable margin of distance error
   private double distanceMargin = 0.03;
@@ -47,17 +52,26 @@ public class AprilTagBalance extends CommandBase {
   // number of code cycles the distance has to be within margin in order for command to end
   private int distCycleMargin = 2;
 
-  public AprilTagBalance(Drive drive, Peripherals peripherals, Lights Lights, double speed) {
+  public AprilTagBalance(Drive drive, Peripherals peripherals, Lights Lights, double speed, boolean closeSide) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drive = drive;
     this.peripherals = peripherals;
     this.lights = lights;
+    this.isCloseSide = closeSide;
     this.speed = Math.abs(speed);
 
     if (this.drive.getFieldSide() == "blue"){
-      this.desiredDistance = this.desiredBlueSideDistance;
+      if (this.isCloseSide){
+        this.desiredDistance = this.blueSideCloseDistance;
+      } else {
+        this.desiredDistance = this.blueSideFarDistance;
+      }
     } else {
-      this.desiredDistance = this.desiredRedSideDistance;
+      if (this.isCloseSide){
+        this.desiredDistance = this.redSideCloseDistance;
+      } else {
+        this.desiredDistance = this.redSideFarDistance;
+      }
     }
 
     addRequirements(this.drive);

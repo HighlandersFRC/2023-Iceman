@@ -72,7 +72,7 @@ public class OnePieceAuto extends SequentialCommandGroup {
           new SetArmRotationPosition(armRotation, flipChecker, 180)
         )
       ),
-      new AprilTagBalance(drive, peripherals, lights, 1.5)
+      new AprilTagBalance(drive, peripherals, lights, 1.5, true)
     );
   }
 }

@@ -159,7 +159,7 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
           new SetArmRotationPosition(armRotation, flipChecker, 180)
         )
       ),
-      new AprilTagBalance(drive, peripherals, lights, 2.25)
+      new AprilTagBalance(drive, peripherals, lights, 2.25, true)
     );
   }
 }

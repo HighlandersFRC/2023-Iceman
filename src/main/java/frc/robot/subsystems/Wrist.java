@@ -4,42 +4,20 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
-import com.ctre.phoenixpro.controls.CoastOut;
-import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.EncoderType;
-import com.revrobotics.SparkMaxAbsoluteEncoder;
-import com.revrobotics.SparkMaxAnalogSensor;
-import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
-import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxAnalogSensor.Mode;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.defaults.WristDefaultCommand;
 import frc.robot.tools.controlloops.PID;
 
 public class Wrist extends SubsystemBase {
 
-  private final CANSparkMax rotationMotor = new CANSparkMax(14, MotorType.kBrushless);
+  private final CANSparkMax rotationMotor = new CANSparkMax(23, MotorType.kBrushless);
 
   private final CANCoder rotationEncoder = new CANCoder(6, "Canivore");
-
-  // private final SparkMaxAnalogSensor rotationAbsoluteEncoder = rotationMotor.getAnalog(SparkMaxAnalogSensor.Mode.kAbsolute);
-
-  private final double ABSOLUTE_ENCODER_ROTATION_MAX_VOLTAGE = 3.3;
-  private final SparkMaxPIDController rotationPidController = rotationMotor.getPIDController();
 
   private double rotationSetPoint = 180;
 
@@ -59,11 +37,7 @@ public class Wrist extends SubsystemBase {
     rotationMotor.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyClosed).enableLimitSwitch(false);
     rotationMotor.getReverseLimitSwitch(LimitSwitchPolarity.kNormallyClosed).enableLimitSwitch(false);
     rotationMotor.setSmartCurrentLimit(40, 25);
-    // rotationPidController.setFeedbackDevice(rotationAbsoluteEncoder);
-    // rotationPidController.setP(1.3);
-    // rotationPidController.setI(0);
-    // rotationPidController.setD(0.5);
-    // rotationPidController.setOutputRange(-1, 1);
+
     pid = new PID(kP, kI, kD);
     pid.setMaxOutput(0.7);
     pid.setMinOutput(-0.7);
@@ -89,13 +63,14 @@ public class Wrist extends SubsystemBase {
   }
 
   public void setRotationMotorPercent(double percent) {
-    if (getWristRotationPosition() >= 320 && percent < 0){
-      rotationMotor.set(0);
-    } else if (getWristRotationPosition() <= 47 && percent > 0){
-      rotationMotor.set(0);
-    } else {
-      rotationMotor.set(percent);
-    }
+    // if (getWristRotationPosition() >= 320 && percent < 0){
+    //   rotationMotor.set(0);
+    // } else if (getWristRotationPosition() <= 47 && percent > 0){
+    //   rotationMotor.set(0);
+    // } else {
+    //   rotationMotor.set(percent);
+    // }
+    rotationMotor.set(percent);
   }
 
   public double getUprightOffset() {
@@ -120,6 +95,5 @@ public class Wrist extends SubsystemBase {
     this.pid.updatePID(getWristRotationPosition());
     double result = pid.getResult();
     setRotationMotorPercent(-result);
-    // System.out.println("Wrist: " + rotationMotor.getFaults());
   }
 }

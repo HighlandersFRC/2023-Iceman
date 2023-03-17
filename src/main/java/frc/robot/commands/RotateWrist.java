@@ -36,10 +36,13 @@ public class RotateWrist extends CommandBase {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println("Wrist Init");
+  }
 
   @Override
   public void execute() { 
+    System.out.println("Wrist Execute");
     double setAngle = this.angle;
     if (useNavx){
       double navxAngle = peripherals.getNavxAngle() % 360;
@@ -131,7 +134,9 @@ public class RotateWrist extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    System.out.println("Wrist End, Interrupted: " + interrupted);
+  }
 
   // Returns true when the command should end.
   @Override

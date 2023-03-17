@@ -108,7 +108,10 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
         new RunIntake(intake, -35, 0.1),
         new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
-        new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
+        new SequentialCommandGroup(
+          new WaitCommand(0.15),
+          new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
+        )
       ),
       new WaitCommand(0.1),
       new ParallelDeadlineGroup(
@@ -120,7 +123,10 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
         new RotateWrist(wrist, flipChecker, 180)
       ),
       new ParallelDeadlineGroup(
-        new AutonomousFollower(drive, pathJSON, false),
+        new SequentialCommandGroup(
+          new WaitCommand(0.1),
+          new AutonomousFollower(drive, pathJSON, false)
+        ),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION),
         new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION),
         new RunIntake(intake, -55, 1),
@@ -129,6 +135,7 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
       ),
       new ParallelDeadlineGroup(
         new MoveToPieceForwards(drive, peripherals, lights),
+        new RunIntake(intake, -55, 1),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION)
       ),
       new WaitCommand(0.1),
@@ -137,7 +144,10 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
         new ParallelCommandGroup(
           new RotateWrist(wrist, flipChecker, 180),
           new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
-          new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.MID_PLACEMENT_ARM_EXTENSION)
+          new SequentialCommandGroup(
+            new WaitCommand(0.75),
+            new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.MID_PLACEMENT_ARM_EXTENSION / 3)
+          )
         ),
         new RunIntake(intake, -35, 0.1)
       ),
@@ -152,7 +162,7 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
       new WaitCommand(0.1),
       new ParallelDeadlineGroup(
         new WaitCommand(0.1),
-        new RunIntake(intake, 55, 1)
+        new RunIntake(intake, 55, 0.4)
       ),
       new ParallelDeadlineGroup(
         new SetArmExtensionPosition(lights, armExtension, armRotation, 0),
@@ -168,6 +178,7 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
       ),
       new ParallelDeadlineGroup(
         new MoveToPieceForwards(drive, peripherals, lights),
+        new RunIntake(intake, -55, 1),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION)
       ),
       new WaitCommand(0.1),
@@ -176,7 +187,7 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
         new SetArmRotationPosition(armRotation, flipChecker, 180),
         new RotateWrist(wrist, flipChecker, 180)
       ),
-      new AprilTagBalance(drive, peripherals, lights, 2.75)
+      new AprilTagBalance(drive, peripherals, lights, 2.75, false)
     );
   }
 }
