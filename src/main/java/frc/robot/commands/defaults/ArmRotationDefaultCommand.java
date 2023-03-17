@@ -33,14 +33,14 @@ public class ArmRotationDefaultCommand extends CommandBase {
   public void execute() {
     // arm.setRotationPosition(180);
     // arm.setRotationMotorPercent(0);
-    // if((OI.operatorController.getRawAxis(4))/4 < 0.0125) {
-      if(armExtension.getExtensionPosition() < 5) {
-        // if(position > 90 && position < 250) {
-        //   arm.setRotationPosition(position);
-        // }
-        // else {
-        arm.setRotationPosition(180);
-      }
+    // // if((OI.operatorController.getRawAxis(4))/4 < 0.0125) {
+    //   if(armExtension.getExtensionPosition() < 5) {
+    //     // if(position > 90 && position < 250) {
+    //     //   arm.setRotationPosition(position);
+    //     // } //TODO: uncomment for normal use
+    //     // else {
+    //     arm.setRotationPosition(180);
+    //   }
       //   // if(OI.operatorController.getLeftTriggerAxis() > 0.25) {
       //   //   arm.setRotationMotorPercent(OI.operatorController.getLeftTriggerAxis()/4);
       //   // }

@@ -65,9 +65,11 @@ public class VisionAlignment extends CommandBase {
   public void execute() {
     double currentAngle = peripherals.getFrontLimelightAngleToTarget();
     if (currentAngle == 0){
-      lights.setMode(LEDMode.GOLDSTROBE);
+      lights.setAMode(LEDMode.GOLDSTROBE);
+      lights.setSMode(LEDMode.GOLDSTROBE);
     } else {
-      lights.setMode(LEDMode.GREEN);
+      lights.setAMode(LEDMode.GREEN);
+      lights.setSMode(LEDMode.GREEN);
     }
     pid.updatePID(currentAngle);
     double result = pid.getResult();

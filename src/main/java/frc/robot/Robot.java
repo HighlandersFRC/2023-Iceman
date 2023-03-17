@@ -38,6 +38,7 @@ import frc.robot.commands.RunIntake;
 import frc.robot.commands.SetArmExtensionPosition;
 import frc.robot.commands.SetArmRotationPosition;
 import frc.robot.commands.SetLightMode;
+import frc.robot.commands.TestIntake;
 import frc.robot.commands.VisionAlignment;
 import frc.robot.commands.ZeroNavxMidMatch;
 import frc.robot.subsystems.ArmExtension;
