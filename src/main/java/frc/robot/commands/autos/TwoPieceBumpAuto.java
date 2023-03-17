@@ -105,7 +105,7 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
         new RunIntake(intake, 55, 1)
       ),
       new ParallelDeadlineGroup(
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 10),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 5),
         new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION)
       ),
       new ParallelDeadlineGroup(

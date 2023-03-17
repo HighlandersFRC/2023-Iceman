@@ -88,6 +88,10 @@ public class OI {
         return autoChooser.getRawButton(3);
     }
 
+    public static boolean is3Piece(){
+        return autoChooser.getRawButton(5);
+    }
+
     public static boolean isDocking() {
         return autoChooser.getRawButton(7);
     }

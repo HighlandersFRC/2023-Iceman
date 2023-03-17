@@ -39,7 +39,7 @@ public class IntakeDefaultCommand extends CommandBase {
       // System.out.println("INTAKING");
     }
     else {
-      // Intake.setIntakeTorqueOutput(-35, 0.10); TODO: uncomment for normal use
+      Intake.setIntakeTorqueOutput(-35, 0.10);
     }
     // Intake.setIntakeRotationPosition(150);
   }

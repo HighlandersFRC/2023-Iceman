@@ -52,6 +52,7 @@ import frc.robot.subsystems.Wrist;
 // import edu.wpi.first.util.net.PortForwarder;
 import frc.robot.commands.autos.OnePieceAuto;
 import frc.robot.commands.autos.OnePieceAutoNoDock;
+import frc.robot.commands.autos.ThreePieceAuto;
 import frc.robot.commands.autos.TwoPieceAuto;
 import frc.robot.commands.autos.TwoPieceAutoNoDock;
 import frc.robot.commands.autos.TwoPieceBumpAuto;
@@ -162,6 +163,15 @@ public class Robot extends TimedRobot {
       } catch (Exception e) {
         System.out.println("ERROR WITH PATH FILE " + e);
       }
+    } else if (OI.is3Piece()){
+      try {
+        pathingFile = new File("/home/lvuser/deploy/2PiecePart1.json");
+        FileReader scanner = new FileReader(pathingFile);
+        pathRead = new JSONObject(new JSONTokener(scanner));
+        pathJSON = (JSONArray) pathRead.get("sampled_points");
+      } catch (Exception e) {
+        System.out.println("ERROR WITH PATH FILE " + e);
+      }
     }
 
     if (OI.is2PieceBumpSideAuto()) {
@@ -196,6 +206,9 @@ public class Robot extends TimedRobot {
         this.auto = new TwoPlusOneAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       }
+    } else if (OI.is3Piece()){
+      this.auto = new ThreePieceAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+      auto.schedule();
     } else {
       System.out.println("NO AUTO SELECTED");
     }

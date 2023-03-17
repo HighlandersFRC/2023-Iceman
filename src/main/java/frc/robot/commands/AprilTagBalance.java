@@ -18,8 +18,8 @@ public class AprilTagBalance extends CommandBase {
   private Lights lights;
   
   private PID pid;
-  private double kP = 2.8;
-  private double kI = 0.1;
+  private double kP = 2.85;
+  private double kI = 0.075;
   private double kD = 0.0;
 
   // horizontal (x) distance from apriltag to center of charging station
