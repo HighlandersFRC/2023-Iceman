@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 public class Lights extends SubsystemBase {
   private Spark aLeds;
   private Spark sLeds;
-  private String fieldSide = "red";
+  private String fieldSide = "blue";
   private double aMode = LEDMode.RED.value;
   private double sMode = LEDMode.RED.value;
   private String lightMode = "side";

@@ -4,16 +4,21 @@
 
 package frc.robot.commands.defaults;
 
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OI;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Lights;
 
 public class IntakeDefaultCommand extends CommandBase {
   /** Creates a new IntakeDefaultCommand. */
   private Intake Intake;
-  public IntakeDefaultCommand(Intake Intake) {
+  private boolean hasSpunUp = false;
+  private Lights lights;
+  public IntakeDefaultCommand(Intake Intake, Lights lights) {
     this.Intake = Intake;
-    addRequirements(this.Intake);
+    this.lights = lights;
+    addRequirements(this.Intake, this.lights);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -24,24 +29,32 @@ public class IntakeDefaultCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // if(Math.abs(Intake.getGrabberMotorCurrent()) < 25) {
-    //   this.Intake.setGrabberMotorPercent(0.1);
-    // }
-    // else {
-    //   Intake.setGrabberMotorPercent(0);
-    // }
+    // OI.driverController.setRumble(RumbleType.kBothRumble, 1);
+    double intakeVelocity = Math.abs(Intake.getVelocity());
     if(OI.driverController.getLeftTriggerAxis() > 0.5) {
       Intake.setIntakeTorqueOutput(55, 1);
       // System.out.println("OUTTAKING");
     }
     else if(OI.driverController.getRightTriggerAxis() > 0.5) {
       Intake.setIntakeTorqueOutput(-55, 1);
-      // System.out.println("INTAKING");
+      if(intakeVelocity > 20) {
+        hasSpunUp = true;
+      }
+      if(intakeVelocity < 20 && hasSpunUp) {
+        hasSpunUp = false;
+        // set lights and rumble
+        lights.setLightsToIntake();
+        OI.driverController.setRumble(RumbleType.kBothRumble, 1);
+        OI.operatorController.setRumble(RumbleType.kBothRumble, 1);
+      }
     }
     else {
-      // Intake.setIntakeTorqueOutput(-35, 0.10); TODO: uncomment for normal use
+      hasSpunUp = false;
+      Intake.setIntakeTorqueOutput(-35, 0.10);
+      OI.driverController.setRumble(RumbleType.kBothRumble, 0);
+      OI.operatorController.setRumble(RumbleType.kBothRumble, 0);
+      lights.setCorrectMode();
     }
-    // Intake.setIntakeRotationPosition(150);
   }
 
   // Called once the command ends or is interrupted.

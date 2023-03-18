@@ -58,6 +58,9 @@ public class RotateWrist extends CommandBase {
           case MID_PLACEMENT:
             this.angle = Constants.MID_PLACEMENT_FRONTSIDE_WRIST_ROTATION;
             break;
+          case LOW_PLACEMENT:
+            this.angle = Constants.LOW_PLACEMENT_FRONTSIDE_WRIST_ROTATION;
+            break;
           case UPRIGHT_CONE:
             this.angle = Constants.UPRIGHT_CONE_FRONTSIDE_WRIST_ROTATION;
             break;
@@ -81,6 +84,9 @@ public class RotateWrist extends CommandBase {
             break;
           case MID_PLACEMENT:
             this.angle = Constants.MID_PLACEMENT_BACKSIDE_WRIST_ROTATION;
+            break;
+          case LOW_PLACEMENT:
+            this.angle = Constants.LOW_PLACEMENT_BACKSIDE_WRIST_ROTATION;
             break;
           case UPRIGHT_CONE:
             this.angle = Constants.UPRIGHT_CONE_BACKSIDE_WRIST_ROTATION;

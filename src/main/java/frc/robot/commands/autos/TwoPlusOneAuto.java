@@ -185,7 +185,7 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
       new ParallelDeadlineGroup(
         new AutonomousFollower(drive, pathJSON4, false),
         new SetArmRotationPosition(armRotation, flipChecker, 180),
-        new RotateWrist(wrist, flipChecker, 180)
+        new RotateWrist(wrist, flipChecker, 225)
       ),
       new AprilTagBalance(drive, peripherals, lights, 2.75, false)
     );

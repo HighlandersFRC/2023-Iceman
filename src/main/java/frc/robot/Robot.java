@@ -16,6 +16,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -60,6 +61,7 @@ import frc.robot.commands.autos.TwoPlusOneAuto;
 import frc.robot.commands.autos.TwoPlusOneAutoNoDock;
 import frc.robot.commands.presets.CubePreset;
 import frc.robot.commands.presets.HighPlacementPreset;
+import frc.robot.commands.presets.LowPreset;
 import frc.robot.commands.presets.MidPlacementPreset;
 import frc.robot.commands.presets.ShelfPreset;
 import frc.robot.commands.presets.TippedConePreset;
@@ -80,8 +82,8 @@ public class Robot extends TimedRobot {
   private ArmExtension armExtension = new ArmExtension();
   private ArmRotation armRotation = new ArmRotation(armExtension);
   private Wrist wrist = new Wrist();
-  private Intake intake = new Intake();
-  private FlipChecker flipChecker = new FlipChecker();
+  private Intake intake = new Intake(lights);
+  private FlipChecker flipChecker = new FlipChecker(peripherals);
 
   private UsbCamera frontDriverCam;
   private UsbCamera backDriverCam;
@@ -234,20 +236,21 @@ public class Robot extends TimedRobot {
       armExtension.setExtensionEncoderPosition(0);
     }
 
-    armRotation.postRotationValues();
-    SmartDashboard.putNumber("EXTENSION", armExtension.getExtensionPosition());
+    // SmartDashboard.putNumber("EXTENSION", armExtension.getExtensionPosition());
     // System.out.println("ARM: " + armRotation.getRotationPosition());
     // System.out.println("WRIST: " + wrist.getWristRotationPosition());
     // lights.periodic();
-    // System.out.println("Extension: " + armExtension.getExtensionPosition());
 
     //DO NOT COMMENT OUT!!!
     wrist.periodic();
     //DO NOT COMMENT OUT!!!
+
+    // armRotation.printRotationVelocity();
   }
 
   @Override
   public void disabledInit() {
+    OI.driverController.setRumble(RumbleType.kBothRumble, 0);
   }
 
   @Override
@@ -303,6 +306,8 @@ public class Robot extends TimedRobot {
 
     // // intake position for cube
     OI.operatorRB.whileHeld(new CubePreset(armExtension, armRotation, flipChecker, wrist, lights));
+
+    OI.operatorLB.whileHeld(new LowPreset(armExtension, armRotation, peripherals, flipChecker, wrist, lights));
 
     // // drive rotationally aligned to 0 or 180
     // OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals, lights));

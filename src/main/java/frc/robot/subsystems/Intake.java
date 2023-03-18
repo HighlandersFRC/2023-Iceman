@@ -30,7 +30,11 @@ public class Intake extends SubsystemBase {
 
   private MotorOutputConfigs motorOutputConfigs = new MotorOutputConfigs();
 
-  public Intake() {}
+  private Lights lights;
+
+  public Intake(Lights lights) {
+    this.lights = lights;
+  }
 
   public void init() {
     // grabberMotor.configFactoryDefault();
@@ -38,10 +42,10 @@ public class Intake extends SubsystemBase {
     // grabberMotor.configOpenloopRamp(0.25);
     // // grabberMotor.ramp
     // grabberMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(false, 1, 1, 0));
-    motorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
+    motorOutputConfigs.Inverted = InvertedValue.CounterClockwise_Positive;
     configurator.apply(motorOutputConfigs);
     
-    setDefaultCommand(new IntakeDefaultCommand(this));
+    setDefaultCommand(new IntakeDefaultCommand(this, lights));
   }
 
   public double getVelocity() {

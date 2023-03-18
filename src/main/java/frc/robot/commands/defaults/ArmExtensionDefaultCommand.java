@@ -47,7 +47,7 @@ public class ArmExtensionDefaultCommand extends CommandBase {
     // else {
     //   arm.setExtensionPosition(0);
     // }
-    arm.setExtensionPosition(0);
+    arm.setExtensionPosition(1.5);
   }
 
   // Called once the command ends or is interrupted.

@@ -61,6 +61,7 @@ public final class Constants {
     public static enum PRESET {
         HIGH_PLACEMENT,
         MID_PLACEMENT,
+        LOW_PLACEMENT,
         UPRIGHT_CONE,
         TIPPED_CONE,
         CUBE,
@@ -78,8 +79,11 @@ public final class Constants {
     public static final double MID_PLACEMENT_FRONTSIDE_WRIST_ROTATION = 79.9;
     public static final double MID_PLACEMENT_ARM_EXTENSION = 18;
 
+    // low placement
+    public static final double LOW_PLACEMENT_FRONTSIDE_WRIST_ROTATION = 80;
+
     // Upright cone intaking
-    public static final double UPRIGHT_CONE_FRONTSIDE_ARM_ROTATION = 89.7;
+    public static final double UPRIGHT_CONE_FRONTSIDE_ARM_ROTATION = 88;
     public static final double UPRIGHT_CONE_FRONTSIDE_WRIST_ROTATION = 152;
 
     // Tipped cone intaking
@@ -87,7 +91,7 @@ public final class Constants {
     public static final double TIPPED_CONE_FRONTSIDE_WRIST_ROTATION = 186.2;
 
     // Cube intaking
-    public static final double CUBE_FRONTSIDE_ARM_ROTATION = 92.9;
+    public static final double CUBE_FRONTSIDE_ARM_ROTATION = 90;
     public static final double CUBE_FRONTSIDE_WRIST_ROTATION = 124.8;
 
     // Shelf intaking
@@ -104,16 +108,19 @@ public final class Constants {
     public static final double MID_PLACEMENT_BACKSIDE_ARM_ROTATION = 219.3;
     public static final double MID_PLACEMENT_BACKSIDE_WRIST_ROTATION = 280.3;
 
+    // low placement
+    public static final double LOW_PLACEMENT_BACKSIDE_WRIST_ROTATION = 280;
+
     // Upright cone intaking
-    public static final double UPRIGHT_CONE_BACKSIDE_ARM_ROTATION = 267.7;
+    public static final double UPRIGHT_CONE_BACKSIDE_ARM_ROTATION = 270;
     public static final double UPRIGHT_CONE_BACKSIDE_WRIST_ROTATION = 207;
 
     // Tipped cone intaking
-    public static final double TIPPED_CONE_BACKSIDE_ARM_ROTATION = 292.2;
+    public static final double TIPPED_CONE_BACKSIDE_ARM_ROTATION = 289.34;
     public static final double TIPPED_CONE_BACKSIDE_WRIST_ROTATION = 175.4;
 
     // Cube intaking
-    public static final double CUBE_BACKSIDE_ARM_ROTATION = 264.6;
+    public static final double CUBE_BACKSIDE_ARM_ROTATION = 266.85;
     public static final double CUBE_BACKSIDE_WRIST_ROTATION = 235;
 
     // Shelf intaking
@@ -150,9 +157,9 @@ public final class Constants {
     // max of falcon with regular firmware = 6380 rpm, with phoenix pro ~ 6000 rpm, converting to rps
     public static final double MAX_FALCON_ROTATIONS_PER_SECOND = 80;
     // max acceleration of a falcon - calculated by deciding that we need to reach max speed in 1 second
-    public static final double MAX_FALCON_ROTATIONS_PER_SECOND_PER_SECOND = 150;
+    public static final double MAX_FALCON_ROTATIONS_PER_SECOND_PER_SECOND = 200;
     // max jerk of a falcon - calculated by deciding that we need to reach max acceleration in 1 second
-    public static final double MAX_FALCON_ROTATIONS_PER_SECOND_PER_SECOND_PER_SECOND = 1250;
+    public static final double MAX_FALCON_ROTATIONS_PER_SECOND_PER_SECOND_PER_SECOND = 2500;
 
     public static final double MAX_FALCON_TICS_PER_SECOND = (25 * FALCON_TICS_PER_ROTATION)/10; // raw sensor units/100 ms
     
