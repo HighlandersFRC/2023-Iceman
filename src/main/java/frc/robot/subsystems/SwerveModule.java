@@ -277,7 +277,7 @@ public class SwerveModule extends SubsystemBase {
     }
 
     // change rps to speed
-    public double RPSToSpeed(double rps){
+    public double rotationsPerSecondToSpeed(double rps){
         return rps * (Constants.WHEEL_CIRCUMFRENCE)/(Constants.GEAR_RATIO * Constants.FALCON_TICS_PER_ROTATION);
     }
     
