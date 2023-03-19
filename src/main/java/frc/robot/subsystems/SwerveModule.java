@@ -36,7 +36,7 @@ public class SwerveModule extends SubsystemBase {
 
     private double xTurnAngle = 0.7692;
     private double yTurnAngle = 0.6390;
-    TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(10, 0.1, 0, false);
+    private TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(10, 0.1, 0, false);
 
 
     public SwerveModule(int moduleNumber, TalonFX mAngleMotor, TalonFX mDriveMotor, double zeroOffset, CANCoder mAbsoluteEncoder) {
@@ -49,7 +49,6 @@ public class SwerveModule extends SubsystemBase {
         absoluteEncoder = mAbsoluteEncoder;
 
         // configures angle motor PID, output, etc.
-        angleMotor.
         angleMotor.configPeakOutputForward(1);
         angleMotor.configPeakOutputReverse(-1);
         angleMotor.configVoltageCompSaturation(11.7);
