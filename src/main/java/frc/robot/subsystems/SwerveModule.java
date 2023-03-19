@@ -10,7 +10,11 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenixpro.StatusCode;
 // import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenixpro.configs.ClosedLoopGeneralConfigs;
+import com.ctre.phoenixpro.configs.ClosedLoopRampsConfigs;
+import com.ctre.phoenixpro.configs.CurrentLimitsConfigs;
 import com.ctre.phoenixpro.configs.MotorOutputConfigs;
+import com.ctre.phoenixpro.configs.OpenLoopRampsConfigs;
+import com.ctre.phoenixpro.configs.Slot0Configs;
 import com.ctre.phoenixpro.configs.TalonFXConfiguration;
 import com.ctre.phoenixpro.configs.TalonFXConfigurator;
 import com.ctre.phoenixpro.controls.ControlRequest;
@@ -169,38 +173,56 @@ public class SwerveModule extends SubsystemBase {
 
     // returns state of swerve modules - Used for Odometry
     public SwerveModuleState getState(double navxOffset) {
-        return new SwerveModuleState((ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity())), new Rotation2d(Math.toRadians(getAbsolutePosition() - navxOffset)));
+        return new SwerveModuleState(driveMotor.getVelocity().getValue(), new Rotation2d(Math.toRadians(getAbsolutePosition() - navxOffset)));
     }
 
     public double getModuleSpeed() {
-        return (ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity()));
+        return (RPSToSpeed(driveMotor.getVelocity().getValue()));
     }
 
     public double getModuleDistance() {
-        double currentTics = driveMotor.getSelectedSensorPosition();
+        double currentTics = driveMotor.getPosition().getValue();
         // because current tics is just the current encoder position rather than tics/second, calling the ticsPerSecondToSpeed method will return a distance rather than a speed
         double distance = ticsPerSecondToSpeed(currentTics);
         return distance;
     }
 
     public void teleopInit() {
-        driveMotor.configClosedloopRamp(0.15);
-        driveMotor.configOpenloopRamp(0);
+        ClosedLoopRampsConfigs closedLoopRampsConfigs = new ClosedLoopRampsConfigs();
+        closedLoopRampsConfigs.DutyCycleClosedLoopRampPeriod = 0.15;
+        closedLoopRampsConfigs.TorqueClosedLoopRampPeriod = 0.15;
+        closedLoopRampsConfigs.VoltageClosedLoopRampPeriod = 0.15;
+        driveMotor.getConfigurator().apply(closedLoopRampsConfigs);
+        OpenLoopRampsConfigs openLoopRampsConfigs = new OpenLoopRampsConfigs();
+        openLoopRampsConfigs.DutyCycleOpenLoopRampPeriod = 0.0;
+        openLoopRampsConfigs.TorqueOpenLoopRampPeriod = 0.0;
+        openLoopRampsConfigs.VoltageOpenLoopRampPeriod = 0.0;
+        driveMotor.getConfigurator().apply(openLoopRampsConfigs);
     }
 
     // method run when robot boots up, sets up Current Limits, and Frame Periods to limit CAN usage, as well as tells internal encoder where it actually is
     public void init() {
         // System.out.println("INSIDE!");
-        angleMotor.configFactoryDefault();
-        driveMotor.configFactoryDefault();
-
-        angleMotor.setSelectedSensorPosition(radiansToTics(degreesToRadians(-absoluteEncoder.getAbsolutePosition())));
-        angleMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 45, 45 , 0.5));
-        angleMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(false, 60, 60, 0.5));
-        
-        angleMotor.config_kP(0, 0.3);
-        angleMotor.config_kI(0, 0.0);
-        angleMotor.config_kD(0, 0);
+        // angleMotor.configFactoryDefault();
+        // driveMotor.configFactoryDefault();
+        angleMotor.setRotorPosition(radiansToRotations(-absoluteEncoder.getAbsolutePosition()));
+        // angleMotor.setSelectedSensorPosition(radiansToTics(degreesToRadians(-absoluteEncoder.getAbsolutePosition())));
+        CurrentLimitsConfigs currentLimitsConfigs = new CurrentLimitsConfigs();
+        currentLimitsConfigs.StatorCurrentLimit = 60;
+        currentLimitsConfigs.SupplyCurrentLimit = 45;
+        currentLimitsConfigs.StatorCurrentLimitEnable = true;
+        currentLimitsConfigs.SupplyCurrentLimitEnable = true;
+        angleMotor.getConfigurator().apply(currentLimitsConfigs);
+        // angleMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 45, 45 , 0.5));
+        // angleMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(false, 60, 60, 0.5));
+        Slot0Configs slot0Configs = new Slot0Configs();
+        slot0Configs.kP = 0.3;
+        slot0Configs.kI = 0.0;
+        slot0Configs.kD = 0.0;
+        angleMotor.getConfigurator().apply(slot0Configs);
+        // angleMotor.config_kP(0, 0.3);
+        // angleMotor.config_kI(0, 0.0);
+        // angleMotor.config_kD(0, 0);
 
         // angleMotor.config_kP(0, 0.1);
         // angleMotor.config_kI(0, 0.0);
@@ -295,19 +317,19 @@ public class SwerveModule extends SubsystemBase {
 
     public void postDriveMotorSpeed() {
         if(moduleNum == 1) {
-            SmartDashboard.putNumber("MODULE 1", ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity()));
+            SmartDashboard.putNumber("MODULE 1", ticsPer100MSToSpeed(driveMotor.getRotorVelocity()));
             // SmartDashboard.putNumber("MODULE 1", radiansToDegrees(getModulePosition()));
         }
         if(moduleNum == 2) {
-            SmartDashboard.putNumber("MODULE 2", ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity()));
+            SmartDashboard.putNumber("MODULE 2", ticsPer100MSToSpeed(driveMotor.getRotorVelocity()));
             // SmartDashboard.putNumber("MODULE 2", radiansToDegrees(getModulePosition()));
         }
         if(moduleNum == 3) {
-            SmartDashboard.putNumber("MODULE 3", ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity()));
+            SmartDashboard.putNumber("MODULE 3", ticsPer100MSToSpeed(driveMotor.getRotorVelocity()));
             // SmartDashboard.putNumber("MODULE 3", radiansToDegrees(getModulePosition()));
         }
         if(moduleNum == 4) {
-            SmartDashboard.putNumber("MODULE 4", ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity()));
+            SmartDashboard.putNumber("MODULE 4", ticsPer100MSToSpeed(driveMotor.getRotorVelocity()));
             // SmartDashboard.putNumber("MODULE 4", radiansToDegrees(getModulePosition()));
         }
     }
@@ -317,16 +339,16 @@ public class SwerveModule extends SubsystemBase {
     public void velocityDrive(Vector speedVector, double turnRate, double navxOffset) {
 
         if(moduleNum == 1) {
-            SmartDashboard.putNumber("1", ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity()));
+            SmartDashboard.putNumber("1", ticsPer100MSToSpeed(driveMotor.getRotorVelocity()));
         }
         if(moduleNum == 2) {
-            SmartDashboard.putNumber("2", ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity()));
+            SmartDashboard.putNumber("2", ticsPer100MSToSpeed(driveMotor.getRotorVelocity()));
         }
         if(moduleNum == 3) {
-            SmartDashboard.putNumber("3", ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity()));
+            SmartDashboard.putNumber("3", ticsPer100MSToSpeed(driveMotor.getRotorVelocity()));
         }
         if(moduleNum == 4) {
-            SmartDashboard.putNumber("4", ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity()));
+            SmartDashboard.putNumber("4", ticsPer100MSToSpeed(driveMotor.getRotorVelocity()));
         }
 
         if(Math.abs(speedVector.getI()) < 0.0001 && Math.abs(speedVector.getJ()) < 0.0001 && Math.abs(turnRate) < 0.01) {
