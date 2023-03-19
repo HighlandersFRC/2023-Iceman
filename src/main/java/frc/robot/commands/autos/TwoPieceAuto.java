@@ -100,7 +100,7 @@ public class TwoPieceAuto extends SequentialCommandGroup {
         new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
         new SequentialCommandGroup(
-          new WaitCommand(0.15),
+          new WaitCommand(0.3),
           new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
         )
       ),
