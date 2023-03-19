@@ -55,17 +55,16 @@ public class SwerveModule extends SubsystemBase {
         talonFXConfiguration.Slot0.kI = 0.0;
         talonFXConfiguration.Slot0.kD = 0.1;
         talonFXConfiguration.Slot0.kV = 0.0;
-        talonFXConfiguration.
         angleMotor.configPeakOutputForward(1);
         angleMotor.configPeakOutputReverse(-1);
         angleMotor.configVoltageCompSaturation(11.7);
         angleMotor.enableVoltageCompensation(true);
         angleMotor.setSensorPhase(true);
         angleMotor.selectProfileSlot(0, 0);
-        angleMotor.config_kF(0, 0.0);
-        angleMotor.config_kP(0, 0.1);
-        angleMotor.config_kI(0, 0);
-        angleMotor.config_kD(0, 0.1);
+        // angleMotor.config_kF(0, 0.0);
+        // angleMotor.config_kP(0, 0.1);
+        // angleMotor.config_kI(0, 0);
+        // angleMotor.config_kD(0, 0.1);
         angleMotor.config_IntegralZone(0, 0.01);
 
         // sets drive motor to brake
