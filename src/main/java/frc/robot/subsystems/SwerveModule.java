@@ -5,7 +5,15 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+// import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
+import com.ctre.phoenixpro.configs.MotorOutputConfigs;
+import com.ctre.phoenixpro.configs.TalonFXConfigurator;
+import com.ctre.phoenixpro.controls.TorqueCurrentFOC;
+import com.ctre.phoenixpro.controls.VoltageOut;
+import com.ctre.phoenixpro.hardware.TalonFX;
+import com.ctre.phoenixpro.signals.InvertedValue;
+
 import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -28,18 +36,20 @@ public class SwerveModule extends SubsystemBase {
 
     private double xTurnAngle = 0.7692;
     private double yTurnAngle = 0.6390;
+    TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(10, 0.1, 0, false);
+
 
     public SwerveModule(int moduleNumber, TalonFX mAngleMotor, TalonFX mDriveMotor, double zeroOffset, CANCoder mAbsoluteEncoder) {
         // sets up the module by defining angle motor and drive motor
         angleMotor = mAngleMotor;
         driveMotor = mDriveMotor;
-
         moduleNum = moduleNumber;
 
         // defines absolute encoder
         absoluteEncoder = mAbsoluteEncoder;
 
         // configures angle motor PID, output, etc.
+        angleMotor.
         angleMotor.configPeakOutputForward(1);
         angleMotor.configPeakOutputReverse(-1);
         angleMotor.configVoltageCompSaturation(11.7);
@@ -98,6 +108,10 @@ public class SwerveModule extends SubsystemBase {
     public void setDriveMotorVelocity(double velocity) {
         driveMotor.set(ControlMode.Velocity, velocity);
     }
+
+    public void setDriveMotorTorqueOutput(double amps, double maxPercent){
+        driveMotor.setControl(torqueRequest.withOutput(amps).withMaxAbsDutyCycle(maxPercent));
+      }
 
     // convert from radians to ticks
     public double radiansToTics(double radians) {

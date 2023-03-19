@@ -1,8 +1,16 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+// import com.ctre.phoenix.motorcontrol.can.TalonFX;s
+// import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenixpro.configs.MotorOutputConfigs;
+import com.ctre.phoenixpro.configs.TalonFXConfigurator;
+import com.ctre.phoenixpro.controls.TorqueCurrentFOC;
+import com.ctre.phoenixpro.controls.VoltageOut;
+import com.ctre.phoenixpro.hardware.TalonFX;
+import com.ctre.phoenixpro.signals.InvertedValue;
 
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -24,7 +32,6 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.commands.defaults.DriveDefault;
@@ -45,14 +52,44 @@ public class Drive extends SubsystemBase {
     private double[] velocityArray = new double[3];
 
     // creating all the falcons
-    private final WPI_TalonFX leftForwardMotor = new WPI_TalonFX(3);
-    private final WPI_TalonFX leftForwardAngleMotor = new WPI_TalonFX(4);
-    private final WPI_TalonFX leftBackMotor = new WPI_TalonFX(5);
-    private final WPI_TalonFX leftBackAngleMotor = new WPI_TalonFX(6);
-    private final WPI_TalonFX rightForwardMotor = new WPI_TalonFX(1);
-    private final WPI_TalonFX rightForwardAngleMotor = new WPI_TalonFX(2);
-    private final WPI_TalonFX rightBackMotor = new WPI_TalonFX(7);
-    private final WPI_TalonFX rightBackAngleMotor = new WPI_TalonFX(8);
+
+
+
+    private final TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(10, 0.1, 0, false);
+    private final VoltageOut percentRequest = new VoltageOut(-6);
+    private MotorOutputConfigs motorOutputConfigs = new MotorOutputConfigs();
+    
+    private final TalonFX leftFowardMotor = new TalonFX(3, "Canivore");
+    private TalonFXConfigurator leftFowardMotorConfig = leftFowardMotor.getConfigurator();
+    
+    private final TalonFX leftFowardAngleMotor = new TalonFX(4, "Canivore");
+    private TalonFXConfigurator leftFowardAngleMotorConfig = leftFowardAngleMotor.getConfigurator();
+    
+    private final TalonFX leftBackMotor = new TalonFX(5, "Canivore");
+    private TalonFXConfigurator leftBackMotorConfig = leftBackMotor.getConfigurator();
+    
+    private final TalonFX leftBackAngleMotor = new TalonFX(6, "Canivore");
+    private TalonFXConfigurator leftBackAngleMotorConfig = leftBackAngleMotor.getConfigurator();
+    
+    private final TalonFX rightFowardMotor = new TalonFX(1, "Canivore");
+    private TalonFXConfigurator rightFowardMotorConfig = rightFowardMotor.getConfigurator();
+    
+    private final TalonFX rightFowardAngleMotor = new TalonFX(2, "Canivore");
+    private TalonFXConfigurator rightFowardAngleMotorConfig = rightFowardAngleMotor.getConfigurator();
+    
+    private final TalonFX rightBackMotor = new TalonFX(7, "Canivore");
+    private TalonFXConfigurator rightBackMotorConfig = rightBackMotor.getConfigurator();
+    
+    private final TalonFX rightBackAngleMotor = new TalonFX(8, "Canivore");
+    private TalonFXConfigurator rightBackAngleMotorConfig = rightBackAngleMotor.getConfigurator();
+
+    // private final WPI_TalonFX leftForwardAngleMotor = new WPI_TalonFX(4);
+    // private final WPI_TalonFX leftBackMotor = new WPI_TalonFX(5);
+    // private final WPI_TalonFX leftBackAngleMotor = new WPI_TalonFX(6);
+    // private final WPI_TalonFX rightForwardMotor = new WPI_TalonFX(1);
+    // private final WPI_TalonFX rightForwardAngleMotor = new WPI_TalonFX(2);
+    // private final WPI_TalonFX rightBackMotor = new WPI_TalonFX(7);
+    // private final WPI_TalonFX rightBackAngleMotor = new WPI_TalonFX(8);
 
     // creating peripherals object to access sensors
     private Peripherals peripherals;
@@ -258,6 +295,15 @@ public class Drive extends SubsystemBase {
         leftBack.init();
         rightBack.init();
         rightFront.init();
+
+        leftFowardMotorConfig.apply(motorOutputConfigs);
+        leftFowardAngleMotorConfig.apply(motorOutputConfigs);
+        leftBackMotorConfig.apply(motorOutputConfigs);
+        leftBackAngleMotorConfig.apply(motorOutputConfigs);
+        rightFowardMotorConfig.apply(motorOutputConfigs);
+        rightFowardAngleMotorConfig.apply(motorOutputConfigs);
+        rightBackAngleMotorConfig.apply(motorOutputConfigs);
+        rightBackAngleMotorConfig.apply(motorOutputConfigs);
 
         xPID.setMinOutput(-4.9);
         xPID.setMaxOutput(4.9);
