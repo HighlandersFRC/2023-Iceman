@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Peripherals;
+import frc.robot.subsystems.Lights.LEDMode;
 import frc.robot.tools.controlloops.PID;
 import frc.robot.tools.math.Vector;
 
@@ -18,8 +19,8 @@ public class AprilTagBalance extends CommandBase {
   private Lights lights;
   
   private PID pid;
-  private double kP = 2.8;
-  private double kI = 0.1;
+  private double kP = 2.85;
+  private double kI = 0.075;
   private double kD = 0.0;
 
   // horizontal (x) distance from apriltag to center of charging station
@@ -27,7 +28,7 @@ public class AprilTagBalance extends CommandBase {
 
   // side and color specific distances
   private double blueSideCloseDistance = 2.86;
-  private double redSideCloseDistance = 2.86;
+  private double redSideCloseDistance = 2.94;
   private double blueSideFarDistance = 2.94;
   private double redSideFarDistance = 2.94;
 
@@ -50,13 +51,13 @@ public class AprilTagBalance extends CommandBase {
   private int numCyclesWithinMargin = 0;
 
   // number of code cycles the distance has to be within margin in order for command to end
-  private int distCycleMargin = 2;
+  private int distCycleMargin = 1;
 
   public AprilTagBalance(Drive drive, Peripherals peripherals, Lights Lights, double speed, boolean closeSide) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drive = drive;
     this.peripherals = peripherals;
-    this.lights = lights;
+    this.lights = Lights;
     this.isCloseSide = closeSide;
     this.speed = Math.abs(speed);
 
@@ -91,6 +92,7 @@ public class AprilTagBalance extends CommandBase {
   public void execute() {
     double dist = peripherals.getBackHorizontalDistToTag();
     if (dist == 0){
+      lights.setAMode(LEDMode.GOLDSTROBE);
       double roll = peripherals.getNavxRoll();
       if (roll >= this.balancedRoll + this.rollMargin){
         drive.autoRobotCentricDrive(new Vector(-this.speed / 2, 0), 0);
@@ -100,6 +102,7 @@ public class AprilTagBalance extends CommandBase {
         drive.autoRobotCentricDrive(new Vector(0, 0), 0);
       }
     } else {
+      lights.setAMode(LEDMode.GREENBPM);
       this.pid.updatePID(dist);
       double result = this.pid.getResult();
       drive.autoRobotCentricDrive(new Vector(result, 0), 0);

@@ -99,59 +99,63 @@ public class TwoPieceAuto extends SequentialCommandGroup {
         new RunIntake(intake, -35, 0.1),
         new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
-        new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
+        new SequentialCommandGroup(
+          new WaitCommand(0.15),
+          new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
+        )
       ),
-      new WaitCommand(0.25),
+      new WaitCommand(0.1),
       new ParallelDeadlineGroup(
-        new WaitCommand(0.25),
+        new WaitCommand(0.15),
         new RunIntake(intake, 55, 1)
       ),
       new ParallelDeadlineGroup(
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 5),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 0),
         new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION)
       ),
       new ParallelDeadlineGroup(
-        new ParallelDeadlineGroup(
-          new AutonomousFollower(drive, pathJSON, false),
-          new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION),
-          new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION),
-          new RunIntake(intake, -55, 1)
+        new SequentialCommandGroup(
+          new WaitCommand(0.1),
+          new AutonomousFollower(drive, pathJSON, false)
         ),
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 1),
+        new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION),
+        new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION),
+        new RunIntake(intake, -55, 1),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 0),
         new SetFrontLimelightPipeline(peripherals, 2)
       ),
       new ParallelDeadlineGroup(
         new MoveToPieceForwards(drive, peripherals, lights),
+        new RunIntake(intake, -55, 1),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION)
       ),
       new WaitCommand(0.25),
       new ParallelDeadlineGroup(
         new AutonomousFollower(drive, pathJSON2, false),
-        new SequentialCommandGroup(
-          new ParallelCommandGroup(
-            new RotateWrist(wrist, flipChecker, 180),
-            new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION)
-          ),
-          new WaitCommand(1.5),
-          new SetArmRotationPosition(armRotation, flipChecker, Constants.MID_PLACEMENT_BACKSIDE_ARM_ROTATION)
+        new ParallelCommandGroup(
+          new RotateWrist(wrist, flipChecker, 180),
+          new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION)
         ),
         new RunIntake(intake, -35, 0.1)
       ),
       new ParallelDeadlineGroup(
         new ParallelCommandGroup(
-          new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION),
+          new SequentialCommandGroup(
+            new WaitCommand(0.1),
+            new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
+          ),
           new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
           new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION)
         ),
         new SetBackLimelightPipeline(peripherals, 0)
       ),
-      new WaitCommand(0.25),
+      new WaitCommand(0.15),
       new ParallelDeadlineGroup(
-        new WaitCommand(0.25),
-        new RunIntake(intake, 45, 1)
+        new WaitCommand(0.15),
+        new RunIntake(intake, 55, 0.4)
       ),
       new ParallelDeadlineGroup(
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 2),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 0),
         new RotateWrist(wrist, flipChecker, 180)
       ),
       new ParallelDeadlineGroup(
@@ -161,7 +165,7 @@ public class TwoPieceAuto extends SequentialCommandGroup {
           new SetArmRotationPosition(armRotation, flipChecker, 180)
         )
       ),
-      new AprilTagBalance(drive, peripherals, lights, 2.25, true)
+      new AprilTagBalance(drive, peripherals, lights, 1.5, true)
     );
   }
 }

@@ -156,7 +156,7 @@ public class SwerveModule extends SubsystemBase {
         driveMotor.configFactoryDefault();
 
         angleMotor.setSelectedSensorPosition(radiansToTics(degreesToRadians(-absoluteEncoder.getAbsolutePosition())));
-        angleMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 35, 35 , 0.5));
+        angleMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 45, 45 , 0.5));
         angleMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(false, 60, 60, 0.5));
         
         angleMotor.config_kP(0, 0.3);
@@ -169,7 +169,7 @@ public class SwerveModule extends SubsystemBase {
 
         angleMotor.configAllowableClosedloopError(0, radiansToTics(degreesToRadians(2)), 10);
 
-        driveMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 40, 0.5));
+        driveMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 45, 45, 0.5));
         driveMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 75, 75, 0.5));
         driveMotor.setSelectedSensorPosition(0);
         driveMotor.setInverted(false);
@@ -179,7 +179,7 @@ public class SwerveModule extends SubsystemBase {
 
         driveMotor.setSelectedSensorPosition(0);
 
-        driveMotor.config_kP(0, 0.15);
+        driveMotor.config_kP(0, 0.23);
         driveMotor.config_kI(0, 0);
         driveMotor.config_kD(0, 0);
 
@@ -246,20 +246,20 @@ public class SwerveModule extends SubsystemBase {
 
     public void postDriveMotorSpeed() {
         if(moduleNum == 1) {
-            // SmartDashboard.putNumber("MODULE 1", ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity()));
-            SmartDashboard.putNumber("MODULE 1", radiansToDegrees(getModulePosition()));
+            SmartDashboard.putNumber("MODULE 1", ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity()));
+            // SmartDashboard.putNumber("MODULE 1", radiansToDegrees(getModulePosition()));
         }
         if(moduleNum == 2) {
-            // SmartDashboard.putNumber("MODULE 2", ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity()));
-            SmartDashboard.putNumber("MODULE 2", radiansToDegrees(getModulePosition()));
+            SmartDashboard.putNumber("MODULE 2", ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity()));
+            // SmartDashboard.putNumber("MODULE 2", radiansToDegrees(getModulePosition()));
         }
         if(moduleNum == 3) {
-            // SmartDashboard.putNumber("MODULE 3", ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity()));
-            SmartDashboard.putNumber("MODULE 3", radiansToDegrees(getModulePosition()));
+            SmartDashboard.putNumber("MODULE 3", ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity()));
+            // SmartDashboard.putNumber("MODULE 3", radiansToDegrees(getModulePosition()));
         }
         if(moduleNum == 4) {
-            // SmartDashboard.putNumber("MODULE 4", ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity()));
-            SmartDashboard.putNumber("MODULE 4", radiansToDegrees(getModulePosition()));
+            SmartDashboard.putNumber("MODULE 4", ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity()));
+            // SmartDashboard.putNumber("MODULE 4", radiansToDegrees(getModulePosition()));
         }
     }
 
@@ -362,8 +362,5 @@ public class SwerveModule extends SubsystemBase {
                 driveMotor.set(ControlMode.PercentOutput, 0);
             }
         }
-
-        postDriveMotorSpeed();
-        
     }
 }

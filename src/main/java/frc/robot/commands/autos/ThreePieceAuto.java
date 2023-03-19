@@ -42,8 +42,8 @@ import frc.robot.subsystems.Wrist;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TwoPlusOneAuto extends SequentialCommandGroup {
-  /** Creates a new TwoPlusOneAuto. */
+public class ThreePieceAuto extends SequentialCommandGroup {
+  /** Creates a new ThreePieceAuto. */
   private File pathingFile;
   private JSONArray pathJSON;
   private JSONObject pathRead;
@@ -60,7 +60,7 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
   private JSONArray pathJSON4;
   private JSONObject pathRead4;
 
-  public TwoPlusOneAuto(Drive drive, ArmExtension armExtension, ArmRotation armRotation, Wrist wrist, FlipChecker flipChecker, Peripherals peripherals, Lights lights, Intake intake) {
+  public ThreePieceAuto(Drive drive, ArmExtension armExtension, ArmRotation armRotation, Wrist wrist, FlipChecker flipChecker, Peripherals peripherals, Lights lights, Intake intake) {
 
     try {
       pathingFile = new File("/home/lvuser/deploy/2PiecePart1.json");
@@ -93,7 +93,7 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
     }
 
     try {
-        pathingFile4 = new File("/home/lvuser/deploy/2PiecePart4Dock.json");
+        pathingFile4 = new File("/home/lvuser/deploy/3PiecePart4.json");
         FileReader scanner4 = new FileReader(pathingFile4);
         pathRead4 = new JSONObject(new JSONTokener(scanner4));
         pathJSON4 = (JSONArray) pathRead4.get("sampled_points");
@@ -106,16 +106,16 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
     addCommands(
       new ParallelCommandGroup(
         new RunIntake(intake, -35, 0.1),
-        new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION),
-        new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
+        new RotateWrist(wrist, flipChecker, Constants.MID_PLACEMENT_BACKSIDE_WRIST_ROTATION),
+        new SetArmRotationPosition(armRotation, flipChecker, Constants.MID_PLACEMENT_BACKSIDE_ARM_ROTATION),
         new SequentialCommandGroup(
           new WaitCommand(0.15),
-          new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
+          new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.MID_PLACEMENT_ARM_EXTENSION)
         )
       ),
-      new WaitCommand(0.1),
+      new WaitCommand(0.3),
       new ParallelDeadlineGroup(
-        new WaitCommand(0.15),
+        new WaitCommand(0.1),
         new RunIntake(intake, 55, 1)
       ),
       new ParallelDeadlineGroup(
@@ -142,13 +142,14 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
       new ParallelDeadlineGroup(
         new AutonomousFollower(drive, pathJSON2, false),
         new ParallelCommandGroup(
-          new RotateWrist(wrist, flipChecker, 180),
+          new RotateWrist(wrist, flipChecker, 215),
           new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
           new SequentialCommandGroup(
             new WaitCommand(0.75),
-            new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.MID_PLACEMENT_ARM_EXTENSION / 3)
+            new SetArmExtensionPosition(lights, armExtension, armRotation, 18)
           )
         ),
+        new WaitCommand(0.25),
         new RunIntake(intake, -35, 0.1)
       ),
       new ParallelDeadlineGroup(
@@ -165,7 +166,7 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
         new RunIntake(intake, 55, 0.4)
       ),
       new ParallelDeadlineGroup(
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 0),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 6),
         new RotateWrist(wrist, flipChecker, 180)
       ),
       new ParallelDeadlineGroup(
@@ -184,11 +185,19 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
       new WaitCommand(0.1),
       new ParallelDeadlineGroup(
         new AutonomousFollower(drive, pathJSON4, false),
-        new SetArmRotationPosition(armRotation, flipChecker, 180),
-        new RotateWrist(wrist, flipChecker, 225)
+        new ParallelCommandGroup(
+          new RotateWrist(wrist, flipChecker, 240),
+          new SetArmRotationPosition(armRotation, flipChecker, Constants.MID_PLACEMENT_BACKSIDE_ARM_ROTATION),
+          new SequentialCommandGroup(
+            new WaitCommand(0.75),
+            new SetArmExtensionPosition(lights, armExtension, armRotation, 3)
+          )
+        ),
+        new RunIntake(intake, -35, 0.1)
       ),
-      new AprilTagBalance(drive, peripherals, lights, 2.75, false),
-      new RunIntake(intake, -55, -1)
+      new WaitCommand(0.35),
+      new RunIntake(intake, 55, 0.5),
+      new WaitCommand(3)
     );
   }
 }
