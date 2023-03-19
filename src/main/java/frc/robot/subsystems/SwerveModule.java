@@ -74,7 +74,7 @@ public class SwerveModule extends SubsystemBase {
         // angleMotor.config_IntegralZone(0, 0.01);
 
         // sets drive motor to brake
-        driveMotor.setNeutralMode(NeutralMode.Brake);
+        // driveMotor.setNeutralMode(NeutralMode.Brake);
 
 
 
