@@ -78,7 +78,7 @@ public class SwerveModule extends SubsystemBase {
         // angleMotor.config_IntegralZone(0, 0.01);
 
         // sets drive motor to brake
-        driveMotor.setNeutralMode(NeutralMode.Brake);
+        // driveMotor.setNeutralMode(NeutralMode.Brake);
 
 
 
@@ -173,11 +173,11 @@ public class SwerveModule extends SubsystemBase {
 
     // returns state of swerve modules - Used for Odometry
     public SwerveModuleState getState(double navxOffset) {
-        return new SwerveModuleState(driveMotor.getVelocity().getValue(), new Rotation2d(Math.toRadians(getAbsolutePosition() - navxOffset)));
+        return new SwerveModuleState(rotationsPerSecondToSpeed(driveMotor.getVelocity().getValue()), new Rotation2d(Math.toRadians(getAbsolutePosition() - navxOffset)));
     }
 
     public double getModuleSpeed() {
-        return (RPSToSpeed(driveMotor.getVelocity().getValue()));
+        return (rotationsPerSecondToSpeed(driveMotor.getVelocity().getValue()));
     }
 
     public double getModuleDistance() {
@@ -295,12 +295,12 @@ public class SwerveModule extends SubsystemBase {
     
     // change speed to rps
     public double speedToRPS(double speed){
-        return speed * (Constants.GEAR_RATIO * Constants.FALCON_TICS_PER_ROTATION)/(Constants.WHEEL_CIRCUMFRENCE);
+        return speed * (Constants.GEAR_RATIO)/(Constants.WHEEL_CIRCUMFRENCE);
     }
-
+    
     // change rps to speed
-    public double RPSToSpeed(double rps){
-        return rps * (Constants.WHEEL_CIRCUMFRENCE)/(Constants.GEAR_RATIO * Constants.FALCON_TICS_PER_ROTATION);
+    public double rotationsPerSecondToSpeed(double rps){
+        return rps * (Constants.WHEEL_CIRCUMFRENCE)/(Constants.GEAR_RATIO);
     }
     
     public double ticsPerSecondToSpeed(double tics) {
@@ -317,19 +317,19 @@ public class SwerveModule extends SubsystemBase {
 
     public void postDriveMotorSpeed() {
         if(moduleNum == 1) {
-            SmartDashboard.putNumber("MODULE 1", ticsPer100MSToSpeed(driveMotor.getRotorVelocity()));
+            SmartDashboard.putNumber("MODULE 1", rotationsPerSecondToSpeed(driveMotor.getVelocity().getValue()));
             // SmartDashboard.putNumber("MODULE 1", radiansToDegrees(getModulePosition()));
         }
         if(moduleNum == 2) {
-            SmartDashboard.putNumber("MODULE 2", ticsPer100MSToSpeed(driveMotor.getRotorVelocity()));
+            SmartDashboard.putNumber("MODULE 2", rotationsPerSecondToSpeed(driveMotor.getVelocity().getValue()));
             // SmartDashboard.putNumber("MODULE 2", radiansToDegrees(getModulePosition()));
         }
         if(moduleNum == 3) {
-            SmartDashboard.putNumber("MODULE 3", ticsPer100MSToSpeed(driveMotor.getRotorVelocity()));
+            SmartDashboard.putNumber("MODULE 3", ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity()));
             // SmartDashboard.putNumber("MODULE 3", radiansToDegrees(getModulePosition()));
         }
         if(moduleNum == 4) {
-            SmartDashboard.putNumber("MODULE 4", ticsPer100MSToSpeed(driveMotor.getRotorVelocity()));
+            SmartDashboard.putNumber("MODULE 4", rotationsPerSecondToSpeed(driveMotor.getVelocity().getValue()));
             // SmartDashboard.putNumber("MODULE 4", radiansToDegrees(getModulePosition()));
         }
     }
@@ -339,20 +339,21 @@ public class SwerveModule extends SubsystemBase {
     public void velocityDrive(Vector speedVector, double turnRate, double navxOffset) {
 
         if(moduleNum == 1) {
-            SmartDashboard.putNumber("1", ticsPer100MSToSpeed(driveMotor.getRotorVelocity()));
+            SmartDashboard.putNumber("1", rotationsPerSecondToSpeed(driveMotor.getVelocity().getValue()));
         }
         if(moduleNum == 2) {
-            SmartDashboard.putNumber("2", ticsPer100MSToSpeed(driveMotor.getRotorVelocity()));
+            SmartDashboard.putNumber("2", rotationsPerSecondToSpeed(driveMotor.getVelocity().getValue()));
         }
         if(moduleNum == 3) {
-            SmartDashboard.putNumber("3", ticsPer100MSToSpeed(driveMotor.getRotorVelocity()));
+            SmartDashboard.putNumber("3", rotationsPerSecondToSpeed(driveMotor.getVelocity().getValue()));
         }
         if(moduleNum == 4) {
-            SmartDashboard.putNumber("4", ticsPer100MSToSpeed(driveMotor.getRotorVelocity()));
+            SmartDashboard.putNumber("4", rotationsPerSecondToSpeed(driveMotor.getVelocity().getValue()));
         }
 
         if(Math.abs(speedVector.getI()) < 0.0001 && Math.abs(speedVector.getJ()) < 0.0001 && Math.abs(turnRate) < 0.01) {
-            driveMotor.set(ControlMode.Velocity, 0.0);
+            //driveMotor.set(ControlMode.Velocity, 0.0);
+            driveMotor.set(0.0);
             // angleMotor.set(ControlMode.PercentOutput, 0);
         }
         else {
@@ -430,7 +431,8 @@ public class SwerveModule extends SubsystemBase {
                 // setAnglePID(adjustedAngle, velocityTicsPer100MS);
             }
             else{
-                driveMotor.set(ControlMode.PercentOutput, 0);
+                //driveMotor.set(ControlMode.PercentOutput, 0);
+                driveMotor.set(0.0);
             }
         }
     }
