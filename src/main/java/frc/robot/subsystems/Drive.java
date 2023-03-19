@@ -60,11 +60,11 @@ public class Drive extends SubsystemBase {
     private final VoltageOut percentRequest = new VoltageOut(-6);
     private MotorOutputConfigs motorOutputConfigs = new MotorOutputConfigs();
     
-    private final TalonFX leftFowardMotor = new TalonFX(3, "Canivore");
-    private TalonFXConfiguration leftFowardMotorConfig = new TalonFXConfiguration();
+    private final TalonFX leftForwardMotor = new TalonFX(3, "Canivore");
+    private TalonFXConfiguration leftForwardMotorConfig = new TalonFXConfiguration();
     
-    private final TalonFX leftFowardAngleMotor = new TalonFX(4, "Canivore");
-    private TalonFXConfiguration leftFowardAngleMotorConfig = new TalonFXConfiguration();
+    private final TalonFX leftForwardAngleMotor = new TalonFX(4, "Canivore");
+    private TalonFXConfiguration leftForwardAngleMotorConfig = new TalonFXConfiguration();
     
     private final TalonFX leftBackMotor = new TalonFX(5, "Canivore");
     private TalonFXConfiguration leftBackMotorConfig = new TalonFXConfiguration();
@@ -72,11 +72,11 @@ public class Drive extends SubsystemBase {
     private final TalonFX leftBackAngleMotor = new TalonFX(6, "Canivore");
     private TalonFXConfiguration leftBackAngleMotorConfig = new TalonFXConfiguration();
     
-    private final TalonFX rightFowardMotor = new TalonFX(1, "Canivore");
-    private TalonFXConfiguration rightFowardMotorConfig = new TalonFXConfiguration();
+    private final TalonFX rightForwardMotor = new TalonFX(1, "Canivore");
+    private TalonFXConfiguration rightForwardMotorConfig = new TalonFXConfiguration();
     
-    private final TalonFX rightFowardAngleMotor = new TalonFX(2, "Canivore");
-    private TalonFXConfiguration rightFowardAngleMotorConfig = new TalonFXConfiguration();
+    private final TalonFX rightForwardAngleMotor = new TalonFX(2, "Canivore");
+    private TalonFXConfiguration rightForwardAngleMotorConfig = new TalonFXConfiguration();
     
     private final TalonFX rightBackMotor = new TalonFX(7, "Canivore");
     private TalonFXConfiguration rightBackMotorConfig = new TalonFXConfiguration();
