@@ -78,7 +78,10 @@ public class TwoPieceBumpAutoNoDock extends SequentialCommandGroup {
         new RunIntake(intake, -35, 0.1),
         new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
-        new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
+        new SequentialCommandGroup(
+          new WaitCommand(0.3),
+          new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
+        )
       ),
       new WaitCommand(0.25),
       new ParallelDeadlineGroup(
@@ -86,7 +89,7 @@ public class TwoPieceBumpAutoNoDock extends SequentialCommandGroup {
         new RunIntake(intake, 55, 1)
       ),
       new ParallelDeadlineGroup(
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 10),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 5),
         new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION)
       ),
       new ParallelDeadlineGroup(
@@ -127,11 +130,17 @@ public class TwoPieceBumpAutoNoDock extends SequentialCommandGroup {
       new WaitCommand(0.1),
       new ParallelDeadlineGroup(
         new WaitCommand(0.1),
-        new RunIntake(intake, 45, 1)
+        new RunIntake(intake, 45, 0.4)
       ),
       new ParallelDeadlineGroup(
         new SetArmExtensionPosition(lights, armExtension, armRotation, 2),
         new RotateWrist(wrist, flipChecker, 180)
+      ),
+      new ParallelDeadlineGroup(
+        new SequentialCommandGroup(
+          new WaitCommand(0.9),
+          new SetArmRotationPosition(armRotation, flipChecker, 180)
+        )
       )
     );
   }

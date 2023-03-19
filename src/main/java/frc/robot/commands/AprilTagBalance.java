@@ -28,7 +28,7 @@ public class AprilTagBalance extends CommandBase {
 
   // side and color specific distances
   private double blueSideCloseDistance = 2.86;
-  private double redSideCloseDistance = 2.94;
+  private double redSideCloseDistance = 2.86;
   private double blueSideFarDistance = 2.94;
   private double redSideFarDistance = 2.94;
 
