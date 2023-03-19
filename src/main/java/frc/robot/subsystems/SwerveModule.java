@@ -247,8 +247,8 @@ public class SwerveModule extends SubsystemBase {
         driveMotor.config_kI(0, 0);
         driveMotor.config_kD(0, 0);
 
-        angleMotor.setNeutralMode(NeutralMode.Brake);
-        driveMotor.setNeutralMode(NeutralMode.Brake);
+        // angleMotor.setNeutralMode(NeutralMode.Brake);
+        // driveMotor.setNeutralMode(NeutralMode.Brake);
 
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 100);
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 100);
@@ -265,7 +265,8 @@ public class SwerveModule extends SubsystemBase {
 
     // returns angle motor position in ticks
     public double getAngleMotorEncoder(){
-        return angleMotor.getSelectedSensorPosition();
+        // return angleMotor.getIntegratedSensorVelocity();
+        return angleMotor.getVelocity().getValue();
     }
 
     // returns Cancoder position in degrees
@@ -328,8 +329,7 @@ public class SwerveModule extends SubsystemBase {
             // SmartDashboard.putNumber("MODULE 2", radiansToDegrees(getModulePosition()));
         }
         if(moduleNum == 3) {
-            SmartDashboard.putNumber("MODULE 3", ticsPer100MSToSpeed(driveMotor.getSelectedSensorVelocity()));
-            // SmartDashboard.putNumber("MODULE 3", radiansToDegrees(getModulePosition()));
+            SmartDashboard.putNumber("MODULE 3", rotationsPerSecondToSpeed(driveMotor.getVelocity().getValue()));           // SmartDashboard.putNumber("MODULE 3", radiansToDegrees(getModulePosition()));
         }
         if(moduleNum == 4) {
             SmartDashboard.putNumber("MODULE 4", rotationsPerSecondToSpeed(driveMotor.getVelocity().getValue()));
