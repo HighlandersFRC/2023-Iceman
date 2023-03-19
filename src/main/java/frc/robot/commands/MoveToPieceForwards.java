@@ -107,7 +107,7 @@ public class MoveToPieceForwards extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Timer.getFPGATimestamp() - startTime > 0.6) {
+    if(Timer.getFPGATimestamp() - startTime > 0.7) {
       return true;
     }
     return false;

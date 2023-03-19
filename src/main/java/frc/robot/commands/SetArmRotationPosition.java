@@ -63,6 +63,9 @@ public class SetArmRotationPosition extends CommandBase {
           case MID_PLACEMENT:
             this.position = Constants.MID_PLACEMENT_FRONTSIDE_ARM_ROTATION;
             break;
+          case LOW_PLACEMENT:
+            this.position = Constants.LOW_PLACEMENT_FRONTSIDE_ARM_ROTATION;
+            break;
           case UPRIGHT_CONE:
             this.position = Constants.UPRIGHT_CONE_FRONTSIDE_ARM_ROTATION;
             break;
@@ -86,6 +89,9 @@ public class SetArmRotationPosition extends CommandBase {
             break;
           case MID_PLACEMENT:
             this.position = Constants.MID_PLACEMENT_BACKSIDE_ARM_ROTATION;
+            break;
+          case LOW_PLACEMENT:
+            this.position = Constants.LOW_PLACEMENT_BACKSIDE_ARM_ROTATION;
             break;
           case UPRIGHT_CONE:
             this.position = Constants.UPRIGHT_CONE_BACKSIDE_ARM_ROTATION;
@@ -148,10 +154,12 @@ public class SetArmRotationPosition extends CommandBase {
         arm.setRotationPosition(setPosition);
       }
     }
+    flipChecker.setAllowedToFlip(false);
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   @Override
   public boolean isFinished() {

@@ -37,7 +37,100 @@ public class RotateWrist extends CommandBase {
 
   @Override
   public void initialize() {
-    System.out.println("Wrist Init");
+    System.out.println("Wrist Execute");
+    double setAngle = this.angle;
+    if (useNavx){
+      double navxAngle = peripherals.getNavxAngle() % 360;
+      while (navxAngle < 0) {
+        navxAngle += 360;
+      }
+      if (navxAngle >= 90 && navxAngle <= 270){
+        // Case where robot is facing towards driver
+        switch(preset) {
+          case HIGH_PLACEMENT:
+            this.angle = Constants.HIGH_PLACEMENT_FRONTSIDE_WRIST_ROTATION;
+            break;
+          case MID_PLACEMENT:
+            this.angle = Constants.MID_PLACEMENT_FRONTSIDE_WRIST_ROTATION;
+            break;
+          case LOW_PLACEMENT:
+            this.angle = Constants.LOW_PLACEMENT_FRONTSIDE_WRIST_ROTATION;
+            break;
+          case UPRIGHT_CONE:
+            this.angle = Constants.UPRIGHT_CONE_FRONTSIDE_WRIST_ROTATION;
+            break;
+          case TIPPED_CONE:
+            this.angle = Constants.TIPPED_CONE_FRONTSIDE_WRIST_ROTATION;
+            break;
+          case CUBE:
+            this.angle = Constants.CUBE_FRONTSIDE_WRIST_ROTATION;
+            break;
+          case SHELF:
+            this.angle = Constants.SHELF_BACKSIDE_WRIST_ROTATION;
+            break;
+          default:
+            this.angle = 180;
+        }
+      } else {
+        // Case where robot is facing away from driver
+        switch(preset) {
+          case HIGH_PLACEMENT:
+            this.angle = Constants.HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION;
+            break;
+          case MID_PLACEMENT:
+            this.angle = Constants.MID_PLACEMENT_BACKSIDE_WRIST_ROTATION;
+            break;
+          case LOW_PLACEMENT:
+            this.angle = Constants.LOW_PLACEMENT_BACKSIDE_WRIST_ROTATION;
+            break;
+          case UPRIGHT_CONE:
+            this.angle = Constants.UPRIGHT_CONE_BACKSIDE_WRIST_ROTATION;
+            break;
+          case TIPPED_CONE:
+            this.angle = Constants.TIPPED_CONE_BACKSIDE_WRIST_ROTATION;
+            break;
+          case CUBE:
+            this.angle = Constants.CUBE_BACKSIDE_WRIST_ROTATION;
+            break;
+          case SHELF:
+            this.angle = Constants.SHELF_FRONTSIDE_WRIST_ROTATION;
+            break;
+          default:
+            this.angle = 180;
+        }
+      }
+    } else {
+      if (angle == Constants.UPRIGHT_CONE_FRONTSIDE_WRIST_ROTATION) {
+        if (flipChecker.getFlip()) {
+          setAngle = Constants.UPRIGHT_CONE_BACKSIDE_WRIST_ROTATION;
+        }
+      } else if (angle == Constants.TIPPED_CONE_FRONTSIDE_WRIST_ROTATION) {
+        if (flipChecker.getFlip()) {
+          setAngle = Constants.TIPPED_CONE_BACKSIDE_WRIST_ROTATION;
+        }
+      } else if (angle == Constants.HIGH_PLACEMENT_FRONTSIDE_WRIST_ROTATION) {
+        if (flipChecker.getFlip()) {
+          setAngle = Constants.HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION;
+        }
+      } else if (angle == Constants.MID_PLACEMENT_FRONTSIDE_WRIST_ROTATION) {
+        if (flipChecker.getFlip()) {
+          setAngle = Constants.MID_PLACEMENT_BACKSIDE_WRIST_ROTATION;
+        }
+      } else if (angle == Constants.CUBE_FRONTSIDE_WRIST_ROTATION) {
+        if (flipChecker.getFlip()) {
+          setAngle = Constants.CUBE_BACKSIDE_WRIST_ROTATION;
+        }
+      } else if (angle == Constants.SHELF_FRONTSIDE_WRIST_ROTATION) {
+        if (flipChecker.getFlip()) {
+          setAngle = Constants.SHELF_BACKSIDE_WRIST_ROTATION;
+        }
+      }
+    }
+    if (Math.abs(OI.operatorController.getRawAxis(5)) > 0.1) {
+      this.wrist.setRotationMotorPercent(OI.operatorController.getRawAxis(5)/4);
+    } else {
+      wrist.setRotationPosition(setAngle + Constants.wristOffsetMidMatch);
+    }
   }
 
   @Override

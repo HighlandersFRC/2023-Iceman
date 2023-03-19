@@ -22,6 +22,7 @@ public class LowPreset extends ParallelCommandGroup {
   /** Creates a new LowPreset. */
   public LowPreset(ArmExtension armExtension, ArmRotation armRotation, Peripherals peripherals, FlipChecker flipChecker, Wrist wrist, Lights lights) {
     addCommands(
+      new SetArmRotationPosition(armRotation, peripherals, flipChecker, Constants.PRESET.LOW_PLACEMENT),
       new RotateWrist(wrist, flipChecker, peripherals, Constants.PRESET.LOW_PLACEMENT)
     );
   }

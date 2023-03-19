@@ -9,15 +9,18 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OI;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmRotation;
+import frc.robot.subsystems.FlipChecker;
 
 public class ArmRotationDefaultCommand extends CommandBase {
   /** Creates a new ArmDefaultCommand. */
   private ArmRotation arm;
   private ArmExtension armExtension;
+  private FlipChecker flipChecker;
   double position = 0;
-  public ArmRotationDefaultCommand(ArmRotation arm, ArmExtension armExtension) {
+  public ArmRotationDefaultCommand(ArmRotation arm, ArmExtension armExtension, FlipChecker flipChecker) {
     this.arm = arm;
     this.armExtension = armExtension;
+    this.flipChecker = flipChecker;
     addRequirements(this.arm);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -31,9 +34,7 @@ public class ArmRotationDefaultCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // arm.setRotationPosition(180);
-    // arm.setRotationMotorPercent(0);
-    // // if((OI.operatorController.getRawAxis(4))/4 < 0.0125) {
+    flipChecker.setAllowedToFlip(true);
       if(armExtension.getExtensionPosition() < 5) {
         // if(position > 90 && position < 250) {
         //   arm.setRotationPosition(position);

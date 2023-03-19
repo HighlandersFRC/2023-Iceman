@@ -81,10 +81,10 @@ public class Robot extends TimedRobot {
   private Peripherals peripherals = new Peripherals(lights);
   private Drive drive = new Drive(peripherals);
   private ArmExtension armExtension = new ArmExtension();
-  private ArmRotation armRotation = new ArmRotation(armExtension);
   private Wrist wrist = new Wrist();
   private Intake intake = new Intake(lights);
   private FlipChecker flipChecker = new FlipChecker(peripherals);
+  private ArmRotation armRotation = new ArmRotation(armExtension, flipChecker);
 
   private UsbCamera frontDriverCam;
   private UsbCamera backDriverCam;
@@ -264,6 +264,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     OI.driverController.setRumble(RumbleType.kBothRumble, 0);
+    OI.operatorController.setRumble(RumbleType.kBothRumble, 0);
   }
 
   @Override
@@ -289,6 +290,7 @@ public class Robot extends TimedRobot {
     drive.teleopInit(); 
     armExtension.teleopInit();
     wrist.teleopInit();
+    flipChecker.setTeleop();
 
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 

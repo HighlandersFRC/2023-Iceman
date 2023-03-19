@@ -24,9 +24,11 @@ public class ArmRotation extends SubsystemBase {
   private final CANCoder armRotationCancoder = new CANCoder(5, "Canivore");
 
   private ArmExtension armExtension;
+  private FlipChecker flipChecker;
 
-  public ArmRotation(ArmExtension armExtension) {
+  public ArmRotation(ArmExtension armExtension, FlipChecker flipChecker) {
     this.armExtension = armExtension;
+    this.flipChecker = flipChecker;
   }
 
   public void init() {
@@ -49,7 +51,7 @@ public class ArmRotation extends SubsystemBase {
     rotationMotorMaster.configRemoteFeedbackFilter(armRotationCancoder, 0);
     rotationMotorMaster.configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0);
 
-    setDefaultCommand(new ArmRotationDefaultCommand(this, armExtension));
+    setDefaultCommand(new ArmRotationDefaultCommand(this, armExtension, flipChecker));
   }
 
   public double getRotationPosition() {

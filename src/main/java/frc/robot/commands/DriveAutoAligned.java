@@ -25,13 +25,13 @@ public class DriveAutoAligned extends CommandBase {
 
   private double set = 0;
 
-  // private double kP = 6;
-  // private double kI = 0.15;
-  // private double kD = 0.6;
+  private double kP = 6;
+  private double kI = 0.15;
+  private double kD = 0.6;
 
-  private double kP = 0.5;
-  private double kI = 0;
-  private double kD = 2;
+  // private double kP = 0.5;
+  // private double kI = 0;
+  // private double kD = 2;
 
   private int angleSettled = 0;
 
@@ -55,16 +55,16 @@ public class DriveAutoAligned extends CommandBase {
     }
     set = setPoint;
     pid.setSetPoint(setPoint);
-    pid.setMinOutput(-1.25);
-    pid.setMaxOutput(1.25);
+    pid.setMinOutput(-1.1);
+    pid.setMaxOutput(1.1);
     angleSettled = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("setpoint: " + set);
-    System.out.println("current: " + peripherals.getNavxAngle());
+    // System.out.println("setpoint: " + set);
+    // System.out.println("current: " + peripherals.getNavxAngle());
     turn = peripherals.getNavxAngle();
     pid.updatePID(turn);
     double result = -pid.getResult();
@@ -78,7 +78,7 @@ public class DriveAutoAligned extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drive.autoDrive(new Vector(0, 0), 0);
+    // drive.autoDrive(new Vector(0, 0), 0);
   }
 
   // Returns true when the command should end.

@@ -11,11 +11,18 @@ public class FlipChecker extends SubsystemBase {
   /** Creates a new FlipChecker. */
 
   private boolean flip = false;
+  private boolean isTeleop = false;
+
+  private boolean allowedToFlip = true;
 
   private Peripherals peripherals;
 
   public FlipChecker(Peripherals peripherals) {
     this.peripherals = peripherals;
+  }
+
+  public void setTeleop() {
+    isTeleop = true;
   }
 
   public void setFlip(Boolean flip) {
@@ -24,6 +31,10 @@ public class FlipChecker extends SubsystemBase {
 
   public boolean getFlip() {
     return flip;
+  }
+
+  public void setAllowedToFlip(boolean flip) {
+    allowedToFlip = flip;
   }
 
   private double getTrueDegree(double angle) {
@@ -72,7 +83,14 @@ public class FlipChecker extends SubsystemBase {
     //   setFlip(false);
     // }
 
-    setFlip(!getArmDirection());
+    if(isTeleop && allowedToFlip) {
+      setFlip(!getArmDirection());
+    }
+    else {
+      setFlip(flip);
+    }
+
+    // System.out.println(allowedToFlip);
 
     // This method will be called once per scheduler run
   }

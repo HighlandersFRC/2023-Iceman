@@ -543,8 +543,8 @@ public class Drive extends SubsystemBase {
 
         double turnRadiansPerSec = degreesFromPlacement;
 
-        double originalX = -OI.getDriverLeftY();
-        double originalY = -OI.getDriverLeftX();
+        double originalX = -(Math.copySign(OI.getDriverLeftY() * OI.getDriverLeftY(), OI.getDriverLeftY()));
+        double originalY = -(Math.copySign(OI.getDriverLeftX() * OI.getDriverLeftX(), OI.getDriverLeftX()));
 
         if(Math.abs(originalX) < 0.05) {
             originalX = 0;
