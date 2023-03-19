@@ -1,16 +1,22 @@
 package frc.robot.subsystems;
 
+import java.net.NoRouteToHostException;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenixpro.StatusCode;
 // import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenixpro.configs.ClosedLoopGeneralConfigs;
 import com.ctre.phoenixpro.configs.MotorOutputConfigs;
 import com.ctre.phoenixpro.configs.TalonFXConfiguration;
 import com.ctre.phoenixpro.configs.TalonFXConfigurator;
+import com.ctre.phoenixpro.controls.ControlRequest;
+import com.ctre.phoenixpro.controls.PositionVoltage;
 import com.ctre.phoenixpro.controls.TorqueCurrentFOC;
+import com.ctre.phoenixpro.controls.VelocityVoltage;
 import com.ctre.phoenixpro.controls.VoltageOut;
 import com.ctre.phoenixpro.hardware.TalonFX;
 import com.ctre.phoenixpro.signals.InvertedValue;
@@ -55,18 +61,17 @@ public class SwerveModule extends SubsystemBase {
         talonFXConfiguration.Slot0.kI = 0.0;
         talonFXConfiguration.Slot0.kD = 0.1;
         talonFXConfiguration.Slot0.kV = 0.0;
-        talonFXConfiguration.
-        angleMotor.configPeakOutputForward(1);
-        angleMotor.configPeakOutputReverse(-1);
-        angleMotor.configVoltageCompSaturation(11.7);
-        angleMotor.enableVoltageCompensation(true);
-        angleMotor.setSensorPhase(true);
-        angleMotor.selectProfileSlot(0, 0);
-        angleMotor.config_kF(0, 0.0);
-        angleMotor.config_kP(0, 0.1);
-        angleMotor.config_kI(0, 0);
-        angleMotor.config_kD(0, 0.1);
-        angleMotor.config_IntegralZone(0, 0.01);
+        // angleMotor.configPeakOutputForward(1);
+        // angleMotor.configPeakOutputReverse(-1);
+        // angleMotor.configVoltageCompSaturation(11.7);
+        // angleMotor.enableVoltageCompensation(true);
+        // angleMotor.setSensorPhase(true);
+        // angleMotor.selectProfileSlot(0, 0);
+        // angleMotor.config_kF(0, 0.0);
+        // angleMotor.config_kP(0, 0.1);
+        // angleMotor.config_kI(0, 0);
+        // angleMotor.config_kD(0, 0.1);
+        // angleMotor.config_IntegralZone(0, 0.01);
 
         // sets drive motor to brake
         driveMotor.setNeutralMode(NeutralMode.Brake);
@@ -106,18 +111,31 @@ public class SwerveModule extends SubsystemBase {
 
     // this method sets the angle motor to move to a specific angle(in radians) and then sets the drive motors to the motor percent
     public void setAnglePID(double targetAngle, double velocity){
-        angleMotor.set(ControlMode.Position, (radiansToTics((targetAngle))));
+        var request = new PositionVoltage(radiansToRotations(targetAngle));
+        angleMotor.setControl(request);
         setDriveMotorVelocity(velocity);
     }
-
-    // velocity in tics/100 milliseconds
+    // takes an input of on field speed, then sets the drive motors to that speed
     public void setDriveMotorVelocity(double velocity) {
-        driveMotor.set(ControlMode.Velocity, velocity);
+        var request = new VelocityVoltage(speedToRPS(velocity));
+        driveMotor.setControl(request);
     }
 
     public void setDriveMotorTorqueOutput(double amps, double maxPercent){
         driveMotor.setControl(torqueRequest.withOutput(amps).withMaxAbsDutyCycle(maxPercent));
       }
+
+    // convert from radians to ticks
+    public double radiansToRotations(double radians) {
+        double outputRotations = 0.5 * radians * (Constants.STEER_GEAR_RATIO/Math.PI);
+        return outputRotations;
+    }
+
+    // convert from rotations to radians
+    public double rotationsToRadians(double rotations) {
+        double outputRadians = 2 * Math.PI * (rotations/(Constants.FALCON_TICS_PER_ROTATION * Constants.STEER_GEAR_RATIO));
+        return outputRadians;
+    }
 
     // convert from radians to ticks
     public double radiansToTics(double radians) {
@@ -252,7 +270,17 @@ public class SwerveModule extends SubsystemBase {
         double ticsPer100MS = ticsPerSecond/10;
         return ticsPer100MS;
     }
+    
+    // change speed to rps
+    public double speedToRPS(double speed){
+        return speed * (Constants.GEAR_RATIO * Constants.FALCON_TICS_PER_ROTATION)/(Constants.WHEEL_CIRCUMFRENCE);
+    }
 
+    // change rps to speed
+    public double RPSToSpeed(double rps){
+        return rps * (Constants.WHEEL_CIRCUMFRENCE)/(Constants.GEAR_RATIO * Constants.FALCON_TICS_PER_ROTATION);
+    }
+    
     public double ticsPerSecondToSpeed(double tics) {
         double speed = (tics * Constants.WHEEL_CIRCUMFRENCE)/(Constants.GEAR_RATIO * Constants.FALCON_TICS_PER_ROTATION);
         return speed;
