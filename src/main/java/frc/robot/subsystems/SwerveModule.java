@@ -262,7 +262,7 @@ public class SwerveModule extends SubsystemBase {
 
     // returns angle motor position in ticks
     public double getAngleMotorEncoder(){
-        return angleMotor.getSelectedSensorPosition();
+        return angleMotor.getVelocity().getValue();
     }
 
     // returns Cancoder position in degrees
