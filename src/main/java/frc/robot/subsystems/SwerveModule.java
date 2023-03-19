@@ -325,7 +325,7 @@ public class SwerveModule extends SubsystemBase {
             // SmartDashboard.putNumber("MODULE 2", radiansToDegrees(getModulePosition()));
         }
         if(moduleNum == 3) {
-            SmartDashboard.putNumber("MODULE 3", rotationsPerSecondToSpeed(driveMotor.getVelocity().getValue()))            // SmartDashboard.putNumber("MODULE 3", radiansToDegrees(getModulePosition()));
+            SmartDashboard.putNumber("MODULE 3", rotationsPerSecondToSpeed(driveMotor.getVelocity().getValue()));           // SmartDashboard.putNumber("MODULE 3", radiansToDegrees(getModulePosition()));
         }
         if(moduleNum == 4) {
             SmartDashboard.putNumber("MODULE 4", rotationsPerSecondToSpeed(driveMotor.getVelocity().getValue()));
