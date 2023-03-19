@@ -15,7 +15,10 @@ import com.ctre.phoenixpro.controls.TorqueCurrentFOC;
 import com.ctre.phoenixpro.controls.VoltageOut;
 import com.ctre.phoenixpro.hardware.TalonFX;
 import com.ctre.phoenixpro.signals.InvertedValue;
+import com.revrobotics.Rev2mDistanceSensor;
+import com.revrobotics.Rev2mDistanceSensor.Port;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.defaults.IntakeDefaultCommand;
 
@@ -25,6 +28,8 @@ public class Intake extends SubsystemBase {
   private final TalonFX grabberMotor = new TalonFX(15, "Canivore");
   private final TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(10, 0.1, 0, false);
   private final VoltageOut percentRequest = new VoltageOut(-6);
+
+  private final Rev2mDistanceSensor distanceSensor = new Rev2mDistanceSensor(Port.kOnboard);
   
   private TalonFXConfigurator configurator = grabberMotor.getConfigurator();
 
@@ -45,6 +50,8 @@ public class Intake extends SubsystemBase {
     motorOutputConfigs.Inverted = InvertedValue.CounterClockwise_Positive;
     configurator.apply(motorOutputConfigs);
     
+    distanceSensor.setAutomaticMode(true);
+
     setDefaultCommand(new IntakeDefaultCommand(this, lights));
   }
 
@@ -67,8 +74,19 @@ public class Intake extends SubsystemBase {
   //   return grabberMotor.getStatorCurrent();
   // }
 
+  public boolean cone(){
+    if (distanceSensor.getRange() < 8){
+      return true;
+    } else {
+      return false;
+    }
+    // if the distance is less than the value, a cone is in the intake
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Distance Sensor", distanceSensor.getRange());//outputs distance
+    SmartDashboard.putBoolean("Cone", cone());// true = cone in intake
   }
 }
