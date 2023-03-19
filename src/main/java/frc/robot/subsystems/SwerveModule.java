@@ -330,7 +330,8 @@ public class SwerveModule extends SubsystemBase {
         }
 
         if(Math.abs(speedVector.getI()) < 0.0001 && Math.abs(speedVector.getJ()) < 0.0001 && Math.abs(turnRate) < 0.01) {
-            driveMotor.set(ControlMode.Velocity, 0.0);
+            //driveMotor.set(ControlMode.Velocity, 0.0);
+            driveMotor.set(0.0);
             // angleMotor.set(ControlMode.PercentOutput, 0);
         }
         else {
@@ -408,7 +409,8 @@ public class SwerveModule extends SubsystemBase {
                 // setAnglePID(adjustedAngle, velocityTicsPer100MS);
             }
             else{
-                driveMotor.set(ControlMode.PercentOutput, 0);
+                //driveMotor.set(ControlMode.PercentOutput, 0);
+                driveMotor.set(0.0);
             }
         }
     }
