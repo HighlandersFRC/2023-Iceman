@@ -12,6 +12,7 @@ import com.ctre.phoenixpro.StatusCode;
 import com.ctre.phoenixpro.configs.ClosedLoopGeneralConfigs;
 import com.ctre.phoenixpro.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenixpro.configs.CurrentLimitsConfigs;
+import com.ctre.phoenixpro.configs.FeedbackConfigs;
 import com.ctre.phoenixpro.configs.MotorOutputConfigs;
 import com.ctre.phoenixpro.configs.OpenLoopRampsConfigs;
 import com.ctre.phoenixpro.configs.Slot0Configs;
@@ -227,16 +228,18 @@ public class SwerveModule extends SubsystemBase {
         // angleMotor.config_kP(0, 0.1);
         // angleMotor.config_kI(0, 0.0);
         // angleMotor.config_kD(0, 0.1);
-
-        angleMotor.configAllowableClosedloopError(0, radiansToTics(degreesToRadians(2)), 10);
-
-        driveMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 45, 45, 0.5));
-        driveMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 75, 75, 0.5));
-        driveMotor.setSelectedSensorPosition(0);
-        driveMotor.setInverted(false);
-
-        driveMotor.configClosedloopRamp(0);
-        driveMotor.configOpenloopRamp(0);
+        // angleMotor.configAllowableClosedloopError(0, radiansToTics(degreesToRadians(2)), 10);
+        currentLimitsConfigs.StatorCurrentLimit = 75;
+        currentLimitsConfigs.SupplyCurrentLimit = 45;
+        driveMotor.getConfigurator().apply(currentLimitsConfigs);
+        // driveMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 45, 45, 0.5));
+        // driveMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 75, 75, 0.5));
+        // driveMotor.setSelectedSensorPosition(0);
+        // driveMotor.setInverted(false);
+        ClosedLoopRampsConfigs closedLoopRampsConfigs = new ClosedLoopRampsConfigs();
+        OpenLoopRampsConfigs openLoopRampsConfigs = new OpenLoopRampsConfigs();
+        // driveMotor.configClosedloopRamp(0);
+        // driveMotor.configOpenloopRamp(0);
 
         driveMotor.setSelectedSensorPosition(0);
 
