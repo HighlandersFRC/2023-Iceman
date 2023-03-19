@@ -238,29 +238,37 @@ public class SwerveModule extends SubsystemBase {
         // driveMotor.setInverted(false);
         ClosedLoopRampsConfigs closedLoopRampsConfigs = new ClosedLoopRampsConfigs();
         OpenLoopRampsConfigs openLoopRampsConfigs = new OpenLoopRampsConfigs();
+        closedLoopRampsConfigs.DutyCycleClosedLoopRampPeriod = 0;
+        closedLoopRampsConfigs.TorqueClosedLoopRampPeriod = 0;
+        closedLoopRampsConfigs.VoltageClosedLoopRampPeriod = 0;
+        openLoopRampsConfigs.DutyCycleOpenLoopRampPeriod = 0;
+        openLoopRampsConfigs.TorqueOpenLoopRampPeriod = 0;
+        openLoopRampsConfigs.VoltageOpenLoopRampPeriod = 0;
         // driveMotor.configClosedloopRamp(0);
         // driveMotor.configOpenloopRamp(0);
-
-        driveMotor.setSelectedSensorPosition(0);
-
-        driveMotor.config_kP(0, 0.23);
-        driveMotor.config_kI(0, 0);
-        driveMotor.config_kD(0, 0);
+        driveMotor.setRotorPosition(0);
+        // driveMotor.setSelectedSensorPosition(0);
+        slot0Configs.kP = 0.23;
+        slot0Configs.kI = 0.0;
+        slot0Configs.kD = 0.0;
+        driveMotor.getConfigurator().apply(slot0Configs);
+        // driveMotor.config_kP(0, 0.23);
+        // driveMotor.config_kI(0, 0);
+        // driveMotor.config_kD(0, 0);
 
         // angleMotor.setNeutralMode(NeutralMode.Brake);
         // driveMotor.setNeutralMode(NeutralMode.Brake);
+        // driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 100);
+        // driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 100);
+        // driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 1000);
+        // driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 1000);
+        // driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 1000);
 
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 100);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 100);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 1000);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 1000);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 1000);
-
-        angleMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 100);
-        angleMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 100);
-        angleMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 1000);
-        angleMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 1000);
-        angleMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 1000);
+        // angleMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 100);
+        // angleMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 100);
+        // angleMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 1000);
+        // angleMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 1000);
+        // angleMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 1000);
     }
 
     // returns angle motor position in ticks
