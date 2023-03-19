@@ -145,7 +145,8 @@ public class SwerveModule extends SubsystemBase {
 
     // sets the drive motor to the specified percent
     public void setDriveMotors(double percent) {
-        driveMotor.set(ControlMode.PercentOutput, percent);
+        //driveMotor.set(ControlMode.PercentOutput, percent);
+        driveMotor.set(percent);
     }
 
     // returns state of swerve modules - Used for Odometry
