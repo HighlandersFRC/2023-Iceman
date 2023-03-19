@@ -4,6 +4,7 @@ package frc.robot.subsystems;
 // import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenixpro.configs.MotorOutputConfigs;
+import com.ctre.phoenixpro.configs.TalonFXConfiguration;
 import com.ctre.phoenixpro.configs.TalonFXConfigurator;
 import com.ctre.phoenixpro.controls.TorqueCurrentFOC;
 import com.ctre.phoenixpro.controls.VoltageOut;
@@ -60,28 +61,28 @@ public class Drive extends SubsystemBase {
     private MotorOutputConfigs motorOutputConfigs = new MotorOutputConfigs();
     
     private final TalonFX leftFowardMotor = new TalonFX(3, "Canivore");
-    private TalonFXConfigurator leftFowardMotorConfig = leftFowardMotor.getConfigurator();
+    private TalonFXConfiguration leftFowardMotorConfig = new TalonFXConfiguration();
     
     private final TalonFX leftFowardAngleMotor = new TalonFX(4, "Canivore");
-    private TalonFXConfigurator leftFowardAngleMotorConfig = leftFowardAngleMotor.getConfigurator();
+    private TalonFXConfiguration leftFowardAngleMotorConfig = new TalonFXConfiguration();
     
     private final TalonFX leftBackMotor = new TalonFX(5, "Canivore");
-    private TalonFXConfigurator leftBackMotorConfig = leftBackMotor.getConfigurator();
+    private TalonFXConfiguration leftBackMotorConfig = new TalonFXConfiguration();
     
     private final TalonFX leftBackAngleMotor = new TalonFX(6, "Canivore");
-    private TalonFXConfigurator leftBackAngleMotorConfig = leftBackAngleMotor.getConfigurator();
+    private TalonFXConfiguration leftBackAngleMotorConfig = new TalonFXConfiguration();
     
     private final TalonFX rightFowardMotor = new TalonFX(1, "Canivore");
-    private TalonFXConfigurator rightFowardMotorConfig = rightFowardMotor.getConfigurator();
+    private TalonFXConfiguration rightFowardMotorConfig = new TalonFXConfiguration();
     
     private final TalonFX rightFowardAngleMotor = new TalonFX(2, "Canivore");
-    private TalonFXConfigurator rightFowardAngleMotorConfig = rightFowardAngleMotor.getConfigurator();
+    private TalonFXConfiguration rightFowardAngleMotorConfig = new TalonFXConfiguration();
     
     private final TalonFX rightBackMotor = new TalonFX(7, "Canivore");
-    private TalonFXConfigurator rightBackMotorConfig = rightBackMotor.getConfigurator();
+    private TalonFXConfiguration rightBackMotorConfig = new TalonFXConfiguration();
     
     private final TalonFX rightBackAngleMotor = new TalonFX(8, "Canivore");
-    private TalonFXConfigurator rightBackAngleMotorConfig = rightBackAngleMotor.getConfigurator();
+    private TalonFXConfiguration rightBackAngleMotorConfig = new TalonFXConfiguration();
 
     // private final WPI_TalonFX leftForwardAngleMotor = new WPI_TalonFX(4);
     // private final WPI_TalonFX leftBackMotor = new WPI_TalonFX(5);
@@ -295,15 +296,8 @@ public class Drive extends SubsystemBase {
         leftBack.init();
         rightBack.init();
         rightFront.init();
-
-        leftFowardMotorConfig.apply(motorOutputConfigs);
-        leftFowardAngleMotorConfig.apply(motorOutputConfigs);
-        leftBackMotorConfig.apply(motorOutputConfigs);
-        leftBackAngleMotorConfig.apply(motorOutputConfigs);
-        rightFowardMotorConfig.apply(motorOutputConfigs);
-        rightFowardAngleMotorConfig.apply(motorOutputConfigs);
-        rightBackAngleMotorConfig.apply(motorOutputConfigs);
-        rightBackAngleMotorConfig.apply(motorOutputConfigs);
+        leftBackAngleMotor.getConfigurator().
+        
 
         xPID.setMinOutput(-4.9);
         xPID.setMaxOutput(4.9);

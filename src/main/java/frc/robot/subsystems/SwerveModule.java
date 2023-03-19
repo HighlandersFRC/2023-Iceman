@@ -6,8 +6,9 @@ import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 // import com.ctre.phoenix.motorcontrol.can.TalonFX;
-
+import com.ctre.phoenixpro.configs.ClosedLoopGeneralConfigs;
 import com.ctre.phoenixpro.configs.MotorOutputConfigs;
+import com.ctre.phoenixpro.configs.TalonFXConfiguration;
 import com.ctre.phoenixpro.configs.TalonFXConfigurator;
 import com.ctre.phoenixpro.controls.TorqueCurrentFOC;
 import com.ctre.phoenixpro.controls.VoltageOut;
@@ -49,7 +50,12 @@ public class SwerveModule extends SubsystemBase {
         absoluteEncoder = mAbsoluteEncoder;
 
         // configures angle motor PID, output, etc.
-        angleMotor.
+        TalonFXConfiguration talonFXConfiguration = new TalonFXConfiguration();
+        talonFXConfiguration.Slot0.kP = 0.1;
+        talonFXConfiguration.Slot0.kI = 0.0;
+        talonFXConfiguration.Slot0.kD = 0.1;
+        talonFXConfiguration.Slot0.kV = 0.0;
+        talonFXConfiguration.
         angleMotor.configPeakOutputForward(1);
         angleMotor.configPeakOutputReverse(-1);
         angleMotor.configVoltageCompSaturation(11.7);
