@@ -72,7 +72,7 @@ public final class Constants {
     // High row placement
     public static final double HIGH_PLACEMENT_FRONTSIDE_ARM_ROTATION = 135.2;
     public static final double HIGH_PLACEMENT_FRONTSIDE_WRIST_ROTATION = 79;
-    public static final double HIGH_PLACEMENT_ARM_EXTENSION = 40;
+    public static final double HIGH_PLACEMENT_ARM_EXTENSION = 38;
 
     // Mid row placement
     public static final double MID_PLACEMENT_FRONTSIDE_ARM_ROTATION = 138.7;
@@ -98,7 +98,7 @@ public final class Constants {
     // Shelf intaking
     public static final double SHELF_FRONTSIDE_ARM_ROTATION = 161;
     public static final double SHELF_FRONTSIDE_WRIST_ROTATION = 68;
-    public static final double SHELF_ARM_EXTENSION = 16.7;
+    public static final double SHELF_ARM_EXTENSION = 17.7;
 
     // BACK SIDE (worm gear)
     // High row placement

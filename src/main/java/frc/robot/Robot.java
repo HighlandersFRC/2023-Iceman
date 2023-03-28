@@ -297,16 +297,14 @@ public class Robot extends TimedRobot {
     // OI.driverA.whileHeld(new SetArmExtensionPosition(lights, armExtension, armRotation, 18));
     // OI.driverY.whileHeld(new ExtendArm(armExtension, 3));
 
-    // OI.driverA.whenPressed(new AprilTagBalance(drive, peripherals, lights, 2.25, true));
+    OI.driverB.whenPressed(new AprilTagBalance(drive, peripherals, lights, 2.25, true));
+    OI.driverA.whenPressed(new AprilTagBalance(drive, peripherals, lights, 2.25, false));
 
     // // COMPETITION CONTROLS - DO NOT DELETE
     // // shelf intake position
-    // OI.operatorMenuButton.whileHeld(new ShelfPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
-    OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals, lights));
+    // OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals, lights));
 
-    OI.driverY.whileActiveOnce(new AprilTagBalance(drive, peripherals, lights, 1.5, true));
-
-    // OI.operatorY.whileHeld(new SetArmExtensionPosition(lights, armExtension, armRotation, 25));
+    // OI.driverY.whileActiveOnce(new AprilTagBalance(drive, peripherals, lights, 1.5, true));
 
     // // ramp intake position
     OI.operatorMenuButton.whileHeld(new ShelfPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));

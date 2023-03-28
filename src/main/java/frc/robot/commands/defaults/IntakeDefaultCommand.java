@@ -50,7 +50,7 @@ public class IntakeDefaultCommand extends CommandBase {
     }
     else {
       hasSpunUp = false;
-      Intake.setIntakeTorqueOutput(-35, 0.10);
+      Intake.setIntakeTorqueOutput(-45, 0.10);
       OI.driverController.setRumble(RumbleType.kBothRumble, 0);
       OI.operatorController.setRumble(RumbleType.kBothRumble, 0);
       lights.setCorrectMode();
