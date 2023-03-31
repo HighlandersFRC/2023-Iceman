@@ -60,6 +60,8 @@ import frc.robot.commands.autos.TwoPieceBumpAuto;
 import frc.robot.commands.autos.TwoPieceBumpAutoNoDock;
 import frc.robot.commands.autos.TwoPlusOneAuto;
 import frc.robot.commands.autos.TwoPlusOneAutoNoDock;
+import frc.robot.commands.autos.TwoPlusOneBumpAuto;
+import frc.robot.commands.autos.TwoPlusOneBumpAutoNoDock;
 import frc.robot.commands.presets.CubePreset;
 import frc.robot.commands.presets.HighPlacementPreset;
 import frc.robot.commands.presets.LowPreset;
@@ -147,9 +149,9 @@ public class Robot extends TimedRobot {
       } catch (Exception e) {
         System.out.println("ERROR WITH PATH FILE " + e);
       }
-    } else if (OI.is1PieceCenterAuto()) {
+    } else if (OI.is2Plus1BumpSideAuto()) {
       try {
-        pathingFile = new File("/home/lvuser/deploy/1PieceDock.json");
+        pathingFile = new File("/home/lvuser/deploy/2PieceBumpPart1.json");
         FileReader scanner = new FileReader(pathingFile);
         pathRead = new JSONObject(new JSONTokener(scanner));
         pathJSON = (JSONArray) pathRead.get("sampled_points");
@@ -193,12 +195,14 @@ public class Robot extends TimedRobot {
         this.auto = new TwoPieceAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       }
-    } else if (OI.is1PieceCenterAuto()) {
+    } else if (OI.is2Plus1BumpSideAuto()) {
       if (OI.isDocking()){
-        this.auto = new OnePieceAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        System.out.println("////////////////DOCKING");
+        this.auto = new TwoPlusOneBumpAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       } else {
-        this.auto = new OnePieceAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        System.out.println("////////////////////NON-DOCKING");
+        this.auto = new TwoPlusOneBumpAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       }
     } else if (OI.is2Plus1ClearSideAuto()) {
