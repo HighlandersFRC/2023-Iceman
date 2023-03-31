@@ -360,24 +360,14 @@ public class Drive extends SubsystemBase {
         currentY = getOdometryY();
         currentTheta = navxOffset;
 
-        // if(useCameraInOdometry && cameraCoordinates.getDouble(0) != 0) {
-        //     cameraBasedX = cameraCoordinates.getDouble(0);
-        //     cameraBasedY = cameraCoordinates.getDouble(1);
-        //     if(Math.sqrt((Math.pow(currentX - cameraBasedX, 2)) + Math.pow(currentY - cameraBasedY, 2)) < 1 * timeSinceLastCameraMeasurement) {
-        //         timeSinceLastCameraMeasurement = 0;
-        //         // System.out.println("WITHIN ACCEPTABLE DISTANCE |||||||||||||||||||||||||||||||||||||||||");
-        //         Pose2d cameraBasedPosition = new Pose2d(new Translation2d(cameraBasedX, cameraBasedY), new Rotation2d(navxOffset));
-        //         m_odometry.addVisionMeasurement(cameraBasedPosition, Timer.getFPGATimestamp() - (peripherals.getBackCameraLatency()/1000));
-        //     }
-        //     else {
-        //         // System.out.println("--------------------------------------------");
-        //         timeSinceLastCameraMeasurement = Timer.getFPGATimestamp() - timeSinceLastCameraMeasurement;
-
-        //     }
-        // }
-        // else {
-        //     timeSinceLastCameraMeasurement = Timer.getFPGATimestamp() - timeSinceLastCameraMeasurement;
-        // }
+        if(useCameraInOdometry && cameraCoordinates.getDouble(0) != 0) {
+            cameraBasedX = cameraCoordinates.getDouble(0);
+            cameraBasedY = cameraCoordinates.getDouble(1);
+            timeSinceLastCameraMeasurement = 0;
+            // System.out.println("WITHIN ACCEPTABLE DISTANCE |||||||||||||||||||||||||||||||||||||||||");
+            Pose2d cameraBasedPosition = new Pose2d(new Translation2d(cameraBasedX, cameraBasedY), new Rotation2d(navxOffset));
+            m_odometry.addVisionMeasurement(cameraBasedPosition, Timer.getFPGATimestamp() - (peripherals.getBackCameraLatency()/1000));
+        }
 
         currentTime = Timer.getFPGATimestamp() - initTime;
         timeDiff = currentTime - previousTime;
@@ -401,7 +391,7 @@ public class Drive extends SubsystemBase {
         currentFusedOdometry[1] = averagedY;
         currentFusedOdometry[2] = currentTheta;
 
-        // System.out.println("X: " + averagedX + " Y: " + averagedY);
+        System.out.println("X: " + averagedX + " Y: " + averagedY);
     }
 
     public double getFrontRightModuleVelocity() {
@@ -572,7 +562,7 @@ public class Drive extends SubsystemBase {
     // method run in teleop that accepts controller values to move swerve drive
     public void teleopDrive() {
         updateOdometryFusedArray();
-        double turnLimit = 1;
+        double turnLimit = 0.8;
 
         if(OI.driverController.getLeftBumper()) {
             // activate speedy spin

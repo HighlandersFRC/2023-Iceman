@@ -177,6 +177,7 @@ public class Robot extends TimedRobot {
     }
 
     if (OI.is2PieceBumpSideAuto()) {
+      drive.useCameraInOdometry();
       if (OI.isDocking()) {
         this.auto = new TwoPieceBumpAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
@@ -249,7 +250,7 @@ public class Robot extends TimedRobot {
       armExtension.setExtensionEncoderPosition(0);
     }
 
-    // SmartDashboard.putNumber("EXTENSION", armExtension.getExtensionPosition());
+    SmartDashboard.putNumber("EXTENSION", armExtension.getExtensionPosition());
     // System.out.println("ARM: " + armRotation.getRotationPosition());
     // System.out.println("WRIST: " + wrist.getWristRotationPosition());
     // lights.periodic();
@@ -302,7 +303,7 @@ public class Robot extends TimedRobot {
 
     // // COMPETITION CONTROLS - DO NOT DELETE
     // // shelf intake position
-    // OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals, lights));
+    OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals, lights));
 
     // OI.driverY.whileActiveOnce(new AprilTagBalance(drive, peripherals, lights, 1.5, true));
 
