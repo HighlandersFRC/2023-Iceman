@@ -84,11 +84,11 @@ public class OI {
         return autoChooser.getRawButton(2);
     }
 
-    public static boolean is2Plus1BumpSideAuto() {
+    public static boolean is3PieceBumpSideAuto() {
         return autoChooser.getRawButton(3);
     }
 
-    public static boolean is3Piece(){
+    public static boolean is3PieceClearSideAuto(){
         return autoChooser.getRawButton(5);
     }
 

@@ -54,6 +54,7 @@ import frc.robot.subsystems.Wrist;
 import frc.robot.commands.autos.OnePieceAuto;
 import frc.robot.commands.autos.OnePieceAutoNoDock;
 import frc.robot.commands.autos.ThreePieceAuto;
+import frc.robot.commands.autos.ThreePieceBumpAuto;
 import frc.robot.commands.autos.TwoPieceAuto;
 import frc.robot.commands.autos.TwoPieceAutoNoDock;
 import frc.robot.commands.autos.TwoPieceBumpAuto;
@@ -149,7 +150,7 @@ public class Robot extends TimedRobot {
       } catch (Exception e) {
         System.out.println("ERROR WITH PATH FILE " + e);
       }
-    } else if (OI.is2Plus1BumpSideAuto()) {
+    } else if (OI.is3PieceBumpSideAuto()) {
       try {
         pathingFile = new File("/home/lvuser/deploy/2PieceBumpPart1.json");
         FileReader scanner = new FileReader(pathingFile);
@@ -167,7 +168,7 @@ public class Robot extends TimedRobot {
       } catch (Exception e) {
         System.out.println("ERROR WITH PATH FILE " + e);
       }
-    } else if (OI.is3Piece()){
+    } else if (OI.is3PieceClearSideAuto()){
       try {
         pathingFile = new File("/home/lvuser/deploy/2PiecePart1.json");
         FileReader scanner = new FileReader(pathingFile);
@@ -195,16 +196,17 @@ public class Robot extends TimedRobot {
         this.auto = new TwoPieceAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       }
-    } else if (OI.is2Plus1BumpSideAuto()) {
-      if (OI.isDocking()){
-        System.out.println("////////////////DOCKING");
-        this.auto = new TwoPlusOneBumpAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
-        auto.schedule();
-      } else {
-        System.out.println("////////////////////NON-DOCKING");
-        this.auto = new TwoPlusOneBumpAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
-        auto.schedule();
-      }
+    // } else if (OI.is2Plus1BumpSideAuto()) {
+    //   if (OI.isDocking()){
+    //     this.auto = new TwoPlusOneBumpAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+    //     auto.schedule();
+    //   } else {
+    //     this.auto = new TwoPlusOneBumpAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+    //     auto.schedule();
+    //   }
+    } else if (OI.is3PieceBumpSideAuto()){
+      this.auto = new ThreePieceBumpAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+      auto.schedule();
     } else if (OI.is2Plus1ClearSideAuto()) {
       if (OI.isDocking()){
         this.auto = new TwoPlusOneAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
@@ -213,7 +215,7 @@ public class Robot extends TimedRobot {
         this.auto = new TwoPlusOneAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       }
-    } else if (OI.is3Piece()){
+    } else if (OI.is3PieceClearSideAuto()){
       this.auto = new ThreePieceAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
       auto.schedule();
     } else {
