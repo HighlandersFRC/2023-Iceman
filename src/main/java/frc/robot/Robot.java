@@ -252,7 +252,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("EXTENSION", armExtension.getExtensionPosition());
     // System.out.println("ARM: " + armRotation.getRotationPosition());
-    // System.out.println("WRIST: " + wrist.getWristRotationPosition());
+    System.out.println("WRIST: " + wrist.getWristRotationPosition());
     // lights.periodic();
 
     //DO NOT COMMENT OUT!!!
