@@ -58,6 +58,8 @@ public final class Constants {
 
     public static double wristOffsetMidMatch = 0;
 
+    public static double wristOffsetDiffArm = 10;
+
     public static enum PRESET {
         HIGH_PLACEMENT,
         MID_PLACEMENT,
@@ -71,63 +73,63 @@ public final class Constants {
     // FRONT SIDE (battery), extensions are same on both sides
     // High row placement
     public static final double HIGH_PLACEMENT_FRONTSIDE_ARM_ROTATION = 135.2;
-    public static final double HIGH_PLACEMENT_FRONTSIDE_WRIST_ROTATION = 79;
+    public static final double HIGH_PLACEMENT_FRONTSIDE_WRIST_ROTATION = 79 + wristOffsetDiffArm;
     public static final double HIGH_PLACEMENT_ARM_EXTENSION = 38;
 
     // Mid row placement
     public static final double MID_PLACEMENT_FRONTSIDE_ARM_ROTATION = 138.7;
-    public static final double MID_PLACEMENT_FRONTSIDE_WRIST_ROTATION = 79.9;
+    public static final double MID_PLACEMENT_FRONTSIDE_WRIST_ROTATION = 79.9 + wristOffsetDiffArm;
     public static final double MID_PLACEMENT_ARM_EXTENSION = 18;
 
     // low placement
-    public static final double LOW_PLACEMENT_FRONTSIDE_WRIST_ROTATION = 62;
+    public static final double LOW_PLACEMENT_FRONTSIDE_WRIST_ROTATION = 62 + wristOffsetDiffArm;
     public static final double LOW_PLACEMENT_FRONTSIDE_ARM_ROTATION = 150;
 
     // Upright cone intaking
     public static final double UPRIGHT_CONE_FRONTSIDE_ARM_ROTATION = 88;
-    public static final double UPRIGHT_CONE_FRONTSIDE_WRIST_ROTATION = 152;
+    public static final double UPRIGHT_CONE_FRONTSIDE_WRIST_ROTATION = 152 + wristOffsetDiffArm;
 
     // Tipped cone intaking
     public static final double TIPPED_CONE_FRONTSIDE_ARM_ROTATION = 66.0;
-    public static final double TIPPED_CONE_FRONTSIDE_WRIST_ROTATION = 186.2;
+    public static final double TIPPED_CONE_FRONTSIDE_WRIST_ROTATION = 186.2 + wristOffsetDiffArm;
 
     // Cube intaking
     public static final double CUBE_FRONTSIDE_ARM_ROTATION = 90;
-    public static final double CUBE_FRONTSIDE_WRIST_ROTATION = 124.8;
+    public static final double CUBE_FRONTSIDE_WRIST_ROTATION = 124.8 + wristOffsetDiffArm;
 
     // Shelf intaking
     public static final double SHELF_FRONTSIDE_ARM_ROTATION = 161;
-    public static final double SHELF_FRONTSIDE_WRIST_ROTATION = 68;
+    public static final double SHELF_FRONTSIDE_WRIST_ROTATION = 68 + wristOffsetDiffArm;
     public static final double SHELF_ARM_EXTENSION = 17.7;
 
     // BACK SIDE (worm gear)
     // High row placement
     public static final double HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION = 223.3;
-    public static final double HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION = 280;
+    public static final double HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION = 280 + wristOffsetDiffArm;
 
     // Mid row placement
     public static final double MID_PLACEMENT_BACKSIDE_ARM_ROTATION = 219.3;
-    public static final double MID_PLACEMENT_BACKSIDE_WRIST_ROTATION = 280.3;
+    public static final double MID_PLACEMENT_BACKSIDE_WRIST_ROTATION = 280.3 + wristOffsetDiffArm;
 
     // low placement
-    public static final double LOW_PLACEMENT_BACKSIDE_WRIST_ROTATION = 290;
+    public static final double LOW_PLACEMENT_BACKSIDE_WRIST_ROTATION = 290 + wristOffsetDiffArm;
     public static final double LOW_PLACEMENT_BACKSIDE_ARM_ROTATION = 210;
 
     // Upright cone intaking
     public static final double UPRIGHT_CONE_BACKSIDE_ARM_ROTATION = 270;
-    public static final double UPRIGHT_CONE_BACKSIDE_WRIST_ROTATION = 207;
+    public static final double UPRIGHT_CONE_BACKSIDE_WRIST_ROTATION = 207 + wristOffsetDiffArm;
 
     // Tipped cone intaking
     public static final double TIPPED_CONE_BACKSIDE_ARM_ROTATION = 289.34;
-    public static final double TIPPED_CONE_BACKSIDE_WRIST_ROTATION = 175.4;
+    public static final double TIPPED_CONE_BACKSIDE_WRIST_ROTATION = 175.4 + wristOffsetDiffArm;
 
     // Cube intaking
     public static final double CUBE_BACKSIDE_ARM_ROTATION = 266.85;
-    public static final double CUBE_BACKSIDE_WRIST_ROTATION = 235;
+    public static final double CUBE_BACKSIDE_WRIST_ROTATION = 235 + wristOffsetDiffArm;
 
     // Shelf intaking
     public static final double SHELF_BACKSIDE_ARM_ROTATION = 198;
-    public static final double SHELF_BACKSIDE_WRIST_ROTATION = 292;
+    public static final double SHELF_BACKSIDE_WRIST_ROTATION = 292 + wristOffsetDiffArm;
 
 
     public static final double PLACEMENT_LOCATION_X_RED = 14.75;
@@ -159,7 +161,7 @@ public final class Constants {
     // max of falcon with regular firmware = 6380 rpm, with phoenix pro ~ 6000 rpm, converting to rps
     public static final double MAX_FALCON_ROTATIONS_PER_SECOND = 80;
     // max acceleration of a falcon - calculated by deciding that we need to reach max speed in 1 second
-    public static final double MAX_FALCON_ROTATIONS_PER_SECOND_PER_SECOND = 250;
+    public static final double MAX_FALCON_ROTATIONS_PER_SECOND_PER_SECOND = 275;
     // max jerk of a falcon - calculated by deciding that we need to reach max acceleration in 1 second
     public static final double MAX_FALCON_ROTATIONS_PER_SECOND_PER_SECOND_PER_SECOND = 2500;
 

@@ -42,7 +42,7 @@ public class Intake extends SubsystemBase {
     // grabberMotor.configOpenloopRamp(0.25);
     // // grabberMotor.ramp
     // grabberMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(false, 1, 1, 0));
-    motorOutputConfigs.Inverted = InvertedValue.CounterClockwise_Positive;
+    motorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
     configurator.apply(motorOutputConfigs);
     
     setDefaultCommand(new IntakeDefaultCommand(this, lights));
