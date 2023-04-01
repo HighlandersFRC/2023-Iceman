@@ -360,14 +360,14 @@ public class Drive extends SubsystemBase {
         currentY = getOdometryY();
         currentTheta = navxOffset;
 
-        if(useCameraInOdometry && cameraCoordinates.getDouble(0) != 0) {
-            cameraBasedX = cameraCoordinates.getDouble(0);
-            cameraBasedY = cameraCoordinates.getDouble(1);
-            timeSinceLastCameraMeasurement = 0;
-            // System.out.println("WITHIN ACCEPTABLE DISTANCE |||||||||||||||||||||||||||||||||||||||||");
-            Pose2d cameraBasedPosition = new Pose2d(new Translation2d(cameraBasedX, cameraBasedY), new Rotation2d(navxOffset));
-            m_odometry.addVisionMeasurement(cameraBasedPosition, Timer.getFPGATimestamp() - (peripherals.getBackCameraLatency()/1000));
-        }
+        // if(useCameraInOdometry && cameraCoordinates.getDouble(0) != 0) {
+        //     cameraBasedX = cameraCoordinates.getDouble(0);
+        //     cameraBasedY = cameraCoordinates.getDouble(1);
+        //     timeSinceLastCameraMeasurement = 0;
+        //     // System.out.println("WITHIN ACCEPTABLE DISTANCE |||||||||||||||||||||||||||||||||||||||||");
+        //     Pose2d cameraBasedPosition = new Pose2d(new Translation2d(cameraBasedX, cameraBasedY), new Rotation2d(navxOffset));
+        //     m_odometry.addVisionMeasurement(cameraBasedPosition, Timer.getFPGATimestamp() - (peripherals.getBackCameraLatency()/1000));
+        // }
 
         currentTime = Timer.getFPGATimestamp() - initTime;
         timeDiff = currentTime - previousTime;
@@ -391,7 +391,7 @@ public class Drive extends SubsystemBase {
         currentFusedOdometry[1] = averagedY;
         currentFusedOdometry[2] = currentTheta;
 
-        System.out.println("X: " + averagedX + " Y: " + averagedY);
+        // System.out.println("X: " + averagedX + " Y: " + averagedY);
     }
 
     public double getFrontRightModuleVelocity() {
