@@ -199,7 +199,7 @@ public class ThreePieceAuto extends SequentialCommandGroup {
         new RunIntake(intake, -35, 0.1)
       ),
       new WaitCommand(0.35),
-      new RunIntake(intake, 55, 0.5),
+      new RunIntake(intake, 55, 0.4),
       new WaitCommand(3)
     );
   }
