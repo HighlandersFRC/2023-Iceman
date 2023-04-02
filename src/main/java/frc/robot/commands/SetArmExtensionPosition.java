@@ -48,13 +48,13 @@ public class SetArmExtensionPosition extends CommandBase {
     else {
       armExtension.setExtensionPosition(position);
     }
-    System.out.println("Extension Init");
+    // System.out.println("Extension Init");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("Extension Execute");
+    // System.out.println("Extension Execute");
     if(armRotation.getRotationPosition() < 100 || armRotation.getRotationPosition() > 260) {
       armExtension.setExtensionPosition(0);
     }
@@ -68,7 +68,7 @@ public class SetArmExtensionPosition extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("Extension End, Interrupted: " + interrupted);
+    // System.out.println("Extension End, Interrupted: " + interrupted);
   }
 
   // Returns true when the command should end.

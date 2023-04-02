@@ -23,7 +23,7 @@ public class Wrist extends SubsystemBase {
 
   private PID pid;
 
-  private double kP = 0.019;
+  private double kP = 0.017;
   //kI MUST be 0
   private double kI = 0.0;
   private double kD = 0.0;
@@ -39,8 +39,8 @@ public class Wrist extends SubsystemBase {
     rotationMotor.setSmartCurrentLimit(40, 25);
 
     pid = new PID(kP, kI, kD);
-    pid.setMaxOutput(0.7);
-    pid.setMinOutput(-0.7);
+    pid.setMaxOutput(0.9);
+    pid.setMinOutput(-0.9);
     pid.setSetPoint(180);
     pid.updatePID(getWristRotationPosition());
     rotationMotor.set(0);
