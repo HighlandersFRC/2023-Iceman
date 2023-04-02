@@ -12,6 +12,7 @@ import com.ctre.phoenixpro.configs.MotionMagicConfigs;
 import com.ctre.phoenixpro.configs.MotorOutputConfigs;
 import com.ctre.phoenixpro.configs.Slot0Configs;
 import com.ctre.phoenixpro.configs.TalonFXConfiguration;
+import com.ctre.phoenixpro.controls.Follower;
 import com.ctre.phoenixpro.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenixpro.controls.MotionMagicVoltage;
 // import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -30,6 +31,7 @@ import com.ctre.phoenixpro.configs.TalonFXConfigurator;
 public class ArmExtension extends SubsystemBase {
 
   private final TalonFX extensionMotor = new TalonFX(10, "Canivore");
+  private final TalonFX followerExtensionMotor = new TalonFX(18, "Canivore");
 
   private TalonFXConfigurator configurator = extensionMotor.getConfigurator();
 
@@ -49,15 +51,18 @@ public class ArmExtension extends SubsystemBase {
 
     motorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
 
-    currentLimitConfigs.StatorCurrentLimitEnable = false;
-    currentLimitConfigs.SupplyCurrentLimitEnable = false;
+    currentLimitConfigs.StatorCurrentLimitEnable = true;
+    currentLimitConfigs.SupplyCurrentLimitEnable = true;
+
+    currentLimitConfigs.StatorCurrentLimit = 80;
+    currentLimitConfigs.SupplyCurrentLimit = 80;
 
     // motorOutputConfigs.DutyCycleNeutralDeadband = 0.125;
 
     Slot0Configs slot0Configs = new Slot0Configs();
-    slot0Configs.kS = 1; // Add 0.05 V output to overcome static friction
-    slot0Configs.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
-    slot0Configs.kP = 24; // A position error of 0.5 rotations results in 12 V output
+    slot0Configs.kS = 0.5; // Add 0.05 V output to overcome static friction
+    slot0Configs.kV = 0; // A velocity target of 1 rps results in 0.12 V output
+    slot0Configs.kP = 17; // A position error of 0.5 rotations results in 12 V output
     slot0Configs.kI = 0; // no output for integrated error
     slot0Configs.kD = 0.1; // A velocity error of 1 rps results in 0.1 V output
 
@@ -70,6 +75,8 @@ public class ArmExtension extends SubsystemBase {
     configurator.apply(slot0Configs);
 
     configurator.apply(currentLimitConfigs);
+
+    followerExtensionMotor.setControl(new Follower(10, false));
 
     setDefaultCommand(new ArmExtensionDefaultCommand(this));
   }

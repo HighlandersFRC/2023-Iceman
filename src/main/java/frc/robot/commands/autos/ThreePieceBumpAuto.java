@@ -116,13 +116,13 @@ public class ThreePieceBumpAuto extends SequentialCommandGroup {
         //   new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
         )
       ),
-      new WaitCommand(0.3),
+      new WaitCommand(0.25),
       new ParallelDeadlineGroup(
-        new WaitCommand(0.1),
+        new WaitCommand(0.25),
         new RunIntake(intake, 55, 1)
       ),
       new ParallelDeadlineGroup(
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 0),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 5),
         new RotateWrist(wrist, flipChecker, 180)
       ),
       new ParallelDeadlineGroup(
@@ -148,7 +148,7 @@ public class ThreePieceBumpAuto extends SequentialCommandGroup {
           new RotateWrist(wrist, flipChecker, 215),
           new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
           new SequentialCommandGroup(
-            new WaitCommand(1.6),
+            new WaitCommand(1.5),
             new SetArmExtensionPosition(lights, armExtension, armRotation, 18)
           )
         ),
@@ -166,10 +166,10 @@ public class ThreePieceBumpAuto extends SequentialCommandGroup {
       new WaitCommand(0.2),
       new ParallelDeadlineGroup(
         new WaitCommand(0.1),
-        new RunIntake(intake, 55, 0.4)
+        new RunIntake(intake, 55, 0.3)
       ),
       new ParallelDeadlineGroup(
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 6),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 8),
         new RotateWrist(wrist, flipChecker, 180)
       ),
       new ParallelDeadlineGroup(
@@ -198,7 +198,7 @@ public class ThreePieceBumpAuto extends SequentialCommandGroup {
         ),
         new RunIntake(intake, -35, 0.1)
       ),
-      new WaitCommand(0.1),
+      // new WaitCommand(0.1),
       new RunIntake(intake, 55, 0.4),
       new WaitCommand(3)
     );

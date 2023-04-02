@@ -256,7 +256,7 @@ public class Robot extends TimedRobot {
       armExtension.setExtensionEncoderPosition(0);
     }
 
-    SmartDashboard.putNumber("EXTENSION", armExtension.getExtensionPosition());
+    // SmartDashboard.putNumber("EXTENSION", armExtension.getExtensionPosition());
     // System.out.println("ARM: " + armRotation.getRotationPosition());
     // System.out.println("WRIST: " + wrist.getWristRotationPosition());
     // lights.periodic();

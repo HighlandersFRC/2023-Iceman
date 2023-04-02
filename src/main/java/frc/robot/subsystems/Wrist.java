@@ -23,7 +23,7 @@ public class Wrist extends SubsystemBase {
 
   private PID pid;
 
-  private double kP = 0.0225;
+  private double kP = 0.019;
   //kI MUST be 0
   private double kI = 0.0;
   private double kD = 0.0;
@@ -95,6 +95,6 @@ public class Wrist extends SubsystemBase {
     this.pid.updatePID(getWristRotationPosition());
     double result = pid.getResult();
     setRotationMotorPercent(-result);
-    // System.out.println(rotationMotor.getEncoder().getPosition());
+    // System.out.println("Wrist: " + rotationMotor.getEncoder().getPosition());
   }
 }
