@@ -113,7 +113,7 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
           new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
         )
       ),
-      new WaitCommand(0.25),
+      new WaitCommand(0.5),
       new ParallelDeadlineGroup(
         new WaitCommand(0.1),
         new RunIntake(intake, 55, 1)
