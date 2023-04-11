@@ -225,6 +225,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    // peripherals.setFrontPipeline(2);
 
     CommandScheduler.getInstance().run();
 
@@ -304,12 +305,13 @@ public class Robot extends TimedRobot {
     // OI.driverA.whileHeld(new SetArmExtensionPosition(lights, armExtension, armRotation, 18));
     // OI.driverY.whileHeld(new ExtendArm(armExtension, 3));
 
-    OI.driverB.whenPressed(new AprilTagBalance(drive, peripherals, lights, 2.25, true));
-    OI.driverA.whenPressed(new AprilTagBalance(drive, peripherals, lights, 2.25, false));
+    // OI.driverB.whenPressed(new AprilTagBalance(drive, peripherals, lights, 2.25, true));
+    // OI.driverA.whenPressed(new AprilTagBalance(drive, peripherals, lights, 2.25, false));
 
     // // COMPETITION CONTROLS - DO NOT DELETE
     // // shelf intake position
     OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals, lights));
+    // OI.driverA.whenPressed(new MoveToPieceForwards(drive, peripherals, lights));
 
     // OI.driverY.whileActiveOnce(new AprilTagBalance(drive, peripherals, lights, 1.5, true));
 

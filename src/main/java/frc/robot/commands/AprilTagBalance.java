@@ -29,8 +29,8 @@ public class AprilTagBalance extends CommandBase {
   // side and color specific distances
   private double blueSideCloseDistance = 2.86;
   private double redSideCloseDistance = 2.86;
-  private double blueSideFarDistance = 2.78;
-  private double redSideFarDistance = 2.78;
+  private double blueSideFarDistance = 2.83;
+  private double redSideFarDistance = 2.83;
 
   // is coming from close side (true) or far side (false) of charging station
   private boolean isCloseSide;

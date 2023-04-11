@@ -79,6 +79,8 @@ public class MoveToPieceForwards extends CommandBase {
 
     // if(peripherals.getFrontTargetArea() < 2.5) {
     drive.autoRobotCentricDrive(new Vector(1.75 * 1.5, 0), result * 1.5);
+    System.out.println("Result " + result);
+    System.out.println("Angle: " + currentAngle);
     // }
     // else {
       // drive.autoRobotCentricDrive(new Vector(3, 0), 0);
