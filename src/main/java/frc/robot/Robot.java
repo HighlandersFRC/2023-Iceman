@@ -22,9 +22,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.AutoPlacementCone;
-import frc.robot.commands.AutoPlacementCube;
-import frc.robot.commands.AlignToConePlacement;
+import frc.robot.commands.AprilTagAlignment;
 import frc.robot.commands.AprilTagBalance;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
@@ -39,7 +37,6 @@ import frc.robot.commands.RunIntake;
 import frc.robot.commands.SetArmExtensionPosition;
 import frc.robot.commands.SetArmRotationPosition;
 import frc.robot.commands.SetLightMode;
-import frc.robot.commands.TestIntake;
 import frc.robot.commands.VisionAlignment;
 import frc.robot.commands.ZeroNavxMidMatch;
 import frc.robot.subsystems.ArmExtension;
@@ -311,6 +308,7 @@ public class Robot extends TimedRobot {
     // // COMPETITION CONTROLS - DO NOT DELETE
     // // shelf intake position
     OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals, lights));
+    OI.driverY.whileHeld(new AprilTagAlignment(drive, peripherals, lights));
     // OI.driverA.whenPressed(new MoveToPieceForwards(drive, peripherals, lights));
 
     // OI.driverY.whileActiveOnce(new AprilTagBalance(drive, peripherals, lights, 1.5, true));

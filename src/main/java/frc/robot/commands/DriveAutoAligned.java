@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.OI;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Peripherals;
@@ -25,9 +26,9 @@ public class DriveAutoAligned extends CommandBase {
 
   private double set = 0;
 
-  private double kP = 6;
-  private double kI = 0.15;
-  private double kD = 0.6;
+  private double kP = 0.27;
+  private double kI = 0;
+  private double kD = 0;
 
   // private double kP = 0.5;
   // private double kI = 0;
@@ -48,26 +49,30 @@ public class DriveAutoAligned extends CommandBase {
   @Override
   public void initialize() {
     pid = new PID(kP, kI, kD);
-    double numTurns = ((int) peripherals.getNavxAngle())/180;
+    int numTurns = ((int) peripherals.getNavxAngle())/180;
     double setPoint = 180 * Math.copySign(numTurns, peripherals.getNavxAngle());
-    if((peripherals.getNavxAngle() % 180) > 90) {
-      setPoint = 180 * Math.copySign(numTurns + 1, peripherals.getNavxAngle());
+    if((Math.abs(peripherals.getNavxAngle()) % 180) > 90) {
+      if(peripherals.getNavxAngle() < 0) {
+        setPoint = 180 * Math.copySign(numTurns - 1, peripherals.getNavxAngle());
+      }
+      else {
+        setPoint = 180 * Math.copySign(numTurns + 1, peripherals.getNavxAngle());
+      }
     }
-    set = setPoint;
+      set = setPoint;
     pid.setSetPoint(setPoint);
-    pid.setMinOutput(-1.1);
-    pid.setMaxOutput(1.1);
+    pid.setMinOutput(-3);
+    pid.setMaxOutput(3);
     angleSettled = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // System.out.println("setpoint: " + set);
-    // System.out.println("current: " + peripherals.getNavxAngle());
     turn = peripherals.getNavxAngle();
     pid.updatePID(turn);
     double result = -pid.getResult();
+    System.out.println(result);
     if(Math.abs(turn - set) < 2) { 
       result = 0;
     }
@@ -84,6 +89,9 @@ public class DriveAutoAligned extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // if(!OI.driverController.getXButton()) {
+    //   return true;
+    // }
     return false;
   }
 }

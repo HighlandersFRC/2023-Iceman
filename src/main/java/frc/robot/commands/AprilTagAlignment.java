@@ -14,22 +14,26 @@ import frc.robot.subsystems.Lights.LEDMode;
 import frc.robot.tools.controlloops.PID;
 import frc.robot.tools.math.Vector;
 
-public class MoveToPieceForwards extends CommandBase {
+public class AprilTagAlignment extends CommandBase {
   /** Creates a new VisionAlignment. */
   private Drive drive;
   private Peripherals peripherals;
   private Lights lights;
-  private double turn = 0;
 
   private PID pid;
+  private PID rotationPID;
 
   // private double kP = 1.25;
   // private double kI = 0.05;
   // private double kD = 1;
 
-  private double kP = 6;
+  private double kP = 4;
   private double kI = 0;
   private double kD = 0;
+
+  private double rotationP = 0.27;
+  private double rotationI = 0;
+  private double rotationD = 0;
   
   // private double kP = 1.0;
   // private double kI = 0.0;
@@ -39,11 +43,7 @@ public class MoveToPieceForwards extends CommandBase {
 
   private double startTime;
 
-  private double initialAngle = 0;
-  private double target = 0;
-
-  private double initTime = 0;
-  public MoveToPieceForwards(Drive drive, Peripherals peripherals, Lights lights) {
+  public AprilTagAlignment(Drive drive, Peripherals peripherals, Lights lights) {
     this.peripherals = peripherals;
     this.drive = drive;
     this.lights = lights;
@@ -56,8 +56,14 @@ public class MoveToPieceForwards extends CommandBase {
   public void initialize() {
     pid = new PID(kP, kI, kD);
     pid.setSetPoint(0);
-    pid.setMinOutput(-4);
-    pid.setMaxOutput(4);
+    pid.setMinOutput(-2);
+    pid.setMaxOutput(2);
+
+    rotationPID = new PID(rotationP, rotationI, rotationD);
+    rotationPID.setSetPoint(0);
+    rotationPID.setMinOutput(-3);
+    rotationPID.setMaxOutput(3);
+
     angleSettled = 0;
     startTime = Timer.getFPGATimestamp();
   }
@@ -65,7 +71,8 @@ public class MoveToPieceForwards extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double currentAngle = peripherals.getFrontLimelightAngleToTarget();
+    double currentAngle = peripherals.getBackLimelightAngleToTarget();
+
     if (currentAngle == 0){
       lights.setAMode(LEDMode.GOLDSTROBE);
       lights.setSMode(LEDMode.GOLDSTROBE);
@@ -73,12 +80,16 @@ public class MoveToPieceForwards extends CommandBase {
       lights.setAMode(LEDMode.GREEN);
       lights.setSMode(LEDMode.GREEN);
     }
+
     pid.updatePID(currentAngle);
     double result = -pid.getResult();
-    SmartDashboard.putNumber("Angle Settled", angleSettled);
+
+    double turn = peripherals.getNavxAngle();
+    rotationPID.updatePID(turn);
+    double rotationResult = -rotationPID.getResult();
 
     // if(peripherals.getFrontTargetArea() < 2.5) {
-    drive.autoRobotCentricDrive(new Vector(1.75 * 1.5, 0), result * 1.5);
+    drive.autoRobotCentricDrive(new Vector(-1, result), rotationResult);
     System.out.println("Result " + result);
     System.out.println("Angle: " + currentAngle);
   }
@@ -86,13 +97,17 @@ public class MoveToPieceForwards extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drive.autoRobotCentricDrive(new Vector(0, 0), 0);
+    System.out.println("ENDED");
+    // drive.autoRobotCentricDrive(new Vector(0, 0), 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     if(Timer.getFPGATimestamp() - startTime > 0.7) {
+      return true;
+    }
+    if(peripherals.getBackLimelightAngleToTarget() == 0) {
       return true;
     }
     return false;
