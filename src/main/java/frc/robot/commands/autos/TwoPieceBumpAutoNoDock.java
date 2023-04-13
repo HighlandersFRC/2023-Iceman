@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.commands.AprilTagAlignment;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
 import frc.robot.commands.MoveToPieceBackwards;
@@ -120,12 +121,12 @@ public class TwoPieceBumpAutoNoDock extends SequentialCommandGroup {
         new RunIntake(intake, -35, 0.1)
       ),
       new ParallelDeadlineGroup(
+        new AprilTagAlignment(drive, peripherals, lights),
         new ParallelCommandGroup(
           new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION),
           new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
           new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION)
-        ),
-        new SetBackLimelightPipeline(peripherals, 0)
+        )
       ),
       new WaitCommand(0.1),
       new ParallelDeadlineGroup(

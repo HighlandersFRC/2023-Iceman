@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.commands.AprilTagAlignment;
 import frc.robot.commands.AprilTagBalance;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
@@ -108,12 +109,9 @@ public class ThreePieceBumpAuto extends SequentialCommandGroup {
         new RunIntake(intake, -35, 0.1),
         new RotateWrist(wrist, flipChecker, Constants.MID_PLACEMENT_BACKSIDE_WRIST_ROTATION),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.MID_PLACEMENT_BACKSIDE_ARM_ROTATION),
-        // new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION),
-        // new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
         new SequentialCommandGroup(
           new WaitCommand(0.15),
           new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.MID_PLACEMENT_ARM_EXTENSION)
-        //   new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
         )
       ),
       new WaitCommand(0.5),
@@ -146,22 +144,25 @@ public class ThreePieceBumpAuto extends SequentialCommandGroup {
         new AutonomousFollower(drive, pathJSON2, false),
         new ParallelCommandGroup(
           new RotateWrist(wrist, flipChecker, 215),
-          new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
           new SequentialCommandGroup(
             new WaitCommand(1.5),
-            new SetArmExtensionPosition(lights, armExtension, armRotation, 18)
+            new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION)
+          ),
+          new SequentialCommandGroup(
+            new WaitCommand(1.75),
+            new SetArmExtensionPosition(lights, armExtension, armRotation, 14)
           )
         ),
-        new WaitCommand(0.25),
         new RunIntake(intake, -35, 0.1)
       ),
       new ParallelDeadlineGroup(
+        new AprilTagAlignment(drive, peripherals, lights),
         new ParallelCommandGroup(
           new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.MID_PLACEMENT_ARM_EXTENSION),
           new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
-          new RotateWrist(wrist, flipChecker, 215)
-        ),
-        new SetBackLimelightPipeline(peripherals, 0)
+          new RotateWrist(wrist, flipChecker, 215),
+          new RunIntake(intake, -35, 0.1)
+        )
       ),
       new WaitCommand(0.2),
       new ParallelDeadlineGroup(
@@ -190,7 +191,10 @@ public class ThreePieceBumpAuto extends SequentialCommandGroup {
         new AutonomousFollower(drive, pathJSON4, false),
         new ParallelCommandGroup(
           new RotateWrist(wrist, flipChecker, 240),
-          new SetArmRotationPosition(armRotation, flipChecker, Constants.MID_PLACEMENT_BACKSIDE_ARM_ROTATION),
+          new SequentialCommandGroup(
+            new WaitCommand(1.25),
+            new SetArmRotationPosition(armRotation, flipChecker, Constants.MID_PLACEMENT_BACKSIDE_ARM_ROTATION)
+          ),
           new SequentialCommandGroup(
             new WaitCommand(0.75),
             new SetArmExtensionPosition(lights, armExtension, armRotation, 3)
@@ -198,7 +202,7 @@ public class ThreePieceBumpAuto extends SequentialCommandGroup {
         ),
         new RunIntake(intake, -35, 0.1)
       ),
-      // new WaitCommand(0.1),
+      new AprilTagAlignment(drive, peripherals, lights),
       new RunIntake(intake, 55, 0.4),
       new WaitCommand(3)
     );

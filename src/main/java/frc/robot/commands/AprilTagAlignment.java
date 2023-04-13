@@ -60,7 +60,11 @@ public class AprilTagAlignment extends CommandBase {
     pid.setMaxOutput(2);
 
     rotationPID = new PID(rotationP, rotationI, rotationD);
-    rotationPID.setSetPoint(0);
+    if (drive.getFieldSide() == "red"){
+      rotationPID.setSetPoint(180);
+    } else {
+      rotationPID.setSetPoint(0);
+    }
     rotationPID.setMinOutput(-3);
     rotationPID.setMaxOutput(3);
 
@@ -104,7 +108,7 @@ public class AprilTagAlignment extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Timer.getFPGATimestamp() - startTime > 0.7) {
+    if(Timer.getFPGATimestamp() - startTime > 0.4) {
       return true;
     }
     if(peripherals.getBackLimelightAngleToTarget() == 0) {

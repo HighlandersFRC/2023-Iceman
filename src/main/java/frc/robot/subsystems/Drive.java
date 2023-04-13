@@ -240,6 +240,13 @@ public class Drive extends SubsystemBase {
         leftFront.setAnglePID(Math.PI / 2, 0);
     }
 
+    public void setWheelsStraight(){
+        leftBack.setAnglePID(0, 0);
+        leftFront.setAnglePID(0, 0);
+        rightFront.setAnglePID(0, 0);
+        rightBack.setAnglePID(0, 0);
+    }
+
     // get Joystick adjusted y-value
     public double getAdjustedY(double originalX, double originalY){
         double adjustedY = originalY * Math.sqrt((1-(Math.pow(originalX, 2))/2));
