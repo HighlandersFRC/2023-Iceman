@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.Arrays;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -27,7 +29,7 @@ public class AprilTagAlignment extends CommandBase {
   // private double kI = 0.05;
   // private double kD = 1;
 
-  private double kP = 4;
+  private double kP = 3;
   private double kI = 0;
   private double kD = 0;
 
@@ -62,6 +64,7 @@ public class AprilTagAlignment extends CommandBase {
     rotationPID = new PID(rotationP, rotationI, rotationD);
     if (drive.getFieldSide() == "red"){
       rotationPID.setSetPoint(180);
+      // rotationPID.setSetPoint(0);
     } else {
       rotationPID.setSetPoint(0);
     }
@@ -93,22 +96,23 @@ public class AprilTagAlignment extends CommandBase {
     double rotationResult = -rotationPID.getResult();
 
     // if(peripherals.getFrontTargetArea() < 2.5) {
-    drive.autoRobotCentricDrive(new Vector(-1, result), rotationResult);
-    System.out.println("Result " + result);
+    drive.autoRobotCentricDrive(new Vector(-2.5, result * 1.25), rotationResult);
+    System.out.println("Result: " + result);
     System.out.println("Angle: " + currentAngle);
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     System.out.println("ENDED");
-    // drive.autoRobotCentricDrive(new Vector(0, 0), 0);
+    drive.autoRobotCentricDrive(new Vector(0, 0), 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Timer.getFPGATimestamp() - startTime > 0.4) {
+    if(Timer.getFPGATimestamp() - startTime > 0.5) {
       return true;
     }
     if(peripherals.getBackLimelightAngleToTarget() == 0) {

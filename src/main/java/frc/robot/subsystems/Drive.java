@@ -247,6 +247,24 @@ public class Drive extends SubsystemBase {
         rightBack.setAnglePID(0, 0);
     }
 
+    public double[] getWheelVelocities(){
+        double[] vels = new double[4];
+        vels[0] = rightFront.getModuleSpeed();
+        vels[1] = leftFront.getModuleSpeed();
+        vels[2] = leftBack.getModuleSpeed();
+        vels[3] = rightBack.getModuleSpeed();
+        return vels;
+    }
+
+    public double[] getWheelOutputs(){
+        double[] vels = new double[4];
+        vels[0] = rightFront.getDesiredVelocity();
+        vels[1] = leftFront.getDesiredVelocity();
+        vels[2] = leftBack.getDesiredVelocity();
+        vels[3] = rightBack.getDesiredVelocity();
+        return vels;
+    }
+
     // get Joystick adjusted y-value
     public double getAdjustedY(double originalX, double originalY){
         double adjustedY = originalY * Math.sqrt((1-(Math.pow(originalX, 2))/2));

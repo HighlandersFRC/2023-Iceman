@@ -95,7 +95,7 @@ public final class Constants {
 
     // Cube intaking
     public static final double CUBE_FRONTSIDE_ARM_ROTATION = 95.5;
-    public static final double CUBE_FRONTSIDE_WRIST_ROTATION = 121 + wristOffsetDiffArm;
+    public static final double CUBE_FRONTSIDE_WRIST_ROTATION = 127 + wristOffsetDiffArm;
 
     // Shelf intaking
     public static final double SHELF_FRONTSIDE_ARM_ROTATION = 161;
@@ -125,7 +125,7 @@ public final class Constants {
 
     // Cube intaking
     public static final double CUBE_BACKSIDE_ARM_ROTATION = 265.5;
-    public static final double CUBE_BACKSIDE_WRIST_ROTATION = 238 + wristOffsetDiffArm;
+    public static final double CUBE_BACKSIDE_WRIST_ROTATION = 231 + wristOffsetDiffArm;
 
     // Shelf intaking
     public static final double SHELF_BACKSIDE_ARM_ROTATION = 199;

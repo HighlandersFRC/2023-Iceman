@@ -29,6 +29,8 @@ public class SwerveModule extends SubsystemBase {
     private double xTurnAngle = 0.7692;
     private double yTurnAngle = 0.6390;
 
+    private double desiredVel = 0;
+
     public SwerveModule(int moduleNumber, TalonFX mAngleMotor, TalonFX mDriveMotor, double zeroOffset, CANCoder mAbsoluteEncoder) {
         // sets up the module by defining angle motor and drive motor
         angleMotor = mAngleMotor;
@@ -126,6 +128,10 @@ public class SwerveModule extends SubsystemBase {
     // sets the drive motor to the specified percent
     public void setDriveMotors(double percent) {
         driveMotor.set(ControlMode.PercentOutput, percent);
+    }
+
+    public double getDesiredVelocity(){
+        return desiredVel;
     }
 
     // returns state of swerve modules - Used for Odometry
@@ -309,6 +315,8 @@ public class SwerveModule extends SubsystemBase {
                 // System.out.println("Module Number: " + moduleNum + " cannot reach requested speed of " + motorFieldSpeed);
                 motorFieldSpeed = Constants.TOP_SPEED;
             }
+
+            desiredVel = motorFieldSpeed;
 
             double adjustedAngle = -Math.atan2(adjustedVector.getJ(), adjustedVector.getI());
 
