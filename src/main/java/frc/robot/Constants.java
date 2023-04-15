@@ -158,7 +158,7 @@ public final class Constants {
     public static final double EXTENSION_INCHES_PER_ROTATION = 1.5038 * Math.PI;
     public static final double MAX_EXTENSION = 40;
 
-    public static final double SIDE_INTAKE_GEAR_RATIO = 66.66;
+    public static final double SIDE_INTAKE_GEAR_RATIO = 75;
 
     // max of falcon with regular firmware = 6380 rpm, with phoenix pro ~ 6000 rpm, converting to rps
     public static final double MAX_FALCON_ROTATIONS_PER_SECOND = 80;

@@ -73,7 +73,6 @@ public class ArmExtension extends SubsystemBase {
     configurator.apply(motorOutputConfigs);
     configurator.apply(motionMagicConfigs);
     configurator.apply(slot0Configs);
-
     configurator.apply(currentLimitConfigs);
 
     followerExtensionMotor.setControl(new Follower(10, false));

@@ -7,9 +7,12 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenixpro.configs.CurrentLimitsConfigs;
+import com.ctre.phoenixpro.configs.MotionMagicConfigs;
 import com.ctre.phoenixpro.configs.MotorOutputConfigs;
 import com.ctre.phoenixpro.configs.Slot0Configs;
 import com.ctre.phoenixpro.configs.TalonFXConfigurator;
+import com.ctre.phoenixpro.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenixpro.controls.PositionTorqueCurrentFOC;
 // import com.ctre.phoenix.motorcontrol.can.TalonFX;
 // import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -30,23 +33,34 @@ public class GroundCubeIntake extends SubsystemBase {
   private final TalonFX grabberMotor = new TalonFX(21, "Canivore");
   private final TalonFX rotationMotor = new TalonFX(20, "Canivore");
   
+  private TalonFXConfigurator grabberMotorConfigurator = grabberMotor.getConfigurator();
+  private TalonFXConfigurator rotationMotorConfigurator = rotationMotor.getConfigurator();
+  private MotorOutputConfigs grabberMotorOutputConfig = new MotorOutputConfigs();
+  private MotorOutputConfigs rotationMotorOutputConfig = new MotorOutputConfigs();
+  private MotionMagicTorqueCurrentFOC rotationMotionMagicRequest = new MotionMagicTorqueCurrentFOC(0).withSlot(0);
+  private MotionMagicConfigs rotationMotionMagicConfig = new MotionMagicConfigs();
+  private CurrentLimitsConfigs rotationCurrentLimitConfig = new CurrentLimitsConfigs();
+
   private final TorqueCurrentFOC torqueRequest = new TorqueCurrentFOC(10, 0.1, 0, false);
   private final VoltageOut percentRequest = new VoltageOut(-6);
-
   private final PositionTorqueCurrentFOC positionRequest = new PositionTorqueCurrentFOC(0, 0.1, 0, true);
-  
-  private TalonFXConfigurator grabberMotorConfigurator = grabberMotor.getConfigurator();
-
-  private TalonFXConfigurator rotationMotorConfigurator = rotationMotor.getConfigurator();
-
-  private MotorOutputConfigs motorOutputConfigs = new MotorOutputConfigs();
+  private MotionMagicTorqueCurrentFOC motionMagicRequest = new MotionMagicTorqueCurrentFOC(0).withSlot(0);
 
   public GroundCubeIntake() {
   }
 
   public void init() {
-    motorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
-    motorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
+    grabberMotorOutputConfig.Inverted = InvertedValue.Clockwise_Positive;
+    grabberMotorOutputConfig.NeutralMode = NeutralModeValue.Brake;
+    rotationMotorOutputConfig.Inverted = InvertedValue.CounterClockwise_Positive;
+    rotationMotorOutputConfig.NeutralMode = NeutralModeValue.Brake;
+    rotationCurrentLimitConfig.StatorCurrentLimit = 45;
+    rotationCurrentLimitConfig.StatorCurrentLimitEnable = true;
+    rotationCurrentLimitConfig.SupplyCurrentLimit = 40;
+    rotationCurrentLimitConfig.SupplyCurrentLimitEnable = true;
+    rotationMotionMagicConfig.MotionMagicCruiseVelocity = 80;
+    rotationMotionMagicConfig.MotionMagicAcceleration = 200;
+    rotationMotionMagicConfig.MotionMagicJerk = 1000;
 
     Slot0Configs slot0Configs = new Slot0Configs();
     slot0Configs.kS = 0; // Add 0.05 V output to overcome static friction
@@ -55,8 +69,11 @@ public class GroundCubeIntake extends SubsystemBase {
     slot0Configs.kI = 0.005; // no output for integrated error
     slot0Configs.kD = 0.25;
     
-    grabberMotorConfigurator.apply(motorOutputConfigs);
+    grabberMotorConfigurator.apply(grabberMotorOutputConfig);
+    rotationMotorConfigurator.apply(rotationMotorOutputConfig);
     rotationMotorConfigurator.apply(slot0Configs);
+    rotationMotorConfigurator.apply(rotationCurrentLimitConfig);
+    rotationMotorConfigurator.apply(rotationMotionMagicConfig);
 
     rotationMotor.setRotorPosition(0);
     
@@ -84,7 +101,7 @@ public class GroundCubeIntake extends SubsystemBase {
   }
 
   public void setIntakeRotation(double position) {
-    rotationMotor.setControl(positionRequest.withPosition(Constants.getSideIntakeRotationsFromDegrees(position)));
+    rotationMotor.setControl(motionMagicRequest.withPosition(Constants.getSideIntakeRotationsFromDegrees(position)));
   }
 
   @Override
