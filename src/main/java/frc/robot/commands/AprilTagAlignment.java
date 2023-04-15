@@ -112,7 +112,7 @@ public class AprilTagAlignment extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Timer.getFPGATimestamp() - startTime > 0.5) {
+    if(Timer.getFPGATimestamp() - startTime > 0.45) {
       return true;
     }
     if(peripherals.getBackLimelightAngleToTarget() == 0) {
