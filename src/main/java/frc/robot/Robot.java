@@ -305,6 +305,7 @@ public class Robot extends TimedRobot {
 
     // OI.driverB.whenPressed(new AprilTagBalance(drive, peripherals, lights, 2.25, true));
     // OI.driverA.whenPressed(new AprilTagBalance(drive, peripherals, lights, 2.25, false));
+    OI.driverA.whenPressed(new MoveToPieceForwards(drive, peripherals, lights));
 
     // // COMPETITION CONTROLS - DO NOT DELETE
     // // shelf intake position

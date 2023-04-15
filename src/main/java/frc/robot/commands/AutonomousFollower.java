@@ -124,6 +124,7 @@ public class AutonomousFollower extends CommandBase {
     Vector velocityVector = new Vector(0, 0);
     double desiredThetaChange = 0;
     drive.autoDrive(velocityVector, desiredThetaChange);
+    drive.setWheelsStraight();
 
     odometryFusedX = drive.getFusedOdometryX();
     odometryFusedY = drive.getFusedOdometryY();

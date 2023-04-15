@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.Arrays;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -81,6 +83,17 @@ public class MoveToPieceForwards extends CommandBase {
     drive.autoRobotCentricDrive(new Vector(1.75 * 1.5, 0), result * 1.5);
     System.out.println("Result " + result);
     System.out.println("Angle: " + currentAngle);
+    double[] vels = drive.getWheelVelocities();
+    double[] outs = drive.getWheelOutputs();
+    System.out.println("------------------------");
+    System.out.println("M1 Set: " + Math.round(outs[0] * 100.0) / 100.0 + " Vel: " + Math.round(vels[0] * 100) / 100.0);
+    System.out.println("------------------------");
+    System.out.println("M2 Set: " + Math.round(outs[1] * 100.0) / 100.0 + " Vel: " + Math.round(vels[1] * 100) / 100.0);
+    System.out.println("------------------------");
+    System.out.println("M3 Set: " + Math.round(outs[2] * 100.0) / 100.0 + " Vel: " + Math.round(vels[2] * 100) / 100.0);
+    System.out.println("------------------------");
+    System.out.println("M4 Set: " + Math.round(outs[3] * 100.0) / 100.0 + " Vel: " + Math.round(vels[3] * 100) / 100.0);
+    System.out.println("------------------------");
   }
 
   // Called once the command ends or is interrupted.
