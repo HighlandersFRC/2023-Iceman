@@ -158,6 +158,8 @@ public final class Constants {
     public static final double EXTENSION_INCHES_PER_ROTATION = 1.5038 * Math.PI;
     public static final double MAX_EXTENSION = 40;
 
+    public static final double SIDE_INTAKE_GEAR_RATIO = 66.66;
+
     // max of falcon with regular firmware = 6380 rpm, with phoenix pro ~ 6000 rpm, converting to rps
     public static final double MAX_FALCON_ROTATIONS_PER_SECOND = 80;
     // max acceleration of a falcon - calculated by deciding that we need to reach max speed in 1 second
@@ -203,6 +205,14 @@ public final class Constants {
 
     public static double getArmExtensionInchesFromRotations(double rotations) {
         return getArmExtensionInches(rotations) * FALCON_TICS_PER_ROTATION;
+    }
+
+    public static double getSideIntakeDegreesFromRotations(double rotations) {
+        return rotations/SIDE_INTAKE_GEAR_RATIO;
+    }
+
+    public static double getSideIntakeRotationsFromDegrees(double degrees) {
+        return degrees * SIDE_INTAKE_GEAR_RATIO;
     }
 
     public static final Transform3d ROBOT_TO_CAM =

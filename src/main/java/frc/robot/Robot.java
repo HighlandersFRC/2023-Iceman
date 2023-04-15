@@ -43,6 +43,7 @@ import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmRotation;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.FlipChecker;
+import frc.robot.subsystems.GroundCubeIntake;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Peripherals;
@@ -85,6 +86,7 @@ public class Robot extends TimedRobot {
   private Intake intake = new Intake(lights);
   private FlipChecker flipChecker = new FlipChecker(peripherals);
   private ArmRotation armRotation = new ArmRotation(armExtension, flipChecker);
+  private GroundCubeIntake sideIntake = new GroundCubeIntake();
 
   private UsbCamera frontDriverCam;
   private UsbCamera backDriverCam;
@@ -254,16 +256,15 @@ public class Robot extends TimedRobot {
       armExtension.setExtensionEncoderPosition(0);
     }
 
+    System.out.println(sideIntake.getPosition());
+
     // SmartDashboard.putNumber("EXTENSION", armExtension.getExtensionPosition());
     // System.out.println("ARM: " + armRotation.getRotationPosition());
     // System.out.println("WRIST: " + wrist.getWristRotationPosition());
-    // lights.periodic();
 
     //DO NOT COMMENT OUT!!!
     wrist.periodic();
     //DO NOT COMMENT OUT!!!
-
-    // armRotation.printRotationVelocity();
   }
 
   @Override
