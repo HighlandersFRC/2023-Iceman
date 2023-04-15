@@ -35,7 +35,9 @@ public class GroundCubeIntake extends SubsystemBase {
 
   private final PositionTorqueCurrentFOC positionRequest = new PositionTorqueCurrentFOC(0, 0.1, 0, true);
   
-  private TalonFXConfigurator configurator = grabberMotor.getConfigurator();
+  private TalonFXConfigurator grabberMotorConfigurator = grabberMotor.getConfigurator();
+
+  private TalonFXConfigurator rotationMotorConfigurator = rotationMotor.getConfigurator();
 
   private MotorOutputConfigs motorOutputConfigs = new MotorOutputConfigs();
 
@@ -43,18 +45,20 @@ public class GroundCubeIntake extends SubsystemBase {
   }
 
   public void init() {
-    motorOutputConfigs.Inverted = InvertedValue.CounterClockwise_Positive;
+    motorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
     motorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
 
     Slot0Configs slot0Configs = new Slot0Configs();
     slot0Configs.kS = 0; // Add 0.05 V output to overcome static friction
     slot0Configs.kV = 0; // A velocity target of 1 rps results in 0.12 V output
-    slot0Configs.kP = 0; // A position error of 0.5 rotations results in 12 V output
-    slot0Configs.kI = 0; // no output for integrated error
-    slot0Configs.kD = 0;
+    slot0Configs.kP = 2.5; // A position error of 0.5 rotations results in 12 V output
+    slot0Configs.kI = 0.005; // no output for integrated error
+    slot0Configs.kD = 0.25;
     
-    configurator.apply(motorOutputConfigs);
-    configurator.apply(slot0Configs);
+    grabberMotorConfigurator.apply(motorOutputConfigs);
+    rotationMotorConfigurator.apply(slot0Configs);
+
+    rotationMotor.setRotorPosition(0);
     
     setDefaultCommand(new GroundCubeIntakeDefault(this));
   }
@@ -66,6 +70,7 @@ public class GroundCubeIntake extends SubsystemBase {
 
   public double getPosition() {
     return Constants.getSideIntakeDegreesFromRotations(rotationMotor.getPosition().getValue());
+    // return rotationMotor.getPosition().getValue();
   }
 
   public void setGrabberMotorMaxPercent(double percent) {

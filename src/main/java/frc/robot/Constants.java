@@ -208,11 +208,11 @@ public final class Constants {
     }
 
     public static double getSideIntakeDegreesFromRotations(double rotations) {
-        return rotations/SIDE_INTAKE_GEAR_RATIO;
+        return 360 * (rotations/SIDE_INTAKE_GEAR_RATIO);
     }
 
     public static double getSideIntakeRotationsFromDegrees(double degrees) {
-        return degrees * SIDE_INTAKE_GEAR_RATIO;
+        return (degrees * SIDE_INTAKE_GEAR_RATIO)/360;
     }
 
     public static final Transform3d ROBOT_TO_CAM =

@@ -4,14 +4,22 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.OI;
 import frc.robot.subsystems.GroundCubeIntake;
 
 public class RunGroundCubeIntake extends CommandBase {
   /** Creates a new RunGroundCubeIntake. */
   private GroundCubeIntake intake;
-  public RunGroundCubeIntake(GroundCubeIntake intake) {
+  private boolean hasSpunUp = false;
+
+  private double position;
+  private double speed;
+  public RunGroundCubeIntake(GroundCubeIntake intake, double position, double speed) {
     this.intake = intake;
+    this.position = position;
+    this.speed = speed;
     addRequirements(this.intake);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -23,8 +31,25 @@ public class RunGroundCubeIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.setIntakeRotation(0);
-    intake.setIntakeTorqueOutput(45, 1);
+    if(speed > 0) {
+      intake.setIntakeRotation(position);
+    }
+
+    double intakeVelocity = Math.abs(intake.getVelocity());
+
+      if(intakeVelocity > 20) {
+        hasSpunUp = true;
+        intake.setIntakeTorqueOutput((55) * Math.signum(speed), Math.abs(speed));
+      }
+      if(intakeVelocity < 20 && hasSpunUp) {
+        intake.setIntakeTorqueOutput((55) * Math.signum(speed), Math.abs(speed));
+        // set lights and rumble
+        OI.driverController.setRumble(RumbleType.kBothRumble, 1);
+        OI.operatorController.setRumble(RumbleType.kBothRumble, 1);
+      }
+      else {
+        intake.setIntakeTorqueOutput((55) * Math.signum(speed), Math.abs(speed));
+      }
   }
 
   // Called once the command ends or is interrupted.

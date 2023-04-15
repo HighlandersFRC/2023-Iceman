@@ -33,6 +33,7 @@ import frc.robot.commands.MoveToPieceForwards;
 import frc.robot.commands.MoveWrist;
 import frc.robot.commands.RotateArm;
 import frc.robot.commands.RotateWrist;
+import frc.robot.commands.RunGroundCubeIntake;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.SetArmExtensionPosition;
 import frc.robot.commands.SetArmRotationPosition;
@@ -112,6 +113,7 @@ public class Robot extends TimedRobot {
     armRotation.init();
     wrist.init();
     intake.init();
+    sideIntake.init();
 
     PortForwarder.add(5800, "limelight-front.local", 5800);
     PortForwarder.add(5801, "limelight-front.local", 5801);
@@ -300,17 +302,20 @@ public class Robot extends TimedRobot {
 
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 
+    OI.driverRB.whileTrue(new RunGroundCubeIntake(sideIntake, 63, 0.3));
+    OI.driverLB.whileTrue(new RunGroundCubeIntake(sideIntake, 30, -0.5));
+
     // OI.driverA.whileHeld(new SetArmExtensionPosition(lights, armExtension, armRotation, 18));
     // OI.driverY.whileHeld(new ExtendArm(armExtension, 3));
 
     // OI.driverB.whenPressed(new AprilTagBalance(drive, peripherals, lights, 2.25, true));
     // OI.driverA.whenPressed(new AprilTagBalance(drive, peripherals, lights, 2.25, false));
-    OI.driverA.whenPressed(new MoveToPieceForwards(drive, peripherals, lights));
+    // OI.driverA.whenPressed(new MoveToPieceForwards(drive, peripherals, lights));
 
     // // COMPETITION CONTROLS - DO NOT DELETE
     // // shelf intake position
-    OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals, lights));
-    OI.driverY.whileHeld(new AprilTagAlignment(drive, peripherals, lights));
+    // OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals, lights));
+    // OI.driverY.whileHeld(new AprilTagAlignment(drive, peripherals, lights));
     // OI.driverA.whenPressed(new MoveToPieceForwards(drive, peripherals, lights));
 
     // OI.driverY.whileActiveOnce(new AprilTagBalance(drive, peripherals, lights, 1.5, true));
