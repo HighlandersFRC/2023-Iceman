@@ -96,7 +96,7 @@ public class AprilTagAlignment extends CommandBase {
     double rotationResult = -rotationPID.getResult();
 
     // if(peripherals.getFrontTargetArea() < 2.5) {
-    drive.autoRobotCentricDrive(new Vector(-2.5, result * 1.25), rotationResult);
+    drive.autoRobotCentricDrive(new Vector(-2.5, result * 1.5), rotationResult);
     System.out.println("Result: " + result);
     System.out.println("Angle: " + currentAngle);
     
@@ -112,7 +112,7 @@ public class AprilTagAlignment extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Timer.getFPGATimestamp() - startTime > 0.45) {
+    if(Timer.getFPGATimestamp() - startTime > 0.5) {
       return true;
     }
     if(peripherals.getBackLimelightAngleToTarget() == 0) {

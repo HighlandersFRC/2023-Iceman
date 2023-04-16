@@ -174,7 +174,7 @@ public class TwoPlusOneAuto extends SequentialCommandGroup {
         new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION),
         new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION),
         new RunIntake(intake, -55, 1),
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 0),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 1.5),
         new SetFrontLimelightPipeline(peripherals, 2)
       ),
       new ParallelDeadlineGroup(

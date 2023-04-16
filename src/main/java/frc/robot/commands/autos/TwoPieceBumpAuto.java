@@ -56,10 +56,6 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
   private JSONArray pathJSON3;
   private JSONObject pathRead3;
 
-  private File pathingFile4;
-  private JSONArray pathJSON4;
-  private JSONObject pathRead4;
-
   public TwoPieceBumpAuto(Drive drive, ArmExtension armExtension, ArmRotation armRotation, Wrist wrist, FlipChecker flipChecker, Peripherals peripherals, Lights lights, Intake intake) {
 
     try {
@@ -99,71 +95,79 @@ public class TwoPieceBumpAuto extends SequentialCommandGroup {
         new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
         new SequentialCommandGroup(
-          new WaitCommand(0.3),
+          new WaitCommand(0.15),
           new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
         )
       ),
-      new WaitCommand(0.25),
+      new WaitCommand(0.35),
       new ParallelDeadlineGroup(
-        new WaitCommand(0.15),
+        new WaitCommand(0.25),
         new RunIntake(intake, 55, 1)
       ),
       new ParallelDeadlineGroup(
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 5),
-        new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION)
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 8),
+        new RotateWrist(wrist, flipChecker, 180)
       ),
       new ParallelDeadlineGroup(
-        new ParallelDeadlineGroup(
-          new AutonomousFollower(drive, pathJSON, false),
-          new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION),
-          new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION),
-          new RunIntake(intake, -55, 1)
+        new SequentialCommandGroup(
+          new WaitCommand(0.1),
+          new AutonomousFollower(drive, pathJSON, false)
         ),
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 1),
+        new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION),
+        new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION),
+        new RunIntake(intake, -55, 1),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 3),
         new SetFrontLimelightPipeline(peripherals, 2)
       ),
       new ParallelDeadlineGroup(
         new MoveToPieceForwards(drive, peripherals, lights),
+        new RunIntake(intake, -55, 1),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION)
       ),
       new WaitCommand(0.1),
       new ParallelDeadlineGroup(
         new AutonomousFollower(drive, pathJSON2, false),
-        new SequentialCommandGroup(
-          new ParallelCommandGroup(
-            new RotateWrist(wrist, flipChecker, 180),
+        new ParallelCommandGroup(
+          new RotateWrist(wrist, flipChecker, 270),
+          new SequentialCommandGroup(
+            new SetArmRotationPosition(armRotation, flipChecker, 150),
+            new WaitCommand(1.25),
             new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION)
           ),
-          new WaitCommand(2),
-          new SetArmRotationPosition(armRotation, flipChecker, Constants.MID_PLACEMENT_BACKSIDE_ARM_ROTATION)
+          new SequentialCommandGroup(
+            new WaitCommand(2.5),
+            new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.MID_PLACEMENT_ARM_EXTENSION - 4)
+          )
         ),
-        new RunIntake(intake, -35, 0.1)
+        new RunIntake(intake, -45, 0.1)
       ),
       new ParallelDeadlineGroup(
         new AprilTagAlignment(drive, peripherals, lights),
         new ParallelCommandGroup(
-          new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION),
+          new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.MID_PLACEMENT_ARM_EXTENSION - 4),
           new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
-          new RotateWrist(wrist, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION)
+          new RotateWrist(wrist, flipChecker, 215),
+          new RunIntake(intake, -45, 0.1)
         )
       ),
-      new WaitCommand(0.1),
+      new WaitCommand(0.4),
       new ParallelDeadlineGroup(
         new WaitCommand(0.1),
-        new RunIntake(intake, 45, 0.4)
+        new RunIntake(intake, 45, 0.3)
       ),
       new ParallelDeadlineGroup(
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 2),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 8),
         new RotateWrist(wrist, flipChecker, 180)
       ),
       new ParallelDeadlineGroup(
         new AutonomousFollower(drive, pathJSON3, false),
-        new SequentialCommandGroup(
-          new WaitCommand(0.9),
-          new SetArmRotationPosition(armRotation, flipChecker, 180)
-        )
+        new SetArmRotationPosition(armRotation, flipChecker, 180),
+        new RotateWrist(wrist, flipChecker, 180),
+        new RunIntake(intake, -35, 0.1),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 3),
+        new SetFrontLimelightPipeline(peripherals, 2)
       ),
-      new AprilTagBalance(drive, peripherals, lights, 2.25, true)
+      new AprilTagBalance(drive, peripherals, lights, 1.5, true)
     );
   }
 }

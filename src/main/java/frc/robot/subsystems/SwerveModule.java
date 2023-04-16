@@ -186,7 +186,7 @@ public class SwerveModule extends SubsystemBase {
         driveMotor.setSelectedSensorPosition(0);
 
         if(moduleNum == 2 || moduleNum == 3) {
-            driveMotor.config_kP(0, 0.45);
+            driveMotor.config_kP(0, 0.35);
             driveMotor.config_kI(0, 0);
             driveMotor.config_kD(0, 0);
         }
