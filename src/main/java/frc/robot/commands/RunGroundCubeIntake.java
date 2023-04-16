@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OI;
 import frc.robot.subsystems.GroundCubeIntake;
@@ -34,6 +35,8 @@ public class RunGroundCubeIntake extends CommandBase {
     if(speed > 0) {
       intake.setIntakeRotation(position);
     }
+
+    SmartDashboard.putNumber("Ground intake position", intake.getPosition());
 
     double intakeVelocity = Math.abs(intake.getVelocity());
 

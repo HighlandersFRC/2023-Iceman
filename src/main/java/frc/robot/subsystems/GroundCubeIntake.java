@@ -60,12 +60,12 @@ public class GroundCubeIntake extends SubsystemBase {
     rotationCurrentLimitConfig.SupplyCurrentLimitEnable = true;
     rotationMotionMagicConfig.MotionMagicCruiseVelocity = 80;
     rotationMotionMagicConfig.MotionMagicAcceleration = 200;
-    rotationMotionMagicConfig.MotionMagicJerk = 1000;
+    rotationMotionMagicConfig.MotionMagicJerk = 2500;
 
     Slot0Configs slot0Configs = new Slot0Configs();
     slot0Configs.kS = 0; // Add 0.05 V output to overcome static friction
     slot0Configs.kV = 0; // A velocity target of 1 rps results in 0.12 V output
-    slot0Configs.kP = 2.5; // A position error of 0.5 rotations results in 12 V output
+    slot0Configs.kP = 1; // A position error of 0.5 rotations results in 12 V output
     slot0Configs.kI = 0.005; // no output for integrated error
     slot0Configs.kD = 0.25;
     
@@ -98,6 +98,10 @@ public class GroundCubeIntake extends SubsystemBase {
 
   public void setIntakeTorqueOutput(double amps, double maxPercent){
     grabberMotor.setControl(this.torqueRequest.withOutput(amps).withMaxAbsDutyCycle(maxPercent));
+  }
+
+  public void setIntakeRotationPercent(double amps, double percent) {
+    rotationMotor.setControl(this.torqueRequest.withOutput(amps).withMaxAbsDutyCycle(percent));
   }
 
   public void setIntakeRotation(double position) {

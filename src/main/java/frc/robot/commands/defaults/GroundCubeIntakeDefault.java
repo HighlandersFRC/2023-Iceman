@@ -5,6 +5,7 @@
 package frc.robot.commands.defaults;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OI;
 import frc.robot.subsystems.GroundCubeIntake;
@@ -27,8 +28,13 @@ public class GroundCubeIntakeDefault extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Intake.setIntakeRotation(0);
-    Intake.setIntakeTorqueOutput(45, 0.1);
+    if(Intake.getPosition() < 1) {
+      Intake.setIntakeRotationPercent(-15, 0.1);
+    }
+    else {
+      Intake.setIntakeRotation(-5);
+    }
+    Intake.setIntakeTorqueOutput(10, 0.1);
   }
 
   // Called once the command ends or is interrupted.

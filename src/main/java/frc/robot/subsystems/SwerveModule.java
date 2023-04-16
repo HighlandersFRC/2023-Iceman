@@ -176,7 +176,7 @@ public class SwerveModule extends SubsystemBase {
         angleMotor.configAllowableClosedloopError(0, radiansToTics(degreesToRadians(2)), 10);
 
         driveMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 45, 45, 0.5));
-        driveMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 60, 60, 0.5));
+        driveMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 75, 75, 0.5));
         driveMotor.setSelectedSensorPosition(0);
         driveMotor.setInverted(false);
 
@@ -185,9 +185,17 @@ public class SwerveModule extends SubsystemBase {
 
         driveMotor.setSelectedSensorPosition(0);
 
-        driveMotor.config_kP(0, 0.3);
-        driveMotor.config_kI(0, 0);
-        driveMotor.config_kD(0, 0);
+        if(moduleNum == 2 || moduleNum == 3) {
+            driveMotor.config_kP(0, 0.45);
+            driveMotor.config_kI(0, 0);
+            driveMotor.config_kD(0, 0);
+        }
+        else {
+            driveMotor.config_kP(0, 0.23);
+            driveMotor.config_kI(0, 0);
+            driveMotor.config_kD(0, 0);
+        }
+        
 
         angleMotor.setNeutralMode(NeutralMode.Brake);
         driveMotor.setNeutralMode(NeutralMode.Brake);

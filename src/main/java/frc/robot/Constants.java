@@ -87,7 +87,7 @@ public final class Constants {
 
     // Upright cone intaking
     public static final double UPRIGHT_CONE_FRONTSIDE_ARM_ROTATION = 101;
-    public static final double UPRIGHT_CONE_FRONTSIDE_WRIST_ROTATION = 123 + wristOffsetDiffArm;
+    public static final double UPRIGHT_CONE_FRONTSIDE_WRIST_ROTATION = 120 + wristOffsetDiffArm;
 
     // Tipped cone intaking
     public static final double TIPPED_CONE_FRONTSIDE_ARM_ROTATION = 71.0;
@@ -95,20 +95,20 @@ public final class Constants {
 
     // Cube intaking
     public static final double CUBE_FRONTSIDE_ARM_ROTATION = 95.5;
-    public static final double CUBE_FRONTSIDE_WRIST_ROTATION = 127 + wristOffsetDiffArm;
+    public static final double CUBE_FRONTSIDE_WRIST_ROTATION = 118 + wristOffsetDiffArm;
 
     // Shelf intaking
     public static final double SHELF_FRONTSIDE_ARM_ROTATION = 161;
     public static final double SHELF_FRONTSIDE_WRIST_ROTATION = 64 + wristOffsetDiffArm;
-    public static final double SHELF_ARM_EXTENSION = 19;
+    public static final double SHELF_ARM_EXTENSION = 16.5;
 
     // BACK SIDE (worm gear)
     // High row placement
     public static final double HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION = 223.3;
-    public static final double HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION = 280 + wristOffsetDiffArm;
+    public static final double HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION = 276 + wristOffsetDiffArm;
 
     // Mid row placement
-    public static final double MID_PLACEMENT_BACKSIDE_ARM_ROTATION = 219.3;
+    public static final double MID_PLACEMENT_BACKSIDE_ARM_ROTATION = 221.3;
     public static final double MID_PLACEMENT_BACKSIDE_WRIST_ROTATION = 280.3 + wristOffsetDiffArm;
 
     // low placement
@@ -125,7 +125,7 @@ public final class Constants {
 
     // Cube intaking
     public static final double CUBE_BACKSIDE_ARM_ROTATION = 265.5;
-    public static final double CUBE_BACKSIDE_WRIST_ROTATION = 231 + wristOffsetDiffArm;
+    public static final double CUBE_BACKSIDE_WRIST_ROTATION = 241 + wristOffsetDiffArm;
 
     // Shelf intaking
     public static final double SHELF_BACKSIDE_ARM_ROTATION = 199;

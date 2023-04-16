@@ -258,7 +258,7 @@ public class Robot extends TimedRobot {
       armExtension.setExtensionEncoderPosition(0);
     }
 
-    System.out.println(sideIntake.getPosition());
+    // System.out.println(sideIntake.getPosition());
 
     // SmartDashboard.putNumber("EXTENSION", armExtension.getExtensionPosition());
     // System.out.println("ARM: " + armRotation.getRotationPosition());
@@ -302,7 +302,7 @@ public class Robot extends TimedRobot {
 
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 
-    OI.driverRB.whileTrue(new RunGroundCubeIntake(sideIntake, 63, 0.3));
+    OI.driverRB.whileTrue(new RunGroundCubeIntake(sideIntake, 110, 0.3));
     OI.driverLB.whileTrue(new RunGroundCubeIntake(sideIntake, 30, -0.5));
 
     // OI.driverA.whileHeld(new SetArmExtensionPosition(lights, armExtension, armRotation, 18));
