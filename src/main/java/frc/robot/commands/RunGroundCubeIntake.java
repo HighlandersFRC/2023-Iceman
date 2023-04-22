@@ -33,7 +33,12 @@ public class RunGroundCubeIntake extends CommandBase {
   @Override
   public void execute() {
     if(speed > 0) {
-      intake.setIntakeRotation(position);
+      if(intake.getPosition() > 80) {
+        intake.setIntakeRotationPercent(15, 0.2);
+      }
+      else {
+        intake.setIntakeRotation(position);
+      }
     }
 
     SmartDashboard.putNumber("Ground intake position", intake.getPosition());

@@ -302,7 +302,7 @@ public class Robot extends TimedRobot {
 
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
 
-    OI.driverRB.whileTrue(new RunGroundCubeIntake(sideIntake, 110, 0.3));
+    OI.driverRB.whileTrue(new RunGroundCubeIntake(sideIntake, 110, 0.51));
     OI.driverLB.whileTrue(new RunGroundCubeIntake(sideIntake, 30, -0.5));
 
     // OI.driverA.whileHeld(new SetArmExtensionPosition(lights, armExtension, armRotation, 18));

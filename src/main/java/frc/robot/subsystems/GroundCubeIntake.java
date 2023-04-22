@@ -65,7 +65,7 @@ public class GroundCubeIntake extends SubsystemBase {
     Slot0Configs slot0Configs = new Slot0Configs();
     slot0Configs.kS = 0; // Add 0.05 V output to overcome static friction
     slot0Configs.kV = 0; // A velocity target of 1 rps results in 0.12 V output
-    slot0Configs.kP = 1; // A position error of 0.5 rotations results in 12 V output
+    slot0Configs.kP = 0.6; // A position error of 0.5 rotations results in 12 V output
     slot0Configs.kI = 0.005; // no output for integrated error
     slot0Configs.kD = 0.25;
     
