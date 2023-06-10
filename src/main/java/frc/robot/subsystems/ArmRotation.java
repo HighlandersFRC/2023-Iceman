@@ -39,7 +39,7 @@ public class ArmRotation extends SubsystemBase {
     rotationMotorMaster.configMotionAcceleration(Constants.MAX_FALCON_TICS_PER_SECOND_PER_SECOND);
     rotationMotorMaster.configMotionSCurveStrength(6);
 
-    rotationMotorMaster.config_kP(0, 3);
+    rotationMotorMaster.config_kP(0, 2.6);
     rotationMotorMaster.config_kI(0, 0.0);
     rotationMotorMaster.config_kD(0, 17);
 

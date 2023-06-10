@@ -26,9 +26,9 @@ public class DriveAutoAligned extends CommandBase {
 
   private double set = 0;
 
-  private double kP = 0.27;
+  private double kP = 0.2;
   private double kI = 0;
-  private double kD = 0;
+  private double kD = 0.01;
 
   // private double kP = 0.5;
   // private double kI = 0;
@@ -36,7 +36,7 @@ public class DriveAutoAligned extends CommandBase {
 
   private int angleSettled = 0;
 
-  private double initTime = 0;
+  private double initTime = Timer.getFPGATimestamp();
   public DriveAutoAligned(Drive drive, Peripherals peripherals, Lights lights) {
     this.peripherals = peripherals;
     this.drive = drive;
@@ -72,12 +72,10 @@ public class DriveAutoAligned extends CommandBase {
     turn = peripherals.getNavxAngle();
     pid.updatePID(turn);
     double result = -pid.getResult();
-    System.out.println(result);
     if(Math.abs(turn - set) < 2) { 
       result = 0;
     }
     drive.driveAutoAligned(result);
-
   }
 
   // Called once the command ends or is interrupted.

@@ -233,8 +233,8 @@ public class Robot extends TimedRobot {
     flipChecker.periodic();
     lights.periodic();
 
-    SmartDashboard.putNumber("Extension", armExtension.getExtensionPosition());
-    SmartDashboard.putBoolean("ARM LIMIT SWITCH", armExtension.getExtensionLimitSwitch());
+    // SmartDashboard.putNumber("Extension", armExtension.getExtensionPosition());
+    // SmartDashboard.putBoolean("ARM LIMIT SWITCH", armExtension.getExtensionLimitSwitch());
 
     // System.out.println(Constants.wristOffsetMidMatch);
 
@@ -300,7 +300,9 @@ public class Robot extends TimedRobot {
     wrist.teleopInit();
     flipChecker.setTeleop();
 
+    OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals, lights));
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
+    // OI.driverX.whileActiveContinuous(new DriveAutoAligned(drive, peripherals, lights));
 
     OI.driverRB.whileTrue(new RunGroundCubeIntake(sideIntake, 110, 0.51));
     OI.driverLB.whileTrue(new RunGroundCubeIntake(sideIntake, 30, -0.5));

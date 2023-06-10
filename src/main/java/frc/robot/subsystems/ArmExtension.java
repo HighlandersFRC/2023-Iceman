@@ -113,7 +113,9 @@ public class ArmExtension extends SubsystemBase {
 
   public void setExtensionPosition(double inches) {
     SmartDashboard.putNumber("Desired", Constants.getArmExtensionTics(inches));
+    // extensionMotor.setControl(tpercentRequest);
     extensionMotor.setControl(motionMagicRequest.withPosition(Constants.getArmExtensionRotations(inches)));
+    
     // extensionMotor.set(ControlMode.Position, Constants.getArmExtensionTics(inches));
   }
 

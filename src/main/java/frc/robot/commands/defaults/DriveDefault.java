@@ -37,44 +37,44 @@ public class DriveDefault extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double odometryFusedX = drive.getFusedOdometryX();
-    double odometryFusedY = drive.getFusedOdometryY();
-    double odometryFusedTheta = drive.getFusedOdometryTheta();
-    double currentTime = Timer.getFPGATimestamp() - initTime;
+    // double odometryFusedX = drive.getFusedOdometryX();
+    // double odometryFusedY = drive.getFusedOdometryY();
+    // double odometryFusedTheta = drive.getFusedOdometryTheta();
+    // double currentTime = Timer.getFPGATimestamp() - initTime;
 
-    recordedOdometry.add(new double[] {currentTime, odometryFusedX, odometryFusedY, odometryFusedTheta});
+    //recordedOdometry.add(new double[] {currentTime, odometryFusedX, odometryFusedY, odometryFusedTheta});
     drive.teleopDrive();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    try {
-      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd-hh-mm-ss");
-      LocalDateTime now = LocalDateTime.now();
-      String filename = "/home/lvuser/deploy/recordings/" + dtf.format(now) + ".csv";
-      File file = new File(filename);
-      if (!file.exists()){
-        file.createNewFile();
-      }
-      FileWriter fw = new FileWriter(file);
-      BufferedWriter bw = new BufferedWriter(fw);
-      for (int i = 0; i <recordedOdometry.size(); i ++){
-        String line = "";
-        for (double val : recordedOdometry.get(i)){
-          line += val + ",";
-        }
-        line = line.substring(0, line.length() - 1);
-        line += "\n";
-        // System.out.println(line);
-        bw.write(line);
-      }
+    // try {
+    //   DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd-hh-mm-ss");
+    //   LocalDateTime now = LocalDateTime.now();
+    //   String filename = "/home/lvuser/deploy/recordings/" + dtf.format(now) + ".csv";
+    //   File file = new File(filename);
+    //   if (!file.exists()){
+    //     file.createNewFile();
+    //   }
+    //   FileWriter fw = new FileWriter(file);
+    //   BufferedWriter bw = new BufferedWriter(fw);
+    //   for (int i = 0; i <recordedOdometry.size(); i ++){
+    //     String line = "";
+    //     for (double val : recordedOdometry.get(i)){
+    //       line += val + ",";
+    //     }
+    //     line = line.substring(0, line.length() - 1);
+    //     line += "\n";
+    //     // System.out.println(line);
+    //     bw.write(line);
+    //   }
       
-      bw.close();
-    } catch (Exception e) {
-      System.out.println(e);
-      System.out.println("CSV file error");
-    }
+    //   bw.close();
+    // } catch (Exception e) {
+    //   System.out.println(e);
+    //   System.out.println("CSV file error");
+    // }
   }
 
   // Returns true when the command should end.

@@ -40,7 +40,7 @@ public class IntakeDefaultCommand extends CommandBase {
       if(intakeVelocity > 20) {
         hasSpunUp = true;
       }
-      if(intakeVelocity < 20 && hasSpunUp) {
+      if(intakeVelocity < 15 && hasSpunUp) {
         hasSpunUp = false;
         // set lights and rumble
         lights.setLightsToIntake();
