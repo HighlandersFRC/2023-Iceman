@@ -362,7 +362,7 @@ public class Drive extends SubsystemBase {
     public void updateOdometryFusedArray() {
         double navxOffset = Math.toRadians(peripherals.getNavxAngle());
 
-        JSONArray cameraCoordinates = peripherals.getLimelightBasedPosition();
+        JSONArray cameraCoordinates = peripherals.getBackLimelightBasedPosition();
 
         double cameraBasedX = 0;
         double cameraBasedY = 0;
@@ -385,14 +385,13 @@ public class Drive extends SubsystemBase {
         currentY = getOdometryY();
         currentTheta = navxOffset;
 
-        // if(useCameraInOdometry && cameraCoordinates.getDouble(0) != 0) {
-        //     cameraBasedX = cameraCoordinates.getDouble(0);
-        //     cameraBasedY = cameraCoordinates.getDouble(1);
-        //     timeSinceLastCameraMeasurement = 0;
-        //     // System.out.println("WITHIN ACCEPTABLE DISTANCE |||||||||||||||||||||||||||||||||||||||||");
-        //     Pose2d cameraBasedPosition = new Pose2d(new Translation2d(cameraBasedX, cameraBasedY), new Rotation2d(navxOffset));
-        //     m_odometry.addVisionMeasurement(cameraBasedPosition, Timer.getFPGATimestamp() - (peripherals.getBackCameraLatency()/1000));
-        // }
+        if(useCameraInOdometry && cameraCoordinates.getDouble(0) != 0) {
+            cameraBasedX = cameraCoordinates.getDouble(0);
+            cameraBasedY = cameraCoordinates.getDouble(1);
+            timeSinceLastCameraMeasurement = 0;
+            Pose2d cameraBasedPosition = new Pose2d(new Translation2d(cameraBasedX, cameraBasedY), new Rotation2d(navxOffset));
+            m_odometry.addVisionMeasurement(cameraBasedPosition, Timer.getFPGATimestamp() - (peripherals.getBackCameraLatency()/1000));
+        }
 
         currentTime = Timer.getFPGATimestamp() - initTime;
         timeDiff = currentTime - previousTime;

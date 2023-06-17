@@ -62,12 +62,16 @@ public class MoveToPieceForwards extends CommandBase {
     pid.setMaxOutput(4);
     angleSettled = 0;
     startTime = Timer.getFPGATimestamp();
+    // peripherals.setFrontPipeline(2);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // System.out.println("Pipeline: " + peripherals.getFrontLimelightPipeline());
     double currentAngle = peripherals.getFrontLimelightAngleToTarget();
+    // System.out.println("Angle: " + currentAngle);
+    // System.out.println("JSON: " + peripherals.getFrontJSONString());
     if (currentAngle == 0){
       lights.setAMode(LEDMode.GOLDSTROBE);
       lights.setSMode(LEDMode.GOLDSTROBE);

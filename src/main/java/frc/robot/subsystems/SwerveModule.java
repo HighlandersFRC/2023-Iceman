@@ -165,7 +165,7 @@ public class SwerveModule extends SubsystemBase {
         angleMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 45, 45 , 0.5));
         angleMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(false, 60, 60, 0.5));
         
-        angleMotor.config_kP(0, 0.2);
+        angleMotor.config_kP(0, 0.3);
         angleMotor.config_kI(0, 0.0);
         angleMotor.config_kD(0, 0);
 

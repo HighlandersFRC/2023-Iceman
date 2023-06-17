@@ -86,6 +86,10 @@ public class Peripherals extends SubsystemBase {
     setDefaultCommand(new PeripheralsDefault(this));
   }
 
+  public String getFrontJSONString(){
+    return frontJson.getString("");
+  }
+
   public double getBackHorizontalDistToTag(){
     double[] pose = backTagToRobotPose.getDoubleArray(new double[] {0, 0, 0, 0, 0, 0});
     return -pose[2];
@@ -145,6 +149,8 @@ public class Peripherals extends SubsystemBase {
       return backX;
     }
   }
+
+  
 
   public JSONArray getLimelightBasedPosition(){
     JSONArray noTrack = new JSONArray();
@@ -230,31 +236,30 @@ public class Peripherals extends SubsystemBase {
   }
 
   public JSONArray getBackLimelightBasedPosition() {
-    // System.out.println(robotPose.getString(""));
-    JSONArray robotPosArray = new JSONArray();
-    robotPosArray.put(0, 0);
+    JSONArray fieldPosArray = new JSONArray();
     double[] result = new double[7];
+    double tagDist = 99999;
+    JSONArray noTrack = new JSONArray();
+    noTrack.put(0);
+    noTrack.put(0);
     try {
       result = backRobotPose.getDoubleArray(noTrackLimelightArray);
-      System.out.println(Arrays.toString(result));
+      tagDist = getBackHorizontalDistToTag();
     } catch (Exception e) {
-      JSONArray noTarget = new JSONArray();
-      noTarget.put(0);
-      return noTarget;
-      // TODO: handle exception
+      return noTrack;
     }
-    
-    if(result[0] != 0) {
-      robotPosArray.put(0, result[0] + (Constants.FIELD_LENGTH/2));
-      robotPosArray.put(1, result[1] + (Constants.FIELD_WIDTH/2));
+    if (tagDist > 2.25 || tagDist == 0){
+      return noTrack;
     }
-    else {
-      robotPosArray.put(0, 0);
-      robotPosArray.put(1, 0);
+    if (result[0] == 0 || result[1] == 0){
+      return noTrack;
     }
-  
-    // System.out.println(robotPosArray);
-    return robotPosArray;
+    double fieldX = result[0] + Constants.FIELD_LENGTH / 2;
+    double fieldY = result[1] + Constants.FIELD_WIDTH / 2;
+    fieldPosArray.put(0, fieldX);
+    fieldPosArray.put(1, fieldY);
+    System.out.println("Back X: " + fieldX + " Y: " + fieldY + " Dist: " + tagDist);
+    return fieldPosArray;
   }
 
   public double getFrontLimeLightX() {

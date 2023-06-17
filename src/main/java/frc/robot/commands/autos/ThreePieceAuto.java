@@ -131,7 +131,7 @@ public class ThreePieceAuto extends SequentialCommandGroup {
           new AutonomousFollower(drive, pathJSON, false)
         ),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION),
-        new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION),
+        new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION + 60),
         new RunIntake(intake, -55, 1),
         new SetArmExtensionPosition(lights, armExtension, armRotation, 1.5),
         new SetFrontLimelightPipeline(peripherals, 2)
@@ -139,7 +139,8 @@ public class ThreePieceAuto extends SequentialCommandGroup {
       new ParallelDeadlineGroup(
         new MoveToPieceForwards(drive, peripherals, lights),
         new RunIntake(intake, -55, 1),
-        new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION)
+        new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION),
+        new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION)
       ),
       new WaitCommand(0.1),
       new ParallelDeadlineGroup(
@@ -175,7 +176,7 @@ public class ThreePieceAuto extends SequentialCommandGroup {
       new ParallelDeadlineGroup(
         new AutonomousFollower(drive, pathJSON3, false),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION),
-        new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION),
+        new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION + 60),
         new RunIntake(intake, -55, 1),
         new SetArmExtensionPosition(lights, armExtension, armRotation, 1.5),
         new SetFrontLimelightPipeline(peripherals, 2)
@@ -183,7 +184,8 @@ public class ThreePieceAuto extends SequentialCommandGroup {
       new ParallelDeadlineGroup(
         new MoveToPieceForwards(drive, peripherals, lights),
         new RunIntake(intake, -55, 1),
-        new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION)
+        new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION),
+        new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION)
       ),
       new WaitCommand(0.1),
       new ParallelDeadlineGroup(
