@@ -43,14 +43,24 @@ public class MoveToPieceForwards extends CommandBase {
 
   private double initialAngle = 0;
   private double target = 0;
+  private double timeout = 0.7;
 
   private double initTime = 0;
   public MoveToPieceForwards(Drive drive, Peripherals peripherals, Lights lights) {
     this.peripherals = peripherals;
     this.drive = drive;
     this.lights = lights;
+    this.timeout = 0.7;
     addRequirements(this.drive, this.peripherals, this.lights);
     // Use addRequirements() here to declare subsystem dependencies.
+  }
+
+  public MoveToPieceForwards(Drive drive, Peripherals peripherals, Lights lights, double timeout){
+    this.peripherals = peripherals;
+    this.drive = drive;
+    this.lights = lights;
+    this.timeout = timeout;
+    addRequirements(this.drive, this.peripherals, this.lights);
   }
 
   // Called when the command is initially scheduled.
@@ -109,7 +119,7 @@ public class MoveToPieceForwards extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Timer.getFPGATimestamp() - startTime > 0.7) {
+    if(Timer.getFPGATimestamp() - startTime > timeout) {
       return true;
     }
     return false;
