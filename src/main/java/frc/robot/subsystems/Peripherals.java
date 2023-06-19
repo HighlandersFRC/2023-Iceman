@@ -67,6 +67,8 @@ public class Peripherals extends SubsystemBase {
 
   private double[] noTrackLimelightArray = new double[6];
 
+  private double navxStartingRoll = 0;
+
   // static PhotonCamera camera = new PhotonCamera(Constants.CAMERA_NAME);
 
   private final PowerDistribution m_pdh = new PowerDistribution(1, ModuleType.kRev);
@@ -314,6 +316,19 @@ public class Peripherals extends SubsystemBase {
         // TODO: handle exception
     }
     return robotPosArray;
+  }
+
+  public double getNavxRollOffset() {
+    if(navxStartingRoll == 0) {
+      navxStartingRoll = getNavxRoll();
+      if(navxStartingRoll == 0) {
+        navxStartingRoll = 0.0001;
+      }
+      return navxStartingRoll;
+    } else {
+      double offset = getNavxRoll() - navxStartingRoll;
+      return offset;
+    }
   }
 
   public static double getNavxAngle() {

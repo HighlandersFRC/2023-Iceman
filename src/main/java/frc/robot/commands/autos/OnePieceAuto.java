@@ -17,7 +17,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.commands.AprilTagBalance;
+import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutonomousFollower;
+import frc.robot.commands.DriveBackOnChargeStation;
+import frc.robot.commands.DriveOverChargeStation;
 import frc.robot.commands.RotateWrist;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.SetArmExtensionPosition;
@@ -75,7 +78,10 @@ public class OnePieceAuto extends SequentialCommandGroup {
           new SetArmRotationPosition(armRotation, flipChecker, 180)
         )
       ),
-      new AprilTagBalance(drive, peripherals, lights, 1.5, true)
+      new DriveOverChargeStation(drive, peripherals),
+      new WaitCommand(0.58),
+      new DriveBackOnChargeStation(drive, peripherals),
+      new AutoBalance(drive, peripherals)
     );
   }
 }
