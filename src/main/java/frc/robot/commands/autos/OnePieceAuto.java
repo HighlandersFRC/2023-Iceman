@@ -69,18 +69,15 @@ public class OnePieceAuto extends SequentialCommandGroup {
       ),
       new ParallelDeadlineGroup(
         new SetArmExtensionPosition(lights, armExtension, armRotation, 5),
-        new RotateWrist(wrist, flipChecker, 180)
+        new RotateWrist(wrist, flipChecker, 180),
+        new RunIntake(intake, -35, 0.1)
+
       ),
-      new ParallelDeadlineGroup(
-        new AutonomousFollower(drive, pathJSON, false),
-        new SequentialCommandGroup(
-          new WaitCommand(0.9),
-          new SetArmRotationPosition(armRotation, flipChecker, 180)
-        )
-      ),
+      new SetArmRotationPosition(armRotation, flipChecker, 180),
       new DriveOverChargeStation(drive, peripherals),
       new WaitCommand(0.58),
       new DriveBackOnChargeStation(drive, peripherals),
+      new WaitCommand(1),
       new AutoBalance(drive, peripherals)
     );
   }

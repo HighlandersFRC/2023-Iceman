@@ -76,7 +76,7 @@ public class OI {
         return autoChooser.getRawButton(4);
     }
 
-    public static boolean is2PieceClearSideAuto() {
+    public static boolean is1PieceAuto() {
         return autoChooser.getRawButton(1);
     }
 

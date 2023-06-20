@@ -23,7 +23,7 @@ public class DriveBackOnChargeStation extends CommandBase {
   private double turn;
 
   Vector driveVector = new Vector(-1.75, 0);
-  Vector balanceVector = new Vector(-0.4, 0.0);
+  Vector balanceVector = new Vector(-0.6, 0.0);
   Vector stopVector = new Vector(0.0, 0.0);
 
   public DriveBackOnChargeStation(Drive drive, Peripherals peripherals) {
@@ -37,7 +37,11 @@ public class DriveBackOnChargeStation extends CommandBase {
   public void initialize() {
     drive.autoRobotCentricDrive(driveVector, 0);
     pid = new PID(kP, kI, kD);
-    setPoint = 0;
+    if (drive.getFieldSide() == "red"){
+      setPoint = 180;
+    } else {
+      setPoint = 0;
+    }
     set = setPoint;
     pid.setSetPoint(setPoint);
     pid.setMinOutput(-1);
@@ -48,14 +52,15 @@ public class DriveBackOnChargeStation extends CommandBase {
   public void execute() {
     turn = peripherals.getNavxAngle();
     pid.updatePID(turn);
+    System.out.println("offset " + peripherals.getNavxRollOffset());
     double result = pid.getResult();
     if(Math.abs(turn - set) < 2) { 
       result = 0;
     }
-    drive.autoRobotCentricDrive(driveVector, result);
+    drive.autoRobotCentricDrive(driveVector, -result);
     SmartDashboard.putBoolean("checkpoint 2", checkpoint);
     if(this.peripherals != null) {
-      if(peripherals.getNavxRollOffset() < -10 && !checkpoint) {
+      if(peripherals.getNavxRollOffset() > 12 && !checkpoint) {
         checkpoint = true;
         startTimeOnStation = Timer.getFPGATimestamp();
       }
@@ -64,7 +69,7 @@ public class DriveBackOnChargeStation extends CommandBase {
         drive.autoRobotCentricDrive(balanceVector, 0);
       }
 
-      if(checkpoint && peripherals.getNavxRollOffset() > -10 && !balanced) {
+      if(checkpoint && peripherals.getNavxRollOffset() < 9 && !balanced) {
         balanced = true;
       }
 

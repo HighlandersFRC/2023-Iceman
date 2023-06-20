@@ -142,7 +142,7 @@ public class Robot extends TimedRobot {
       } catch(Exception e) {
         System.out.println("ERROR WITH PATH FILE " + e);
       }
-    } else if (OI.is2PieceClearSideAuto()) {
+    } else if (OI.is1PieceAuto()) {
       try {
         pathingFile = new File("/home/lvuser/deploy/2PiecePart1.json");
         FileReader scanner = new FileReader(pathingFile);
@@ -189,12 +189,12 @@ public class Robot extends TimedRobot {
         this.auto = new TwoPieceBumpAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       }
-    } else if (OI.is2PieceClearSideAuto()) {
+    } else if (OI.is1PieceAuto()) {
       if (OI.isDocking()) {
-        this.auto = new TwoPieceAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        this.auto = new OnePieceAuto(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       } else {
-        this.auto = new TwoPieceAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
+        this.auto = new OnePieceAutoNoDock(drive, armExtension, armRotation, wrist, flipChecker, peripherals, lights, intake);
         auto.schedule();
       }
     // } else if (OI.is2Plus1BumpSideAuto()) {

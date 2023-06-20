@@ -260,7 +260,7 @@ public class Peripherals extends SubsystemBase {
     double fieldY = result[1] + Constants.FIELD_WIDTH / 2;
     fieldPosArray.put(0, fieldX);
     fieldPosArray.put(1, fieldY);
-    System.out.println("Back X: " + fieldX + " Y: " + fieldY + " Dist: " + tagDist);
+    // System.out.println("Back X: " + fieldX + " Y: " + fieldY + " Dist: " + tagDist);
     return fieldPosArray;
   }
 

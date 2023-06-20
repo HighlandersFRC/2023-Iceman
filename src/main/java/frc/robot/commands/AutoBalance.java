@@ -39,7 +39,11 @@ public class AutoBalance extends CommandBase {
   public void initialize() {
     drive.autoRobotCentricDrive(stopVector, 0);
     pid = new PID(kP, kI, kD);
-    setPoint = 0;
+    if (drive.getFieldSide() == "red"){
+      setPoint = 180;
+    } else {
+      setPoint = 0;
+    }
     set = setPoint;
     pid.setSetPoint(setPoint);
     pid.setMinOutput(-1);
@@ -55,10 +59,10 @@ public class AutoBalance extends CommandBase {
       result = 0;
     }
 
-    if(peripherals.getNavxRollOffset() < -5) {
+    if(peripherals.getNavxRollOffset() > 5) {
       balanceVector = closerBalanceVector;
       balanced = false;
-    } else if(peripherals.getNavxRollOffset() > 5) {
+    } else if(peripherals.getNavxRollOffset() < -5) {
       balanceVector = fartherBalanceVector;
       balanced = false;
     } else {
@@ -79,7 +83,7 @@ public class AutoBalance extends CommandBase {
     }
 
 
-    drive.autoRobotCentricDrive(balanceVector, result);
+    drive.autoRobotCentricDrive(balanceVector, -result);
   }
 
   @Override

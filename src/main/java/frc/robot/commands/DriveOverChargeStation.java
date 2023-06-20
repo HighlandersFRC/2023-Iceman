@@ -37,7 +37,11 @@ public class DriveOverChargeStation extends CommandBase {
   public void initialize() {
     drive.autoRobotCentricDrive(driveVector, 0);
     pid = new PID(kP, kI, kD);
-    setPoint = 0;
+    if (drive.getFieldSide() == "red"){
+      setPoint = 180;
+    } else {
+      setPoint = 0;
+    }
     set = setPoint;
     pid.setSetPoint(setPoint);
     pid.setMinOutput(-1);
@@ -52,25 +56,18 @@ public class DriveOverChargeStation extends CommandBase {
     if(Math.abs(turn - set) < 2) { 
       result = 0;
     }
-    drive.autoRobotCentricDrive(driveVector, result);
-    SmartDashboard.putBoolean("checkpoint", checkpoint);
-    SmartDashboard.putBoolean("pastStation", pastStation);
-    SmartDashboard.putNumber("timePastStation", timePastStation);
-    SmartDashboard.putBoolean("peripherals null", this.peripherals == null);
-    if(this.peripherals != null) {
-      if(peripherals.getNavxRollOffset() > 10) {
-        checkpoint = true;
-      }
+    drive.autoRobotCentricDrive(driveVector, -result);
+    if(peripherals.getNavxRollOffset() < -10) {
+      checkpoint = true;
+    }
 
-      if(peripherals.getNavxRollOffset() < -5 && checkpoint && !exitingStation) {
-        exitingStation = true;
-      }
+    if(peripherals.getNavxRollOffset() > 5 && checkpoint && !exitingStation) {
+      exitingStation = true;
+    }
 
-      if(peripherals.getNavxRollOffset() > -5 && exitingStation && !pastStation) {
-        timePastStation = Timer.getFPGATimestamp();
-        pastStation = true;
-      }
-
+    if(peripherals.getNavxRollOffset() < 5 && exitingStation && !pastStation) {
+      timePastStation = Timer.getFPGATimestamp();
+      pastStation = true;
     }
   }
 
