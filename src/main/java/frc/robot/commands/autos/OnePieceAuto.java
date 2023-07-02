@@ -68,7 +68,7 @@ public class OnePieceAuto extends SequentialCommandGroup {
         new RunIntake(intake, 55, 1)
       ),
       new ParallelDeadlineGroup(
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 5),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 3),
         new RotateWrist(wrist, flipChecker, 180),
         new RunIntake(intake, -35, 0.1)
 
