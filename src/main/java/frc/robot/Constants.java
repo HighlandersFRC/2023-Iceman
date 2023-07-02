@@ -72,8 +72,8 @@ public final class Constants {
 
     // FRONT SIDE (battery), extensions are same on both sides
     // High row placement
-    public static final double HIGH_PLACEMENT_FRONTSIDE_ARM_ROTATION = 135.5;
-    public static final double HIGH_PLACEMENT_FRONTSIDE_WRIST_ROTATION = 80 + wristOffsetDiffArm;
+    public static final double HIGH_PLACEMENT_FRONTSIDE_ARM_ROTATION = 135.3;
+    public static final double HIGH_PLACEMENT_FRONTSIDE_WRIST_ROTATION = 84 + wristOffsetDiffArm;
     public static final double HIGH_PLACEMENT_ARM_EXTENSION = 36.5;
 
     // Mid row placement
@@ -94,8 +94,8 @@ public final class Constants {
     public static final double TIPPED_CONE_FRONTSIDE_WRIST_ROTATION = 183 + wristOffsetDiffArm;
 
     // Cube intaking
-    public static final double CUBE_FRONTSIDE_ARM_ROTATION = 95.5;
-    public static final double CUBE_FRONTSIDE_WRIST_ROTATION = 118 + wristOffsetDiffArm;
+    public static final double CUBE_FRONTSIDE_ARM_ROTATION = 93.7;
+    public static final double CUBE_FRONTSIDE_WRIST_ROTATION = 120 + wristOffsetDiffArm;
 
     // Shelf intaking
     public static final double SHELF_FRONTSIDE_ARM_ROTATION = 161;
@@ -120,11 +120,11 @@ public final class Constants {
     public static final double UPRIGHT_CONE_BACKSIDE_WRIST_ROTATION = 231 + wristOffsetDiffArm;
 
     // Tipped cone intaking
-    public static final double TIPPED_CONE_BACKSIDE_ARM_ROTATION = 288.5;
+    public static final double TIPPED_CONE_BACKSIDE_ARM_ROTATION = 290;
     public static final double TIPPED_CONE_BACKSIDE_WRIST_ROTATION = 175.4 + wristOffsetDiffArm;
 
     // Cube intaking
-    public static final double CUBE_BACKSIDE_ARM_ROTATION = 265.5;
+    public static final double CUBE_BACKSIDE_ARM_ROTATION = 268.5;
     public static final double CUBE_BACKSIDE_WRIST_ROTATION = 241 + wristOffsetDiffArm;
 
     // Shelf intaking

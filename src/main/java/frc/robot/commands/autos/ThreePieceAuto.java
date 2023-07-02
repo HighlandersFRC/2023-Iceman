@@ -166,7 +166,7 @@ public class ThreePieceAuto extends SequentialCommandGroup {
       ),
       new WaitCommand(0.1),
       new ParallelDeadlineGroup(
-        new WaitCommand(0.1),
+        new WaitCommand(0.2),
         new RunIntake(intake, 45, 0.2)
       ),
       new ParallelDeadlineGroup(
