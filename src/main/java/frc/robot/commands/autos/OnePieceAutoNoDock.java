@@ -51,7 +51,7 @@ public class OnePieceAutoNoDock extends SequentialCommandGroup {
         new RunIntake(intake, 55, 1)
       ),
       new ParallelDeadlineGroup(
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 0),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 3),
         new RotateWrist(wrist, flipChecker, 180)
       )
     );
