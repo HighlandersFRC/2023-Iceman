@@ -19,7 +19,6 @@ public class DriveAutoAligned extends CommandBase {
   /** Creates a new DriveAutoAligned. */
   private Drive drive;
   private Peripherals peripherals;
-  private Lights lights;
   private double turn = 0;
 
   private PID pid;
@@ -37,11 +36,10 @@ public class DriveAutoAligned extends CommandBase {
   private int angleSettled = 0;
 
   private double initTime = Timer.getFPGATimestamp();
-  public DriveAutoAligned(Drive drive, Peripherals peripherals, Lights lights) {
+  public DriveAutoAligned(Drive drive, Peripherals peripherals) {
     this.peripherals = peripherals;
     this.drive = drive;
-    this.lights = lights;
-    addRequirements(this.drive, this.lights);
+    addRequirements(this.drive);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

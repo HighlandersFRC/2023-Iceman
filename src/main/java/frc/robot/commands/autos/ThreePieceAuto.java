@@ -116,9 +116,9 @@ public class ThreePieceAuto extends SequentialCommandGroup {
           new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
         )
       ),
-      new WaitCommand(0.35),
+      new WaitCommand(0.3),
       new ParallelDeadlineGroup(
-        new WaitCommand(0.25),
+        new WaitCommand(0.2),
         new RunIntake(intake, 55, 1)
       ),
       new ParallelDeadlineGroup(
@@ -170,7 +170,7 @@ public class ThreePieceAuto extends SequentialCommandGroup {
         new RunIntake(intake, 45, 0.2)
       ),
       new ParallelDeadlineGroup(
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 6),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 3),
         new RotateWrist(wrist, flipChecker, 180)
       ),
       new ParallelDeadlineGroup(

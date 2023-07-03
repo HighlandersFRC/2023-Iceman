@@ -300,7 +300,7 @@ public class Robot extends TimedRobot {
     wrist.teleopInit();
     flipChecker.setTeleop();
 
-    OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals, lights));
+    OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals));
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
     // OI.driverX.whileActiveContinuous(new DriveAutoAligned(drive, peripherals, lights));
 
