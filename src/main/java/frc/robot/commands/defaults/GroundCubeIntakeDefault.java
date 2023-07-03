@@ -35,6 +35,10 @@ public class GroundCubeIntakeDefault extends CommandBase {
       Intake.setIntakeRotation(-5);
     }
     Intake.setIntakeTorqueOutput(10, 0.1);
+
+    if(OI.driverController.getLeftTriggerAxis() > 0.5) {
+      Intake.setIntakeTorqueOutput(-55, 1);
+    }
   }
 
   // Called once the command ends or is interrupted.
