@@ -24,8 +24,8 @@ public class AutoBalance extends CommandBase {
   private boolean balanced = true;
   private double timer;
   private boolean timerStarted = false;
-  Vector closerBalanceVector = new Vector(-0.25, 0.0);
-  Vector fartherBalanceVector = new Vector(0.25, 0.0);
+  Vector closerBalanceVector = new Vector(-0.2, 0.0);
+  Vector fartherBalanceVector = new Vector(0.2, 0.0);
   Vector stopVector = new Vector(0.0, 0.0);
   Vector balanceVector;
   public AutoBalance(Drive drive, Peripherals peripherals) {
@@ -78,7 +78,7 @@ public class AutoBalance extends CommandBase {
       }
     }
 
-    if(timerStarted && Timer.getFPGATimestamp() - timer < 1) {
+    if(timerStarted && Timer.getFPGATimestamp() - timer < 1.3) {
       balanceVector = stopVector;
     }
 
