@@ -123,6 +123,9 @@ public class Robot extends TimedRobot {
     PortForwarder.add(5801, "limelight-back.local", 5801);
     PortForwarder.add(5805, "limelight-back.local", 5805);
 
+    PortForwarder.add(5801, "10.44.99.39", 5801);
+    PortForwarder.add(5801, "10.44.99.40", 5801);
+
     if (OI.isRedSide()) {
       System.out.println("ON RED SIDE");
       drive.setFieldSide("red");

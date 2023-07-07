@@ -72,12 +72,12 @@ public final class Constants {
 
     // FRONT SIDE (battery), extensions are same on both sides
     // High row placement
-    public static final double HIGH_PLACEMENT_FRONTSIDE_ARM_ROTATION = 135.3;
+    public static final double HIGH_PLACEMENT_FRONTSIDE_ARM_ROTATION = 136;
     public static final double HIGH_PLACEMENT_FRONTSIDE_WRIST_ROTATION = 84 + wristOffsetDiffArm;
     public static final double HIGH_PLACEMENT_ARM_EXTENSION = 36.5;
 
     // Mid row placement
-    public static final double MID_PLACEMENT_FRONTSIDE_ARM_ROTATION = 138;
+    public static final double MID_PLACEMENT_FRONTSIDE_ARM_ROTATION = 139;
     public static final double MID_PLACEMENT_FRONTSIDE_WRIST_ROTATION = 77 + wristOffsetDiffArm;
     public static final double MID_PLACEMENT_ARM_EXTENSION = 17.5;
 
