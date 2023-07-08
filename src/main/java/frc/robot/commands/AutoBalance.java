@@ -24,8 +24,8 @@ public class AutoBalance extends CommandBase {
   private boolean balanced = true;
   private double timer;
   private boolean timerStarted = false;
-  Vector closerBalanceVector = new Vector(-0.2, 0.0);
-  Vector fartherBalanceVector = new Vector(0.2, 0.0);
+  Vector closerBalanceVector = new Vector(-0.15, 0.0);
+  Vector fartherBalanceVector = new Vector(0.15, 0.0);
   Vector stopVector = new Vector(0.0, 0.0);
   Vector balanceVector;
   public AutoBalance(Drive drive, Peripherals peripherals) {

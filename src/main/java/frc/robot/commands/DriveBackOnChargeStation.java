@@ -22,8 +22,8 @@ public class DriveBackOnChargeStation extends CommandBase {
   private double setPoint;
   private double turn;
 
-  Vector driveVector = new Vector(-1.65, 0);
-  Vector balanceVector = new Vector(-0.3, 0.0);
+  Vector driveVector = new Vector(-1, 0);
+  Vector balanceVector = new Vector(-0.45, 0.0);
   Vector stopVector = new Vector(0.0, 0.0);
 
   public DriveBackOnChargeStation(Drive drive, Peripherals peripherals) {
@@ -65,11 +65,11 @@ public class DriveBackOnChargeStation extends CommandBase {
         startTimeOnStation = Timer.getFPGATimestamp();
       }
 
-      if(checkpoint && Timer.getFPGATimestamp() - startTimeOnStation > 0.7) {
+      if(checkpoint && Timer.getFPGATimestamp() - startTimeOnStation > 1.3) {
         drive.autoRobotCentricDrive(balanceVector, 0);
       }
 
-      if(checkpoint && peripherals.getNavxRollOffset() < 9 && !balanced) {
+      if(checkpoint && peripherals.getNavxRollOffset() < 10 && !balanced) {
         balanced = true;
       }
 

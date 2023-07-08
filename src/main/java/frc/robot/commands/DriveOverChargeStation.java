@@ -23,7 +23,7 @@ public class DriveOverChargeStation extends CommandBase {
   private double setPoint;
   private double turn;
 
-  Vector driveVector = new Vector(2.1, 0);
+  Vector driveVector = new Vector(1.75, 0);
   Vector stopVector = new Vector(0.0, 0.0);
 
   public DriveOverChargeStation(Drive drive, Peripherals peripherals) {
@@ -78,7 +78,7 @@ public class DriveOverChargeStation extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    if(Timer.getFPGATimestamp() - timePastStation > 0.3 && pastStation) {
+    if(Timer.getFPGATimestamp() - timePastStation > 0.23 && pastStation) {
       return true;
     } else {
       return false;
