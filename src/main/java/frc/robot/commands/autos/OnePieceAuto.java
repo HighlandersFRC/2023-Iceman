@@ -75,7 +75,7 @@ public class OnePieceAuto extends SequentialCommandGroup {
       ),
       new SetArmRotationPosition(armRotation, flipChecker, 180),
       new DriveOverChargeStation(drive, peripherals),
-      new WaitCommand(0.58),
+      new WaitCommand(1.01),
       new DriveBackOnChargeStation(drive, peripherals),
       new WaitCommand(1),
       new AutoBalance(drive, peripherals)
