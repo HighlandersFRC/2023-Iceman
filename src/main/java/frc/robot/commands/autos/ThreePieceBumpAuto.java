@@ -111,10 +111,10 @@ public class ThreePieceBumpAuto extends SequentialCommandGroup {
         new SetArmRotationPosition(armRotation, flipChecker, Constants.MID_PLACEMENT_BACKSIDE_ARM_ROTATION + 2),
         new SequentialCommandGroup(
           new WaitCommand(0.15),
-          new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.MID_PLACEMENT_ARM_EXTENSION - 2)
+          new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.MID_PLACEMENT_ARM_EXTENSION)
         )
       ),
-      new WaitCommand(0.2),
+      new WaitCommand(0.25),
       new ParallelDeadlineGroup(
         new WaitCommand(0.15),
         new RunIntake(intake, 55, 1)

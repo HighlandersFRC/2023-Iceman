@@ -98,8 +98,8 @@ public final class Constants {
     public static final double CUBE_FRONTSIDE_WRIST_ROTATION = 120 + wristOffsetDiffArm;
 
     // Shelf intaking
-    public static final double SHELF_FRONTSIDE_ARM_ROTATION = 161;
-    public static final double SHELF_FRONTSIDE_WRIST_ROTATION = 64 + wristOffsetDiffArm;
+    public static final double SHELF_FRONTSIDE_ARM_ROTATION = 162.5;
+    public static final double SHELF_FRONTSIDE_WRIST_ROTATION = 66 + wristOffsetDiffArm;
     public static final double SHELF_ARM_EXTENSION = 17.5;
 
     // BACK SIDE (worm gear)
