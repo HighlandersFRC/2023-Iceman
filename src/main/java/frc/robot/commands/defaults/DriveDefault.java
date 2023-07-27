@@ -43,7 +43,7 @@ public class DriveDefault extends CommandBase {
     // double currentTime = Timer.getFPGATimestamp() - initTime;
 
     //recordedOdometry.add(new double[] {currentTime, odometryFusedX, odometryFusedY, odometryFusedTheta});
-    drive.teleopDrive();
+    //drive.teleopDrive();
   }
 
   // Called once the command ends or is interrupted.

@@ -3,6 +3,9 @@
 
 package frc.robot;
 
+import org.littletonrobotics.junction.LogTable;
+import org.littletonrobotics.junction.inputs.LoggableInputs;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -43,6 +46,24 @@ public class OI {
     public static JoystickButton operatorMenuButton = new JoystickButton(operatorController, 8);
 
     public static Joystick autoChooser = new Joystick(2);
+
+    public static LoggableInputs getLoggableInputs(){
+        return new LoggableInputs() {
+            @Override
+            public void toLog(LogTable table) {
+                table.put("DriverLeftX", getDriverLeftX());
+                table.put("DriverLeftY", getDriverLeftY());
+                table.put("DriverRightX", getDriverRightX());
+                table.put("DriverRightY", getDriverRightY());
+            }
+
+            @Override
+            public void fromLog(LogTable table) {
+                // TODO Auto-generated method stub
+                
+            }
+        };
+    }
 
     public static double getDriverLeftX() {
         return driverController.getLeftX();

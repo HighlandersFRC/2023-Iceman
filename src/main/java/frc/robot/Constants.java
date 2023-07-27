@@ -25,7 +25,8 @@ import frc.robot.subsystems.Peripherals;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-
+    // Logging mode can be set to "REAL", "SIM", and "REPLAY"
+    public static final String CURRENT_LOGGING_MODE = "REAL";
     public static final double FIELD_WIDTH = 8.2;
     public static final double FIELD_LENGTH = 16.63;
 
