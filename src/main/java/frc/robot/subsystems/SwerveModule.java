@@ -30,6 +30,7 @@ public class SwerveModule extends SubsystemBase {
     private double yTurnAngle = 0.6390;
 
     private double desiredVel = 0;
+    double desiredAngle;
 
     public SwerveModule(int moduleNumber, TalonFX mAngleMotor, TalonFX mDriveMotor, double zeroOffset, CANCoder mAbsoluteEncoder) {
         // sets up the module by defining angle motor and drive motor
@@ -132,6 +133,18 @@ public class SwerveModule extends SubsystemBase {
 
     public double getDesiredVelocity(){
         return desiredVel;
+    }
+
+    public double getDesiredAngle(){
+        return desiredAngle;
+    }
+
+    public double getTurnSetpoint(){
+        return Math.toDegrees(ticsToRadians(angleMotor.getClosedLoopTarget()));
+    }
+
+    public double getDriveSetpoint(){
+        return ticsPer100MSToSpeed(driveMotor.getClosedLoopTarget());
     }
 
     // returns state of swerve modules - Used for Odometry
@@ -327,6 +340,8 @@ public class SwerveModule extends SubsystemBase {
             desiredVel = motorFieldSpeed;
 
             double adjustedAngle = -Math.atan2(adjustedVector.getJ(), adjustedVector.getI());
+
+            desiredAngle = Math.toDegrees(adjustedAngle);
 
             double velocityTicsPer100MS = (speedToTicsPer100MS(motorFieldSpeed));
 

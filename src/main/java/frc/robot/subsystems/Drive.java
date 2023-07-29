@@ -251,8 +251,8 @@ public class Drive extends SubsystemBase {
     public double[] getWheelVelocities(){
         double[] vels = new double[4];
         vels[0] = rightFront.getModuleSpeed();
-        vels[1] = leftFront.getModuleSpeed();
-        vels[2] = leftBack.getModuleSpeed();
+        vels[1] = -leftFront.getModuleSpeed();
+        vels[2] = -leftBack.getModuleSpeed();
         vels[3] = rightBack.getModuleSpeed();
         return vels;
     }
@@ -264,6 +264,52 @@ public class Drive extends SubsystemBase {
         vels[2] = leftBack.getDesiredVelocity();
         vels[3] = rightBack.getDesiredVelocity();
         return vels;
+    }
+
+    public double[] getDriveSetpoints(){
+        double[] angles = new double[4];
+        angles[0] = rightFront.getDriveSetpoint();
+        angles[1] = leftFront.getDriveSetpoint();
+        angles[2] = leftBack.getDriveSetpoint();
+        angles[3] = rightBack.getDriveSetpoint();
+        return angles;
+    }
+
+    public double[] getTurnSetpoints(){
+        double[] angles = new double[4];
+        angles[0] = -rightFront.getTurnSetpoint();
+        angles[1] = -leftFront.getTurnSetpoint();
+        angles[2] = -leftBack.getTurnSetpoint();
+        angles[3] = -rightBack.getTurnSetpoint();
+        return angles;
+    }
+
+    public double[] getModuleStates(){
+        double[] states = new double[]{
+            getRightForwardEncoder(),
+            getWheelVelocities()[0],
+            getRightBackEncoder(),
+            getWheelVelocities()[1],
+            getLeftForwardEncoder(),
+            getWheelVelocities()[2],
+            getLeftBackEncoder(),
+            getWheelVelocities()[3],
+        };
+        return states;
+    }
+
+    public double[] getModuleSetpoints(){
+        double[] setpoints = new double[]{
+            getTurnSetpoints()[0],
+            getDriveSetpoints()[0],
+            getTurnSetpoints()[1],
+            getDriveSetpoints()[1],
+            getTurnSetpoints()[2],
+            getDriveSetpoints()[2],
+            getTurnSetpoints()[3],
+            getDriveSetpoints()[3]
+        };
+        return setpoints;
     }
 
     // get Joystick adjusted y-value

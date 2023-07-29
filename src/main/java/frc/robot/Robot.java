@@ -147,31 +147,32 @@ public class Robot extends LoggedRobot {
     switch (Constants.CURRENT_LOGGING_MODE) {
       // Running on a real robot, log to a USB stick
       case "REAL":
-        logger.addDataReceiver(new WPILOGWriter("/logs/"));
-        logger.addDataReceiver(new NT4Publisher());
+        System.out.println("Real mode");
+        logger.addDataReceiver(new WPILOGWriter("/home/lvuser/logs/Most-Recent-Deploy.wpilog"));
+        // logger.addDataReceiver(new NT4Publisher());
         break;
 
       // Running a physics simulator, log to local folder
       case "SIM":
-        logger.addDataReceiver(new WPILOGWriter(""));
+        System.out.println("Simulator mode");
+        logger.addDataReceiver(new WPILOGWriter("/home/lvuser/logs/Most-Recent-Deploy.wpilog"));
         logger.addDataReceiver(new NT4Publisher());
         break;
 
       // Replaying a log, set up replay source
       case "REPLAY":
+        System.out.println("Replay mode");
         setUseTiming(false); // Run as fast as possible
         String logPath = LogFileUtil.findReplayLog();
         logger.setReplaySource(new WPILOGReader(logPath));
         logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
         break;
     }
-
     // See http://bit.ly/3YIzFZ6 for more information on timestamps in AdvantageKit.
     // Logger.getInstance().disableDeterministicTimestamps()
 
     // Start AdvantageKit logger
     logger.start();
-    logger.processInputs("Inputs", OI.getLoggableInputs());
 
     PortForwarder.add(5800, "limelight-front.local", 5800);
     PortForwarder.add(5801, "limelight-front.local", 5801);
@@ -287,13 +288,12 @@ public class Robot extends LoggedRobot {
     // peripherals.setFrontPipeline(2);
 
     CommandScheduler.getInstance().run();
+    logger.recordOutput("Swerve Module States", drive.getModuleStates());
+    logger.recordOutput("Swerve Module Setpoints", drive.getModuleSetpoints());
+    logger.recordOutput("NavX", peripherals.getNavxAngle());
 
     flipChecker.periodic();
     lights.periodic();
-    logger.recordOutput("DriverLeftX", OI.getDriverLeftX());
-    logger.recordOutput("DriverLeftY", OI.getDriverLeftY());
-    logger.recordOutput("DriverRightX", OI.getDriverRightX());
-    logger.recordOutput("DriverRightY", OI.getDriverRightY());
     // SmartDashboard.putNumber("Extension", armExtension.getExtensionPosition());
     // SmartDashboard.putBoolean("ARM LIMIT SWITCH", armExtension.getExtensionLimitSwitch());
 
