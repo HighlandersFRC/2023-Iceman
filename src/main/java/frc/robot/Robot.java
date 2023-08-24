@@ -124,6 +124,8 @@ public class Robot extends LoggedRobot {
     intake.init();
     sideIntake.init();
 
+    // For logging, Camera must be used for precision
+    drive.useCameraInOdometry();
 
     // Record metadata
     logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
@@ -131,6 +133,7 @@ public class Robot extends LoggedRobot {
     logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
     logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
     logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
+
     switch (BuildConstants.DIRTY) {
       case 0:
         logger.recordMetadata("GitDirty", "All changes committed");
@@ -149,7 +152,7 @@ public class Robot extends LoggedRobot {
       case "REAL":
         System.out.println("Real mode");
         logger.addDataReceiver(new WPILOGWriter("/home/lvuser/logs/Most-Recent-Deploy.wpilog"));
-        // logger.addDataReceiver(new NT4Publisher());
+        logger.addDataReceiver(new NT4Publisher());
         break;
 
       // Running a physics simulator, log to local folder
@@ -291,6 +294,15 @@ public class Robot extends LoggedRobot {
     logger.recordOutput("Swerve Module States", drive.getModuleStates());
     logger.recordOutput("Swerve Module Setpoints", drive.getModuleSetpoints());
     logger.recordOutput("NavX", peripherals.getNavxAngle());
+    logger.recordOutput("Fused Odometry", new double[]{drive.getFusedOdometryX(), drive.getFusedOdometryY(), drive.getFusedOdometryTheta()});
+    // logger.recordOutput("Odometry", new double[]{peripherals.getLimelightBasedPosition().getDouble(0), peripherals.getLimelightBasedPosition().getDouble(1), drive.getFusedOdometryTheta()+Math.PI/2});
+    try {
+      logger.recordOutput("Limelight-Based Position", new double[]{peripherals.getLimelightBasedPosition().getDouble(0), peripherals.getLimelightBasedPosition().getDouble(1), drive.getFusedOdometryTheta()});
+    } catch (Exception e){
+      System.out.println(e.toString());
+    }
+    // logger.recordOutput("Is Blue Side", OI.isBlueSide());
+    // logger.recordOutput("Is Red Side", OI.isRedSide());
 
     flipChecker.periodic();
     lights.periodic();

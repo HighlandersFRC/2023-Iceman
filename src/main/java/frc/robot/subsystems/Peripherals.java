@@ -215,7 +215,7 @@ public class Peripherals extends SubsystemBase {
       }
       return pose;
     } catch (Exception e){
-      // System.out.println(e.toString());
+      System.out.println(e.toString());
       JSONArray noTarget = new JSONArray();
       noTarget.put(0);
       return noTarget;
