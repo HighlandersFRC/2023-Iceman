@@ -120,7 +120,7 @@ public class ThreePieceBumpAuto extends SequentialCommandGroup {
         new RunIntake(intake, 55, 1)
       ),
       new ParallelDeadlineGroup(
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 8),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 1),
         new RotateWrist(wrist, flipChecker, 180)
       ),
       new ParallelDeadlineGroup(
@@ -129,16 +129,15 @@ public class ThreePieceBumpAuto extends SequentialCommandGroup {
           new AutonomousFollower(drive, pathJSON, false)
         ),
         new SequentialCommandGroup(
-          new WaitCommand(1.3),
+          new WaitCommand(0.6),
           new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION)
         ),
-        new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION + 60),
+        new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION + 65),
         new RunIntake(intake, -55, 1),
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 3),
-        new SetFrontLimelightPipeline(peripherals, 0)
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 1)
       ),
       new ParallelDeadlineGroup(
-        new MoveToPieceForwards(drive, peripherals, lights, 0.75),
+        new MoveToPieceForwards(drive, peripherals, lights, 0.7),
         new RunIntake(intake, -55, 1),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION),
         new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION)
@@ -166,7 +165,7 @@ public class ThreePieceBumpAuto extends SequentialCommandGroup {
         new RunIntake(intake, 45, 0.3)
       ),
       new ParallelDeadlineGroup(
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 8),
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 1),
         new RotateWrist(wrist, flipChecker, 180)
       ),
       new ParallelDeadlineGroup(
@@ -177,8 +176,7 @@ public class ThreePieceBumpAuto extends SequentialCommandGroup {
         ),
         new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION + 60),
         new RunIntake(intake, -55, 1),
-        new SetArmExtensionPosition(lights, armExtension, armRotation, 3),
-        new SetFrontLimelightPipeline(peripherals, 0)
+        new SetArmExtensionPosition(lights, armExtension, armRotation, 1)
       ),
       new ParallelDeadlineGroup(
         new MoveToPieceForwards(drive, peripherals, lights, 0.7),
@@ -193,17 +191,17 @@ public class ThreePieceBumpAuto extends SequentialCommandGroup {
           new RotateWrist(wrist, flipChecker, 240),
           new SequentialCommandGroup(
             new SetArmRotationPosition(armRotation, flipChecker, 150),
-            new WaitCommand(0.9),
+            new WaitCommand(0.8),
             new SetArmRotationPosition(armRotation, flipChecker, Constants.MID_PLACEMENT_BACKSIDE_ARM_ROTATION)
           ),
           new SequentialCommandGroup(
             new WaitCommand(0.6),
-            new SetArmExtensionPosition(lights, armExtension, armRotation, 3)
+            new SetArmExtensionPosition(lights, armExtension, armRotation, 1)
           )
         ),
         new RunIntake(intake, -45, 0.1)
       ),
-      new WaitCommand(0.1),
+      new WaitCommand(0.2),
       new RunIntake(intake, 55, 0.4),
       new WaitCommand(3)
     );
