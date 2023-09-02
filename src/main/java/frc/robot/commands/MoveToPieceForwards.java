@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Peripherals;
 import frc.robot.subsystems.Lights.LEDMode;
@@ -21,6 +22,7 @@ public class MoveToPieceForwards extends CommandBase {
   private Drive drive;
   private Peripherals peripherals;
   private Lights lights;
+  private Intake intake;
   private double turn = 0;
 
   private PID pid;
@@ -44,10 +46,13 @@ public class MoveToPieceForwards extends CommandBase {
   private double initialAngle = 0;
   private double target = 0;
   private double timeout = 0.7;
+  private boolean hasSpunUp = false;
+  private double intakeVel = 0.0;
 
   private double initTime = 0;
-  public MoveToPieceForwards(Drive drive, Peripherals peripherals, Lights lights) {
+  public MoveToPieceForwards(Drive drive, Peripherals peripherals, Lights lights, Intake intake) {
     this.peripherals = peripherals;
+    this.intake = intake;
     this.drive = drive;
     this.lights = lights;
     this.timeout = 0.7;
@@ -55,11 +60,12 @@ public class MoveToPieceForwards extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
-  public MoveToPieceForwards(Drive drive, Peripherals peripherals, Lights lights, double timeout){
+  public MoveToPieceForwards(Drive drive, Peripherals peripherals, Lights lights, Intake intake, double timeout){
     this.peripherals = peripherals;
     this.drive = drive;
     this.lights = lights;
     this.timeout = timeout;
+    this.intake = intake;
     addRequirements(this.drive, this.peripherals, this.lights);
   }
 
@@ -78,6 +84,11 @@ public class MoveToPieceForwards extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    this.intakeVel = Math.abs(intake.getVelocity());
+    if (this.intakeVel > 20){
+      this.hasSpunUp = true;
+    }
+
     // System.out.println("Pipeline: " + peripherals.getFrontLimelightPipeline());
     double currentAngle = peripherals.getFrontLimelightAngleToTarget();
     // System.out.println("Angle: " + currentAngle);
@@ -119,7 +130,10 @@ public class MoveToPieceForwards extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Timer.getFPGATimestamp() - startTime > timeout) {
+    if (Timer.getFPGATimestamp() - startTime > timeout) {
+      return true;
+    }
+    if (this.hasSpunUp && this.intakeVel < 15){
       return true;
     }
     return false;
