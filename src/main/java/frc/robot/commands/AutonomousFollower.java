@@ -28,6 +28,7 @@ public class AutonomousFollower extends CommandBase {
     private double initTime;
     private double currentTime;
     private double previousTime;
+    private double endPathTime;
 
     private double odometryFusedX = 0;
     private double odometryFusedY = 0;
@@ -42,12 +43,24 @@ public class AutonomousFollower extends CommandBase {
 
     private ArrayList<double[]> recordedOdometry = new ArrayList<double[]>();
     private boolean generatePath = false;
+    private boolean stopAtEnd = true;
+    private ArrayList<Vector> endingVelocities = new ArrayList<Vector>();
     /** Creates a new AutonomousFollower. */
   public AutonomousFollower(Drive drive, JSONArray pathPoints, boolean record) {
     this.drive = drive;
     this.path = pathPoints;
     this.record = record;
     this.generatePath = false;
+    this.stopAtEnd = true;
+    addRequirements(this.drive);
+  }
+
+  public AutonomousFollower(Drive drive, JSONArray pathPoints, boolean record, boolean stopAtEnd) {
+    this.drive = drive;
+    this.path = pathPoints;
+    this.record = record;
+    this.generatePath = false;
+    this.stopAtEnd = stopAtEnd;
     addRequirements(this.drive);
   }
 
@@ -57,16 +70,16 @@ public class AutonomousFollower extends CommandBase {
     this.record = record;
     this.generatePath = generatePath;
     this.commands = new JSONArray();
+    this.stopAtEnd = true;
     addRequirements(this.drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    this.endPathTime = path.getJSONArray(path.length() - 1).getDouble(0);
     if(generatePath == true) {
       this.fieldSide = drive.getFieldSide();
-      // if (this.fieldSide == "red"){
-        // System.out.println("Before: " + drive.getNavxAngle());
         while (drive.getNavxAngle() <= -180.0){
           drive.setNavxAngle(360.0);
         }
@@ -75,18 +88,13 @@ public class AutonomousFollower extends CommandBase {
         } else {
           drive.setNavxAngle(-180.0);
         }
-        // System.out.println("After: " + drive.getNavxAngle());
-      // }
       int row = drive.getClosestPlacementGroup(this.fieldSide, drive.getFusedOdometryX(), drive.getFusedOdometryY()) + this.rowOffset;
       this.path = drive.generatePlacementPathOnTheFly(row, this.fieldSide);
-      // System.out.println("Path: " + this.path.toString());
     }
 
     initTime = Timer.getFPGATimestamp();
-    // System.out.println("Path points: " + path.toString());
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     // drive.updateOdometryFusedArray();
@@ -109,35 +117,53 @@ public class AutonomousFollower extends CommandBase {
 
     previousTime = currentTime;
 
-    // previousVelocityX = desiredVelocityArray[0];
-    // previousVelocityY = desiredVelocityArray[1];
-    // previousVelocityTheta = desiredThetaChange;
     if (this.record){
       recordedOdometry.add(new double[] {currentTime, odometryFusedX, odometryFusedY, odometryFusedTheta});
-      // recordedOdometry.add(new double[] {currentTime, desiredVelocityArray[0], desiredVelocityArray[1], drive.getFrontRightModuleDistance(), drive.getFrontRightModuleVelocity()});
+    }
+    if (Math.abs(this.endPathTime - currentTime) < 0.1){
+      this.endingVelocities.add(velocityVector);
     }
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Vector velocityVector = new Vector(0, 0);
-    double desiredThetaChange = 0;
-    drive.autoDrive(velocityVector, desiredThetaChange);
-    drive.setWheelsStraight();
+    if (this.stopAtEnd){
+      Vector velocityVector = new Vector(0, 0);
+      double desiredThetaChange = 0;
+      drive.autoDrive(velocityVector, desiredThetaChange);
+      drive.setWheelsStraight();
+    } else {
+      for (int i = 0; i < this.endingVelocities.size(); i ++){
+        if (this.endingVelocities.get(i).magnitude() > 4){
+          this.endingVelocities.remove(i);
+          i --;
+        }
+      }
+      double avgI = 0;
+      double avgJ = 0;
+      for (int i = 0; i < this.endingVelocities.size(); i ++){
+        avgI += this.endingVelocities.get(i).getI();
+        avgJ += this.endingVelocities.get(i).getJ();
+      }
+      avgI /= this.endingVelocities.size();
+      avgJ /= this.endingVelocities.size();
+      Vector endVector = new Vector(avgI, avgJ);
+      drive.autoDrive(endVector, 0);
+    }
 
     odometryFusedX = drive.getFusedOdometryX();
     odometryFusedY = drive.getFusedOdometryY();
     odometryFusedTheta = drive.getFusedOdometryTheta();
     currentTime = Timer.getFPGATimestamp() - initTime;
+
     if (this.generatePath){
       if (this.fieldSide == "red"){
         drive.setNavxAngle(-180.0);
       }
     }
+
     if (this.record){
       recordedOdometry.add(new double[] {currentTime, odometryFusedX, odometryFusedY, odometryFusedTheta});
-
       try {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd-hh-mm-ss");
         LocalDateTime now = LocalDateTime.now();
@@ -155,7 +181,6 @@ public class AutonomousFollower extends CommandBase {
           }
           line = line.substring(0, line.length() - 1);
           line += "\n";
-          // System.out.println(line);
           bw.write(line);
         }
         
@@ -167,7 +192,6 @@ public class AutonomousFollower extends CommandBase {
     }
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     if(currentTime > path.getJSONArray(path.length() - 1).getDouble(0)) {
