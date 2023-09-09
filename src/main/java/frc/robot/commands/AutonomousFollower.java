@@ -120,7 +120,9 @@ public class AutonomousFollower extends CommandBase {
     if (this.record){
       recordedOdometry.add(new double[] {currentTime, odometryFusedX, odometryFusedY, odometryFusedTheta});
     }
-    if (Math.abs(this.endPathTime - currentTime) < 0.1){
+    // System.out.println("End Time: " + this.endPathTime);
+    // System.out.println("Current Time: " + currentTime);
+    if (Math.abs(this.endPathTime - currentTime) < 1){
       this.endingVelocities.add(velocityVector);
     }
   }
@@ -132,7 +134,9 @@ public class AutonomousFollower extends CommandBase {
       double desiredThetaChange = 0;
       drive.autoDrive(velocityVector, desiredThetaChange);
       drive.setWheelsStraight();
+      System.out.println("Stopping at end");
     } else {
+      System.out.println("Start end values: " + this.endingVelocities.toString());
       for (int i = 0; i < this.endingVelocities.size(); i ++){
         if (this.endingVelocities.get(i).magnitude() > 4){
           this.endingVelocities.remove(i);
@@ -149,6 +153,8 @@ public class AutonomousFollower extends CommandBase {
       avgJ /= this.endingVelocities.size();
       Vector endVector = new Vector(avgI, avgJ);
       drive.autoDrive(endVector, 0);
+      System.out.println("End Values: " + this.endingVelocities.toString());
+      System.out.println("End Vector: {" + endVector.getI() + ", " + endVector.getJ() + "}");
     }
 
     odometryFusedX = drive.getFusedOdometryX();
