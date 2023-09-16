@@ -586,14 +586,15 @@ public class Drive extends SubsystemBase {
     // method run in teleop that accepts controller values to move swerve drive
     public void teleopDrive() {
         updateOdometryFusedArray();
-        double turnLimit = 0.5;
+        double turnCoefficient = 0.5;
+        double speedCoefficient = 1;
 
         if(OI.driverController.getLeftBumper()) {
             // activate speedy spin
-            turnLimit = 1;
+            turnCoefficient = 1;
         }
         // else {
-        //     turnLimit = 0.75;
+        //     turnCoefficient = 0.75;
 
         // }
 
@@ -608,12 +609,12 @@ public class Drive extends SubsystemBase {
             originalY = 0;
         }
 
-        double turn = turnLimit * ((Math.copySign(OI.getDriverRightX() * OI.getDriverRightX() * OI.getDriverRightX(), OI.getDriverRightX())) * (Constants.TOP_SPEED)/(Constants.ROBOT_RADIUS));
+        double turn = turnCoefficient * ((Math.copySign(OI.getDriverRightX() * OI.getDriverRightX() * OI.getDriverRightX(), OI.getDriverRightX())) * (Constants.TOP_SPEED)/(Constants.ROBOT_RADIUS));
         // turn = 0;
         double navxOffset = Math.toRadians(peripherals.getNavxAngle());
         // navxOffset = 0;
-        double xPower = getAdjustedX(originalX, originalY);
-        double yPower = getAdjustedY(originalX, originalY);
+        double xPower = getAdjustedX(originalX, originalY) * speedCoefficient;
+        double yPower = getAdjustedY(originalX, originalY) * speedCoefficient;
 
         double xSpeed = xPower * Constants.TOP_SPEED;
         double ySpeed = yPower * Constants.TOP_SPEED;
