@@ -50,7 +50,8 @@ public class ArmExtensionDefaultCommand extends CommandBase {
     // else {
     //   arm.setExtensionPosition(0);
     // }
-    arm.setExtensionPosition(1);
+    arm.setExtensionPosition(2);
+    // System.out.println("Extension: " + arm.getExtensionPosition());
     // arm.setExtensionMotorPercent(0.0);
   }
 

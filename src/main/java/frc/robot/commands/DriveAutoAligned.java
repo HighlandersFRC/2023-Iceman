@@ -25,9 +25,9 @@ public class DriveAutoAligned extends CommandBase {
 
   private double set = 0;
 
-  private double kP = 0.2;
+  private double kP = 0.17;
   private double kI = 0;
-  private double kD = 0.01;
+  private double kD = 0;
 
   // private double kP = 0.5;
   // private double kI = 0;
@@ -59,8 +59,8 @@ public class DriveAutoAligned extends CommandBase {
     }
       set = setPoint;
     pid.setSetPoint(setPoint);
-    pid.setMinOutput(-3);
-    pid.setMaxOutput(3);
+    pid.setMinOutput(-4);
+    pid.setMaxOutput(4);
     angleSettled = 0;
   }
 
@@ -70,7 +70,7 @@ public class DriveAutoAligned extends CommandBase {
     turn = peripherals.getNavxAngle();
     pid.updatePID(turn);
     double result = -pid.getResult();
-    if(Math.abs(turn - set) < 2) { 
+    if(Math.abs(turn - set) < 0.5) { 
       result = 0;
     }
     drive.driveAutoAligned(result);
