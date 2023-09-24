@@ -33,7 +33,7 @@ public class RunGroundCubeIntake extends CommandBase {
   @Override
   public void execute() {
     if(speed > 0) {
-      if(intake.getPosition() > 80) {
+      if(intake.getPosition() > 110) {
         intake.setIntakeRotationPercent(15, 0.2);
       }
       else {
