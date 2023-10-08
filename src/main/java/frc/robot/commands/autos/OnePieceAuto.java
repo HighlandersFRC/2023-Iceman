@@ -59,7 +59,7 @@ public class OnePieceAuto extends SequentialCommandGroup {
         new SetArmRotationPosition(armRotation, flipChecker, Constants.HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION),
         new SequentialCommandGroup(
           new WaitCommand(0.3),
-          new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION)
+          new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.HIGH_PLACEMENT_ARM_EXTENSION - 2)
         )
       ),
       new WaitCommand(0.25),
