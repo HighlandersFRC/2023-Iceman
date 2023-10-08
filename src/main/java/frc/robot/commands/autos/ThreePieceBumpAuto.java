@@ -159,7 +159,7 @@ public class ThreePieceBumpAuto extends SequentialCommandGroup {
         ),
         new RunIntake(intake, -45, 0.1)
       ),
-      new WaitCommand(0.5),
+      new WaitCommand(0.3),
       new ParallelDeadlineGroup(
         new WaitCommand(0.2),
         new RunIntake(intake, 45, 0.3)
@@ -201,7 +201,7 @@ public class ThreePieceBumpAuto extends SequentialCommandGroup {
         ),
         new RunIntake(intake, -45, 0.1)
       ),
-      new WaitCommand(0.2),
+      new WaitCommand(0.1),
       new RunIntake(intake, 55, 0.4),
       new WaitCommand(3)
     );
