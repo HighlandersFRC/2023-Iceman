@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Peripherals;
 import frc.robot.subsystems.Lights.LEDMode;
@@ -22,6 +23,10 @@ public class MoveToPieceForwards extends CommandBase {
   private Peripherals peripherals;
   private Lights lights;
   private double turn = 0;
+  private Intake intake;
+
+  private boolean hasSpunUp = false;
+  private double intakeVel = 0.0;
 
   private PID pid;
 
@@ -46,20 +51,22 @@ public class MoveToPieceForwards extends CommandBase {
   private double timeout = 0.7;
 
   private double initTime = 0;
-  public MoveToPieceForwards(Drive drive, Peripherals peripherals, Lights lights) {
+  public MoveToPieceForwards(Drive drive, Peripherals peripherals, Lights lights, Intake intake) {
     this.peripherals = peripherals;
     this.drive = drive;
     this.lights = lights;
     this.timeout = 0.7;
+    this.intake = intake;
     addRequirements(this.drive, this.peripherals, this.lights);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
-  public MoveToPieceForwards(Drive drive, Peripherals peripherals, Lights lights, double timeout){
+  public MoveToPieceForwards(Drive drive, Peripherals peripherals, Lights lights, Intake intake, double timeout){
     this.peripherals = peripherals;
     this.drive = drive;
     this.lights = lights;
     this.timeout = timeout;
+    this.intake = intake;
     addRequirements(this.drive, this.peripherals, this.lights);
   }
 
@@ -78,6 +85,10 @@ public class MoveToPieceForwards extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    this.intakeVel = Math.abs(intake.getVelocity());
+    if (this.intakeVel > 20){
+      this.hasSpunUp = true;
+    }
     // System.out.println("Pipeline: " + peripherals.getFrontLimelightPipeline());
     double currentAngle = peripherals.getFrontLimelightAngleToTarget();
     // System.out.println("Angle: " + currentAngle);
@@ -95,19 +106,19 @@ public class MoveToPieceForwards extends CommandBase {
 
     // if(peripherals.getFrontTargetArea() < 2.5) {
     drive.autoRobotCentricDrive(new Vector(1.75 * 1.5, 0), result * 1.5);
-    System.out.println("Result " + result);
-    System.out.println("Angle: " + currentAngle);
+    // System.out.println("Result " + result);
+    // System.out.println("Angle: " + currentAngle);
     double[] vels = drive.getWheelVelocities();
     double[] outs = drive.getWheelOutputs();
-    System.out.println("------------------------");
-    System.out.println("M1 Set: " + Math.round(outs[0] * 100.0) / 100.0 + " Vel: " + Math.round(vels[0] * 100) / 100.0);
-    System.out.println("------------------------");
-    System.out.println("M2 Set: " + Math.round(outs[1] * 100.0) / 100.0 + " Vel: " + Math.round(vels[1] * 100) / 100.0);
-    System.out.println("------------------------");
-    System.out.println("M3 Set: " + Math.round(outs[2] * 100.0) / 100.0 + " Vel: " + Math.round(vels[2] * 100) / 100.0);
-    System.out.println("------------------------");
-    System.out.println("M4 Set: " + Math.round(outs[3] * 100.0) / 100.0 + " Vel: " + Math.round(vels[3] * 100) / 100.0);
-    System.out.println("------------------------");
+    // System.out.println("------------------------");
+    // System.out.println("M1 Set: " + Math.round(outs[0] * 100.0) / 100.0 + " Vel: " + Math.round(vels[0] * 100) / 100.0);
+    // System.out.println("------------------------");
+    // System.out.println("M2 Set: " + Math.round(outs[1] * 100.0) / 100.0 + " Vel: " + Math.round(vels[1] * 100) / 100.0);
+    // System.out.println("------------------------");
+    // System.out.println("M3 Set: " + Math.round(outs[2] * 100.0) / 100.0 + " Vel: " + Math.round(vels[2] * 100) / 100.0);
+    // System.out.println("------------------------");
+    // System.out.println("M4 Set: " + Math.round(outs[3] * 100.0) / 100.0 + " Vel: " + Math.round(vels[3] * 100) / 100.0);
+    // System.out.println("------------------------");
   }
 
   // Called once the command ends or is interrupted.
@@ -119,7 +130,10 @@ public class MoveToPieceForwards extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Timer.getFPGATimestamp() - startTime > timeout) {
+    if (Timer.getFPGATimestamp() - startTime > timeout) {
+      return true;
+    }
+    if (this.hasSpunUp && this.intakeVel < 15){
       return true;
     }
     return false;

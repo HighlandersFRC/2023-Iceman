@@ -134,10 +134,10 @@ public class ThreePieceAuto extends SequentialCommandGroup {
         new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION + 60),
         new RunIntake(intake, -55, 1),
         new SetArmExtensionPosition(lights, armExtension, armRotation, 1.5),
-        new SetFrontLimelightPipeline(peripherals, 2)
+        new SetFrontLimelightPipeline(peripherals, 0)
       ),
       new ParallelDeadlineGroup(
-        new MoveToPieceForwards(drive, peripherals, lights),
+        new MoveToPieceForwards(drive, peripherals, lights, intake),
         new RunIntake(intake, -55, 1),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION),
         new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION)
@@ -179,10 +179,10 @@ public class ThreePieceAuto extends SequentialCommandGroup {
         new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION + 60),
         new RunIntake(intake, -55, 1),
         new SetArmExtensionPosition(lights, armExtension, armRotation, 1.5),
-        new SetFrontLimelightPipeline(peripherals, 2)
+        new SetFrontLimelightPipeline(peripherals, 0)
       ),
       new ParallelDeadlineGroup(
-        new MoveToPieceForwards(drive, peripherals, lights),
+        new MoveToPieceForwards(drive, peripherals, lights, intake),
         new RunIntake(intake, -55, 1),
         new SetArmRotationPosition(armRotation, flipChecker, Constants.CUBE_FRONTSIDE_ARM_ROTATION),
         new RotateWrist(wrist, flipChecker, Constants.CUBE_FRONTSIDE_WRIST_ROTATION)

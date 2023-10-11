@@ -94,8 +94,8 @@ public final class Constants {
     public static final double TIPPED_CONE_FRONTSIDE_WRIST_ROTATION = 183 + wristOffsetDiffArm;
 
     // Cube intaking
-    public static final double CUBE_FRONTSIDE_ARM_ROTATION = 93.7;
-    public static final double CUBE_FRONTSIDE_WRIST_ROTATION = 120 + wristOffsetDiffArm;
+    public static final double CUBE_FRONTSIDE_ARM_ROTATION = 93.2;
+    public static final double CUBE_FRONTSIDE_WRIST_ROTATION = 118 + wristOffsetDiffArm;
 
     // Shelf intaking
     public static final double SHELF_FRONTSIDE_ARM_ROTATION = 162.5;
