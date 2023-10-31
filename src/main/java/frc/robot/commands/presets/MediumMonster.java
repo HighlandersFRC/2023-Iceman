@@ -18,14 +18,14 @@ import frc.robot.subsystems.Wrist;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class BigMonster extends SequentialCommandGroup {
+public class MediumMonster extends SequentialCommandGroup {
   /** Creates a new BigMonster. */
-  public BigMonster(ArmExtension armExtension, ArmRotation armRotation, FlipChecker flipChecker, Lights lights) {
+  public MediumMonster(ArmExtension armExtension, ArmRotation armRotation, FlipChecker flipChecker, Lights lights) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new SetArmRotationPosition(armRotation, flipChecker, Constants.MONSTER_ARM_ROTATION),
-      new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.BIG_MONSTER_ARM_EXTENSION)
+      new SetArmExtensionPosition(lights, armExtension, armRotation, Constants.MEDIUM_MONSTER_ARM_EXTENSION)
     );
   }
 }

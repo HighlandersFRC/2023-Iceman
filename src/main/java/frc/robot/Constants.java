@@ -71,14 +71,20 @@ public final class Constants {
         CUBE,
         SHELF,
         MONSTER,
-        BIG_MONSTER
+        BIG_MONSTER,
+        MEDIUM_MONSTER
     }
 
     // FRONT SIDE (battery), extensions are same on both sides
     // Big Monster
-    public static final double MONSTER_WRIST_ROTATION = 80 + wristOffsetDiffArm;
-    public static final double MONSTER_ARM_EXTENSION = 36.5;
+    public static final double BIG_MONSTER_ARM_EXTENSION = 36.5;
+
+    // Medium Monster
+    public static final double MEDIUM_MONSTER_ARM_EXTENSION = 15;
+    
+    // Monster Constants
     public static final double MONSTER_ARM_ROTATION = 160;
+    public static final double MONSTER_WRIST_ROTATION = 80 + wristOffsetDiffArm;
 
     // High row placement
     public static final double HIGH_PLACEMENT_FRONTSIDE_ARM_ROTATION = 137;

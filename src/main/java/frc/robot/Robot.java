@@ -63,6 +63,7 @@ import frc.robot.commands.autos.TwoPlusOneAuto;
 import frc.robot.commands.autos.TwoPlusOneAutoNoDock;
 import frc.robot.commands.autos.TwoPlusOneBumpAuto;
 import frc.robot.commands.autos.TwoPlusOneBumpAutoNoDock;
+import frc.robot.commands.presets.MediumMonster;
 import frc.robot.commands.presets.BigMonster;
 import frc.robot.commands.presets.CubePreset;
 import frc.robot.commands.presets.HighPlacementPreset;
@@ -305,6 +306,9 @@ public class Robot extends TimedRobot {
     wrist.teleopInit();
     flipChecker.setTeleop();
     OI.driverY.whileHeld(new BigMonster(armExtension, armRotation, flipChecker, lights));
+    OI.driverX.whileHeld(new MediumMonster(armExtension, armRotation, flipChecker, lights));
+    OI.driverLB.whileHeld(new RunIntake(intake, 10, 0.03));
+    OI.driverRB.whileHeld(new RunIntake(intake, -10, 0.03));
     // OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals));
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
     // OI.driverX.whileActiveContinuous(new DriveAutoAligned(drive, peripherals, lights));

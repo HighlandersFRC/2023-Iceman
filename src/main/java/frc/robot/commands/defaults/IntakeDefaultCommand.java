@@ -30,31 +30,7 @@ public class IntakeDefaultCommand extends CommandBase {
   @Override
   public void execute() {
     // OI.driverController.setRumble(RumbleType.kBothRumble, 1);
-    double intakeVelocity = Math.abs(Intake.getVelocity());
-    if(OI.driverController.getLeftTriggerAxis() > 0.5) {
-      Intake.setIntakeTorqueOutput(55, 1);
-      // System.out.println("OUTTAKING");
-    }
-    else if(OI.driverController.getRightTriggerAxis() > 0.5) {
-      Intake.setIntakeTorqueOutput(-55, 1);
-      if(intakeVelocity > 20) {
-        hasSpunUp = true;
-      }
-      if(intakeVelocity < 15 && hasSpunUp) {
-        hasSpunUp = false;
-        // set lights and rumble
-        lights.setLightsToIntake();
-        OI.driverController.setRumble(RumbleType.kBothRumble, 1);
-        OI.operatorController.setRumble(RumbleType.kBothRumble, 1);
-      }
-    }
-    else {
-      hasSpunUp = false;
-      Intake.setIntakeTorqueOutput(-45, 0.10);
-      OI.driverController.setRumble(RumbleType.kBothRumble, 0);
-      OI.operatorController.setRumble(RumbleType.kBothRumble, 0);
-      lights.setCorrectMode();
-    }
+    Intake.setIntakeTorqueOutput(0, 0);
   }
 
   // Called once the command ends or is interrupted.

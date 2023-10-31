@@ -49,6 +49,6 @@ public class RunIntake extends CommandBase {
     //   return true;
     // }
     // return false;
-    return true;
+    return false;
   }
 }
