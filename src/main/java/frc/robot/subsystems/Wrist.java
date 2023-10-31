@@ -10,6 +10,7 @@ import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.commands.defaults.WristDefaultCommand;
 import frc.robot.tools.controlloops.PID;
 
@@ -19,7 +20,7 @@ public class Wrist extends SubsystemBase {
 
   private final CANCoder rotationEncoder = new CANCoder(6, "Canivore");
 
-  private double rotationSetPoint = 180;
+  private double rotationSetPoint = Constants.MONSTER_WRIST_ROTATION;
 
   private PID pid;
 
@@ -41,7 +42,7 @@ public class Wrist extends SubsystemBase {
     pid = new PID(kP, kI, kD);
     pid.setMaxOutput(0.9);
     pid.setMinOutput(-0.9);
-    pid.setSetPoint(180);
+    pid.setSetPoint(Constants.MONSTER_WRIST_ROTATION);
     pid.updatePID(getWristRotationPosition());
     rotationMotor.set(0);
 
@@ -51,7 +52,7 @@ public class Wrist extends SubsystemBase {
   }
 
   public void teleopInit(){
-    pid.setSetPoint(180);
+    pid.setSetPoint(Constants.MONSTER_WRIST_ROTATION);
     pid.updatePID(getWristRotationPosition());
     rotationMotor.set(0);
   }
