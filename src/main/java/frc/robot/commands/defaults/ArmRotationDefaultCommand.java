@@ -6,6 +6,7 @@ package frc.robot.commands.defaults;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmRotation;
@@ -28,19 +29,19 @@ public class ArmRotationDefaultCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("SD Rotation", 180);
+    SmartDashboard.putNumber("SD Rotation", Constants.MONSTER_ARM_ROTATION);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    flipChecker.setAllowedToFlip(true);
+    flipChecker.setAllowedToFlip(false);
       if(armExtension.getExtensionPosition() < 5) {
         // if(position > 90 && position < 250) {
         //   arm.setRotationPosition(position);
         // } //TODO: uncomment for normal use
         // else {
-        arm.setRotationPosition(180);
+        arm.setRotationPosition(Constants.MONSTER_ARM_ROTATION);
       }
       //   // if(OI.operatorController.getLeftTriggerAxis() > 0.25) {
       //   //   arm.setRotationMotorPercent(OI.operatorController.getLeftTriggerAxis()/4);

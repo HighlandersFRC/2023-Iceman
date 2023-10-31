@@ -44,7 +44,7 @@ public class WristDefaultCommand extends CommandBase {
     // } else {
     //   wrist.setRotationMotorPercent(-result);
     // }
-    wrist.setRotationPosition(180 + Constants.wristOffsetMidMatch);
+    wrist.setRotationPosition(Constants.MONSTER_WRIST_ROTATION);
   }
 
   // Called once the command ends or is interrupted.

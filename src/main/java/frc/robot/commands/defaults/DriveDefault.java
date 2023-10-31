@@ -9,8 +9,10 @@ import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.OI;
 import frc.robot.subsystems.Drive;
+import frc.robot.tools.math.Vector;
 
 public class DriveDefault extends CommandBase {
   /** Creates a new DriveDefault. */
@@ -43,7 +45,12 @@ public class DriveDefault extends CommandBase {
     // double currentTime = Timer.getFPGATimestamp() - initTime;
 
     //recordedOdometry.add(new double[] {currentTime, odometryFusedX, odometryFusedY, odometryFusedTheta});
-    drive.teleopDrive();
+    if (Constants.safetyHeld){
+      drive.teleopDrive();
+    } else {
+      drive.autoRobotCentricDrive(new Vector(0, 0), 0);
+    }
+
   }
 
   // Called once the command ends or is interrupted.

@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AprilTagAlignment;
 import frc.robot.commands.AprilTagBalance;
@@ -62,6 +63,7 @@ import frc.robot.commands.autos.TwoPlusOneAuto;
 import frc.robot.commands.autos.TwoPlusOneAutoNoDock;
 import frc.robot.commands.autos.TwoPlusOneBumpAuto;
 import frc.robot.commands.autos.TwoPlusOneBumpAutoNoDock;
+import frc.robot.commands.presets.BigMonster;
 import frc.robot.commands.presets.CubePreset;
 import frc.robot.commands.presets.HighPlacementPreset;
 import frc.robot.commands.presets.LowPreset;
@@ -302,13 +304,13 @@ public class Robot extends TimedRobot {
     armExtension.teleopInit();
     wrist.teleopInit();
     flipChecker.setTeleop();
-
-    OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals));
+    OI.driverY.whileHeld(new BigMonster(armExtension, armRotation, flipChecker, lights));
+    // OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals));
     OI.driverViewButton.whileTrue(new ZeroNavxMidMatch(drive));
     // OI.driverX.whileActiveContinuous(new DriveAutoAligned(drive, peripherals, lights));
 
-    OI.driverRB.whileTrue(new RunGroundCubeIntake(sideIntake, 130, 0.51));
-    OI.driverLB.whileTrue(new RunGroundCubeIntake(sideIntake, 10, -0.5));
+    // OI.driverRB.whileTrue(new RunGroundCubeIntake(sideIntake, 130, 0.51));
+    // OI.driverLB.whileTrue(new RunGroundCubeIntake(sideIntake, 10, -0.5));
 
     // OI.driverA.whileHeld(new SetArmExtensionPosition(lights, armExtension, armRotation, 18));
     // OI.driverY.whileHeld(new ExtendArm(armExtension, 3));
@@ -326,24 +328,24 @@ public class Robot extends TimedRobot {
     // OI.driverY.whileActiveOnce(new AprilTagBalance(drive, peripherals, lights, 1.5, true));
 
     // // ramp intake position
-    OI.operatorMenuButton.whileHeld(new ShelfPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
+    // OI.operatorMenuButton.whileHeld(new ShelfPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
 
-    // // placement position mid
-    OI.operatorA.whileHeld(new MidPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
+    // // // placement position mid
+    // OI.operatorA.whileHeld(new MidPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
 
-    // // placement position high
-    OI.operatorY.whileHeld(new HighPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
+    // // // placement position high
+    // OI.operatorY.whileHeld(new HighPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
     
-    // // intake position for upright cone
-    OI.operatorX.whileHeld(new UprightConePreset(armExtension, armRotation, flipChecker, wrist, lights));
+    // // // intake position for upright cone
+    // OI.operatorX.whileHeld(new UprightConePreset(armExtension, armRotation, flipChecker, wrist, lights));
    
-    // // intake position for a tipped cone
-    OI.operatorB.whileHeld(new TippedConePreset(armExtension, armRotation, flipChecker, wrist, lights));
+    // // // intake position for a tipped cone
+    // OI.operatorB.whileHeld(new TippedConePreset(armExtension, armRotation, flipChecker, wrist, lights));
 
-    // // intake position for cube
-    OI.operatorRB.whileHeld(new CubePreset(armExtension, armRotation, flipChecker, wrist, lights));
+    // // // intake position for cube
+    // OI.operatorRB.whileHeld(new CubePreset(armExtension, armRotation, flipChecker, wrist, lights));
 
-    OI.operatorLB.whileHeld(new LowPreset(armExtension, armRotation, peripherals, flipChecker, wrist, lights));
+    // OI.operatorLB.whileHeld(new LowPreset(armExtension, armRotation, peripherals, flipChecker, wrist, lights));
 
     // // drive rotationally aligned to 0 or 180
     // OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals, lights));
@@ -362,9 +364,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     SmartDashboard.putNumber("NAVX", peripherals.getNavxAngle());
-
+    boolean safety = (OI.driverRT.get() && OI.driverLT.get());
+    Constants.safetyHeld = safety;
     lights.periodic();
-
   }
 
   @Override

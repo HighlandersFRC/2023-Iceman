@@ -60,6 +60,8 @@ public final class Constants {
 
     public static double wristOffsetDiffArm = 0;
 
+    public static boolean safetyHeld = false;
+
     public static enum PRESET {
         HIGH_PLACEMENT,
         MID_PLACEMENT,
@@ -67,10 +69,17 @@ public final class Constants {
         UPRIGHT_CONE,
         TIPPED_CONE,
         CUBE,
-        SHELF
+        SHELF,
+        MONSTER,
+        BIG_MONSTER
     }
 
     // FRONT SIDE (battery), extensions are same on both sides
+    // Big Monster
+    public static final double MONSTER_WRIST_ROTATION = 80 + wristOffsetDiffArm;
+    public static final double MONSTER_ARM_EXTENSION = 36.5;
+    public static final double MONSTER_ARM_ROTATION = 160;
+
     // High row placement
     public static final double HIGH_PLACEMENT_FRONTSIDE_ARM_ROTATION = 137;
     public static final double HIGH_PLACEMENT_FRONTSIDE_WRIST_ROTATION = 84 + wristOffsetDiffArm;
