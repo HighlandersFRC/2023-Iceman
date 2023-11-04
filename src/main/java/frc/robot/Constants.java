@@ -72,13 +72,13 @@ public final class Constants {
 
     // FRONT SIDE (battery), extensions are same on both sides
     // High row placement
-    public static final double HIGH_PLACEMENT_FRONTSIDE_ARM_ROTATION = 137;
-    public static final double HIGH_PLACEMENT_FRONTSIDE_WRIST_ROTATION = 84 + wristOffsetDiffArm;
+    public static final double HIGH_PLACEMENT_FRONTSIDE_ARM_ROTATION = 135;
+    public static final double HIGH_PLACEMENT_FRONTSIDE_WRIST_ROTATION = 86 + wristOffsetDiffArm;
     public static final double HIGH_PLACEMENT_ARM_EXTENSION = 36.5;
 
     // Mid row placement
-    public static final double MID_PLACEMENT_FRONTSIDE_ARM_ROTATION = 140;
-    public static final double MID_PLACEMENT_FRONTSIDE_WRIST_ROTATION = 77 + wristOffsetDiffArm;
+    public static final double MID_PLACEMENT_FRONTSIDE_ARM_ROTATION = 138.5;
+    public static final double MID_PLACEMENT_FRONTSIDE_WRIST_ROTATION = 79 + wristOffsetDiffArm;
     public static final double MID_PLACEMENT_ARM_EXTENSION = 17.5;
 
     // low placement
@@ -105,11 +105,11 @@ public final class Constants {
     // BACK SIDE (worm gear)
     // High row placement
     public static final double HIGH_PLACEMENT_BACKSIDE_ARM_ROTATION = 223.5;
-    public static final double HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION = 276 + wristOffsetDiffArm;
+    public static final double HIGH_PLACEMENT_BACKSIDE_WRIST_ROTATION = 273 + wristOffsetDiffArm;
 
     // Mid row placement
     public static final double MID_PLACEMENT_BACKSIDE_ARM_ROTATION = 220.8;
-    public static final double MID_PLACEMENT_BACKSIDE_WRIST_ROTATION = 280 + wristOffsetDiffArm;
+    public static final double MID_PLACEMENT_BACKSIDE_WRIST_ROTATION = 281 + wristOffsetDiffArm;
 
     // low placement
     public static final double LOW_PLACEMENT_BACKSIDE_WRIST_ROTATION = 290 + wristOffsetDiffArm;

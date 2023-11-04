@@ -71,7 +71,8 @@ public class ArmRotation extends SubsystemBase {
 
   public void setRotationPosition(double degrees) {
     // SmartDashboard.putNumber("Setpoint", degrees);
-    rotationMotorMaster.set(ControlMode.MotionMagic, Constants.convertArmRotationDegreesToTics(degrees));
+    // rotationMotorMaster.set(ControlMode.MotionMagic, Constants.convertArmRotationDegreesToTics(degrees));
+    rotationMotorMaster.set(ControlMode.PercentOutput, 0);
   }
 
   @Override
