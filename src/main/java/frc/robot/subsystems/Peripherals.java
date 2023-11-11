@@ -431,7 +431,7 @@ public class Peripherals extends SubsystemBase {
     double z1 = x1 * Math.tan(-phi1 + ty1);
 
     double robotX = Constants.LIMELIGHT_1_X_OFFSET + x1;
-    double robotZ = Constants.LIMELIGHT_1_Z_OFFSET - z1;
+    double robotZ = Constants.LIMELIGHT_1_Z_OFFSET + z1;
 
     if (Math.abs(robotX) > 20 || Math.abs(robotZ) > 20){
       return new Translation3d(0, 1, 0);
