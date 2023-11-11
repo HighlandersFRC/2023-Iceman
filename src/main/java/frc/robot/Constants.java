@@ -175,6 +175,27 @@ public final class Constants {
 
     public static final double TOTAL_TICS_PER_INCH = (2.0 * ((1.0 / FALCON_TICS_PER_ROTATION) / EXTENSION_GEAR_RATIO) * EXTENSION_INCHES_PER_ROTATION);
 
+    // Double Limelight stereo vision constants (measurements in meters and radians)
+    // Pitch - About Y, positive is pitch up
+    // Yaw - About Z, positive is yaw to the left
+    // Roll - About X, positive is roll left
+
+    // LL1 = "Front"
+    public static final double LIMELIGHT_1_X_OFFSET = 0.034925;
+    public static final double LIMELIGHT_1_Y_OFFSET = 0.2714625;
+    public static final double LIMELIGHT_1_Z_OFFSET = 0.111125;
+    public static final double LIMELIGHT_1_PITCH_OFFSET = 0;
+    public static final double LIMELIGHT_1_YAW_OFFSET = 0;
+    public static final double LIMELIGHT_1_ROLL_OFFSET = 0;
+
+    // LL2 = "Back"
+    public static final double LIMELIGHT_2_X_OFFSET = 0.034925;
+    public static final double LIMELIGHT_2_Y_OFFSET = 0;
+    public static final double LIMELIGHT_2_Z_OFFSET = 0.4937125;
+    public static final double LIMELIGHT_2_PITCH_OFFSET = 0;
+    public static final double LIMELIGHT_2_YAW_OFFSET = 0;
+    public static final double LIMELIGHT_2_ROLL_OFFSET = 0;
+
     public static void increaseWristOffset() {
         wristOffsetMidMatch += 3.75;
     }

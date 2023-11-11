@@ -5,7 +5,9 @@
 package frc.robot.subsystems;
 
 import java.util.Arrays;
+import java.lang.Math;
 
+import org.apache.commons.math3.ml.neuralnet.twod.NeuronSquareMesh2D.HorizontalDirection;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.photonvision.PhotonCamera;
@@ -19,6 +21,8 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -223,12 +227,12 @@ public class Peripherals extends SubsystemBase {
   }
 
   public double getBackLimeLightX() {
-    limeLightX = Math.PI * (backTableX.getDouble(0))/180;
+    limeLightX = Math.PI * (backTableX.getDouble(0)) / 180;
     return limeLightX;
   }
 
   public double getBackLimeLightY() {
-    limeLightY = backTableY.getDouble(-100);
+    limeLightY = Math.PI * (backTableY.getDouble(0)) / 180;
     return limeLightY;
   }
 
@@ -265,12 +269,12 @@ public class Peripherals extends SubsystemBase {
   }
 
   public double getFrontLimeLightX() {
-    limeLightX = Math.PI * (frontTableX.getDouble(0))/180;
+    limeLightX = Math.PI * (frontTableX.getDouble(0)) / 180;
     return limeLightX;
   }
 
   public double getFrontLimeLightY() {
-    limeLightY = frontTableY.getDouble(-100);
+    limeLightY = Math.PI * (frontTableY.getDouble(0)) / 180;
     return limeLightY;
   }
 
@@ -382,8 +386,86 @@ public class Peripherals extends SubsystemBase {
   //   }    
   // }
 
+  public Translation3d getHorizontalStereoPosition(){
+    double tx1 = getFrontLimeLightX();
+    double tx2 = getBackLimeLightX();
+    
+    double Sy = Math.abs(Constants.LIMELIGHT_2_Y_OFFSET - Constants.LIMELIGHT_1_Y_OFFSET);
+    double Sx = Math.abs(Constants.LIMELIGHT_2_X_OFFSET - Constants.LIMELIGHT_1_X_OFFSET);
+
+    double phi1 = Constants.LIMELIGHT_1_YAW_OFFSET;
+    double phi2 = Constants.LIMELIGHT_2_YAW_OFFSET;
+
+    double x2 = (Sy - Sx * Math.tan(-phi1 + tx1)) / (Math.tan(-phi1 + tx1) + Math.tan(phi2 - tx2));
+    double x1 = x2 + Sx;
+
+    double y2 = x2 * Math.tan(phi2 - tx2);
+    double y1 = x1 * Math.tan(-phi1 + tx1);
+
+    double robotX = Constants.LIMELIGHT_1_X_OFFSET + x1;
+    double robotY = Constants.LIMELIGHT_1_Y_OFFSET - y1;
+
+    if (Math.abs(robotX) > 20 || Math.abs(robotY) > 20){
+      return new Translation3d(0, 0, 1);
+    }
+
+    SmartDashboard.putNumber("Hor. Track X", robotX);
+    SmartDashboard.putNumber("Hor. Track Y", robotY);
+    return new Translation3d(robotX, robotY, 0);
+  }
+
+  public Translation3d getVerticalStereoPosition(){
+    double ty1 = getFrontLimeLightY();
+    double ty2 = getBackLimeLightY();
+
+    double Sz = Math.abs(Constants.LIMELIGHT_2_Z_OFFSET - Constants.LIMELIGHT_1_Z_OFFSET);
+    double Sx = Math.abs(Constants.LIMELIGHT_2_X_OFFSET - Constants.LIMELIGHT_1_X_OFFSET);
+
+    double phi1 = Constants.LIMELIGHT_1_PITCH_OFFSET;
+    double phi2 = Constants.LIMELIGHT_2_PITCH_OFFSET;
+
+    double x2 = (Sz - Sx * Math.tan(-phi1 + ty1)) / (Math.tan(-phi1 + ty1) + Math.tan(phi2 - ty2));
+    double x1 = x2 + Sx;
+
+    double z2 = x2 * Math.tan(phi2 - ty2);
+    double z1 = x1 * Math.tan(-phi1 + ty1);
+
+    double robotX = Constants.LIMELIGHT_1_X_OFFSET + x1;
+    double robotZ = Constants.LIMELIGHT_1_Z_OFFSET - z1;
+
+    if (Math.abs(robotX) > 20 || Math.abs(robotZ) > 20){
+      return new Translation3d(0, 1, 0);
+    }
+
+    SmartDashboard.putNumber("Vert. Track X", robotX);
+    SmartDashboard.putNumber("Vert. Track Z", robotZ);
+    return new Translation3d(robotX, 0, robotZ);
+  }
+
+  public Translation3d getCombinedStereoPosition(){
+    Translation3d horiTranslation = getHorizontalStereoPosition();
+    Translation3d vertTranslation = getVerticalStereoPosition();
+    
+    Translation3d combinedTranslation = new Translation3d();
+
+    if (horiTranslation.getZ() != 0){
+      combinedTranslation = vertTranslation;
+    } else if (vertTranslation.getY() != 0){
+      combinedTranslation = horiTranslation;
+    } else {
+      double avgX = (horiTranslation.getX() + vertTranslation.getX()) / 2;
+      combinedTranslation = new Translation3d(avgX, horiTranslation.getY(), vertTranslation.getZ());
+    }
+
+    SmartDashboard.putNumber("Comb. Track X", combinedTranslation.getX());
+    SmartDashboard.putNumber("Comb. Track Y", combinedTranslation.getY());
+    SmartDashboard.putNumber("Comb. Track Z", combinedTranslation.getZ());
+    return combinedTranslation;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    System.out.println(getCombinedStereoPosition().toString());
   }
 }
