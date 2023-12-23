@@ -94,7 +94,7 @@ public class Wrist extends SubsystemBase {
     this.pid.setSetPoint(this.rotationSetPoint);
     this.pid.updatePID(getWristRotationPosition());
     double result = pid.getResult();
-    setRotationMotorPercent(result);
+    setRotationMotorPercent(-result);
     // System.out.println("Wrist: " + rotationMotor.getEncoder().getPosition());
   }
 }
