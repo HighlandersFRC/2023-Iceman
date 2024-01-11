@@ -8,9 +8,6 @@ import java.util.Arrays;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.photonvision.PhotonCamera;
-import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -40,27 +37,27 @@ public class Peripherals extends SubsystemBase {
 
   private double limeLightHFOV = 59.6;
 
-  private NetworkTable backLimeLightTable = NetworkTableInstance.getDefault().getTable("limelight-back");
-  private NetworkTableEntry backTableX = backLimeLightTable.getEntry("tx");
-  private NetworkTableEntry backTableY = backLimeLightTable.getEntry("ty");
-  private NetworkTableEntry backTablePipelineLatency = backLimeLightTable.getEntry("tl");
-  private NetworkTableEntry backTableCameraLatency = backLimeLightTable.getEntry("cl");
-  private NetworkTableEntry backTableArea = backLimeLightTable.getEntry("ta");
-  private NetworkTableEntry backRobotPose = backLimeLightTable.getEntry("botpose");
-  private NetworkTableEntry backTagPose = backLimeLightTable.getEntry("targetpose_cameraspace");
-  private NetworkTableEntry backJson = backLimeLightTable.getEntry("json");
-  private NetworkTableEntry backTagToRobotPose = backLimeLightTable.getEntry("botpose_targetspace");
+  private NetworkTable backCam = NetworkTableInstance.getDefault().getTable("limelight-back");
+  private NetworkTableEntry backCamAngleHorizontal = backCam.getEntry("tx");
+  private NetworkTableEntry backCamAngleVertical = backCam.getEntry("ty");
+  private NetworkTableEntry backCamTableLatency = backCam.getEntry("tl");
+  private NetworkTableEntry backCamCameraLatency = backCam.getEntry("cl");
+  private NetworkTableEntry backCamArea = backCam.getEntry("ta");
+  private NetworkTableEntry backCamRobotPose = backCam.getEntry("botpose");
+  private NetworkTableEntry backCamAprilTagPose = backCam.getEntry("targetpose_cameraspace");
+  private NetworkTableEntry backCamJSON = backCam.getEntry("json");
+  private NetworkTableEntry backCamTagToRobotPose = backCam.getEntry("botpose_targetspace");
 
-  private NetworkTable frontLimeLightTable = NetworkTableInstance.getDefault().getTable("limelight-front");
-  private NetworkTableEntry frontTableX = frontLimeLightTable.getEntry("tx");
-  private NetworkTableEntry frontTableY = frontLimeLightTable.getEntry("ty");
-  private NetworkTableEntry frontTablePipelineLatency = frontLimeLightTable.getEntry("tl");
-  private NetworkTableEntry frontTableCameraLatency = frontLimeLightTable.getEntry("cl");
-  private NetworkTableEntry frontTableArea = frontLimeLightTable.getEntry("ta");
-  private NetworkTableEntry frontRobotPose = frontLimeLightTable.getEntry("botpose");
-  private NetworkTableEntry frontTagPose = frontLimeLightTable.getEntry("targetpose_cameraspace");
-  private NetworkTableEntry frontJson = frontLimeLightTable.getEntry("json");
-  private NetworkTableEntry frontTagToRobotPose = frontLimeLightTable.getEntry("botpose_targetspace");
+  private NetworkTable frontCam = NetworkTableInstance.getDefault().getTable("limelight-front");
+  private NetworkTableEntry frontCamAngleHorizontal = frontCam.getEntry("tx");
+  private NetworkTableEntry frontCamAngleVertical = frontCam.getEntry("ty");
+  private NetworkTableEntry fromCamTableLatency = frontCam.getEntry("tl");
+  private NetworkTableEntry frontCamCameraLatency = frontCam.getEntry("cl");
+  private NetworkTableEntry frontCamArea = frontCam.getEntry("ta");
+  private NetworkTableEntry frontCamRobotPose = frontCam.getEntry("botpose");
+  private NetworkTableEntry frontCamTagPose = frontCam.getEntry("targetpose_cameraspace");
+  private NetworkTableEntry frontCamJSON = frontCam.getEntry("json");
+  private NetworkTableEntry frontCamTagToRobotPose = frontCam.getEntry("botpose_targetspace");
 
   private double limeLightX = -1.0;
   private double limeLightY = -1.0;
@@ -88,62 +85,62 @@ public class Peripherals extends SubsystemBase {
     setDefaultCommand(new PeripheralsDefault(this));
   }
 
-  public String getFrontJSONString(){
-    return frontJson.getString("");
+  public String getfrontCamJSONString(){
+    return frontCamJSON.getString("");
   }
 
   public double getBackHorizontalDistToTag(){
-    double[] pose = backTagToRobotPose.getDoubleArray(new double[] {0, 0, 0, 0, 0, 0});
+    double[] pose = backCamTagToRobotPose.getDoubleArray(new double[] {0, 0, 0, 0, 0, 0});
     return -pose[2];
   }
 
   public void setFrontPipeline(int pipeline){
-    frontLimeLightTable.getEntry("pipeline").setNumber(pipeline);
+    frontCam.getEntry("pipeline").setNumber(pipeline);
   }
 
   public void setBackPipeline(int pipeline){
-    backLimeLightTable.getEntry("pipeline").setNumber(pipeline);
+    backCam.getEntry("pipeline").setNumber(pipeline);
   }
 
   public void setAprilTagPipeline(){
-    backLimeLightTable.getEntry("pipeline").setNumber(0);
-    frontLimeLightTable.getEntry("pipeline").setNumber(0);
+    backCam.getEntry("pipeline").setNumber(0);
+    frontCam.getEntry("pipeline").setNumber(0);
   }
 
   public void setRetroreflectivePipeline(){
-    backLimeLightTable.getEntry("pipeline").setNumber(1);
-    frontLimeLightTable.getEntry("pipeline").setNumber(1);
+    backCam.getEntry("pipeline").setNumber(1);
+    frontCam.getEntry("pipeline").setNumber(1);
   }
 
   public void setConeTrackingPipeline(){
-    frontLimeLightTable.getEntry("pipeline").setNumber(2);
+    frontCam.getEntry("pipeline").setNumber(2);
   }
 
   public int getFrontLimelightPipeline(){
-    return (int) frontLimeLightTable.getEntry("pipeline").getInteger(5);
+    return (int) frontCam.getEntry("pipeline").getInteger(5);
   }
 
   public int getBackLimelightPipeline(){
-    return (int) backLimeLightTable.getEntry("pipeline").getInteger(5);
+    return (int) backCam.getEntry("pipeline").getInteger(5);
   }
 
   public double getFrontLimelightAngleToTarget(){
-    return frontTableX.getDouble(0) * Math.PI / 180;
+    return frontCamAngleHorizontal.getDouble(0) * Math.PI / 180;
   }
 
   public double getBackLimelightAngleToTarget(){
-    return backTableX.getDouble(0) * Math.PI / 180;
+    return backCamAngleHorizontal.getDouble(0) * Math.PI / 180;
   }
 
   public double getBackTargetArea() {
-    return backTableArea.getDouble(0);
+    return backCamArea.getDouble(0);
   }
 
   public double getLimelightAngleToTarget(){
-    double frontX = Math.PI * (frontTableX.getDouble(0)) / 180;
-    double backX = Math.PI * (frontTableX.getDouble(0)) / 180;
-    double frontArea = frontTableArea.getDouble(0);
-    double backArea = backTableArea.getDouble(0);
+    double frontX = Math.PI * (frontCamAngleHorizontal.getDouble(0)) / 180;
+    double backX = Math.PI * (frontCamAngleHorizontal.getDouble(0)) / 180;
+    double frontArea = frontCamArea.getDouble(0);
+    double backArea = backCamArea.getDouble(0);
     // System.out.println("Front: " + frontX + " Back: " + backX);
     if (frontArea > backArea){
       return frontX;
@@ -158,23 +155,23 @@ public class Peripherals extends SubsystemBase {
     JSONArray noTrack = new JSONArray();
     noTrack.put(0, 0.0);
     noTrack.put(1, 0.0);
-    if (frontLimeLightTable.getEntry("pipeline").getInteger(5) != 0 && backLimeLightTable.getEntry("pipeline").getInteger(5) != 0){
+    if (frontCam.getEntry("pipeline").getInteger(5) != 0 && backCam.getEntry("pipeline").getInteger(5) != 0){
       return noTrack;
     }
     try {
-      double[] frontPose = frontRobotPose.getDoubleArray(noTrackLimelightArray);
-      double[] backPose = backRobotPose.getDoubleArray(noTrackLimelightArray);
-      double frontArea = frontTableArea.getDouble(0.0);
-      double backArea = backTableArea.getDouble(0.0);
-      double[] frontTargetPose = frontTagPose.getDoubleArray(noTrackLimelightArray);
-      double[] backTargetPose = backTagPose.getDoubleArray(noTrackLimelightArray);
+      double[] frontPose = frontCamRobotPose.getDoubleArray(noTrackLimelightArray);
+      double[] backPose = backCamRobotPose.getDoubleArray(noTrackLimelightArray);
+      double frontArea = frontCamArea.getDouble(0.0);
+      double backArea = backCamArea.getDouble(0.0);
+      double[] frontTargetPose = frontCamTagPose.getDoubleArray(noTrackLimelightArray);
+      double[] backTargetPose = backCamAprilTagPose.getDoubleArray(noTrackLimelightArray);
       JSONArray frontTargetFieldPose = new JSONArray(new double[] {0, 0});
       JSONArray backTargetFieldPose = new JSONArray(new double[] {0, 0});
       try {
-        frontTargetFieldPose = new JSONObject(frontJson.getString("")).getJSONObject("Results").getJSONArray("Fiducial").getJSONObject(0).getJSONArray("t6r_fs");
+        frontTargetFieldPose = new JSONObject(frontCamJSON.getString("")).getJSONObject("Results").getJSONArray("Fiducial").getJSONObject(0).getJSONArray("t6r_fs");
       } catch(Exception e){}
       try {
-        backTargetFieldPose = new JSONObject(backJson.getString("")).getJSONObject("Results").getJSONArray("Fiducial").getJSONObject(0).getJSONArray("t6r_fs");
+        backTargetFieldPose = new JSONObject(backCamJSON.getString("")).getJSONObject("Results").getJSONArray("Fiducial").getJSONObject(0).getJSONArray("t6r_fs");
       } catch(Exception e){}
         double frontTargetDist = Math.sqrt(Math.pow(frontTargetPose[0], 2) + Math.pow(frontTargetPose[1], 2));
       double backTargetDist = Math.sqrt(Math.pow(backTargetPose[0], 2) + Math.pow(backTargetPose[1], 2));
@@ -223,17 +220,17 @@ public class Peripherals extends SubsystemBase {
   }
 
   public double getBackLimeLightX() {
-    limeLightX = Math.PI * (backTableX.getDouble(0))/180;
+    limeLightX = Math.PI * (backCamAngleHorizontal.getDouble(0))/180;
     return limeLightX;
   }
 
   public double getBackLimeLightY() {
-    limeLightY = backTableY.getDouble(-100);
+    limeLightY = backCamAngleVertical.getDouble(-100);
     return limeLightY;
   }
 
-  public double getBackCameraLatency() {
-    double latency = backTablePipelineLatency.getDouble(-1) + backTableCameraLatency.getDouble(-1);
+  public double getbackCamTableLatency() {
+    double latency = backCamTableLatency.getDouble(-1) + backCamCameraLatency.getDouble(-1);
     return latency;
   }
 
@@ -245,7 +242,7 @@ public class Peripherals extends SubsystemBase {
     noTrack.put(0);
     noTrack.put(0);
     try {
-      result = backRobotPose.getDoubleArray(noTrackLimelightArray);
+      result = backCamRobotPose.getDoubleArray(noTrackLimelightArray);
       tagDist = getBackHorizontalDistToTag();
     } catch (Exception e) {
       return noTrack;
@@ -265,22 +262,27 @@ public class Peripherals extends SubsystemBase {
   }
 
   public double getFrontLimeLightX() {
-    limeLightX = Math.PI * (frontTableX.getDouble(0))/180;
+    limeLightX = Math.PI * (frontCamAngleHorizontal.getDouble(0))/180;
     return limeLightX;
   }
 
   public double getFrontLimeLightY() {
-    limeLightY = frontTableY.getDouble(-100);
+    limeLightY = frontCamAngleVertical.getDouble(-100);
     return limeLightY;
   }
 
   public double getFrontCameraLatency() {
-    double latency = frontTablePipelineLatency.getDouble(-1) + frontTableCameraLatency.getDouble(-1);
+    double latency = fromCamTableLatency.getDouble(-1) + frontCamCameraLatency.getDouble(-1);
+    return latency;
+  }
+
+  public double getBackCameraLatency() {
+    double latency = fromCamTableLatency.getDouble(-1) + backCamCameraLatency.getDouble(-1);
     return latency;
   }
 
   public double getFrontTargetArea() {
-    double area = frontTableArea.getDouble(-1);
+    double area = frontCamArea.getDouble(-1);
     return area;
   }
 
@@ -288,7 +290,7 @@ public class Peripherals extends SubsystemBase {
     JSONArray robotPosArray = new JSONArray();
     robotPosArray.put(0, 0);
     try {
-      String networkTableResult = frontRobotPose.getString("");
+      String networkTableResult = frontCamRobotPose.getString("");
       JSONObject camResult = new JSONObject(networkTableResult).getJSONObject("Results");
       JSONArray tagList = camResult.getJSONArray("Fiducial");
       double averagedX = 0;
@@ -367,6 +369,15 @@ public class Peripherals extends SubsystemBase {
 
   public void setNavxAngle(double angle) {
     navx.setNavxAngle(angle);
+  }
+
+  public JSONObject getCameraMeasurements(){
+    JSONObject allCamResults = new JSONObject();
+    JSONObject backCamResults = new JSONObject(backCamJSON.getString("")).getJSONObject("Results");
+    JSONObject frontCamResults = new JSONObject(frontCamJSON.getString("")).getJSONObject("Results");
+    allCamResults.put("BackCam", backCamResults);
+    allCamResults.put("FrontCam", frontCamResults);
+    return allCamResults;
   }
 
   // public double getLimeLightDistanceToTarget() {

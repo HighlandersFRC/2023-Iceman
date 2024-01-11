@@ -142,17 +142,37 @@ public final class Constants {
     public static final double[] PLACEMENT_PATH_MIDPOINT_Y_RED = new double[] {0.52, 1.07, 1.62, 2.2, 2.74, 3.3, 3.85, 4.43, 4.98};
     public static final double[] PLACEMENT_PATH_MIDPOINT_Y_BLUE = new double[] {4.98, 4.43, 3.85, 3.3, 2.74, 2.2, 1.07, 0.52};
 
-    // 3D locations of all 8 april tags {x, y, z} in meters
-    public static final double[][] TAG_LOCATIONS = new double[][] {
-        {15.513558, 1.071626, 0.462788},
-        {15.513558, 2.748026, 0.462788},
-        {15.513558, 4.424426, 0.462788},
-        {16.178784, 6.749796, 0.695452},
-        {0.36195, 6.749796, 0.695452},
-        {1.02743, 4.4224426, 0.462788},
-        {1.02743, 2.748026, 0.462788},
-        {1.02743, 1.071626, 0.462788},
+    //Poses of all 16 AprilTags, {x, y, z, theta}, in meters and radians
+    public static final double[][] TAG_POSES = {
+        {15.079502159004317, 0.2458724917449835, 1.3558547117094235, 2.0943951023931953},
+        {16.18516637033274, 0.8836677673355348, 1.3558547117094235, 2.0943951023931953},  
+        {16.57937515875032, 4.982727965455931, 1.4511049022098046, 3.141592653589793},    
+        {16.57937515875032, 5.547879095758192, 1.4511049022098046, 3.141592653589793},    
+        {14.700787401574804, 8.204216408432817, 1.3558547117094235, 4.71238898038469},    
+        {1.841503683007366, 8.204216408432817, 1.3558547117094235, 4.71238898038469},     
+        {-0.038100076200152405, 5.547879095758192, 1.4511049022098046, 0.0},
+        {-0.038100076200152405, 4.982727965455931, 1.4511049022098046, 0.0},
+        {0.35610871221742446, 0.8836677673355348, 1.3558547117094235, 1.0471975511965976},
+        {1.4615189230378463, 0.2458724917449835, 1.3558547117094235, 1.0471975511965976}, 
+        {11.90474980949962, 3.713233426466853, 1.3208026416052834, 5.235987755982989},    
+        {11.90474980949962, 4.4983489966979935, 1.3208026416052834, 1.0471975511965976},  
+        {11.220218440436883, 4.105156210312421, 1.3208026416052834, 3.141592653589793},   
+        {5.320802641605283, 4.105156210312421, 1.3208026416052834, 0.0},
+        {4.641351282702566, 4.4983489966979935, 1.3208026416052834, 2.0943951023931953},  
+        {4.641351282702566, 3.713233426466853, 1.3208026416052834, 4.1887902047863905}
     };
+
+    //Field of view angles
+    public static final double LIMELIGHT_HFOV_DEG = 63.3;
+    public static final double LIMELIGHT_VFOV_DEG = 49.7;
+    public static final double LIMELIGHT_HFOV_RAD = LIMELIGHT_HFOV_DEG * Math.PI / 180;
+    public static final double LIMELIGHT_VFOV_RAD = LIMELIGHT_VFOV_DEG * Math.PI / 180;
+
+    //Poses of cameras relative to robot, {x, y, z, rx, ry, rz}, in meters and radians
+    public static final double[] BACK_CAMERA_POSE = {-0.219075, -0.1524, 0.1524, 0, 0, Math.PI};
+    public static final double[] FRONT_CAMERA_POSE = {0.219075, 0.1524, 0.288925, 0, 33 * Math.PI / 180, 0};
+    public static final double[] BACK_CAMERA_POSITION_POLAR = {getDistance(0, 0, BACK_CAMERA_POSE[0], BACK_CAMERA_POSE[1]), Math.atan2(BACK_CAMERA_POSE[1], BACK_CAMERA_POSE[0])};
+    public static final double[] FRONT_CAMERA_POSITION_POLAR = {getDistance(0, 0, FRONT_CAMERA_POSE[0], FRONT_CAMERA_POSE[1]), Math.atan2(FRONT_CAMERA_POSE[1], FRONT_CAMERA_POSE[0])};
 
     public static final double EXTENSION_GEAR_RATIO = 10.13;
     public static final double EXTENSION_INCHES_PER_ROTATION = 1.5038 * Math.PI;
@@ -266,4 +286,7 @@ public final class Constants {
         return (units * 600) / (Constants.FALCON_TICS_PER_ROTATION);
     }
 
+    public static double getDistance(double x1, double y1, double x2, double y2){
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    }
 }

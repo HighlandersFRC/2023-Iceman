@@ -22,6 +22,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -34,6 +37,9 @@ import frc.robot.tools.math.Vector;
 public class Drive extends SubsystemBase {
     private final OI OI = new OI();
 
+    private NetworkTable odometryTrackerTable = NetworkTableInstance.getDefault().getTable("odometry_tracking");
+    private NetworkTableEntry odometryTrackerData = odometryTrackerTable.getEntry("data");
+
     // interpolation range
     private double turnTimePercent = 0.3;
 
@@ -45,14 +51,14 @@ public class Drive extends SubsystemBase {
     private double[] velocityArray = new double[3];
 
     // creating all the falcons
-    private final WPI_TalonFX leftForwardMotor = new WPI_TalonFX(3);
-    private final WPI_TalonFX leftForwardAngleMotor = new WPI_TalonFX(4);
-    private final WPI_TalonFX leftBackMotor = new WPI_TalonFX(5);
-    private final WPI_TalonFX leftBackAngleMotor = new WPI_TalonFX(6);
-    private final WPI_TalonFX rightForwardMotor = new WPI_TalonFX(1);
-    private final WPI_TalonFX rightForwardAngleMotor = new WPI_TalonFX(2);
-    private final WPI_TalonFX rightBackMotor = new WPI_TalonFX(7);
-    private final WPI_TalonFX rightBackAngleMotor = new WPI_TalonFX(8);
+    private final WPI_TalonFX leftForwardMotor = new WPI_TalonFX(3, "Canivore");
+    private final WPI_TalonFX leftForwardAngleMotor = new WPI_TalonFX(4, "Canivore");
+    private final WPI_TalonFX leftBackMotor = new WPI_TalonFX(5, "Canivore");
+    private final WPI_TalonFX leftBackAngleMotor = new WPI_TalonFX(6, "Canivore");
+    private final WPI_TalonFX rightForwardMotor = new WPI_TalonFX(1, "Canivore");
+    private final WPI_TalonFX rightForwardAngleMotor = new WPI_TalonFX(2, "Canivore");
+    private final WPI_TalonFX rightBackMotor = new WPI_TalonFX(7, "Canivore");
+    private final WPI_TalonFX rightBackAngleMotor = new WPI_TalonFX(8, "Canivore");
 
     // creating peripherals object to access sensors
     private Peripherals peripherals;
@@ -62,10 +68,10 @@ public class Drive extends SubsystemBase {
     private final double moduleY = ((Constants.ROBOT_LENGTH)/2) - Constants.MODULE_OFFSET;
 
     // creating all the external encoders
-    private CANCoder backRightAbsoluteEncoder = new CANCoder(4);
-    private CANCoder frontLeftAbsoluteEncoder = new CANCoder(2);
-    private CANCoder frontRightAbsoluteEncoder = new CANCoder(1);
-    private CANCoder backLeftAbsoluteEncoder = new CANCoder(3);
+    private CANCoder backRightAbsoluteEncoder = new CANCoder(4, "Canivore");
+    private CANCoder frontLeftAbsoluteEncoder = new CANCoder(2, "Canivore");
+    private CANCoder frontRightAbsoluteEncoder = new CANCoder(1, "Canivore");
+    private CANCoder backLeftAbsoluteEncoder = new CANCoder(3, "Canivore");
 
     // creating each swerve module with angle and drive motor, module number(relation to robot), and external encoder
     private final SwerveModule leftFront = new SwerveModule(2, leftForwardAngleMotor, leftForwardMotor, 0, frontLeftAbsoluteEncoder);
@@ -418,6 +424,81 @@ public class Drive extends SubsystemBase {
         // System.out.println("X: " + averagedX + " Y: " + averagedY);
     }
 
+    public JSONObject getUpdatedOdometryFusedArray() {
+        double navxAngle = Math.toRadians(peripherals.getNavxAngle());
+        double fieldNavxAngle = navxAngle + Math.PI;
+
+        JSONObject allCamResults = peripherals.getCameraMeasurements();
+        JSONObject backCamResults = allCamResults.getJSONObject("BackCam");
+        JSONObject frontCamResults = allCamResults.getJSONObject("FrontCam");
+
+        JSONArray fiducialResults = new JSONArray();
+        JSONArray backCamFiducialResults = backCamResults.getJSONArray("Fiducial");
+        JSONArray frontCamFiducialResults = frontCamResults.getJSONArray("Fiducial");
+        for (int i = 0; i < backCamFiducialResults.length(); i ++){
+            JSONObject fiducial = (JSONObject) backCamFiducialResults.get(i);
+            fiducial.put("camera", "back_cam");
+            fiducialResults.put(fiducial);
+        }
+        for (int i = 0; i < frontCamFiducialResults.length(); i ++){
+            JSONObject fiducial = (JSONObject) frontCamFiducialResults.get(i);
+            fiducial.put("camera", "front_cam");
+            fiducialResults.put(fiducial);
+        }
+
+        ArrayList<JSONObject> horizontalTagPoses = new ArrayList<JSONObject>();
+        ArrayList<JSONObject> verticalTagDistances = new ArrayList<JSONObject>();
+        for (int i = 0; i < fiducialResults.length(); i ++){
+            JSONObject fiducial = (JSONObject) fiducialResults.get(i);
+            int id = fiducial.getInt("fID");
+            double cameraOffsetX = 0;
+            double cameraOffsetY = 0;
+            double cameraOffsetZ = 0;
+            double cameraOffsetPitch = 0;
+            double cameraOffsetTheta = 0;
+            String camera = fiducial.getString("camera");
+            if (camera == "back_cam"){
+                cameraOffsetX = Constants.BACK_CAMERA_POSITION_POLAR[0] * Math.cos(Constants.BACK_CAMERA_POSITION_POLAR[1] + fieldNavxAngle);
+                cameraOffsetY = Constants.BACK_CAMERA_POSITION_POLAR[0] * Math.sin(Constants.BACK_CAMERA_POSITION_POLAR[1] + fieldNavxAngle);
+                cameraOffsetZ = Constants.BACK_CAMERA_POSE[2];
+                cameraOffsetTheta = Constants.BACK_CAMERA_POSE[5] + fieldNavxAngle;
+                cameraOffsetPitch = Constants.BACK_CAMERA_POSE[4];
+            } else if (camera == "front_cam"){
+                cameraOffsetX = Constants.FRONT_CAMERA_POSITION_POLAR[0] * Math.cos(Constants.FRONT_CAMERA_POSITION_POLAR[1] + fieldNavxAngle);
+                cameraOffsetY = Constants.FRONT_CAMERA_POSITION_POLAR[0] * Math.sin(Constants.FRONT_CAMERA_POSITION_POLAR[1] + fieldNavxAngle);
+                cameraOffsetZ = Constants.FRONT_CAMERA_POSE[2];
+                cameraOffsetTheta = Constants.FRONT_CAMERA_POSE[5] + fieldNavxAngle;
+                cameraOffsetPitch = Constants.FRONT_CAMERA_POSE[4];
+            }
+            JSONObject pose = new JSONObject();
+            pose.put("x", Constants.TAG_POSES[id][0] - cameraOffsetX);
+            pose.put("y", Constants.TAG_POSES[id][1] - cameraOffsetY);
+            pose.put("theta", -fiducial.getDouble("tx") * Constants.LIMELIGHT_HFOV_RAD + cameraOffsetTheta);
+            pose.put("camera", camera);
+            horizontalTagPoses.add(pose);
+
+            double verticalAngle = -fiducial.getDouble("ty") * Constants.LIMELIGHT_VFOV_RAD + cameraOffsetPitch;
+            JSONObject dist = new JSONObject();
+            dist.put("dist", (Constants.TAG_POSES[id][2] - cameraOffsetZ) / Math.tan(verticalAngle));
+            dist.put("camera", camera);
+            verticalTagDistances.add(dist);
+        }
+
+        double finalX = 0;
+        double finalY = 0;
+        double finalTheta = 0;
+
+        JSONObject trackerData = new JSONObject();
+        JSONObject pose = new JSONObject();
+        pose.put("x", finalX);
+        pose.put("y", finalY);
+        pose.put("theta", finalTheta);
+        JSONArray tracks = new JSONArray();
+        trackerData.put("pose", pose);
+        trackerData.put("tracks", tracks);
+        // return trackerData;
+    }
+
     public double getFrontRightModuleVelocity() {
         return rightFront.getModuleSpeed();
     }
@@ -585,6 +666,7 @@ public class Drive extends SubsystemBase {
 
     // method run in teleop that accepts controller values to move swerve drive
     public void teleopDrive() {
+        System.out.println("TELEOP DRIVE");
         updateOdometryFusedArray();
         double turnLimit = 0.5;
 
@@ -684,7 +766,7 @@ public class Drive extends SubsystemBase {
         int number = 0;
         if (fieldSide == "red"){
             for (int i = 0; i < 3; i ++){
-                double[] tagPosition = Constants.TAG_LOCATIONS[i];
+                double[] tagPosition = Constants.TAG_POSES[i];
                 double tagDistance = Math.sqrt(Math.pow(tagPosition[0] - robotX, 2) + Math.pow(tagPosition[1] - robotY, 2));
                 if (tagDistance < distance){
                     distance = tagDistance;
@@ -693,7 +775,7 @@ public class Drive extends SubsystemBase {
             }
         } else if (fieldSide == "blue"){
             for (int i = 5; i < 8; i ++){
-                double[] tagPosition = Constants.TAG_LOCATIONS[i];
+                double[] tagPosition = Constants.TAG_POSES[i];
                 double tagDistance = Math.sqrt(Math.pow(tagPosition[0] - robotX, 2) + Math.pow(tagPosition[1] - robotY, 2));
                 if (tagDistance < distance){
                     distance = tagDistance;
@@ -955,6 +1037,7 @@ public class Drive extends SubsystemBase {
  
     @Override
     public void periodic() {
+
     }
 
     @Override
