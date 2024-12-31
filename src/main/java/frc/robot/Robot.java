@@ -329,11 +329,17 @@ public class Robot extends TimedRobot {
 
     // OI.driverY.whileActiveOnce(new AprilTagBalance(drive, peripherals, lights, 1.5, true));
 
+
+
+
     // // ramp intake position
     OI.operatorMenuButton.whileHeld(new ShelfPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
 
-    // // placement position mid
-    OI.operatorA.whileHeld(new MidPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
+    // testing wrist
+    OI.operatorA.whileHeld(new RotateWrist(wrist, flipChecker, peripherals, Constants.PRESET.SHELF));
+
+    // // placement position mid TODO: uncomment if you want to be mid
+    // OI.operatorA.whileHeld(new MidPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
 
     // // placement position high
     OI.operatorY.whileHeld(new HighPlacementPreset(armExtension, armRotation, flipChecker, wrist, lights, peripherals));
@@ -348,6 +354,9 @@ public class Robot extends TimedRobot {
     OI.operatorRB.whileHeld(new CubePreset(armExtension, armRotation, flipChecker, wrist, lights));
 
     OI.operatorLB.whileHeld(new LowPreset(armExtension, armRotation, peripherals, flipChecker, wrist, lights));
+
+
+
 
     // // drive rotationally aligned to 0 or 180
     // OI.driverX.whileHeld(new DriveAutoAligned(drive, peripherals, lights));

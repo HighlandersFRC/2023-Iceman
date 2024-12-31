@@ -9,7 +9,10 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.commands.defaults.WristDefaultCommand;
 import frc.robot.tools.controlloops.PID;
 
@@ -95,6 +98,9 @@ public class Wrist extends SubsystemBase {
     this.pid.updatePID(getWristRotationPosition());
     double result = pid.getResult();
     setRotationMotorPercent(result);
+    SmartDashboard.putNumber("Wrist Angle !", getWristRotationPosition());
+    SmartDashboard.putNumber("Wrist Setpoint !", pid.getSetPoint());
+    SmartDashboard.putNumber("Wrist Power !", result);
     // System.out.println("Wrist: " + rotationMotor.getEncoder().getPosition());
   }
 }

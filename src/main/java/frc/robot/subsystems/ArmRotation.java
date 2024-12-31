@@ -71,11 +71,14 @@ public class ArmRotation extends SubsystemBase {
 
   public void setRotationPosition(double degrees) {
     // SmartDashboard.putNumber("Setpoint", degrees);
-    rotationMotorMaster.set(ControlMode.MotionMagic, Constants.convertArmRotationDegreesToTics(degrees));
+    rotationMotorMaster.set(ControlMode.MotionMagic, Constants.convertArmRotationDegreesToTics(degrees)-2048);
+    SmartDashboard.putNumber("Setpoint !", rotationMotorMaster.getClosedLoopTarget());
+    System.out.println(rotationMotorMaster.getClosedLoopError());
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Arm Rotation !", getRotationPosition());
   }
 }

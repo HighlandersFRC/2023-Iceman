@@ -31,6 +31,7 @@ public class ArmExtensionDefaultCommand extends CommandBase {
   public void execute() {
     if (arm.getExtensionLimitSwitch()) {
       arm.setExtensionEncoderPosition(0);
+      SmartDashboard.putNumber("Arm Extension", arm.getExtensionPosition());
       // System.out.println("TRUE");
     } else {
       // System.out.println("FALSE");
