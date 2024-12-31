@@ -270,6 +270,7 @@ public class Robot extends TimedRobot {
     //DO NOT COMMENT OUT!!!
     wrist.periodic();
     //DO NOT COMMENT OUT!!!
+    armRotation.postRotationValues();
   }
 
   @Override

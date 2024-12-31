@@ -45,14 +45,14 @@ public class Drive extends SubsystemBase {
     private double[] velocityArray = new double[3];
 
     // creating all the falcons
-    private final WPI_TalonFX leftForwardMotor = new WPI_TalonFX(3);
-    private final WPI_TalonFX leftForwardAngleMotor = new WPI_TalonFX(4);
-    private final WPI_TalonFX leftBackMotor = new WPI_TalonFX(5);
-    private final WPI_TalonFX leftBackAngleMotor = new WPI_TalonFX(6);
-    private final WPI_TalonFX rightForwardMotor = new WPI_TalonFX(1);
-    private final WPI_TalonFX rightForwardAngleMotor = new WPI_TalonFX(2);
-    private final WPI_TalonFX rightBackMotor = new WPI_TalonFX(7);
-    private final WPI_TalonFX rightBackAngleMotor = new WPI_TalonFX(8);
+    private final WPI_TalonFX leftForwardMotor = new WPI_TalonFX(3, "Canivore");
+    private final WPI_TalonFX leftForwardAngleMotor = new WPI_TalonFX(4, "Canivore");
+    private final WPI_TalonFX leftBackMotor = new WPI_TalonFX(5, "Canivore");
+    private final WPI_TalonFX leftBackAngleMotor = new WPI_TalonFX(6, "Canivore");
+    private final WPI_TalonFX rightForwardMotor = new WPI_TalonFX(1, "Canivore");
+    private final WPI_TalonFX rightForwardAngleMotor = new WPI_TalonFX(2, "Canivore");
+    private final WPI_TalonFX rightBackMotor = new WPI_TalonFX(7, "Canivore");
+    private final WPI_TalonFX rightBackAngleMotor = new WPI_TalonFX(8, "Canivore");
 
     // creating peripherals object to access sensors
     private Peripherals peripherals;
@@ -62,10 +62,10 @@ public class Drive extends SubsystemBase {
     private final double moduleY = ((Constants.ROBOT_LENGTH)/2) - Constants.MODULE_OFFSET;
 
     // creating all the external encoders
-    private CANCoder backRightAbsoluteEncoder = new CANCoder(4);
-    private CANCoder frontLeftAbsoluteEncoder = new CANCoder(2);
-    private CANCoder frontRightAbsoluteEncoder = new CANCoder(1);
-    private CANCoder backLeftAbsoluteEncoder = new CANCoder(3);
+    private CANCoder backRightAbsoluteEncoder = new CANCoder(4, "Canivore");
+    private CANCoder frontLeftAbsoluteEncoder = new CANCoder(2, "Canivore");
+    private CANCoder frontRightAbsoluteEncoder = new CANCoder(1, "Canivore");
+    private CANCoder backLeftAbsoluteEncoder = new CANCoder(3, "Canivore");
 
     // creating each swerve module with angle and drive motor, module number(relation to robot), and external encoder
     private final SwerveModule leftFront = new SwerveModule(2, leftForwardAngleMotor, leftForwardMotor, 0, frontLeftAbsoluteEncoder);
@@ -618,6 +618,8 @@ public class Drive extends SubsystemBase {
 
         double xSpeed = xPower * Constants.TOP_SPEED;
         double ySpeed = yPower * Constants.TOP_SPEED;
+        System.out.println("Power X: " + xSpeed);
+        System.out.println("Power Y: " + ySpeed);
 
         Vector controllerVector = new Vector(xSpeed, ySpeed);
 
